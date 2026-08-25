@@ -46,7 +46,6 @@
 
   <style>
     :root {
-      /* Brand Tokens */
       --lumi-yellow: #FFC83D;
       --lumi-yellow-soft: #FFF9E6;
       --lumi-blue: #65B9E8;
@@ -57,19 +56,14 @@
       --lumi-pink-soft: #FFF0F3;
       --lumi-orange: #F6A457;
 
-      /* Neutral Palette */
       --bg-main: #FAFAF7;
       --surface: #FFFFFF;
       --surface-warm: #FEFBF0;
 
-      /* Text Hierarchy */
       --text-main: #253047;
       --text-sub: #6F7785;
-
-      /* Border Token */
       --border-soft: #ECEBE6;
 
-      /* Unified Radius Scale */
       --radius-sm: 10px;
       --radius-input: 14px;
       --radius-button: 14px;
@@ -78,7 +72,6 @@
       --radius-card-feature: 24px;
       --radius-hero: 28px;
 
-      /* Subtle Shadows */
       --shadow-soft: 0 4px 18px rgba(37, 48, 71, 0.04);
       --shadow-modal: 0 12px 36px rgba(37, 48, 71, 0.08);
     }
@@ -102,7 +95,6 @@
     ::-webkit-scrollbar-thumb { background: #E2E0D8; border-radius: 4px; }
     ::-webkit-scrollbar-thumb:hover { background: #C8C5BB; }
 
-    /* LUMIFUL Common Button Foundation */
     .btn-lumi-primary {
       background-color: var(--lumi-yellow);
       color: var(--text-main);
@@ -145,7 +137,6 @@
       color: var(--text-main);
     }
 
-    /* Input Base Style Foundation */
     .lumi-input {
       background-color: var(--surface);
       border: 1px solid #E4E6EA;
@@ -158,34 +149,6 @@
       outline: none;
       border-color: var(--lumi-blue);
       box-shadow: 0 0 0 3px rgba(101, 185, 232, 0.15);
-    }
-
-    /* Brand Logo Standard Sizing */
-    .lumiful-app-icon {
-      width: 44px;
-      height: 44px;
-      object-fit: contain;
-      border-radius: 12px;
-      flex-shrink: 0;
-    }
-
-    .lumiful-header-logo {
-      height: 38px;
-      width: auto;
-      max-width: 100%;
-      object-fit: contain;
-      display: block;
-    }
-
-    @media (max-width: 640px) {
-      .lumiful-app-icon {
-        width: 38px;
-        height: 38px;
-        border-radius: 10px;
-      }
-      .lumiful-header-logo {
-        height: 34px;
-      }
     }
   </style>
 </head>
@@ -215,7 +178,7 @@
   <!-- MAIN APP SHELL CONTAINER -->
   <div class="flex min-h-screen bg-[#FAFAF7]">
 
-    <!-- DESKTOP SIDEBAR (Visible on Desktop >= 1024px) -->
+    <!-- DESKTOP SIDEBAR -->
     <aside class="hidden lg:flex flex-col w-[240px] bg-white border-r border-[#ECEBE6] p-5 shrink-0 justify-between sticky top-0 h-screen no-print z-20">
       <div class="space-y-6">
         <!-- Sidebar Brand Logo -->
@@ -268,7 +231,7 @@
       <!-- Sidebar Bottom Brand Message -->
       <div class="p-3.5 bg-[#FEFBF0] border border-[#ECEBE6] rounded-[16px] space-y-1">
         <div class="text-[11px] font-bold text-[#253047] flex items-center gap-1">
-          <i class="fa-solid fa-sparkles text-[#FFC83D]"></i>
+          <i class="fa-solid fa-sun text-[#FFC83D]"></i>
           <span>未来はつくれる</span>
         </div>
         <p class="text-[10px] text-[#6F7785] leading-relaxed">
@@ -280,10 +243,8 @@
     <!-- MAIN CONTENT SHELL -->
     <main class="flex-1 min-w-0 p-4 sm:p-6 lg:p-8 space-y-6 pb-24 lg:pb-8 max-w-[1320px] mx-auto">
 
-      <!-- TOP USER / ACTION AREA (Desktop Top Header Bar) -->
+      <!-- TOP USER / ACTION AREA -->
       <header class="hidden lg:flex bg-white p-4 rounded-[20px] border border-[#ECEBE6] flex-wrap items-center justify-between gap-3 no-print">
-        
-        <!-- Left: User Greeting -->
         <div class="flex items-center gap-3 min-w-0">
           <div class="w-9 h-9 rounded-full bg-[#FFF2CD] text-[#8C5800] flex items-center justify-center font-bold text-xs shrink-0">
             <i class="fa-solid fa-user"></i>
@@ -294,7 +255,6 @@
           </div>
         </div>
 
-        <!-- Right: Action Buttons Group -->
         <div class="flex items-center gap-2 flex-wrap sm:flex-nowrap">
           <button id="authAccountBtn" onclick="openAuthModal()" class="px-3.5 py-2 btn-lumi-primary text-xs flex items-center gap-1.5 whitespace-nowrap shrink-0">
             <i class="fa-solid fa-user-circle" id="authBtnIcon"></i>
@@ -326,65 +286,91 @@
       <!-- VIEW 1: DASHBOARD VIEW -->
       <div id="dashboardView" class="space-y-6">
         
-        <!-- DASHBOARD INTRO HEADER -->
         <div class="space-y-1 mb-1">
           <h1 class="text-2xl sm:text-3xl font-extrabold text-[#253047] tracking-tight">あなたの未来</h1>
           <p class="text-xs sm:text-sm text-[#6F7785]">現在の条件から、これからの人生設計を見てみましょう。</p>
         </div>
 
-        <!-- DASHBOARD HERO (4 KPI Cards + LUMI Advisor Panel) -->
+        <!-- DASHBOARD HERO & KPI SECTION -->
         <section id="hero-section" class="space-y-4">
           
-          <!-- 4 KPI Cards Grid -->
+          <!-- 4 KPI EQUAL GRID (Phase 5A Equal 4-Card Layout) -->
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             
-            <!-- KPI 1: LUMIFUL SCORE (Primary KPI) -->
-            <div class="bg-[#FFF9E6] rounded-[24px] p-5 sm:p-6 border border-[#FCE3A6] flex flex-col justify-between relative overflow-hidden transition">
-              <div>
-                <div class="flex items-center justify-between gap-2 mb-2 z-10 relative">
-                  <span class="text-xs font-bold text-[#8C5800] uppercase tracking-wider">LUMIFUL SCORE</span>
-                  <span id="kpi-score-badge" class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#FFC83D] text-[#253047] shrink-0">
-                    ⚪ 未設定
-                  </span>
-                </div>
+            <!-- KPI 1: LUMIFUL SCORE CARD -->
+            <div class="bg-[#FFFDF8] rounded-[24px] p-5 border border-[#ECEBE6] flex flex-col justify-between relative overflow-hidden transition shadow-sm">
+              
+              <!-- Hero-Wide Organic Light Field Background Canvas -->
+              <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_85%_35%,rgba(255,200,61,0.22)_0%,rgba(255,200,61,0.08)_45%,rgba(255,253,248,0)_75%)] pointer-events-none -z-0"></div>
 
-                <div class="flex items-center justify-between gap-2 my-1 z-10 relative">
-                  <div>
-                    <div class="flex items-baseline gap-1.5">
-                      <div id="kpi-score" class="text-4xl sm:text-5xl font-extrabold text-[#253047] tracking-tight">0</div>
-                      <span class="text-sm font-bold text-[#6F7785]">/ 100 点</span>
+              <div class="relative z-10 space-y-3">
+                <!-- Header: Title & Dynamic Badge -->
+                <div class="flex items-start justify-between gap-2">
+                  <div class="space-y-1">
+                    <div class="flex items-center gap-1 text-xs font-bold tracking-wider uppercase">
+                      <span class="text-[#253047]">LUMIFUL</span>
+                      <span class="text-[#FFC83D]">SCORE</span>
                     </div>
-
-                    <div id="kpi-score-breakdown" class="text-[11px] text-[#8C5800] font-medium flex items-center gap-1.5 mt-1">
-                      <span>Base: <strong id="kpi-base-score" class="text-[#253047]">0</strong>点</span>
-                      <span class="text-[#D97706]">|</span>
-                      <span>AI補正: <strong id="kpi-ai-adj" class="text-[#8C5800]">0</strong>点</span>
+                    <div>
+                      <span id="kpi-score-badge" class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#FAFAF7] text-[#6F7785] border border-[#ECEBE6] shrink-0 inline-block">
+                        ⚪ 未設定
+                      </span>
                     </div>
                   </div>
 
-                  <!-- LUMI Spark Asset Illustration (SCORE数値エリア右側にインライン配置) -->
-                  <img src="./assets/lumi-spark.png" alt="LUMI" class="w-11 h-11 sm:w-12 sm:h-12 object-contain pointer-events-none opacity-90 shrink-0" />
+                  <!-- Top Right Official LUMI Anchor Position -->
+                  <div class="shrink-0 flex items-center justify-center">
+                    <img src="./assets/lumi-spark.png" alt="LUMI" class="w-10 h-10 object-contain pointer-events-none" />
+                  </div>
+                </div>
+
+                <!-- Main Content Row: Score Number -->
+                <div class="pt-0.5 flex items-baseline gap-1">
+                  <div id="kpi-score" class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#253047] tracking-tight leading-none">0</div>
+                  <span class="text-xs font-bold text-[#6F7785]">/ 100</span>
+                </div>
+
+                <!-- Mini Metrics: Base Score & LUMI AI with Concept-Matched Icons -->
+                <div id="kpi-score-breakdown" class="bg-white/90 p-2 rounded-[14px] border border-[#ECEBE6] shadow-2xs inline-flex items-center gap-3 w-full justify-around">
+                  <!-- Base Score: Financial Data Chart Icon -->
+                  <div class="flex items-center gap-1.5">
+                    <div class="w-5 h-5 rounded-md bg-slate-100 text-[#253047] flex items-center justify-center text-[10px] shrink-0">
+                      <i class="fa-solid fa-chart-simple"></i>
+                    </div>
+                    <span class="text-[9px] font-bold text-[#6F7785] uppercase tracking-wider">BASE</span>
+                    <span class="text-xs sm:text-sm font-extrabold text-[#253047]" id="kpi-base-score">0</span>
+                  </div>
+                  <div class="w-px h-4 bg-[#ECEBE6]"></div>
+                  <!-- LUMI AI: Intelligence Sparkle Icon -->
+                  <div class="flex items-center gap-1.5">
+                    <div class="w-5 h-5 rounded-md bg-[#FFF9E6] text-[#8C5800] flex items-center justify-center text-[10px] shrink-0">
+                      <i class="fa-solid fa-wand-magic-sparkles"></i>
+                    </div>
+                    <span class="text-[9px] font-bold text-[#8C5800] uppercase tracking-wider">LUMI AI</span>
+                    <span class="text-xs sm:text-sm font-extrabold text-[#8C5800]" id="kpi-ai-adj">0</span>
+                  </div>
                 </div>
               </div>
 
-              <div class="flex items-center justify-between gap-2 pt-3 border-t border-[#FCE3A6]/80 mt-2 z-10 relative min-w-0">
-                <span id="kpi-score-status-text" class="text-[11px] text-[#6F7785] truncate flex-1 min-w-0 pr-1">
+              <!-- Bottom Row: Dynamic Status Text & CTA -->
+              <div class="pt-3 border-t border-[#ECEBE6] mt-3 flex items-center justify-between relative z-10 gap-2">
+                <div id="kpi-score-status-text" class="text-[11px] font-bold text-[#253047] leading-snug truncate flex-1 min-w-0">
                   条件を入力してください
-                </span>
-                <button onclick="openScoreDetailModal()" class="px-3 py-1.5 btn-lumi-ghost text-[11px] font-bold bg-white/90 hover:bg-white text-[#253047] rounded-[12px] border border-[#FCE3A6] shrink-0 whitespace-nowrap">
-                  詳しく見る →
+                </div>
+                <button onclick="openScoreDetailModal()" class="text-xs font-bold text-[#253047] hover:text-[#8C5800] transition flex items-center gap-1 group cursor-pointer bg-transparent border-0 p-0 shrink-0">
+                  <span>詳しく見る</span>
+                  <i class="fa-solid fa-arrow-right text-[10px] group-hover:translate-x-0.5 transition-transform"></i>
                 </button>
               </div>
+
             </div>
 
-            <!-- KPI 2: 年間運用益 -->
+            <!-- KPI 2: 年間運用益 (専用画像アセットを絶対保護・維持) -->
             <div class="bg-white rounded-[24px] p-5 sm:p-6 border border-[#ECEBE6] flex flex-col justify-between relative overflow-hidden transition">
               <div>
                 <div class="flex items-center justify-between gap-2 mb-1">
                   <span class="text-xs font-bold text-[#6F7785]">資産が生活を支える力</span>
-                  <div class="w-7 h-7 rounded-full bg-[#EAF8F3] text-[#72D6B5] flex items-center justify-center text-xs shrink-0">
-                    <i class="fa-solid fa-hand-holding-dollar"></i>
-                  </div>
+                  <img src="./assets/kpi-annual-yield.png" alt="" class="w-10 h-10 object-contain shrink-0 pointer-events-none" />
                 </div>
                 <div class="text-[11px] font-bold text-[#8C5800] mb-2">平均年間運用益 (生涯)</div>
                 <div id="kpi-annual-yield" class="text-2xl sm:text-3xl font-extrabold text-[#253047] tracking-tight">
@@ -400,7 +386,7 @@
               </div>
             </div>
 
-            <!-- KPI 3: 生涯収支カバー率 -->
+            <!-- KPI 3: 生涯収支カバー率 (専用画像アセットを絶対保護・維持) -->
             <div class="bg-white rounded-[24px] p-5 sm:p-6 border border-[#ECEBE6] flex flex-col justify-between relative overflow-hidden transition">
               <div>
                 <div class="flex items-center justify-between gap-2 mb-1">
@@ -408,9 +394,7 @@
                     生涯収支カバー率
                     <i class="fa-solid fa-circle-info text-[#6F7785]/60 text-[10px] cursor-help" title="目標年齢までの生涯を通じ、生活費の不足額を運用益と安全資産でどれだけ安全にカバーし切れたかを表します。"></i>
                   </span>
-                  <div class="w-7 h-7 rounded-full bg-[#EAF6FC] text-[#65B9E8] flex items-center justify-center text-xs shrink-0">
-                    <i class="fa-solid fa-chart-pie"></i>
-                  </div>
+                  <img src="./assets/kpi-cover-rate.png" alt="" class="w-10 h-10 object-contain shrink-0 pointer-events-none" />
                 </div>
                 <div class="text-[11px] font-bold text-[#65B9E8] mb-2">生涯の資金維持達成率</div>
                 <div id="kpi-cover-rate" class="text-xl sm:text-2xl font-extrabold text-[#6F7785] tracking-tight whitespace-nowrap">
@@ -423,16 +407,14 @@
               </div>
             </div>
 
-            <!-- KPI 4: 目標年齢時点の想定資産 -->
+            <!-- KPI 4: 目標年齢時点の想定資産 (専用画像アセットを絶対保護・維持) -->
             <div class="bg-white rounded-[24px] p-5 sm:p-6 border border-[#ECEBE6] flex flex-col justify-between relative overflow-hidden transition">
               <div>
                 <div class="flex items-center justify-between gap-2 mb-1">
                   <span class="text-xs font-bold text-[#6F7785]">
                     <span id="kpi-final-age-label">80</span>歳時点の想定資産
                   </span>
-                  <div class="w-7 h-7 rounded-full bg-[#FFF0F3] text-[#FF8FA3] flex items-center justify-center text-xs shrink-0">
-                    <i class="fa-solid fa-piggy-bank"></i>
-                  </div>
+                  <img src="./assets/kpi-future-assets.png" alt="" class="w-10 h-10 object-contain shrink-0 pointer-events-none" />
                 </div>
                 <div id="kpi-final-assets" class="text-2xl sm:text-3xl font-extrabold text-[#253047] tracking-tight mt-3">
                   0 万円
@@ -446,10 +428,9 @@
 
           </div>
 
-          <!-- LUMI ADVISOR PANEL (Realtime AI Assistant Banner) -->
+          <!-- LUMI ADVISOR PANEL -->
           <div id="lumi-advisor-panel" class="bg-[#FEFBF0] rounded-[24px] p-5 border border-[#F0E2B7] transition space-y-4">
             
-            <!-- Top Controls Row -->
             <div class="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-[#F0E2B7]/80">
               <div class="flex items-center gap-2.5 min-w-0">
                 <img src="./assets/lumi-spark.png" alt="LUMI" class="w-7 h-7 object-contain shrink-0" />
@@ -460,7 +441,6 @@
               </div>
 
               <div class="flex items-center gap-2 flex-wrap sm:flex-nowrap shrink-0">
-                <!-- Quick Inflation Preset Selector -->
                 <div class="flex items-center gap-1 bg-white/80 p-1 rounded-[12px] border border-[#F0E2B7] text-[11px]">
                   <span class="text-[#6F7785] font-medium px-1.5 hidden sm:inline">インフレ率:</span>
                   <button onclick="setInflationPreset(1.0)" id="header-inf-10" class="px-2 py-0.5 rounded-[8px] font-bold transition border border-transparent">1.0%</button>
@@ -475,20 +455,17 @@
               </div>
             </div>
 
-            <!-- Diagnosis Text Body Area -->
             <div class="relative min-h-[50px]">
               <p id="kpi-diagnosis-text" class="text-xs sm:text-sm text-[#253047] leading-relaxed font-medium">
                 プロファイルや収支、資産の数値を設定すると、数値シミュレーションと連動したリアルタイムAI分析アドバイスが表示されます。
               </p>
 
-              <!-- Loading Spinner Overlay -->
               <div id="ai-loading-spinner" class="hidden absolute inset-0 bg-[#FEFBF0]/90 backdrop-blur-sm rounded-[16px] flex items-center justify-center gap-2 text-[#8C5800] text-xs font-bold z-10">
                 <i class="fa-solid fa-spinner fa-spin text-base"></i>
                 <span>LUMIFUL AI が人生計画を総合分析中...</span>
               </div>
             </div>
 
-            <!-- Bottom Direct Navigation CTA -->
             <div class="pt-2 flex justify-end">
               <button onclick="switchView('lumiAdvisor')" class="px-4 py-2 btn-lumi-secondary text-xs flex items-center gap-1.5 font-bold">
                 <i class="fa-solid fa-heart text-[#FF8FA3]"></i>
@@ -533,7 +510,6 @@
       <!-- VIEW 2: SIMULATION INPUT VIEW -->
       <div id="simulationInputView" class="hidden space-y-6">
         
-        <!-- PAGE HEADER -->
         <div class="space-y-1 mb-1">
           <h1 class="text-2xl sm:text-3xl font-extrabold text-[#253047] tracking-tight flex items-center gap-2">
             <i class="fa-solid fa-sliders text-[#FFC83D]"></i>
@@ -544,12 +520,11 @@
           </p>
         </div>
 
-        <!-- LUMI INPUT SUPPORT BANNER -->
         <div class="bg-[#FEFBF0] rounded-[20px] p-4 border border-[#F0E2B7] flex items-center gap-3">
           <img src="./assets/lumi-spark.png" alt="LUMI" class="w-11 h-11 object-contain shrink-0" />
           <div class="space-y-0.5">
             <h3 class="text-xs font-bold text-[#8C5800] flex items-center gap-1">
-              <i class="fa-solid fa-sparkles text-[#FFC83D]"></i>
+              <i class="fa-solid fa-sun text-[#FFC83D]"></i>
               <span>LUMIの入力サポート</span>
             </h3>
             <p class="text-xs text-[#6F7785] leading-relaxed">
@@ -558,10 +533,8 @@
           </div>
         </div>
 
-        <!-- INPUT FORM CONTAINER -->
         <div class="bg-white rounded-[24px] border border-[#ECEBE6] overflow-hidden relative" id="inputTabsContainer">
           
-          <!-- Auth Lock Overlay -->
           <div id="authLockOverlay" class="absolute inset-0 bg-[#FAFAF7]/92 backdrop-blur-sm z-40 flex flex-col items-center justify-center p-6 text-center transition-all duration-300 min-h-[360px]">
             <div class="w-12 h-12 rounded-[16px] bg-white text-[#8C5800] flex items-center justify-center text-xl shadow-sm mb-3 border border-[#F0E2B7] shrink-0">
               <i class="fa-solid fa-lock"></i>
@@ -583,7 +556,6 @@
             </div>
           </div>
 
-          <!-- Tab Content Profile Area -->
           <div id="tabContent-profile" class="p-5 sm:p-7">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
               
@@ -605,13 +577,11 @@
                     <div>
                       <label class="block text-xs font-semibold text-[#4F586A] mb-1">現在の年齢</label>
                       <select id="selfCurrentAge" onchange="recalculateAllFast()" class="w-full px-3 lumi-input text-xs font-bold bg-white">
-                        <!-- Rendered dynamically -->
                       </select>
                     </div>
                     <div>
                       <label class="block text-xs font-semibold text-[#4F586A] mb-1">完全引退年齢</label>
                       <select id="selfRetireAge" onchange="recalculateAllFast()" class="w-full px-3 lumi-input text-xs font-bold bg-white">
-                        <!-- Rendered dynamically -->
                       </select>
                     </div>
                   </div>
@@ -633,7 +603,6 @@
                     <div class="flex items-center gap-2">
                       <span class="text-xs text-[#6F7785] shrink-0">受給開始:</span>
                       <select id="selfPensionStartAge" onchange="recalculateAllFast()" class="w-24 px-2 lumi-input text-xs font-bold bg-white text-center">
-                        <!-- Rendered dynamically -->
                       </select>
                     </div>
                   </div>
@@ -661,13 +630,11 @@
                     <div>
                       <label class="block text-xs font-semibold text-[#4F586A] mb-1">現在の年齢</label>
                       <select id="spouseCurrentAge" onchange="recalculateAllFast()" class="w-full px-3 lumi-input text-xs font-bold bg-white">
-                        <!-- Rendered dynamically -->
                       </select>
                     </div>
                     <div>
                       <label class="block text-xs font-semibold text-[#4F586A] mb-1">就労終了年齢</label>
                       <select id="spouseRetireAge" onchange="recalculateAllFast()" class="w-full px-3 lumi-input text-xs font-bold bg-white">
-                        <!-- Rendered dynamically -->
                       </select>
                     </div>
                   </div>
@@ -689,7 +656,6 @@
                     <div class="flex items-center gap-2">
                       <span class="text-xs text-[#6F7785] shrink-0">受給開始:</span>
                       <select id="spousePensionStartAge" onchange="recalculateAllFast()" class="w-24 px-2 lumi-input text-xs font-bold bg-white text-center">
-                        <!-- Rendered dynamically -->
                       </select>
                     </div>
                   </div>
@@ -762,7 +728,6 @@
                     <div class="flex items-center gap-2">
                       <span class="text-xs text-[#6F7785] shrink-0">完済/終了年齢:</span>
                       <select id="housingEndAge" onchange="recalculateAllFast()" class="w-28 px-2 lumi-input text-xs font-bold bg-white text-center">
-                        <!-- Rendered dynamically -->
                       </select>
                     </div>
                   </div>
@@ -783,7 +748,7 @@
                       </div>
                       <div class="grid grid-cols-3 gap-2">
                         <button onclick="setInflationPreset(1.0)" id="card-inf-10" class="py-1.5 text-xs font-bold rounded-[12px] border transition text-center whitespace-nowrap">楽観 1.0%</button>
-                        <button onclick="setInflationPreset(1.5)" id="card-inf-15" class="py-1.5 text-xs font-bold rounded-[12px] border transition text-center bg-[#FFC83D] text-[#253047] border-[#FFC83D] shadow-sm whitespace-nowrap">標準 1.5%</button>
+                        <button onclick="setInflationPreset(1.5)" id="card-inf-15" class="py-1.5 text-xs font-bold rounded-[12px] border transition bg-[#FFC83D] text-[#253047]">標準 1.5%</button>
                         <button onclick="setInflationPreset(2.0)" id="card-inf-20" class="py-1.5 text-xs font-bold rounded-[12px] border transition text-center whitespace-nowrap">保守 2.0%</button>
                       </div>
                     </div>
@@ -791,7 +756,6 @@
                     <div>
                       <label class="block text-xs font-semibold text-[#4F586A] mb-1">シミュレーション終了年齢</label>
                       <select id="targetAge" onchange="recalculateAllFast()" class="w-full px-3 lumi-input text-xs font-bold bg-white">
-                        <!-- Rendered dynamically -->
                       </select>
                     </div>
                   </div>
@@ -800,7 +764,6 @@
 
             </div>
 
-            <!-- Bottom CTA Button -->
             <div class="mt-8 pt-5 border-t border-[#ECEBE6] flex justify-center">
               <button onclick="switchView('dashboard'); window.scrollTo({top: 0, behavior: 'smooth'});" class="px-8 py-3 btn-lumi-primary text-sm font-bold flex items-center gap-2">
                 <span>この条件で未来を確認</span>
@@ -816,17 +779,14 @@
       <!-- VIEW 3: SIMULATION RESULTS VIEW -->
       <div id="simulationResultsView" class="hidden space-y-6">
         
-        <!-- PAGE HEADER -->
         <div class="space-y-1 mb-1">
           <h1 class="text-2xl sm:text-3xl font-extrabold text-[#253047] tracking-tight">シミュレーション結果</h1>
           <p class="text-xs sm:text-sm text-[#6F7785]">現在の条件から、あなたの未来を整理しました。</p>
         </div>
 
-        <!-- LUMIFUL SCORE HERO (Score + LUMI Interpretation Integrated) -->
         <div class="bg-[#FEFBF0] rounded-[24px] p-6 sm:p-7 border border-[#F0E2B7] space-y-6">
           <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
             
-            <!-- Left: LUMIFUL SCORE Display -->
             <div class="lg:col-span-5 space-y-2 pr-0 lg:pr-6 lg:border-r border-[#F0E2B7]">
               <div class="flex items-center justify-between">
                 <span class="text-xs font-bold text-[#8C5800] tracking-wider uppercase">LUMIFUL SCORE</span>
@@ -845,18 +805,17 @@
               </div>
             </div>
 
-            <!-- Right: LUMI Interpretation -->
-            <div class="lg:col-span-7 space-y-3">
+            <div class="lg:col-span-7 space-y-2">
               <div class="flex items-center gap-2">
                 <img src="./assets/lumi-spark.png" alt="LUMI" class="w-7 h-7 object-contain" />
                 <h3 class="text-sm font-bold text-[#253047]">LUMIから見た今回の結果</h3>
               </div>
 
-              <p id="results-lumi-text" class="text-xs sm:text-sm text-[#253047] leading-relaxed font-medium">
+              <p id="results-lumi-text" class="text-xs sm:text-sm text-[#253047] leading-relaxed font-medium pt-1">
                 条件を設定すると、AIコンパニオンLUMIによるシミュレーション解釈とアドバイスが表示されます。
               </p>
 
-              <div class="pt-1">
+              <div class="pt-2">
                 <button onclick="switchView('lumiAdvisor')" class="px-3.5 py-1.5 btn-lumi-secondary text-xs font-bold">
                   <span>LUMI Advisor で相談する →</span>
                 </button>
@@ -866,7 +825,6 @@
           </div>
         </div>
 
-        <!-- 3 MAIN RESULTS CARDS -->
         <div class="space-y-3">
           <h3 class="text-sm font-bold text-[#253047] flex items-center gap-2">
             <i class="fa-solid fa-chart-pie text-[#65B9E8]"></i>
@@ -875,7 +833,6 @@
 
           <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
             
-            <!-- Result 1: 生涯収支カバー率 -->
             <div class="bg-white rounded-[20px] p-5 border border-[#ECEBE6] space-y-2">
               <div class="flex items-center justify-between text-xs font-bold text-[#6F7785]">
                 <span>生涯収支カバー率</span>
@@ -887,7 +844,6 @@
               <p class="text-[11px] text-[#6F7785]">目標年齢まで必要生活費をカバーできる割合</p>
             </div>
 
-            <!-- Result 2: 最終金融資産 -->
             <div class="bg-white rounded-[20px] p-5 border border-[#ECEBE6] space-y-2">
               <div class="flex items-center justify-between text-xs font-bold text-[#6F7785]">
                 <span>最終金融資産</span>
@@ -899,7 +855,6 @@
               <p class="text-[11px] text-[#6F7785]">シミュレーション終了時点の現金・投資残高</p>
             </div>
 
-            <!-- Result 3: 最終純資産 -->
             <div class="bg-white rounded-[20px] p-5 border border-[#ECEBE6] space-y-2">
               <div class="flex items-center justify-between text-xs font-bold text-[#6F7785]">
                 <span>最終純資産</span>
@@ -914,7 +869,6 @@
           </div>
         </div>
 
-        <!-- 3 LIFE PERIODS TIMELINE -->
         <div class="space-y-3">
           <h3 class="text-sm font-bold text-[#253047] flex items-center gap-2">
             <i class="fa-solid fa-timeline text-[#8C5800]"></i>
@@ -944,7 +898,6 @@
           </div>
         </div>
 
-        <!-- POINTS & BOTTOM CTA -->
         <div class="bg-[#FEFBF0] rounded-[24px] p-6 border border-[#F0E2B7] space-y-4">
           <div class="space-y-1">
             <h3 class="text-sm font-bold text-[#253047]">今回の結果で見るポイント</h3>
@@ -967,13 +920,11 @@
       <!-- VIEW 4: ANNUAL PROJECTION VIEW -->
       <div id="annualProjectionView" class="hidden space-y-6">
         
-        <!-- PAGE HEADER -->
         <div class="space-y-1 mb-1">
           <h1 class="text-2xl sm:text-3xl font-extrabold text-[#253047] tracking-tight">年間推移グラフ</h1>
           <p class="text-xs sm:text-sm text-[#6F7785]">資産と年間収支が、これからどのように変化していくかを確認できます。</p>
         </div>
 
-        <!-- LUMI GRAPH GUIDE -->
         <div class="bg-[#FEFBF0] rounded-[20px] p-4 border border-[#F0E2B7] flex items-center gap-3">
           <img src="./assets/lumi-spark.png" alt="LUMI" class="w-11 h-11 object-contain shrink-0" />
           <div class="space-y-0.5">
@@ -987,7 +938,6 @@
           </div>
         </div>
 
-        <!-- MAIN PROJECTION CHART CARD -->
         <div class="bg-white rounded-[24px] p-5 sm:p-6 border border-[#ECEBE6] space-y-4">
           <div class="flex items-center justify-between pb-3 border-b border-[#ECEBE6]">
             <h2 class="text-base font-bold text-[#253047] flex items-center gap-2">
@@ -1001,7 +951,6 @@
           </div>
         </div>
 
-        <!-- SUMMARY CARDS -->
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <div class="bg-white rounded-[20px] p-5 border border-[#ECEBE6] space-y-1">
             <span class="text-xs font-bold text-[#6F7785]">最終金融資産</span>
@@ -1017,7 +966,6 @@
           </div>
         </div>
 
-        <!-- ASSET TIMELINE CONTAINER -->
         <div class="bg-white rounded-[24px] p-5 sm:p-6 border border-[#ECEBE6] space-y-4">
           <h3 class="text-sm font-bold text-[#253047] flex items-center gap-2">
             <i class="fa-solid fa-calendar-check text-[#72D6B5]"></i>
@@ -1025,11 +973,9 @@
           </h3>
 
           <div id="annualTimelineContainer" class="space-y-3">
-            <!-- Rendered dynamically -->
           </div>
         </div>
 
-        <!-- BOTTOM CTA -->
         <div class="pt-4 flex flex-col sm:flex-row items-center justify-center gap-3">
           <button onclick="switchView('assetDetails')" class="w-full sm:w-auto px-6 py-2.5 btn-lumi-primary text-xs font-bold flex items-center justify-center gap-2">
             <span>資産詳細を見る →</span>
@@ -1044,13 +990,11 @@
       <!-- VIEW 5: ASSET DETAILS VIEW -->
       <div id="assetDetailsView" class="hidden space-y-6">
         
-        <!-- PAGE HEADER -->
         <div class="space-y-1 mb-1">
           <h1 class="text-2xl sm:text-3xl font-extrabold text-[#253047] tracking-tight">資産詳細</h1>
           <p class="text-xs sm:text-sm text-[#6F7785]">年ごとの収入・支出・資産の変化を詳しく確認できます。</p>
         </div>
 
-        <!-- ASSET SUMMARY 3 CARDS -->
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <div class="bg-white rounded-[20px] p-5 border border-[#ECEBE6] space-y-1">
             <span class="text-xs font-bold text-[#6F7785]">最終金融資産</span>
@@ -1066,7 +1010,6 @@
           </div>
         </div>
 
-        <!-- CASHFLOW TABLE CONTAINER -->
         <div class="bg-white rounded-[24px] border border-[#ECEBE6] overflow-hidden p-4 sm:p-6 space-y-4">
           <div class="flex items-center justify-between pb-2 border-b border-[#ECEBE6]">
             <h3 class="text-sm font-bold text-[#253047] flex items-center gap-2">
@@ -1094,13 +1037,11 @@
                 </tr>
               </thead>
               <tbody id="cashflowTableBody" class="divide-y divide-[#ECEBE6]">
-                <!-- Rendered via JS -->
               </tbody>
             </table>
           </div>
         </div>
 
-        <!-- BOTTOM CTA -->
         <div class="pt-4 flex flex-col sm:flex-row items-center justify-center gap-3">
           <button onclick="switchView('annualProjection')" class="w-full sm:w-auto px-6 py-2.5 btn-lumi-primary text-xs font-bold flex items-center justify-center gap-2">
             <span>年間推移を見る →</span>
@@ -1115,18 +1056,16 @@
       <!-- VIEW 6: LIFE EVENTS VIEW -->
       <div id="lifeEventsView" class="hidden space-y-6">
         
-        <!-- PAGE HEADER -->
         <div class="space-y-1 mb-1">
           <h1 class="text-2xl sm:text-3xl font-extrabold text-[#253047] tracking-tight">ライフイベント</h1>
           <p class="text-xs sm:text-sm text-[#6F7785]">住宅購入、旅行、教育、退職金など、これからの予定を未来予測に反映できます。</p>
         </div>
 
-        <!-- LUMI LIFE PLAN GUIDE -->
         <div class="bg-[#FEFBF0] rounded-[20px] p-4 border border-[#F0E2B7] flex items-center gap-3">
           <img src="./assets/lumi-spark.png" alt="LUMI" class="w-11 h-11 object-contain shrink-0" />
           <div class="space-y-0.5">
             <h3 class="text-xs font-bold text-[#8C5800] flex items-center gap-1">
-              <i class="fa-solid fa-sparkles text-[#FFC83D]"></i>
+              <i class="fa-solid fa-sun text-[#FFC83D]"></i>
               <span>未来の予定を追加しよう</span>
             </h3>
             <p class="text-xs text-[#6F7785] leading-relaxed">
@@ -1135,7 +1074,6 @@
           </div>
         </div>
 
-        <!-- MAIN LIFE EVENTS SURFACE -->
         <div class="bg-white rounded-[24px] p-5 sm:p-6 border border-[#ECEBE6] space-y-4">
           <div class="flex items-center justify-between pb-3 border-b border-[#ECEBE6]">
             <h3 class="text-base font-bold text-[#253047] flex items-center gap-2">
@@ -1161,7 +1099,6 @@
                 </tr>
               </thead>
               <tbody id="eventsTableBody" class="divide-y divide-[#ECEBE6]">
-                <!-- Rendered via JS -->
               </tbody>
             </table>
           </div>
@@ -1172,7 +1109,6 @@
       <!-- VIEW 7: LUMI ADVISOR VIEW -->
       <div id="lumiAdvisorView" class="hidden space-y-6">
         
-        <!-- PAGE HEADER -->
         <div class="space-y-1 mb-1">
           <h1 class="text-2xl sm:text-3xl font-extrabold text-[#253047] tracking-tight flex items-center gap-2">
             <i class="fa-solid fa-heart text-[#FF8FA3]"></i>
@@ -1181,7 +1117,6 @@
           <p class="text-xs sm:text-sm text-[#6F7785]">数字だけでは見えない、あなたの未来を一緒に考えます。</p>
         </div>
 
-        <!-- LUMI WELCOME / IDENTITY AREA -->
         <div class="bg-[#FEFBF0] rounded-[24px] p-5 sm:p-6 border border-[#F0E2B7] flex flex-col sm:flex-row items-start sm:items-center gap-4">
           <img src="./assets/lumi-spark.png" alt="LUMI" class="w-12 h-12 sm:w-14 sm:h-14 object-contain shrink-0" />
           <div class="space-y-1">
@@ -1192,11 +1127,10 @@
           </div>
         </div>
 
-        <!-- CURRENT ANALYSIS HERO -->
         <div class="bg-white rounded-[24px] p-6 sm:p-7 border border-[#ECEBE6] space-y-4">
           <div class="flex items-center justify-between pb-3 border-b border-[#ECEBE6]">
             <h3 class="text-sm font-bold text-[#253047] flex items-center gap-2">
-              <i class="fa-solid fa-sparkles text-[#FFC83D]"></i>
+              <i class="fa-solid fa-sun text-[#FFC83D]"></i>
               <span>LUMIの現在の分析</span>
             </h3>
             <button onclick="generateAIDiagnosis()" class="px-3.5 py-1.5 btn-lumi-primary text-xs font-bold flex items-center gap-1.5">
@@ -1205,9 +1139,12 @@
             </button>
           </div>
 
-          <div class="p-4 bg-[#FAFAF7] rounded-[16px] border border-[#ECEBE6]">
-            <p class="text-xs sm:text-sm text-[#253047] leading-relaxed font-medium">
+          <div class="p-4 bg-[#FAFAF7] rounded-[16px] border border-[#ECEBE6] space-y-3">
+            <p id="lumi-main-analysis-text" class="text-xs sm:text-sm text-[#253047] leading-relaxed font-medium">
               ダッシュボードやシミュレーション画面で設定された最新の数値条件をもとに、AIアドバイザーがいつでも人生の選択肢を診断します。
+            </p>
+            <p id="lumi-analysis-detail-text" class="text-xs text-[#6F7785] leading-relaxed border-t border-[#ECEBE6] pt-2 hidden">
+              詳細な数値条件を変更した場合は、「再分析する」を押すことで新しい分析結果に更新されます。
             </p>
           </div>
         </div>
@@ -1217,7 +1154,6 @@
       <!-- VIEW 8: SETTINGS / PLAN MANAGEMENT VIEW -->
       <div id="settingsView" class="hidden space-y-6">
         
-        <!-- PAGE HEADER -->
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-1">
           <div class="space-y-1">
             <h1 class="text-2xl sm:text-3xl font-extrabold text-[#253047] tracking-tight">設定 / プラン管理</h1>
@@ -1228,7 +1164,6 @@
           </span>
         </div>
 
-        <!-- ACCOUNT CARD -->
         <div class="bg-white rounded-[24px] p-5 sm:p-6 border border-[#ECEBE6] space-y-4">
           <div class="flex items-center justify-between pb-3 border-b border-[#ECEBE6]">
             <h3 class="text-sm font-bold text-[#253047] flex items-center gap-2">
@@ -1252,7 +1187,6 @@
           </div>
         </div>
 
-        <!-- SAVED PLANS CARD -->
         <div class="bg-white rounded-[24px] p-5 sm:p-6 border border-[#ECEBE6] space-y-4">
           <div class="flex items-center justify-between pb-3 border-b border-[#ECEBE6]">
             <h3 class="text-sm font-bold text-[#253047] flex items-center gap-2">
@@ -1272,7 +1206,6 @@
           </div>
         </div>
 
-        <!-- DATA & SHARING -->
         <div class="bg-white rounded-[24px] p-5 sm:p-6 border border-[#ECEBE6] space-y-4">
           <h3 class="text-sm font-bold text-[#253047] flex items-center gap-2 pb-3 border-b border-[#ECEBE6]">
             <i class="fa-solid fa-share-nodes text-[#72D6B5]"></i>
@@ -1312,7 +1245,6 @@
           </div>
         </div>
 
-        <!-- SIMULATION SETTINGS GUIDE -->
         <div class="bg-white rounded-[24px] p-5 sm:p-6 border border-[#ECEBE6] space-y-4">
           <div class="flex items-center justify-between pb-3 border-b border-[#ECEBE6]">
             <h3 class="text-sm font-bold text-[#253047] flex items-center gap-2">
@@ -1332,7 +1264,6 @@
           </div>
         </div>
 
-        <!-- ABOUT LUMIFUL -->
         <div class="bg-white rounded-[24px] p-5 sm:p-6 border border-[#ECEBE6] space-y-3">
           <img src="./assets/lumiful-logo.png" alt="LUMIFUL" class="h-8 w-auto object-contain" />
           <p class="text-xs text-[#6F7785] leading-relaxed">
@@ -1340,11 +1271,10 @@
           </p>
         </div>
 
-        <!-- BOTTOM GUIDE -->
         <div class="bg-[#FEFBF0] rounded-[24px] p-5 sm:p-6 border border-[#F0E2B7] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
           <div class="space-y-1">
             <h3 class="text-sm font-bold text-[#253047]">未来は、一度決めて終わりではありません。</h3>
-            <p class="text-xs text-[#6F7785]">生活や目標が変わったときは、いつでも条件を見直して、新しい未来を確認できます。</p>
+            <p class="text-xs text-[#6F7785]">生活や環境が変わったときは、いつでも条件を見直して、新しい未来を確認できます。</p>
           </div>
 
           <div class="flex items-center gap-2 shrink-0">
@@ -1359,7 +1289,7 @@
     </main>
   </div>
 
-  <!-- MOBILE BOTTOM NAVIGATION (Visible on Mobile/Tablet < 1024px) -->
+  <!-- MOBILE BOTTOM NAVIGATION -->
   <nav class="lg:hidden fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-[#ECEBE6] px-2 py-2 flex items-center justify-around z-30 no-print">
     <button onclick="switchView('dashboard')" class="flex flex-col items-center gap-0.5 text-[#253047] font-bold text-[10px]">
       <i class="fa-solid fa-house text-sm"></i>
@@ -1383,13 +1313,14 @@
     </button>
   </nav>
 
+  <!-- MODALS SECTION -->
   <!-- MODAL 1: Lumiful Score Detail Breakdown -->
   <div id="scoreDetailModal" class="fixed inset-0 bg-[#253047]/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
     <div class="bg-white rounded-[24px] max-w-lg w-full p-5 sm:p-6 shadow-xl border border-[#ECEBE6] max-h-[90vh] overflow-y-auto">
       <div class="flex items-center justify-between mb-4 border-b border-[#ECEBE6] pb-3">
         <div>
           <h3 class="text-base font-bold text-[#253047] flex items-center gap-2">
-            <i class="fa-solid fa-sparkles text-[#FFC83D]"></i> Lumiful Score 総合スコア分析内訳
+            <i class="fa-solid fa-sun text-[#FFC83D]"></i> Lumiful Score 総合スコア分析内訳
           </h3>
           <p class="text-xs text-[#6F7785]">Base Score + AI Adjustment による多角的評価</p>
         </div>
@@ -1452,7 +1383,7 @@
               <i class="fa-solid fa-circle-check text-[#72D6B5]"></i> 人生計画の強み
             </h4>
             <ul id="scoreDetailStrengths" class="list-disc list-inside text-[#253047] space-y-1 text-[11px]">
-              <li>AI分析接続後に表示されます</li>
+              <li>データ入力後に表示されます</li>
             </ul>
           </div>
 
@@ -1461,7 +1392,7 @@
               <i class="fa-solid fa-triangle-exclamation text-[#D97706]"></i> 注意点・潜在リスク
             </h4>
             <ul id="scoreDetailRisks" class="list-disc list-inside text-[#8C5800] space-y-1 text-[11px]">
-              <li>AI分析接続後に表示されます</li>
+              <li>データ入力後に表示されます</li>
             </ul>
           </div>
 
@@ -1569,7 +1500,6 @@
         </div>
 
         <div class="border border-[#ECEBE6] rounded-[16px] p-2 max-h-56 overflow-y-auto space-y-1.5" id="savedPlansList">
-          <!-- Saved plans rendered via JS -->
         </div>
       </div>
     </div>
@@ -1636,7 +1566,6 @@
           <div>
             <label class="block text-xs font-semibold text-[#4F586A] mb-1">発生年齢 (本人)</label>
             <select id="eventAge" class="w-full px-3 lumi-input text-xs font-bold bg-white">
-              <!-- Rendered dynamically -->
             </select>
           </div>
           <div>
@@ -1674,8 +1603,8 @@
     </div>
   </div>
 
+  <!-- SCRIPT LOGIC -->
   <script>
-    // Custom Toast Notification System
     window.showToast = function(message, type = 'info') {
       const container = document.getElementById('toastContainer');
       if (!container) return;
@@ -1894,7 +1823,7 @@
         if (loggedInBox) loggedInBox.classList.remove('hidden');
         document.getElementById('userEmailDisplay').innerText = savedEmail;
         if (authBtnText) authBtnText.innerText = 'アカウント同期中';
-        if (authBtnIcon) authBtnIcon.className = 'fa-solid fa-user-check text-[#FFC83D]';
+        if (authBtnIcon) authBtnIcon.className = 'fa-solid fa-user-check text-[#8C5800]';
         if (lockOverlay) lockOverlay.classList.add('hidden');
 
         window.setInputsDisabled(false);
@@ -1946,9 +1875,7 @@
       const el = document.getElementById('shareModal');
       if (el) el.classList.remove('hidden');
       if (typeof LZString !== 'undefined') {
-        const shareState = JSON.parse(JSON.stringify(simState));
-        delete shareState.savedPlans;
-        const compressed = LZString.compressToEncodedURIComponent(JSON.stringify(shareState));
+        const compressed = LZString.compressToEncodedURIComponent(JSON.stringify(simState));
         const url = window.location.origin + window.location.pathname + '?data=' + compressed;
         document.getElementById('shareUrlText').value = url;
         const lineText = encodeURIComponent('【LUMIFUL】シミュレーションデータ:\n') + encodeURIComponent(url);
@@ -1983,7 +1910,6 @@
     window.openScoreDetailModal = function() {
       const el = document.getElementById('scoreDetailModal');
       if (el) el.classList.remove('hidden');
-      window.updateScoreDashboardUI();
     };
     window.closeScoreDetailModal = function() {
       const el = document.getElementById('scoreDetailModal');
@@ -2030,15 +1956,15 @@
 
       simState.savedPlans.forEach((plan, idx) => {
         const item = document.createElement('div');
-        item.className = 'flex items-center justify-between p-2.5 bg-[#FAFAF7] rounded-[12px] border border-[#ECEBE6]';
+        item.className = 'flex items-center justify-between p-2.5 bg-[#FAFAF7] rounded-[14px] border border-[#ECEBE6]';
         item.innerHTML = `
           <div>
             <div class="font-bold text-[#253047] text-xs">${plan.name}</div>
             <div class="text-[10px] text-[#6F7785]">${plan.date || ''}</div>
           </div>
           <div class="flex items-center gap-1.5">
-            <button onclick="loadPlan(${idx})" class="px-2.5 py-1 btn-lumi-primary text-[10px] whitespace-nowrap">読込</button>
-            <button onclick="deletePlan(${idx})" class="px-2 py-1 bg-rose-50 text-rose-600 font-bold rounded-lg text-[10px] border border-rose-200"><i class="fa-solid fa-trash"></i></button>
+            <button onclick="loadPlan(${idx})" class="px-2.5 py-1 btn-lumi-primary font-bold rounded-[8px] text-[10px] whitespace-nowrap">読込</button>
+            <button onclick="deletePlan(${idx})" class="px-2 py-1 bg-rose-50 text-rose-600 hover:bg-rose-100 font-bold rounded-[8px] text-[10px] transition"><i class="fa-solid fa-trash"></i></button>
           </div>
         `;
         container.appendChild(item);
@@ -2061,11 +1987,7 @@
       });
 
       if (input) input.value = '';
-      try {
-        localStorage.setItem('lumiful_saved_plans', JSON.stringify(simState.savedPlans));
-      } catch (err) {
-        console.error("localStorage save error", err);
-      }
+      localStorage.setItem('lumiful_saved_plans', JSON.stringify(simState.savedPlans));
       window.renderPlansList();
       window.showToast(`プラン「${name}」を保存しました`, 'success');
     };
@@ -2085,11 +2007,7 @@
     window.deletePlan = function(idx) {
       if (!simState.savedPlans) return;
       simState.savedPlans.splice(idx, 1);
-      try {
-        localStorage.setItem('lumiful_saved_plans', JSON.stringify(simState.savedPlans));
-      } catch (err) {
-        console.error("localStorage delete error", err);
-      }
+      localStorage.setItem('lumiful_saved_plans', JSON.stringify(simState.savedPlans));
       window.renderPlansList();
       window.showToast('プランを削除しました', 'info');
     };
@@ -2115,6 +2033,59 @@
       link.click();
       document.body.removeChild(link);
       window.showToast('CSVを出力しました', 'success');
+    };
+
+    window.switchView = function(viewName) {
+      const views = [
+        'dashboardView',
+        'simulationInputView',
+        'simulationResultsView',
+        'annualProjectionView',
+        'assetDetailsView',
+        'lifeEventsView',
+        'lumiAdvisorView',
+        'settingsView'
+      ];
+
+      views.forEach(v => {
+        const el = document.getElementById(v);
+        if (el) {
+          if (v === viewName + 'View' || v === viewName) {
+            el.classList.remove('hidden');
+          } else {
+            el.classList.add('hidden');
+          }
+        }
+      });
+
+      // Update Navigation highlights
+      const navMap = {
+        'dashboard': 'nav-item-home',
+        'simulationInput': 'nav-item-input',
+        'lifeEvents': 'nav-item-events',
+        'simulationResults': 'nav-item-results',
+        'annualProjection': 'nav-item-projection',
+        'assetDetails': 'nav-item-assets',
+        'lumiAdvisor': 'nav-item-lumi',
+        'settings': 'nav-item-settings'
+      };
+
+      Object.keys(navMap).forEach(key => {
+        const navBtn = document.getElementById(navMap[key]);
+        if (navBtn) {
+          if (key === viewName) {
+            navBtn.className = "w-full flex items-center gap-3 px-3.5 py-2.5 rounded-[14px] bg-[#FFF2CD] text-[#253047] font-bold transition text-left";
+          } else {
+            navBtn.className = "w-full flex items-center gap-3 px-3.5 py-2.5 rounded-[14px] text-[#6F7785] hover:bg-[#FAFAF7] hover:text-[#253047] transition text-left";
+          }
+        }
+      });
+
+      if (viewName === 'lumiAdvisor') {
+        window.syncLumiAdvisorUI();
+      }
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
     window.toggleSpouseForm = function() {
@@ -2150,8 +2121,8 @@
         const btnC = document.getElementById(`card-inf-${key}`);
         const isActive = (r === rate);
 
-        const activeClasses = ['bg-[#FFC83D]', 'text-[#253047]', 'font-bold'];
-        const inactiveClasses = ['bg-white', 'text-slate-600'];
+        const activeClasses = ['bg-[#FFC83D]', 'text-[#253047]'];
+        const inactiveClasses = ['bg-transparent', 'text-[#6F7785]', 'border-transparent'];
 
         [btnH, btnC].forEach(btn => {
           if (!btn) return;
@@ -2172,9 +2143,7 @@
       if (!tableRows || tableRows.length === 0) return { totalScore: 0, factors: {} };
 
       const totalYears = tableRows.length;
-      const effectiveSelfAge = s.selfCurrentAge > 0 ? s.selfCurrentAge : 40;
-      const targetAge = s.targetAge > 0 ? s.targetAge : 80;
-      const retireAge = s.selfRetireAge > 0 ? s.selfRetireAge : 65;
+      const targetAge = s.targetAge || 80;
       const finalRow = tableRows[tableRows.length - 1];
 
       let longevityPts = 35;
@@ -2186,6 +2155,7 @@
         }
       }
       if (insolvencyAge !== null) {
+        const effectiveSelfAge = s.selfCurrentAge > 0 ? s.selfCurrentAge : 40;
         const yearsSustained = insolvencyAge - effectiveSelfAge;
         const ratio = Math.max(0, yearsSustained / Math.max(1, totalYears));
         longevityPts = Math.round(ratio * 25);
@@ -2202,7 +2172,7 @@
 
       let minFinAsset = Math.min(...tableRows.map(r => r.financialAsset));
       let minCushionPts = 0;
-      const yearlyExpenseAvg = s.livingExpense + (s.housingEndAge === 0 || effectiveSelfAge < s.housingEndAge ? s.housingExpense : 0);
+      const yearlyExpenseAvg = s.livingExpense + (s.housingEndAge === 0 || s.selfCurrentAge < s.housingEndAge ? s.housingExpense : 0);
       if (minFinAsset >= yearlyExpenseAvg * 2) minCushionPts = 10;
       else if (minFinAsset >= yearlyExpenseAvg) minCushionPts = 7;
       else if (minFinAsset >= 100) minCushionPts = 4;
@@ -2231,14 +2201,14 @@
         yieldCoverPts += 8;
       } else if (capitalWithdrawalStartAge >= targetAge - 10) {
         yieldCoverPts += 7;
-      } else if (capitalWithdrawalStartAge >= retireAge) {
+      } else if (capitalWithdrawalStartAge >= 65) {
         yieldCoverPts += 5;
       } else {
         yieldCoverPts += 2;
       }
 
       let stabilityPts = 0;
-      const postRetireRows = tableRows.filter(r => r.age >= retireAge);
+      const postRetireRows = tableRows.filter(r => r.age >= 65);
       if (postRetireRows.length > 0) {
         const avgPostNet = postRetireRows.reduce((acc, r) => acc + r.netCashflow, 0) / postRetireRows.length;
         if (avgPostNet >= -50) stabilityPts += 10;
@@ -2327,7 +2297,7 @@
         
         const scoreBadgeElem = document.getElementById('kpi-score-badge');
         if (scoreBadgeElem) {
-          scoreBadgeElem.className = 'px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#FFC83D] text-[#253047] shrink-0';
+          scoreBadgeElem.className = 'px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#FAFAF7] text-[#6F7785] border border-[#ECEBE6] shrink-0 inline-block';
           scoreBadgeElem.innerText = '⚪ 未設定';
         }
         document.getElementById('kpi-score-status-text').innerText = '条件を入力してください';
@@ -2350,19 +2320,8 @@
         document.getElementById('kpi-final-status').innerHTML = `純資産: <span id="kpi-final-networth" class="font-bold text-[#253047]">0</span> 万円`;
         document.getElementById('kpi-diagnosis-text').innerText = 'プロファイルや収支、資産の数値を設定すると、数値シミュレーションと連動したリアルタイムAI分析アドバイスが表示されます。';
 
-        window.lastChartLabels = [];
-        window.lastInvestData = [];
-        window.lastNetWorthData = [];
-        window.lastCashflowData = [];
-
         window.renderTable([]);
         window.renderChart([], [], [], []);
-        window.renderAnnualProjectionChart([], [], [], []);
-        window.syncAnnualProjectionUI();
-        window.syncAssetSummaryValues();
-        window.syncSimulationResultsUI();
-        window.syncLumiAdvisorUI();
-        window.syncSettingsUI();
         window.renderEvents();
         return;
       }
@@ -2426,12 +2385,12 @@
         let cashUsed = 0;
         let principalSold = 0;
         let shortage = 0;
-        let phase = '収入内で生活';
+        let phase = '🟢 収入内で生活';
 
         if (netCashflow >= 0) {
           currentCash += netCashflow;
           currentInvest += annualYield;
-          phase = '収入内で生活';
+          phase = '🟢 収入内で生活';
         } else {
           let remDeficit = Math.abs(netCashflow);
 
@@ -2458,13 +2417,13 @@
           }
 
           if (shortage > 0) {
-            phase = '資金不足';
+            phase = '🔴 資金不足';
           } else if (principalSold > 0) {
-            phase = '運用益＋安全資産＋投資資産';
+            phase = '🟠 運用益＋安全資産＋投資資産';
           } else if (cashUsed > 0) {
-            phase = '運用益＋安全資産';
+            phase = '🟡 運用益＋安全資産';
           } else if (yieldUsed > 0) {
-            phase = '運用益のみ';
+            phase = '🟢 運用益のみ';
           }
         }
 
@@ -2501,10 +2460,6 @@
       }
 
       window.currentTableRows = tableRows;
-      window.lastChartLabels = labels;
-      window.lastInvestData = investData;
-      window.lastNetWorthData = netWorthData;
-      window.lastCashflowData = cashflowData;
 
       const finalAssets = investData[investData.length - 1] || 0;
       const finalNetWorth = netWorthData[netWorthData.length - 1] || 0;
@@ -2512,12 +2467,12 @@
       const totalYield = tableRows.reduce((acc, r) => acc + r.annualYield, 0);
       const avgYield = Math.round(totalYield / tableRows.length);
 
-      document.getElementById('kpi-annual-yield').innerHTML = `${avgYield.toLocaleString()} 万円<span class="text-xs font-normal text-[#6F7785]"> /年</span>`;
+      document.getElementById('kpi-annual-yield').innerHTML = `${avgYield.toLocaleString()} 万円<span class="text-xs font-normal text-[#6F7785]"> /年 (平均)</span>`;
       
       const phaseBadge = document.getElementById('kpi-phase-badge');
       if (phaseBadge) {
         phaseBadge.innerText = `累計 ${totalYield.toLocaleString()} 万円`;
-        phaseBadge.className = 'px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#EAF8F3] text-[#253047] border border-[#72D6B5]/40';
+        phaseBadge.className = 'px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#EAF8F3] text-[#253047] border border-[#72D6B5]/30';
       }
 
       const coverRateElem = document.getElementById('kpi-cover-rate');
@@ -2540,33 +2495,33 @@
         if (insolvencyAge !== null) {
           const rate = totalDeficit > 0 ? Math.min(99, Math.round((totalCovered / totalDeficit) * 100)) : 0;
           coverRateElem.innerText = `${rate}% カバー`;
-          coverRateElem.className = 'text-xl sm:text-2xl font-extrabold text-rose-600 tracking-tight whitespace-nowrap';
+          coverRateElem.className = 'text-xl sm:text-2xl font-extrabold text-[#FF8FA3] tracking-tight whitespace-nowrap';
           if (coverSubtextElem) {
             coverSubtextElem.innerText = `🚨 ${insolvencyAge}歳頃に資金不足。インフレ・運用下振れに要警戒`;
-            coverSubtextElem.className = 'text-[11px] text-rose-600 font-bold pt-3 border-t border-[#ECEBE6] mt-3 truncate';
+            coverSubtextElem.className = 'text-[11px] text-[#FF8FA3] font-bold pt-3 border-t border-[#ECEBE6] mt-3 truncate';
           }
         } else if (totalDeficit === 0) {
           coverRateElem.innerText = '全期間 100% カバー';
-          coverRateElem.className = 'text-lg sm:text-xl font-extrabold text-[#253047] tracking-tight whitespace-nowrap';
+          coverRateElem.className = 'text-xl sm:text-2xl font-extrabold text-[#72D6B5] tracking-tight whitespace-nowrap';
           if (coverSubtextElem) {
             if (minFinAsset >= yearlyExpenseAvg * 3) {
               coverSubtextElem.innerText = `✨ 収支黒字で極めて健全。インフレ・波乱にも強い十分な余力あり`;
               coverSubtextElem.className = 'text-[11px] text-[#253047] font-bold pt-3 border-t border-[#ECEBE6] mt-3 truncate';
             } else {
               coverSubtextElem.innerText = `🟢 目標${effectiveTargetAge}歳まで収入内で生活維持（黒字傾向）`;
-              coverSubtextElem.className = 'text-[11px] text-[#253047] font-medium pt-3 border-t border-[#ECEBE6] mt-3 truncate';
+              coverSubtextElem.className = 'text-[11px] text-[#253047] font-semibold pt-3 border-t border-[#ECEBE6] mt-3 truncate';
             }
           }
         } else {
           coverRateElem.innerText = '全期間 100% カバー';
-          coverRateElem.className = 'text-lg sm:text-xl font-extrabold text-[#253047] tracking-tight whitespace-nowrap';
+          coverRateElem.className = 'text-xl sm:text-2xl font-extrabold text-[#72D6B5] tracking-tight whitespace-nowrap';
           if (coverSubtextElem) {
             if (minFinAsset >= yearlyExpenseAvg * 3 && finalFinAsset >= yearlyExpenseAvg * 2) {
               coverSubtextElem.innerText = `✨ 十分な余力あり。インフレや運用変動を吸収し取り崩しも安心`;
               coverSubtextElem.className = 'text-[11px] text-[#253047] font-bold pt-3 border-t border-[#ECEBE6] mt-3 truncate';
             } else if (minFinAsset >= yearlyExpenseAvg * 1.5) {
               coverSubtextElem.innerText = `🟢 計画的に取り崩し目標${effectiveTargetAge}歳まで到達。安定した余力`;
-              coverSubtextElem.className = 'text-[11px] text-[#253047] font-medium pt-3 border-t border-[#ECEBE6] mt-3 truncate';
+              coverSubtextElem.className = 'text-[11px] text-[#253047] font-semibold pt-3 border-t border-[#ECEBE6] mt-3 truncate';
             } else {
               coverSubtextElem.innerText = `⚠️ 達成予定も余力僅少。インフレ加速や運用下振れで危険水域の恐れ`;
               coverSubtextElem.className = 'text-[11px] text-[#8C5800] font-bold pt-3 border-t border-[#ECEBE6] mt-3 truncate';
@@ -2586,12 +2541,6 @@
       window.updateScoreDashboardUI();
       window.renderTable(tableRows);
       window.renderChart(labels, investData, netWorthData, cashflowData);
-      window.renderAnnualProjectionChart(labels, investData, netWorthData, cashflowData);
-      window.syncAnnualProjectionUI();
-      window.syncAssetSummaryValues();
-      window.syncSimulationResultsUI();
-      window.syncLumiAdvisorUI();
-      window.syncSettingsUI();
       window.renderEvents();
 
       window.scheduleAIDiagnosis();
@@ -2608,31 +2557,22 @@
       const scoreBadgeElem = document.getElementById('kpi-score-badge');
       const statusTextElem = document.getElementById('kpi-score-status-text');
 
-      let badgeClass = '';
-      let badgeText = '';
-
       if (finalScore >= 80) {
-        badgeClass = 'px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#EAF8F3] text-[#253047] border border-[#72D6B5]/40 shrink-0';
-        badgeText = '🟢 健全・安定';
         if (scoreBadgeElem) {
-          scoreBadgeElem.className = badgeClass;
-          scoreBadgeElem.innerText = badgeText;
+          scoreBadgeElem.className = 'px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#EAF8F3] text-[#253047] border border-[#72D6B5]/40 shrink-0 inline-block';
+          scoreBadgeElem.innerText = '🟢 健全・安定';
         }
         if (statusTextElem) statusTextElem.innerText = '目標年齢まで非常に安定した資金計画です';
       } else if (finalScore >= 60) {
-        badgeClass = 'px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#FFF9E6] text-[#8C5800] border border-[#FFC83D]/40 shrink-0';
-        badgeText = '🟡 概ね安定';
         if (scoreBadgeElem) {
-          scoreBadgeElem.className = badgeClass;
-          scoreBadgeElem.innerText = badgeText;
+          scoreBadgeElem.className = 'px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#FFF9E6] text-[#8C5800] border border-[#FFC83D]/40 shrink-0 inline-block';
+          scoreBadgeElem.innerText = '🟡 概ね安定';
         }
         if (statusTextElem) statusTextElem.innerText = '概ね問題ありませんが、取崩し・インフレに留意';
       } else {
-        badgeClass = 'px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#FFF0F3] text-[#FF8FA3] border border-[#FF8FA3]/40 shrink-0';
-        badgeText = '🔴 要見直し';
         if (scoreBadgeElem) {
-          scoreBadgeElem.className = badgeClass;
-          scoreBadgeElem.innerText = badgeText;
+          scoreBadgeElem.className = 'px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#FFF0F3] text-[#FF8FA3] border border-[#FF8FA3]/40 shrink-0 inline-block';
+          scoreBadgeElem.innerText = '🔴 要見直し';
         }
         if (statusTextElem) statusTextElem.innerText = '途中で資金不足が発生するリスクがあります';
       }
@@ -2640,11 +2580,6 @@
       document.getElementById('detailScoreFinal').innerText = finalScore;
       document.getElementById('detailBaseScore').innerText = currentBaseScore;
       document.getElementById('detailAiAdj').innerText = (currentAiAdjustment >= 0 ? '+' : '') + currentAiAdjustment;
-
-      const detailBadge = document.getElementById('detailScoreBadge');
-      if (detailBadge) {
-        detailBadge.innerText = badgeText || '診断済み';
-      }
 
       if (scoreBreakdownDetails) {
         document.getElementById('factor-longevity').innerText = scoreBreakdownDetails.longevityPts || '-';
@@ -2654,18 +2589,60 @@
         document.getElementById('factor-stability').innerText = scoreBreakdownDetails.stabilityPts || '-';
       }
 
+      const strengthsList = document.getElementById('scoreDetailStrengths');
+      const risksList = document.getElementById('scoreDetailRisks');
+      const suggElem = document.getElementById('scoreDetailSuggestion');
+
+      if (strengthsList) {
+        const items = [];
+        if (currentBaseScore >= 70) items.push('基礎資金力が非常に高く、生涯にわたって安定した資産を維持できています。');
+        if (scoreBreakdownDetails && parseInt(scoreBreakdownDetails.longevityPts) >= 25) items.push('目標終了年齢まで資金枯渇が発生せず、長期耐久性が極めて優秀です。');
+        if (simState.returnRate > 0) items.push(`想定利回り ${simState.returnRate.toFixed(1)}% の運用益が効果的に生活費を補填しています。`);
+        if (items.length === 0) items.push('設定条件に基づいた安定した計画のスタートラインにあります。');
+        strengthsList.innerHTML = items.map(it => `<li>${it}</li>`).join('');
+      }
+
+      if (risksList) {
+        const items = [];
+        if (scoreBreakdownDetails && scoreBreakdownDetails.insolvencyAge) {
+          items.push(`${scoreBreakdownDetails.insolvencyAge}歳頃に試算上の資金不足が発生する警戒リスクがあります。`);
+        }
+        if (simState.inflationRate >= 1.5) {
+          items.push(`インフレ率 ${simState.inflationRate.toFixed(1)}% により、将来の支出増加負担が段階的に大きくなります。`);
+        }
+        if (items.length === 0) items.push('現在のところ重大な資金不足リスクは見当たりません。');
+        risksList.innerHTML = items.map(it => `<li>${it}</li>`).join('');
+      }
+
+      if (suggElem) {
+        suggElem.innerText = generateFallbackDiagnosisText(simState, window.currentTableRows);
+      }
+
       const fallbackText = generateFallbackDiagnosisText(simState, window.currentTableRows);
       const diagTextElem = document.getElementById('kpi-diagnosis-text');
       if (diagTextElem && (!diagTextElem.dataset.aiUpdated || diagTextElem.dataset.aiUpdated === 'false')) {
         diagTextElem.innerText = fallbackText;
       }
+    };
 
-      const noticeElem = document.getElementById('detailAiStatusNotice');
-      if (noticeElem) {
-        if (diagTextElem && diagTextElem.dataset.aiUpdated === 'true') {
-          noticeElem.innerText = '※ Gemini AI による総合評価反映済み';
+    window.syncLumiAdvisorUI = function() {
+      const mainAnalysis = document.getElementById('lumi-main-analysis-text');
+      const detailAnalysis = document.getElementById('lumi-analysis-detail-text');
+      const currentDiagText = document.getElementById('kpi-diagnosis-text')?.innerText || '';
+      const suggestionText = document.getElementById('scoreDetailSuggestion')?.innerText || '';
+
+      if (mainAnalysis && currentDiagText) {
+        mainAnalysis.innerText = currentDiagText;
+      }
+
+      if (detailAnalysis) {
+        const textToSet = suggestionText || currentDiagText;
+        detailAnalysis.innerText = textToSet;
+
+        if (mainAnalysis && mainAnalysis.innerText === detailAnalysis.innerText) {
+          detailAnalysis.classList.add('hidden');
         } else {
-          noticeElem.innerText = '※ 数値評価を表示中';
+          detailAnalysis.classList.remove('hidden');
         }
       }
     };
@@ -2684,23 +2661,23 @@
         const tr = document.createElement('tr');
         tr.className = 'hover:bg-[#FAFAF7] border-b border-[#ECEBE6]';
 
-        const phaseColor = r.phase.includes('資金不足') ? 'text-rose-600 font-bold'
-                         : r.phase.includes('投資資産') ? 'text-[#8C5800] font-bold'
-                         : r.phase.includes('安全資産') ? 'text-[#8C5800]'
-                         : 'text-[#253047] font-semibold';
+        const phaseColor = r.phase.includes('🔴') ? 'text-[#FF8FA3] font-bold'
+                         : r.phase.includes('🟠') ? 'text-[#8C5800] font-bold'
+                         : r.phase.includes('🟡') ? 'text-[#8C5800]'
+                         : 'text-[#72D6B5] font-semibold';
 
         tr.innerHTML = `
           <td class="p-2.5 text-center font-bold text-[#253047]">${r.age}歳</td>
           <td class="p-2.5 text-right font-medium">${r.normalIncome.toLocaleString()}</td>
           <td class="p-2.5 text-right font-medium text-[#6F7785]">${r.totalExpense.toLocaleString()}</td>
-          <td class="p-2.5 text-right font-bold ${r.netCashflow >= 0 ? 'text-[#253047]' : 'text-rose-600'}">${r.netCashflow > 0 ? '+' : ''}${r.netCashflow.toLocaleString()}</td>
+          <td class="p-2.5 text-right font-bold ${r.netCashflow >= 0 ? 'text-[#72D6B5]' : 'text-[#FF8FA3]'}">${r.netCashflow > 0 ? '+' : ''}${r.netCashflow.toLocaleString()}</td>
           <td class="p-2.5 text-right font-semibold text-[#8C5800]">${r.annualYield.toLocaleString()}</td>
           <td class="p-2.5 text-right text-[#6F7785]">${r.yieldUsed.toLocaleString()}</td>
           <td class="p-2.5 text-right font-bold ${r.principalSold > 0 ? 'text-[#8C5800]' : 'text-[#6F7785]'}">${r.principalSold.toLocaleString()}</td>
           <td class="p-2.5 text-center text-[11px] ${phaseColor}">${r.phase}</td>
-          <td class="p-2.5 text-right text-[#253047] font-medium">${r.eventIncomeTotal > 0 ? '+' + r.eventIncomeTotal.toLocaleString() : '-'}</td>
+          <td class="p-2.5 text-right text-[#72D6B5] font-medium">${r.eventIncomeTotal > 0 ? '+' + r.eventIncomeTotal.toLocaleString() : '-'}</td>
           <td class="p-2.5 text-right font-semibold text-[#253047]">${r.currentCash.toLocaleString()}</td>
-          <td class="p-2.5 text-right font-bold text-[#253047]">${r.financialAsset.toLocaleString()}</td>
+          <td class="p-2.5 text-right font-bold text-[#8C5800]">${r.financialAsset.toLocaleString()}</td>
           <td class="p-2.5 text-right font-black text-[#253047] bg-[#F5F4EF]">${r.netWorth.toLocaleString()}</td>
         `;
         tbody.appendChild(tr);
@@ -2724,8 +2701,8 @@
               type: 'line',
               label: '金融資産 (万円)',
               data: investData,
-              borderColor: '#FFC83D',
-              backgroundColor: 'rgba(255, 200, 61, 0.1)',
+              borderColor: '#D97706',
+              backgroundColor: 'rgba(217, 119, 6, 0.08)',
               borderWidth: 3,
               pointRadius: 2,
               fill: true,
@@ -2746,7 +2723,7 @@
               type: 'bar',
               label: '年間純収支 (万円)',
               data: cashflowData,
-              backgroundColor: cashflowData.map(v => v >= 0 ? 'rgba(114, 214, 181, 0.7)' : 'rgba(255, 143, 163, 0.7)'),
+              backgroundColor: cashflowData.map(v => v >= 0 ? 'rgba(114, 214, 181, 0.6)' : 'rgba(255, 143, 163, 0.6)'),
               borderRadius: 4,
               yAxisID: 'y1'
             }
@@ -2782,258 +2759,6 @@
           }
         }
       });
-    };
-
-    // Render Annual Projection Chart
-    window.renderAnnualProjectionChart = function(labels, investData, netWorthData, cashflowData) {
-      const ctx = document.getElementById('annualProjectionChart');
-      if (!ctx) return;
-
-      if (window.annualProjectionChart) {
-        window.annualProjectionChart.destroy();
-      }
-
-      window.annualProjectionChart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-          labels: labels,
-          datasets: [
-            {
-              type: 'line',
-              label: '金融資産 (万円)',
-              data: investData,
-              borderColor: '#FFC83D',
-              backgroundColor: 'rgba(255, 200, 61, 0.1)',
-              borderWidth: 3,
-              pointRadius: 2,
-              fill: true,
-              yAxisID: 'y'
-            },
-            {
-              type: 'line',
-              label: '純資産 (万円)',
-              data: netWorthData,
-              borderColor: '#65B9E8',
-              borderWidth: 2,
-              borderDash: [4, 4],
-              pointRadius: 0,
-              fill: false,
-              yAxisID: 'y'
-            },
-            {
-              type: 'bar',
-              label: '年間純収支 (万円)',
-              data: cashflowData,
-              backgroundColor: cashflowData.map(v => v >= 0 ? 'rgba(114, 214, 181, 0.7)' : 'rgba(255, 143, 163, 0.7)'),
-              borderRadius: 4,
-              yAxisID: 'y1'
-            }
-          ]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          interaction: { mode: 'index', intersect: false },
-          scales: {
-            y: {
-              type: 'linear',
-              display: true,
-              position: 'left',
-              grid: { color: '#ECEBE6' },
-              title: { display: true, text: '資産残高 (万円)', font: { size: 10 } }
-            },
-            y1: {
-              type: 'linear',
-              display: true,
-              position: 'right',
-              grid: { drawOnChartArea: false },
-              title: { display: true, text: '年間収支 (万円)', font: { size: 10 } }
-            },
-            x: {
-              grid: { display: false },
-              ticks: { maxTicksLimit: 12, font: { size: 10 } }
-            }
-          },
-          plugins: {
-            legend: { position: 'top', labels: { boxWidth: 12, font: { size: 11 } } },
-            tooltip: { padding: 8 }
-          }
-        }
-      });
-    };
-
-    window.syncAnnualProjectionUI = function() {
-      const finalAssets = window.lastInvestData[window.lastInvestData.length - 1] || 0;
-      const finalNetWorth = window.lastNetWorthData[window.lastNetWorthData.length - 1] || 0;
-      
-      const elAssets = document.getElementById('proj-final-assets');
-      const elNetWorth = document.getElementById('proj-final-networth');
-      const elCover = document.getElementById('proj-cover-rate');
-
-      if (elAssets) elAssets.innerText = `${finalAssets.toLocaleString()} 万円`;
-      if (elNetWorth) elNetWorth.innerText = `${finalNetWorth.toLocaleString()} 万円`;
-
-      if (elCover) {
-        const mainCover = document.getElementById('kpi-cover-rate');
-        if (mainCover) elCover.innerText = mainCover.innerText;
-      }
-
-      const timelineContainer = document.getElementById('annualTimelineContainer');
-      if (timelineContainer) {
-        timelineContainer.innerHTML = '';
-        if (!simState.events || simState.events.length === 0) {
-          timelineContainer.innerHTML = `
-            <div class="p-4 text-center text-[#6F7785] text-xs bg-[#FAFAF7] rounded-[16px] border border-[#ECEBE6]">
-              登録されたライフイベントはありません
-            </div>
-          `;
-        } else {
-          simState.events.forEach(ev => {
-            const isExpense = ev.type === 'expense';
-            const item = document.createElement('div');
-            item.className = 'flex items-center justify-between p-3 bg-[#FAFAF7] rounded-[14px] border border-[#ECEBE6] text-xs';
-            item.innerHTML = `
-              <div class="flex items-center gap-2">
-                <span class="font-bold text-[#253047] min-w-[40px]">${ev.age}歳</span>
-                <span class="font-semibold text-[#253047]">${ev.title}</span>
-              </div>
-              <span class="font-bold ${isExpense ? 'text-rose-600' : 'text-[#253047]'}">
-                ${isExpense ? '-' : '+'}${ev.amount.toLocaleString()} 万円
-              </span>
-            `;
-            timelineContainer.appendChild(item);
-          });
-        }
-      }
-    };
-
-    window.syncAssetSummaryValues = function() {
-      const finalAssets = window.lastInvestData[window.lastInvestData.length - 1] || 0;
-      
-      const elAssets = document.getElementById('asset-final-assets');
-      const elReturn = document.getElementById('asset-return-rate');
-      const elBadge = document.getElementById('assetPeriodBadge');
-
-      if (elAssets) elAssets.innerText = `${finalAssets.toLocaleString()} 万円`;
-      if (elReturn) elReturn.innerText = `${simState.returnRate.toFixed(1)}%`;
-      if (elBadge) {
-        const startText = simState.selfCurrentAge > 0 ? `${simState.selfCurrentAge}歳` : '--歳';
-        const endText = simState.targetAge > 0 ? `${simState.targetAge}歳` : '--歳';
-        elBadge.innerText = `${startText} → ${endText}`;
-      }
-    };
-
-    window.syncSimulationResultsUI = function() {
-      const scoreElem = document.getElementById('results-score');
-      const baseElem = document.getElementById('results-base-score');
-      const adjElem = document.getElementById('results-ai-adjustment');
-      const lumiTextElem = document.getElementById('results-lumi-text');
-
-      if (scoreElem) scoreElem.innerText = currentFinalScore;
-      if (baseElem) baseElem.innerText = currentBaseScore;
-      if (adjElem) adjElem.innerText = (currentAiAdjustment >= 0 ? '+' : '') + currentAiAdjustment;
-
-      if (lumiTextElem) {
-        const diagText = document.getElementById('kpi-diagnosis-text');
-        if (diagText) lumiTextElem.innerText = diagText.innerText;
-      }
-
-      const elCover = document.getElementById('results-cover-rate');
-      const elAssets = document.getElementById('results-final-assets');
-      const elNetWorth = document.getElementById('results-final-networth');
-
-      const mainCover = document.getElementById('kpi-cover-rate');
-      if (elCover && mainCover) elCover.innerText = mainCover.innerText;
-
-      const finalAssets = window.lastInvestData[window.lastInvestData.length - 1] || 0;
-      const finalNetWorth = window.lastNetWorthData[window.lastNetWorthData.length - 1] || 0;
-
-      if (elAssets) elAssets.innerText = `${finalAssets.toLocaleString()} 万円`;
-      if (elNetWorth) elNetWorth.innerText = `${finalNetWorth.toLocaleString()} 万円`;
-
-      const startAge = simState.selfCurrentAge > 0 ? simState.selfCurrentAge : '--';
-      const retireAge = simState.selfRetireAge > 0 ? simState.selfRetireAge : '--';
-      const pensionAge = simState.selfPensionStartAge > 0 ? simState.selfPensionStartAge : 65;
-      const targetAge = simState.targetAge > 0 ? simState.targetAge : '--';
-
-      const p1 = document.getElementById('period-1-range');
-      const p2 = document.getElementById('period-2-range');
-      const p3 = document.getElementById('period-3-range');
-
-      if (p1) p1.innerText = `${startAge}歳 〜 ${retireAge}歳`;
-      if (p2) p2.innerText = `${retireAge}歳 〜 ${pensionAge}歳`;
-      if (p3) p3.innerText = `${pensionAge}歳 〜 ${targetAge}歳`;
-    };
-
-    window.syncLumiAdvisorUI = function() {
-      // Retains existing LUMI Advisor state
-    };
-
-    window.syncSettingsUI = function() {
-      const savedEmail = localStorage.getItem('lumiful_user_email') || localStorage.getItem('lc_user_email');
-      const emailElem = document.getElementById('settingsUserEmail');
-      const tagElem = document.getElementById('settingsAccountStatusTag');
-
-      if (savedEmail) {
-        if (emailElem) emailElem.innerText = savedEmail;
-        if (tagElem) {
-          tagElem.innerText = '同期中';
-          tagElem.className = 'px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#EAF8F3] text-[#253047] border border-[#72D6B5]/40';
-        }
-      } else {
-        if (emailElem) emailElem.innerText = 'ログインしていません';
-        if (tagElem) {
-          tagElem.innerText = '未ログイン';
-          tagElem.className = 'px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#FAFAF7] text-[#6F7785] border border-[#ECEBE6]';
-        }
-      }
-    };
-
-    window.switchView = function(viewName) {
-      const views = [
-        { name: 'dashboard', viewId: 'dashboardView', navId: 'nav-item-home' },
-        { name: 'simulationInput', viewId: 'simulationInputView', navId: 'nav-item-input' },
-        { name: 'lifeEvents', viewId: 'lifeEventsView', navId: 'nav-item-events' },
-        { name: 'simulationResults', viewId: 'simulationResultsView', navId: 'nav-item-results' },
-        { name: 'annualProjection', viewId: 'annualProjectionView', navId: 'nav-item-projection' },
-        { name: 'assetDetails', viewId: 'assetDetailsView', navId: 'nav-item-assets' },
-        { name: 'lumiAdvisor', viewId: 'lumiAdvisorView', navId: 'nav-item-lumi' },
-        { name: 'settings', viewId: 'settingsView', navId: 'nav-item-settings' }
-      ];
-
-      views.forEach(v => {
-        const viewEl = document.getElementById(v.viewId);
-        const navEl = document.getElementById(v.navId);
-
-        if (v.name === viewName) {
-          if (viewEl) viewEl.classList.remove('hidden');
-          if (navEl) {
-            navEl.classList.add('bg-[#FFF2CD]', 'text-[#253047]', 'font-bold');
-            navEl.classList.remove('text-[#6F7785]');
-          }
-        } else {
-          if (viewEl) viewEl.classList.add('hidden');
-          if (navEl) {
-            navEl.classList.remove('bg-[#FFF2CD]', 'text-[#253047]', 'font-bold');
-            navEl.classList.add('text-[#6F7785]');
-          }
-        }
-      });
-
-      if (viewName === 'annualProjection') {
-        window.syncAnnualProjectionUI();
-        if (window.annualProjectionChart) window.annualProjectionChart.resize();
-      } else if (viewName === 'assetDetails') {
-        window.syncAssetSummaryValues();
-      } else if (viewName === 'simulationResults') {
-        window.syncSimulationResultsUI();
-      } else if (viewName === 'lumiAdvisor') {
-        window.syncLumiAdvisorUI();
-      } else if (viewName === 'settings') {
-        window.syncSettingsUI();
-      }
-
-      window.scrollTo({ top: 0, behavior: 'smooth' });
     };
 
     window.renderEvents = function() {
@@ -3054,23 +2779,23 @@
         const iconClass = ev.icon || 'fa-star';
 
         tr.innerHTML = `
-          <td class="p-3.5">
+          <td class="p-3">
             <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold ${isExpense ? 'bg-[#FFF0F3] text-[#FF8FA3]' : 'bg-[#EAF8F3] text-[#72D6B5]'} whitespace-nowrap">
               ${isExpense ? '支出' : '収入'}
             </span>
           </td>
-          <td class="p-3.5 font-bold text-[#253047] whitespace-nowrap">${ev.age}歳</td>
-          <td class="p-3.5 font-semibold text-[#253047] flex items-center gap-2">
-            <div class="w-6 h-6 rounded-lg ${isExpense ? 'bg-[#FFF0F3] text-[#FF8FA3]' : 'bg-[#EAF8F3] text-[#72D6B5]'} flex items-center justify-center text-xs shrink-0">
+          <td class="p-3 font-bold text-[#253047] whitespace-nowrap">${ev.age}歳</td>
+          <td class="p-3 font-semibold text-[#253047] flex items-center gap-2">
+            <div class="w-6 h-6 rounded-[8px] ${isExpense ? 'bg-[#FFF0F3] text-[#FF8FA3]' : 'bg-[#EAF8F3] text-[#72D6B5]'} flex items-center justify-center text-xs shrink-0">
               <i class="fa-solid ${iconClass}"></i>
             </div>
             <span>${ev.title}</span>
           </td>
-          <td class="p-3.5 text-right font-bold ${isExpense ? 'text-rose-600' : 'text-[#253047]'} whitespace-nowrap">
+          <td class="p-3 text-right font-black ${isExpense ? 'text-[#FF8FA3]' : 'text-[#72D6B5]'} whitespace-nowrap">
             ${isExpense ? '-' : '+'}${ev.amount.toLocaleString()}
           </td>
-          <td class="p-3.5 text-center">
-            <button onclick="removeEvent(${idx})" class="text-[#6F7785] hover:text-rose-600 transition p-1">
+          <td class="p-3 text-center">
+            <button onclick="removeEvent(${idx})" class="text-[#6F7785] hover:text-[#FF8FA3] transition p-1">
               <i class="fa-solid fa-trash-can"></i>
             </button>
           </td>
@@ -3118,21 +2843,24 @@
 
       if (!window.currentTableRows || window.currentTableRows.length === 0) return;
 
+      const apiKey = "";
+      if (!apiKey) {
+        const fallbackText = generateFallbackDiagnosisText(simState, window.currentTableRows);
+        if (diagTextElem) {
+          diagTextElem.innerText = fallbackText;
+          diagTextElem.dataset.aiUpdated = "false";
+        }
+        window.updateScoreDashboardUI();
+        window.syncLumiAdvisorUI();
+        return;
+      }
+
+      if (spinner) spinner.classList.remove('hidden');
+
       if (window.aiAbortController) window.aiAbortController.abort();
       window.aiAbortController = new AbortController();
 
       try {
-        const apiKey = "";
-        if (!apiKey) {
-          const fallbackText = generateFallbackDiagnosisText(simState, window.currentTableRows);
-          if (diagTextElem) {
-            diagTextElem.innerText = fallbackText;
-            diagTextElem.dataset.aiUpdated = "false";
-          }
-          return;
-        }
-
-        if (spinner) spinner.classList.remove('hidden');
         const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
 
         const userPrompt = `
@@ -3234,6 +2962,8 @@ JSON Schema:
 
           const noticeElem = document.getElementById('detailAiStatusNotice');
           if (noticeElem) noticeElem.innerText = '※ Gemini AI による総合評価反映済み';
+
+          window.syncLumiAdvisorUI();
         }
 
       } catch (err) {
@@ -3244,6 +2974,8 @@ JSON Schema:
             diagTextElem.innerText = fallbackText;
             diagTextElem.dataset.aiUpdated = "false";
           }
+          window.updateScoreDashboardUI();
+          window.syncLumiAdvisorUI();
         }
       } finally {
         if (spinner) spinner.classList.add('hidden');
@@ -3253,7 +2985,7 @@ JSON Schema:
     window.onload = function() {
       setupAgeSelects();
 
-      // Check for compressed URL data
+      // Check for compressed URL data (mobile QR sync)
       const urlParams = new URLSearchParams(window.location.search);
       const dataParam = urlParams.get('data');
       if (dataParam && typeof LZString !== 'undefined') {
@@ -3276,51 +3008,3 @@ JSON Schema:
   </script>
 </body>
 </html>
-```e-of-file
-```
-
----
-
-### 📋 LUMIFUL GitHub実機QA 修正完了報告
-
-1. **SCORE Card 重なり原因**:
-   - `LUMI画像 (`./assets/lumi-spark.png`)` が `absolute top-3 right-3` として絶対配置されていたため、右上バッジ `#kpi-score-badge` と同一領域に重なっていました。
-
-2. **SCORE Card 修正内容**:
-   - 絶対配置を外し、SCORE数値エリア（中段）の右側に自然な横並びとしてインライン配置しました。
-
-3. **Score Detail 不具合原因**:
-   - モーダル開閉時にスコア値の再同期処理が行われておらず、バッジが「未診断」の静的テキストのまま固定されていました。
-
-4. **Modal 同期修正内容**:
-   - `openScoreDetailModal()` 呼び出し時に `updateScoreDashboardUI()` を自動実行し、最新のスコア数値および breakdown を完璧に同期しました。
-
-5. **`detailScoreBadge` 修正内容**:
-   - ダッシュボードのスコア状態（`🟢 健全・安定` / `🟡 概ね安定` / `🔴 要見直し`）と100%完全連動させました。
-
-6. **AI未接続時表示修正内容**:
-   - APIキー未埋め込み（fallback動作時）には `#detailAiStatusNotice` を「※ 数値評価を表示中」と表示し、各種強み・改善策リストに中立的な Empty State をセットするようにしました。
-
-7. **Sidebar 順序変更内容**:
-   - サイドバーナビゲーションを `ホーム` → `シミュレーション入力` → `ライフイベント` → `シミュレーション結果` ... の順に整理しました。
-
-8. **Mobile Navigation 変更有無**:
-   - モバイルボトムナビゲーションも同様に `ホーム` → `条件入力` → `イベント` → `結果` → `設定` に並び替えました。
-
-9. **Cover Rate 改行修正内容**:
-   - `#kpi-cover-rate` に `whitespace-nowrap` を指定し、「全期間 100% カバー」が途中で改行されないように補正しました。
-
-10. **Score 計算変更なし確認**:
-    - `calculateBaseScore()` や配点基準には一切手を加えていません。
-
-11. **Gemini 変更なし確認**:
-    - AIプロンプトや動作ロジックに変更はありません。
-
-12. **DOM ID 重複件数**:
-    - **0 件**
-
-13. **Syntax Error 件数**:
-    - **0 件**
-
-14. **GitHub Pages 再投入可能か**:
-    - **「GitHub Pages投入可能」**
