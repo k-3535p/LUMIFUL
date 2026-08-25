@@ -1,0 +1,3798 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>LUMIFUL - 資金フローシミュレーター</title>
+
+  <!-- Favicon & Apple Touch Icon -->
+  <link rel="icon" type="image/png" href="./assets/lumiful-icon.png">
+  <link rel="apple-touch-icon" href="./assets/lumiful-icon.png">
+
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- LZString for URL Compression -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lz-string/1.4.4/lz-string.min.js"></script>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&family=Zen+Kaku+Gothic+New:wght@400;500;700;900&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Zen Kaku Gothic New"', '"Plus Jakarta Sans"', 'sans-serif'],
+          },
+          colors: {
+            lumiful: {
+              50: '#FFF9E6',
+              100: '#FEF3C7',
+              500: '#FFC83D',
+              600: '#D97706',
+              700: '#8C5800',
+              900: '#253047',
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    :root {
+      /* Brand Tokens */
+      --lumi-yellow: #FFC83D;
+      --lumi-yellow-soft: #FFF9E6;
+      --lumi-blue: #65B9E8;
+      --lumi-blue-soft: #EAF6FC;
+      --lumi-mint: #72D6B5;
+      --lumi-mint-soft: #EAF8F3;
+      --lumi-pink: #FF8FA3;
+      --lumi-pink-soft: #FFF0F3;
+      --lumi-orange: #F6A457;
+
+      /* Neutral Palette */
+      --bg-main: #FAFAF7;
+      --surface: #FFFFFF;
+      --surface-warm: #FEFBF0;
+
+      /* Text Hierarchy */
+      --text-main: #253047;
+      --text-sub: #6F7785;
+
+      /* Border Token */
+      --border-soft: #ECEBE6;
+
+      /* Unified Radius Scale */
+      --radius-sm: 10px;
+      --radius-input: 14px;
+      --radius-button: 14px;
+      --radius-card-inner: 16px;
+      --radius-card-std: 20px;
+      --radius-card-feature: 24px;
+      --radius-hero: 28px;
+
+      /* Subtle Shadows */
+      --shadow-soft: 0 4px 18px rgba(37, 48, 71, 0.04);
+      --shadow-modal: 0 12px 36px rgba(37, 48, 71, 0.08);
+    }
+
+    @media print {
+      .no-print { display: none !important; }
+      body { background: white !important; padding: 0 !important; color: black !important; }
+      .print-container { box-shadow: none !important; border: none !important; max-width: 100% !important; margin: 0 !important; }
+      .page-break { page-break-inside: avoid; }
+    }
+
+    body {
+      background-color: var(--bg-main);
+      color: var(--text-main);
+      font-feature-settings: "palt" 1;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: #FAFAF7; }
+    ::-webkit-scrollbar-thumb { background: #E2E0D8; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #C8C5BB; }
+
+    /* LUMIFUL Common Button Foundation */
+    .btn-lumi-primary {
+      background-color: var(--lumi-yellow);
+      color: var(--text-main);
+      font-weight: 700;
+      border-radius: var(--radius-button);
+      transition: all 0.15s ease-in-out;
+      border: 1px solid transparent;
+      box-shadow: 0 2px 6px rgba(255, 200, 61, 0.22);
+    }
+    .btn-lumi-primary:hover:not(:disabled) {
+      filter: brightness(0.97);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 10px rgba(255, 200, 61, 0.32);
+    }
+
+    .btn-lumi-secondary {
+      background-color: var(--surface);
+      color: var(--text-main);
+      font-weight: 600;
+      border: 1px solid var(--border-soft);
+      border-radius: var(--radius-button);
+      transition: all 0.15s ease-in-out;
+    }
+    .btn-lumi-secondary:hover:not(:disabled) {
+      background-color: #F8F7F2;
+      border-color: #DDDBCF;
+      transform: translateY(-1px);
+    }
+
+    .btn-lumi-ghost {
+      background-color: transparent;
+      border: 1px solid var(--border-soft);
+      color: var(--text-sub);
+      font-weight: 600;
+      border-radius: var(--radius-button);
+      transition: all 0.15s ease-in-out;
+    }
+    .btn-lumi-ghost:hover:not(:disabled) {
+      background-color: #F5F4EF;
+      color: var(--text-main);
+    }
+
+    /* Input Base Style Foundation */
+    .lumi-input {
+      background-color: var(--surface);
+      border: 1px solid #E4E6EA;
+      border-radius: var(--radius-input);
+      color: var(--text-main);
+      height: 42px;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    }
+    .lumi-input:focus {
+      outline: none;
+      border-color: var(--lumi-blue);
+      box-shadow: 0 0 0 3px rgba(101, 185, 232, 0.15);
+    }
+
+    /* Brand Logo Standard Sizing */
+    .lumiful-app-icon {
+      width: 44px;
+      height: 44px;
+      object-fit: contain;
+      border-radius: 12px;
+      flex-shrink: 0;
+    }
+
+    .lumiful-header-logo {
+      height: 38px;
+      width: auto;
+      max-width: 100%;
+      object-fit: contain;
+      display: block;
+    }
+
+    @media (max-width: 640px) {
+      .lumiful-app-icon {
+        width: 38px;
+        height: 38px;
+        border-radius: 10px;
+      }
+      .lumiful-header-logo {
+        height: 34px;
+      }
+    }
+  </style>
+</head>
+<body class="bg-[#FAFAF7] text-[#253047] min-h-screen font-sans antialiased relative overflow-x-hidden">
+
+  <!-- Toast Notification Container -->
+  <div id="toastContainer" class="fixed bottom-20 lg:bottom-6 right-4 z-50 flex flex-col gap-2 pointer-events-none"></div>
+
+  <!-- Background Decorative Blurs -->
+  <div class="fixed top-[-10%] left-[-10%] w-[500px] h-[500px] bg-amber-400/10 rounded-full blur-3xl pointer-events-none -z-10 no-print"></div>
+  <div class="fixed top-[20%] right-[-10%] w-[450px] h-[450px] bg-sky-400/10 rounded-full blur-3xl pointer-events-none -z-10 no-print"></div>
+
+  <!-- MOBILE TOP HEADER (Visible on Mobile/Tablet < 1024px) -->
+  <div class="lg:hidden flex items-center justify-between p-3.5 bg-white border border-[#ECEBE6] rounded-[20px] shadow-sm no-print m-2.5">
+    <img
+      src="./assets/lumiful-logo.png"
+      alt="LUMIFUL"
+      class="h-8 w-auto object-contain cursor-pointer"
+      onclick="switchView('dashboard')"
+    />
+    <button onclick="openAuthModal()" class="px-3.5 py-1.5 btn-lumi-primary text-xs flex items-center gap-1.5 whitespace-nowrap">
+      <i class="fa-solid fa-user-circle"></i>
+      <span>ログイン</span>
+    </button>
+  </div>
+
+  <!-- MAIN APP SHELL CONTAINER -->
+  <div class="flex min-h-screen bg-[#FAFAF7]">
+
+    <!-- DESKTOP SIDEBAR (Visible on Desktop >= 1024px) -->
+    <aside class="hidden lg:flex flex-col w-[240px] bg-white border-r border-[#ECEBE6] p-5 shrink-0 justify-between sticky top-0 h-screen no-print z-20">
+      <div class="space-y-6">
+        <!-- Sidebar Brand Logo -->
+        <div class="px-1 py-1">
+          <img
+            src="./assets/lumiful-logo.png"
+            alt="LUMIFUL"
+            class="h-10 w-auto object-contain cursor-pointer"
+            onclick="switchView('dashboard')"
+          />
+        </div>
+
+        <!-- Sidebar Navigation (8 View Options) -->
+        <nav class="space-y-1 text-xs font-semibold">
+          <button id="nav-item-home" onclick="switchView('dashboard')" class="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-[14px] bg-[#FFF2CD] text-[#253047] font-bold transition text-left">
+            <i class="fa-solid fa-house text-[#8C5800] text-sm w-4 text-center"></i>
+            <span>ホーム</span>
+          </button>
+          <button id="nav-item-input" onclick="switchView('simulationInput')" class="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-[14px] text-[#6F7785] hover:bg-[#FAFAF7] hover:text-[#253047] transition text-left">
+            <i class="fa-solid fa-sliders text-sm w-4 text-center"></i>
+            <span>シミュレーション入力</span>
+          </button>
+          <button id="nav-item-results" onclick="switchView('simulationResults')" class="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-[14px] text-[#6F7785] hover:bg-[#FAFAF7] hover:text-[#253047] transition text-left">
+            <i class="fa-solid fa-chart-line text-sm w-4 text-center"></i>
+            <span>シミュレーション結果</span>
+          </button>
+          <button id="nav-item-projection" onclick="switchView('annualProjection')" class="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-[14px] text-[#6F7785] hover:bg-[#FAFAF7] hover:text-[#253047] transition text-left">
+            <i class="fa-solid fa-arrow-trend-up text-sm w-4 text-center"></i>
+            <span>年間推移グラフ</span>
+          </button>
+          <button id="nav-item-assets" onclick="switchView('assetDetails')" class="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-[14px] text-[#6F7785] hover:bg-[#FAFAF7] hover:text-[#253047] transition text-left">
+            <i class="fa-solid fa-wallet text-sm w-4 text-center"></i>
+            <span>資産詳細</span>
+          </button>
+          <button id="nav-item-events" onclick="switchView('lifeEvents')" class="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-[14px] text-[#6F7785] hover:bg-[#FAFAF7] hover:text-[#253047] transition text-left">
+            <i class="fa-solid fa-calendar-days text-sm w-4 text-center"></i>
+            <span>ライフイベント</span>
+          </button>
+          <button id="nav-item-lumi" onclick="switchView('lumiAdvisor')" class="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-[14px] text-[#6F7785] hover:bg-[#FAFAF7] hover:text-[#253047] transition text-left">
+            <i class="fa-solid fa-heart text-[#FF8FA3] text-sm w-4 text-center"></i>
+            <span>AIアドバイザー (LUMI)</span>
+          </button>
+          <button id="nav-item-settings" onclick="switchView('settings')" class="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-[14px] text-[#6F7785] hover:bg-[#FAFAF7] hover:text-[#253047] transition text-left">
+            <i class="fa-solid fa-gear text-sm w-4 text-center"></i>
+            <span>設定 / プラン管理</span>
+          </button>
+        </nav>
+      </div>
+
+      <!-- Sidebar Bottom Brand Message -->
+      <div class="p-3.5 bg-[#FEFBF0] border border-[#ECEBE6] rounded-[16px] space-y-1">
+        <div class="text-[11px] font-bold text-[#253047] flex items-center gap-1">
+          <i class="fa-solid fa-sparkles text-[#FFC83D]"></i>
+          <span>未来はつくれる</span>
+        </div>
+        <p class="text-[10px] text-[#6F7785] leading-relaxed">
+          今日の選択が、10年後のあなたをもっと軽やかにする。
+        </p>
+      </div>
+    </aside>
+
+    <!-- MAIN CONTENT SHELL -->
+    <main class="flex-1 min-w-0 p-4 sm:p-6 lg:p-8 space-y-6 pb-24 lg:pb-8 max-w-[1320px] mx-auto">
+
+      <!-- TOP USER / ACTION AREA (Desktop Top Header Bar) -->
+      <header class="hidden lg:flex bg-white p-4 rounded-[20px] border border-[#ECEBE6] flex-wrap items-center justify-between gap-3 no-print">
+        
+        <!-- Left: User Greeting -->
+        <div class="flex items-center gap-3 min-w-0">
+          <div class="w-9 h-9 rounded-full bg-[#FFF2CD] text-[#8C5800] flex items-center justify-center font-bold text-xs shrink-0">
+            <i class="fa-solid fa-user"></i>
+          </div>
+          <div class="min-w-0">
+            <h2 class="text-sm font-bold text-[#253047] truncate">こんにちは！</h2>
+            <p class="text-xs text-[#6F7785] truncate">あなたの未来を一緒に見ていきましょう。</p>
+          </div>
+        </div>
+
+        <!-- Right: Action Buttons Group -->
+        <div class="flex items-center gap-2 flex-wrap sm:flex-nowrap">
+          <button id="authAccountBtn" onclick="openAuthModal()" class="px-3.5 py-2 btn-lumi-primary text-xs flex items-center gap-1.5 whitespace-nowrap shrink-0">
+            <i class="fa-solid fa-user-circle" id="authBtnIcon"></i>
+            <span id="authBtnText" class="whitespace-nowrap">アカウント作成 / ログイン</span>
+          </button>
+
+          <button onclick="openPlansModal()" class="px-3 py-2 btn-lumi-secondary text-xs flex items-center gap-1.5 whitespace-nowrap shrink-0">
+            <i class="fa-solid fa-folder-open text-[#65B9E8]"></i>
+            <span class="hidden sm:inline whitespace-nowrap">プラン管理</span>
+          </button>
+
+          <button onclick="openShareModal()" class="px-3 py-2 btn-lumi-secondary text-xs flex items-center gap-1.5 whitespace-nowrap shrink-0">
+            <i class="fa-solid fa-share-nodes text-[#FF8FA3]"></i>
+            <span class="hidden sm:inline whitespace-nowrap">スマホへ送る</span>
+          </button>
+
+          <button onclick="exportCSV()" class="px-3 py-2 btn-lumi-ghost text-xs flex items-center gap-1.5 whitespace-nowrap shrink-0">
+            <i class="fa-solid fa-file-csv text-[#72D6B5]"></i>
+            <span class="hidden sm:inline whitespace-nowrap">CSV</span>
+          </button>
+
+          <button onclick="window.print()" class="px-3.5 py-2 bg-[#253047] hover:bg-[#1e2638] text-white text-xs font-bold rounded-[14px] transition flex items-center gap-1.5 whitespace-nowrap shrink-0">
+            <i class="fa-solid fa-print"></i>
+            <span class="whitespace-nowrap">印刷 / PDF</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- VIEW 1: DASHBOARD VIEW -->
+      <div id="dashboardView" class="space-y-6">
+        
+        <!-- DASHBOARD INTRO HEADER -->
+        <div class="space-y-1 mb-1">
+          <h1 class="text-2xl sm:text-3xl font-extrabold text-[#253047] tracking-tight">あなたの未来</h1>
+          <p class="text-xs sm:text-sm text-[#6F7785]">現在の条件から、これからの人生設計を見てみましょう。</p>
+        </div>
+
+        <!-- DASHBOARD HERO (4 KPI Cards + LUMI Advisor Panel) -->
+        <section id="hero-section" class="space-y-4">
+          
+          <!-- 4 KPI Cards Grid -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            
+            <!-- KPI 1: LUMIFUL SCORE (Primary KPI) -->
+            <div class="bg-[#FFF9E6] rounded-[24px] p-5 sm:p-6 border border-[#FCE3A6] flex flex-col justify-between relative overflow-hidden transition">
+              <div>
+                <div class="flex items-center justify-between gap-2 mb-2">
+                  <span class="text-xs font-bold text-[#8C5800] uppercase tracking-wider">LUMIFUL SCORE</span>
+                  <span id="kpi-score-badge" class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#FFC83D] text-[#253047]">
+                    ⚪ 未設定
+                  </span>
+                </div>
+
+                <div class="flex items-baseline gap-1.5 my-2">
+                  <div id="kpi-score" class="text-4xl sm:text-5xl font-extrabold text-[#253047] tracking-tight">0</div>
+                  <span class="text-sm font-bold text-[#6F7785]">/ 100 点</span>
+                </div>
+
+                <div id="kpi-score-breakdown" class="text-[11px] text-[#8C5800] font-medium flex items-center gap-1.5 my-1.5">
+                  <span>Base: <strong id="kpi-base-score" class="text-[#253047]">0</strong>点</span>
+                  <span class="text-[#D97706]">|</span>
+                  <span>AI補正: <strong id="kpi-ai-adj" class="text-[#8C5800]">0</strong>点</span>
+                </div>
+              </div>
+
+              <div class="flex items-center justify-between gap-2 pt-3 border-t border-[#FCE3A6]/80 mt-2">
+                <span id="kpi-score-status-text" class="text-[11px] text-[#6F7785] truncate pr-1">
+                  条件を入力してください
+                </span>
+                <button onclick="openScoreDetailModal()" class="px-3 py-1.5 btn-lumi-ghost text-[11px] font-bold bg-white/80 hover:bg-white text-[#253047] rounded-[12px] border border-[#FCE3A6] shrink-0 whitespace-nowrap">
+                  詳しく見る →
+                </button>
+              </div>
+
+              <!-- LUMI Spark Asset Illustration -->
+              <img src="./assets/lumi-spark.png" alt="LUMI" class="absolute top-4 right-4 w-14 h-14 sm:w-16 sm:h-16 object-contain pointer-events-none opacity-90" />
+            </div>
+
+            <!-- KPI 2: 年間運用益 -->
+            <div class="bg-white rounded-[24px] p-5 sm:p-6 border border-[#ECEBE6] flex flex-col justify-between relative overflow-hidden transition">
+              <div>
+                <div class="flex items-center justify-between gap-2 mb-2">
+                  <span class="text-xs font-bold text-[#0369a1] flex items-center gap-1.5">
+                    <span>年間運用益</span>
+                  </span>
+                  <img src="./assets/kpi-annual-yield.png" alt="" class="w-10 h-10 object-contain pointer-events-none" />
+                </div>
+
+                <div id="kpi-annual-yield" class="text-2xl sm:text-3xl font-extrabold text-[#253047] tracking-tight my-2">
+                  0 万円<span class="text-xs font-normal text-[#6F7785]"> /年</span>
+                </div>
+              </div>
+
+              <div class="pt-3 border-t border-[#ECEBE6] mt-2 flex items-center justify-between">
+                <span class="text-[11px] text-[#6F7785]">現在の年間予想</span>
+                <span id="kpi-phase-badge" class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#FAFAF7] text-[#253047] border border-[#ECEBE6]">
+                  ⚪ 未設定
+                </span>
+              </div>
+            </div>
+
+            <!-- KPI 3: 生涯収支カバー率 -->
+            <div class="bg-white rounded-[24px] p-5 sm:p-6 border border-[#ECEBE6] flex flex-col justify-between relative overflow-hidden transition">
+              <div>
+                <div class="flex items-center justify-between gap-2 mb-2">
+                  <span class="text-xs font-bold text-[#047857]">生涯収支カバー率</span>
+                  <img src="./assets/kpi-cover-rate.png" alt="" class="w-10 h-10 object-contain pointer-events-none" />
+                </div>
+
+                <div id="kpi-cover-rate" class="text-2xl sm:text-3xl font-extrabold text-[#253047] tracking-tight my-2">
+                  -
+                </div>
+              </div>
+
+              <div id="kpi-cover-subtext" class="text-[11px] text-[#6F7785] pt-3 border-t border-[#ECEBE6] mt-2 truncate">
+                目標年齢まで維持するカバー力
+              </div>
+            </div>
+
+            <!-- KPI 4: 目標年齢時点の想定資産 -->
+            <div class="bg-white rounded-[24px] p-5 sm:p-6 border border-[#ECEBE6] flex flex-col justify-between relative overflow-hidden transition">
+              <div>
+                <div class="flex items-center justify-between gap-2 mb-2">
+                  <span class="text-xs font-bold text-[#BE123C]">
+                    <span id="kpi-final-age-label">80</span>歳時点の想定資産
+                  </span>
+                  <img src="./assets/kpi-future-assets.png" alt="" class="w-10 h-10 object-contain pointer-events-none" />
+                </div>
+
+                <div id="kpi-final-assets" class="text-2xl sm:text-3xl font-extrabold text-[#253047] tracking-tight my-2">
+                  0 万円
+                </div>
+              </div>
+
+              <div id="kpi-final-status" class="text-[11px] text-[#6F7785] pt-3 border-t border-[#ECEBE6] mt-2">
+                純資産: <span id="kpi-final-networth" class="font-bold text-[#253047]">0</span> 万円
+              </div>
+            </div>
+
+          </div>
+
+          <!-- LUMI Advisor Panel -->
+          <div id="lumi-advisor-panel" class="bg-[#FEFBF0] rounded-[24px] p-5 sm:p-6 border border-[#F0E2B7]/80 flex flex-col md:flex-row items-start md:items-center justify-between gap-4 relative overflow-hidden">
+            <div class="flex items-start gap-3.5 flex-1 min-w-0">
+              <img src="./assets/lumi-spark.png" alt="LUMI" class="w-12 h-12 sm:w-14 sm:h-14 object-contain shrink-0 mt-0.5" />
+              
+              <div class="space-y-2 w-full min-w-0">
+                <div class="flex flex-wrap items-center justify-between gap-2">
+                  <div class="flex items-center gap-2">
+                    <h3 class="font-extrabold text-[#253047] text-sm sm:text-base">LUMIからのアドバイス</h3>
+                    <span id="ai-status-tag" class="text-[10px] text-[#6F7785] px-2 py-0.5 rounded-full font-medium bg-white/60 border border-[#ECEBE6]">
+                      Gemini AI 連携分析
+                    </span>
+                  </div>
+
+                  <!-- Inflation Preset Selector -->
+                  <div class="bg-white/80 px-2.5 py-1 rounded-[12px] border border-[#ECEBE6] flex items-center gap-1.5 text-xs">
+                    <span class="text-[11px] font-bold text-[#6F7785]">分析条件:</span>
+                    <button onclick="setInflationPreset(1.0)" id="header-inf-10" class="px-2 py-0.5 text-[10px] font-bold rounded-[8px] transition">1.0%</button>
+                    <button onclick="setInflationPreset(1.5)" id="header-inf-15" class="px-2 py-0.5 text-[10px] font-bold rounded-[8px] transition bg-[#FFC83D] text-[#253047]">1.5%</button>
+                    <button onclick="setInflationPreset(2.0)" id="header-inf-20" class="px-2 py-0.5 text-[10px] font-bold rounded-[8px] transition">2.0%</button>
+                  </div>
+                </div>
+
+                <div id="ai-diagnosis-container" class="relative">
+                  <p id="kpi-diagnosis-text" class="text-xs sm:text-sm text-[#253047] leading-relaxed py-1.5">
+                    プロファイルや収支、資産の数値を設定すると、数値シミュレーションと連動したリアルタイムAI分析アドバイスが表示されます。
+                  </p>
+                  <div id="ai-loading-spinner" class="hidden absolute inset-0 bg-[#FEFBF0]/90 backdrop-blur-sm rounded-[16px] flex items-center justify-center gap-2 text-[#D97706] text-xs font-bold z-10">
+                    <i class="fa-solid fa-spinner fa-spin text-base"></i>
+                    <span>LUMIFUL AI が人生計画を総合分析中...</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="self-end md:self-center shrink-0">
+              <button onclick="generateAIDiagnosis()" id="ai-diagnose-btn" class="px-4 py-2.5 btn-lumi-primary text-xs sm:text-sm flex items-center gap-2 whitespace-nowrap h-[42px]">
+                <i class="fa-solid fa-arrows-rotate text-xs" id="ai-btn-icon"></i>
+                <span>LUMIの詳しい分析を見る</span>
+              </button>
+            </div>
+          </div>
+
+        </section>
+
+        <!-- FUTURE PROJECTION CHART SECTION -->
+        <section id="chart-section" class="space-y-3">
+          <div>
+            <h2 class="text-lg sm:text-xl font-extrabold text-[#253047] tracking-tight">あなたの未来予測</h2>
+            <p class="text-xs sm:text-sm text-[#6F7785] mt-0.5">現在の条件から、資産と年間収支がどう変化していくかを確認できます。</p>
+          </div>
+
+          <!-- Chart Container Card -->
+          <div id="chart-container" class="bg-white rounded-[24px] p-5 sm:p-6 border border-[#ECEBE6] space-y-4">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-[#ECEBE6]">
+              <div>
+                <h3 class="font-extrabold text-[#253047] text-sm sm:text-base flex items-center gap-2">
+                  <i class="fa-solid fa-chart-line text-[#65B9E8]"></i> 総資産 ＆ 年間純収支 推移
+                </h3>
+                <p class="text-xs text-[#6F7785] mt-0.5">金融資産・純資産・年間純収支の長期シミュレーション</p>
+              </div>
+              
+              <div class="flex items-center gap-3 text-xs bg-[#FAFAF7] px-3 py-1.5 rounded-[12px] border border-[#ECEBE6] self-start sm:self-auto">
+                <div class="flex items-center gap-1.5">
+                  <span class="text-[#6F7785] font-medium">想定利回り:</span>
+                  <span id="chart-slider-yield-val" class="font-extrabold text-[#D97706]">0.0%</span>
+                </div>
+                <div class="h-3 w-px bg-[#ECEBE6]"></div>
+                <div class="flex items-center gap-1.5">
+                  <span class="text-[#6F7785] font-medium">インフレ率:</span>
+                  <span id="chart-slider-inflation-val" class="font-extrabold text-[#D97706]">1.5%</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="relative w-full h-[280px] sm:h-[360px]">
+              <canvas id="assetChart"></canvas>
+            </div>
+            <p class="text-[11px] text-[#6F7785] mt-2 text-center">※ 資産の長期推移と、年間の収支バランスを確認できます。</p>
+          </div>
+        </section>
+
+      </div>
+
+      <!-- VIEW 2: SIMULATION INPUT VIEW -->
+      <div id="simulationInputView" class="hidden space-y-6">
+        
+        <!-- Simulation Input Page Header -->
+        <div class="space-y-1 mb-1">
+          <h1 class="text-2xl sm:text-3xl font-extrabold text-[#253047] tracking-tight flex items-center gap-2">
+            <i class="fa-solid fa-sliders text-[#8C5800]"></i> シミュレーション入力
+          </h1>
+          <p class="text-xs sm:text-sm text-[#6F7785] leading-relaxed max-w-2xl">
+            あなたの未来をシミュレーションするための基本条件を設定します。すべてを一度に決めなくても、分かるところから入力できます。
+          </p>
+        </div>
+
+        <!-- LUMI Input Support Banner -->
+        <div class="bg-[#FEFBF0] rounded-[20px] p-4 border border-[#ECEBE6] flex items-center gap-3.5">
+          <img src="./assets/lumi-spark.png" alt="LUMI" class="w-11 h-11 object-contain shrink-0" />
+          <div>
+            <h4 class="text-xs font-bold text-[#253047] flex items-center gap-1.5 mb-0.5">
+              <span>LUMIの入力サポート</span>
+            </h4>
+            <p class="text-xs text-[#6F7785] leading-relaxed">
+              完璧な数字でなくても大丈夫です。まずは現在分かる範囲で入力して、あとから条件を調整できます。
+            </p>
+          </div>
+        </div>
+
+        <!-- Input Form Container -->
+        <div class="bg-white rounded-[24px] border border-[#ECEBE6] overflow-hidden relative" id="inputTabsContainer">
+
+          <!-- Auth Lock Overlay -->
+          <div id="authLockOverlay" class="absolute inset-0 bg-[#FAFAF7]/92 backdrop-blur-sm z-40 flex flex-col items-center justify-center p-6 text-center transition-all duration-300 min-h-[360px]">
+            <div class="w-14 h-14 rounded-full bg-[#FFF9E6] text-[#8C5800] flex items-center justify-center text-2xl shadow-sm mb-3.5 border border-[#FCE3A6] shrink-0">
+              <i class="fa-solid fa-lock"></i>
+            </div>
+            <h2 class="text-lg sm:text-xl font-extrabold text-[#253047] mb-1.5 whitespace-nowrap">シミュレーションのご利用にはログインが必要です</h2>
+            <p class="text-xs text-[#6F7785] mb-6 max-w-md leading-relaxed">
+              アカウント作成・ログイン、またはワンクリック簡易ログイン（ゲスト）を行うと、プロファイル入力や数値変更・保存機能をご利用いただけます。
+            </p>
+
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-3 w-full max-w-lg px-2">
+              <button onclick="openAuthModal()" class="w-full sm:w-auto px-6 py-3 btn-lumi-primary text-xs sm:text-sm flex items-center justify-center gap-2 whitespace-nowrap shrink-0 shadow-sm">
+                <i class="fa-solid fa-user-plus text-sm"></i>
+                <span class="whitespace-nowrap">アカウント作成 / ログイン</span>
+              </button>
+              <button onclick="handleAnonymousAuth()" class="w-full sm:w-auto px-6 py-3 btn-lumi-secondary text-xs sm:text-sm flex items-center justify-center gap-2 whitespace-nowrap shrink-0">
+                <i class="fa-solid fa-bolt text-[#65B9E8] text-sm"></i>
+                <span class="whitespace-nowrap">ゲストとして今すぐ始める</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Profile & Expenses Form Content -->
+          <div id="tabContent-profile" class="p-5 sm:p-7 space-y-6">
+            
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 sm:gap-6">
+              
+              <!-- Block 1: 基本プロフィール -->
+              <div class="bg-white rounded-[20px] p-5 border border-[#ECEBE6] space-y-4">
+                <div class="flex items-center justify-between pb-2.5 border-b border-[#ECEBE6]">
+                  <div class="flex items-center gap-2">
+                    <span class="w-6 h-6 rounded-full bg-[#FFF9E6] text-[#8C5800] text-[11px] font-bold flex items-center justify-center shrink-0">01</span>
+                    <h3 class="font-bold text-[#253047] text-sm flex items-center gap-1.5">
+                      <i class="fa-solid fa-user-gear text-[#8C5800]"></i> 1. 基本プロフィール
+                    </h3>
+                  </div>
+                  <span class="text-[10px] font-semibold bg-[#FFF9E6] text-[#8C5800] px-2.5 py-0.5 rounded-full border border-[#FCE3A6] whitespace-nowrap">本人設定</span>
+                </div>
+                <p class="text-[11px] text-[#6F7785] leading-relaxed">現在の年齢、働く期間、収入と年金の基本条件です。</p>
+
+                <div class="space-y-3.5">
+                  <div class="grid grid-cols-2 gap-3">
+                    <div>
+                      <label class="block text-[11px] font-medium text-[#4F586A] mb-1.5">現在の年齢</label>
+                      <select id="selfCurrentAge" onchange="recalculateAllFast()" class="lumi-input w-full px-3 py-2 text-xs font-semibold text-[#253047] bg-white">
+                        <!-- Rendered dynamically -->
+                      </select>
+                    </div>
+                    <div>
+                      <label class="block text-[11px] font-medium text-[#4F586A] mb-1.5">完全引退年齢</label>
+                      <select id="selfRetireAge" onchange="recalculateAllFast()" class="lumi-input w-full px-3 py-2 text-xs font-semibold text-[#253047] bg-white">
+                        <!-- Rendered dynamically -->
+                      </select>
+                    </div>
+                  </div>
+
+                  <div>
+                    <label class="block text-[11px] font-medium text-[#4F586A] mb-1.5">事業・副業の手取り年収</label>
+                    <div class="flex items-center gap-2">
+                      <input type="number" id="selfIncome" value="0" min="0" step="10" onfocus="this.select()" onblur="if(this.value==='')this.value='0';" oninput="recalculateAllFast()" class="lumi-input w-full px-3 py-2 text-xs font-semibold text-[#253047]">
+                      <span class="text-xs text-[#6F7785] shrink-0">万円/年</span>
+                    </div>
+                  </div>
+
+                  <div class="pt-3 border-t border-[#ECEBE6] space-y-2">
+                    <label class="block text-[11px] font-medium text-[#4F586A] mb-1">公的年金（手取り想定年額）</label>
+                    <div class="flex items-center gap-2 mb-1.5">
+                      <input type="number" id="selfPension" value="0" min="0" step="5" onfocus="this.select()" onblur="if(this.value==='')this.value='0';" oninput="recalculateAllFast()" class="lumi-input w-full px-3 py-2 text-xs font-semibold text-[#253047]">
+                      <span class="text-xs text-[#6F7785] shrink-0">万円/年</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                      <span class="text-[11px] text-[#6F7785] shrink-0">受給開始:</span>
+                      <select id="selfPensionStartAge" onchange="recalculateAllFast()" class="lumi-input w-24 px-2.5 py-1.5 text-xs font-semibold text-[#253047] text-center bg-white">
+                        <!-- Rendered dynamically -->
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Block 2: 配偶者 -->
+              <div class="bg-white rounded-[20px] p-5 border border-[#ECEBE6] space-y-4">
+                <div class="flex items-center justify-between pb-2.5 border-b border-[#ECEBE6]">
+                  <div class="flex items-center gap-2">
+                    <span class="w-6 h-6 rounded-full bg-[#EAF6FC] text-[#0369a1] text-[11px] font-bold flex items-center justify-center shrink-0">02</span>
+                    <h3 class="font-bold text-[#253047] text-sm flex items-center gap-1.5">
+                      <i class="fa-solid fa-user-group text-[#0369a1]"></i> 2. 配偶者 設定
+                    </h3>
+                  </div>
+                  <label class="flex items-center gap-1.5 text-[11px] font-semibold text-[#253047] cursor-pointer bg-[#FAFAF7] hover:bg-white px-2.5 py-1 rounded-xl border border-[#ECEBE6] transition whitespace-nowrap shrink-0">
+                    <input type="checkbox" id="hasSpouse" onchange="toggleSpouseForm(); recalculateAllFast();" class="w-3.5 h-3.5 text-[#0369a1] rounded focus:ring-[#65B9E8]">
+                    <span>配偶者あり</span>
+                  </label>
+                </div>
+                <p class="text-[11px] text-[#6F7785] leading-relaxed">配偶者様のお仕事や年金条件を設定します。</p>
+
+                <div id="spouseFormGroup" class="space-y-3.5 opacity-40 pointer-events-none transition-opacity duration-200">
+                  <div class="grid grid-cols-2 gap-3">
+                    <div>
+                      <label class="block text-[11px] font-medium text-[#4F586A] mb-1.5">現在の年齢</label>
+                      <select id="spouseCurrentAge" onchange="recalculateAllFast()" class="lumi-input w-full px-3 py-2 text-xs font-semibold text-[#253047] bg-white">
+                        <!-- Rendered dynamically -->
+                      </select>
+                    </div>
+                    <div>
+                      <label class="block text-[11px] font-medium text-[#4F586A] mb-1.5">就労終了年齢</label>
+                      <select id="spouseRetireAge" onchange="recalculateAllFast()" class="lumi-input w-full px-3 py-2 text-xs font-semibold text-[#253047] bg-white">
+                        <!-- Rendered dynamically -->
+                      </select>
+                    </div>
+                  </div>
+
+                  <div>
+                    <label class="block text-[11px] font-medium text-[#4F586A] mb-1.5">パート・就労の手取り年収</label>
+                    <div class="flex items-center gap-2">
+                      <input type="number" id="spouseIncome" value="0" min="0" step="10" onfocus="this.select()" onblur="if(this.value==='')this.value='0';" oninput="recalculateAllFast()" class="lumi-input w-full px-3 py-2 text-xs font-semibold text-[#253047]">
+                      <span class="text-xs text-[#6F7785] shrink-0">万円/年</span>
+                    </div>
+                  </div>
+
+                  <div class="pt-3 border-t border-[#ECEBE6] space-y-2">
+                    <label class="block text-[11px] font-medium text-[#4F586A] mb-1">公的年金（手取り想定年額）</label>
+                    <div class="flex items-center gap-2 mb-1.5">
+                      <input type="number" id="spousePension" value="0" min="0" step="5" onfocus="this.select()" onblur="if(this.value==='')this.value='0';" oninput="recalculateAllFast()" class="lumi-input w-full px-3 py-2 text-xs font-semibold text-[#253047]">
+                      <span class="text-xs text-[#6F7785] shrink-0">万円/年</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                      <span class="text-[11px] text-[#6F7785] shrink-0">受給開始:</span>
+                      <select id="spousePensionStartAge" onchange="recalculateAllFast()" class="lumi-input w-24 px-2.5 py-1.5 text-xs font-semibold text-[#253047] text-center bg-white">
+                        <!-- Rendered dynamically -->
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Block 3: 現在の資産 -->
+              <div class="bg-white rounded-[20px] p-5 border border-[#ECEBE6] space-y-4">
+                <div class="flex items-center justify-between pb-2.5 border-b border-[#ECEBE6]">
+                  <div class="flex items-center gap-2">
+                    <span class="w-6 h-6 rounded-full bg-[#EAF8F3] text-[#047857] text-[11px] font-bold flex items-center justify-center shrink-0">03</span>
+                    <h3 class="font-bold text-[#253047] text-sm flex items-center gap-1.5">
+                      <i class="fa-solid fa-coins text-[#047857]"></i> 3. 現在の保有資産
+                    </h3>
+                  </div>
+                  <span class="text-[10px] font-semibold bg-[#EAF8F3] text-[#047857] px-2.5 py-0.5 rounded-full border border-[#BFECD9] whitespace-nowrap">金融・不動産</span>
+                </div>
+                <p class="text-[11px] text-[#6F7785] leading-relaxed">投資資産、安全資産、その他の純資産評価額です。</p>
+                
+                <div class="grid grid-cols-2 gap-3">
+                  <div>
+                    <label class="block text-[11px] font-medium text-[#4F586A] mb-1.5">投資資産（株式・投信等）</label>
+                    <input type="number" id="initialInvest" value="0" min="0" step="50" onfocus="this.select()" onblur="if(this.value==='')this.value='0';" oninput="recalculateAllFast()" class="lumi-input w-full px-3 py-2 text-xs font-semibold text-[#253047]">
+                  </div>
+                  <div>
+                    <label class="block text-[11px] font-medium text-[#4F586A] mb-1.5">安全資産（国債・現金等）</label>
+                    <input type="number" id="initialCash" value="0" min="0" step="50" onfocus="this.select()" onblur="if(this.value==='')this.value='0';" oninput="recalculateAllFast()" class="lumi-input w-full px-3 py-2 text-xs font-semibold text-[#253047]">
+                  </div>
+                </div>
+
+                <div>
+                  <label class="block text-[11px] font-medium text-[#4F586A] mb-1.5">不動産・その他価値（純資産評価）</label>
+                  <div class="flex items-center gap-2">
+                    <input type="number" id="realEstateValue" value="0" min="0" step="100" onfocus="this.select()" onblur="if(this.value==='')this.value='0';" oninput="recalculateAllFast()" class="lumi-input w-full px-3 py-2 text-xs font-semibold text-[#253047]">
+                    <span class="text-xs text-[#6F7785] shrink-0">万円</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Block 4: 生活費・シミュレーション条件 -->
+              <div class="bg-white rounded-[20px] p-5 border border-[#ECEBE6] space-y-4">
+                <div class="flex items-center justify-between pb-2.5 border-b border-[#ECEBE6]">
+                  <div class="flex items-center gap-2">
+                    <span class="w-6 h-6 rounded-full bg-[#FFF0F3] text-[#BE123C] text-[11px] font-bold flex items-center justify-center shrink-0">04</span>
+                    <h3 class="font-bold text-[#253047] text-sm flex items-center gap-1.5">
+                      <i class="fa-solid fa-house-user text-[#BE123C]"></i> 4. 生活費 ＆ シミュレーション条件
+                    </h3>
+                  </div>
+                  <span class="text-[10px] font-semibold bg-[#FFF0F3] text-[#BE123C] px-2.5 py-0.5 rounded-full border border-[#FFCCD5] whitespace-nowrap">未来設定</span>
+                </div>
+                <p class="text-[11px] text-[#6F7785] leading-relaxed">基本生活費、住居費、運用利回りやインフレ率です。</p>
+
+                <div class="space-y-3.5">
+                  <div>
+                    <label class="block text-[11px] font-medium text-[#4F586A] mb-1.5">基本生活費（年間）</label>
+                    <div class="flex items-center gap-2">
+                      <input type="number" id="livingExpense" value="0" min="0" step="10" onfocus="this.select()" onblur="if(this.value==='')this.value='0';" oninput="recalculateAllFast()" class="lumi-input w-full px-3 py-2 text-xs font-semibold text-[#253047]">
+                      <span class="text-xs text-[#6F7785] shrink-0">万円/年</span>
+                    </div>
+                  </div>
+
+                  <div>
+                    <label class="block text-[11px] font-medium text-[#4F586A] mb-1.5">住居費（年間）</label>
+                    <div class="flex items-center gap-2 mb-2">
+                      <input type="number" id="housingExpense" value="0" min="0" step="10" onfocus="this.select()" onblur="if(this.value==='')this.value='0';" oninput="recalculateAllFast()" class="lumi-input w-full px-3 py-2 text-xs font-semibold text-[#253047]">
+                      <span class="text-xs text-[#6F7785] shrink-0">万円/年</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                      <span class="text-[11px] text-[#6F7785] shrink-0">完済/終了年齢:</span>
+                      <select id="housingEndAge" onchange="recalculateAllFast()" class="lumi-input w-24 px-2.5 py-1.5 text-xs font-semibold text-[#253047] text-center bg-white">
+                        <!-- Rendered dynamically -->
+                      </select>
+                    </div>
+                  </div>
+
+                  <div class="pt-3.5 border-t border-[#ECEBE6] space-y-3.5">
+                    <div>
+                      <div class="flex justify-between items-center mb-1.5">
+                        <label class="text-[11px] font-medium text-[#4F586A]">想定運用利回り</label>
+                        <span id="slider-return-val" class="text-xs font-extrabold text-[#D97706]">0.0%</span>
+                      </div>
+                      <input type="range" id="returnRateSlider" min="0" max="15" step="0.5" value="0.0" oninput="updateSliders()" class="w-full accent-[#FFC83D] h-2 bg-[#FAFAF7] border border-[#ECEBE6] rounded-lg cursor-pointer">
+                    </div>
+
+                    <div>
+                      <div class="flex justify-between items-center mb-1.5">
+                        <label class="text-[11px] font-medium text-[#4F586A] flex items-center gap-1">
+                          <span>生活費インフレ率</span>
+                          <span class="text-[10px] text-[#6F7785] font-normal">(3段階固定)</span>
+                        </label>
+                        <span id="slider-inflation-val" class="text-xs font-extrabold text-[#D97706]">1.5%</span>
+                      </div>
+                      <div class="grid grid-cols-3 gap-2">
+                        <button onclick="setInflationPreset(1.0)" id="card-inf-10" class="py-2 text-xs font-semibold rounded-[12px] border border-[#ECEBE6] bg-white hover:bg-[#FAFAF7] text-[#253047] transition text-center whitespace-nowrap">楽観 1.0%</button>
+                        <button onclick="setInflationPreset(1.5)" id="card-inf-15" class="py-2 text-xs font-semibold rounded-[12px] border border-[#FFC83D] bg-[#FFC83D] text-[#253047] transition text-center whitespace-nowrap shadow-sm">標準 1.5%</button>
+                        <button onclick="setInflationPreset(2.0)" id="card-inf-20" class="py-2 text-xs font-semibold rounded-[12px] border border-[#ECEBE6] bg-white hover:bg-[#FAFAF7] text-[#253047] transition text-center whitespace-nowrap">保守 2.0%</button>
+                      </div>
+                    </div>
+
+                    <div>
+                      <label class="block text-[11px] font-medium text-[#4F586A] mb-1.5">シミュレーション終了年齢</label>
+                      <select id="targetAge" onchange="recalculateAllFast()" class="lumi-input w-full px-3 py-2 text-xs font-semibold text-[#253047] bg-white">
+                        <!-- Rendered dynamically -->
+                      </select>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+        <!-- Confirm Future CTA Button -->
+        <div class="flex flex-col items-center justify-center pt-2 gap-1.5">
+          <button onclick="switchView('dashboard'); window.scrollTo({top: 0, behavior: 'smooth'});" class="px-8 py-3.5 btn-lumi-primary text-sm sm:text-base font-extrabold flex items-center justify-center gap-2 shadow-sm hover:shadow-md transition">
+            <span>この条件で未来を確認</span>
+            <i class="fa-solid fa-arrow-right text-xs"></i>
+          </button>
+          <span class="text-[11px] text-[#6F7785]">入力内容はリアルタイムでシミュレーションに反映されます</span>
+        </div>
+
+      </div>
+
+      <!-- VIEW 3: SIMULATION RESULTS VIEW -->
+      <div id="simulationResultsView" class="hidden space-y-6">
+        
+        <!-- Page Header -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-2 border-b border-[#ECEBE6]">
+          <div class="space-y-1">
+            <h2 class="text-2xl sm:text-3xl font-extrabold text-[#253047] tracking-tight">シミュレーション結果</h2>
+            <p class="text-xs sm:text-sm text-[#6F7785] leading-relaxed max-w-2xl">
+              現在の条件から見える未来を、ポイントごとに整理しました。
+            </p>
+          </div>
+          <div class="bg-[#FEFBF0] px-3.5 py-1.5 rounded-[12px] border border-[#F0E2B7] shrink-0 self-start sm:self-auto">
+            <span class="text-[11px] font-bold text-[#8C5800] flex items-center gap-1.5">
+              <i class="fa-solid fa-circle-check text-[#D97706]"></i> 現在の設定を反映した結果
+            </span>
+          </div>
+        </div>
+
+        <!-- LUMIFUL SCORE Hero Experience -->
+        <div class="bg-[#FFF9E6] rounded-[28px] p-6 sm:p-8 border border-[#ECEBE6] space-y-6 lg:space-y-0 lg:grid lg:grid-cols-12 lg:gap-8 items-start">
+          
+          <!-- Left: LUMIFUL SCORE Side -->
+          <div class="lg:col-span-5 space-y-4 pr-0 lg:pr-4 border-b lg:border-b-0 lg:border-r border-[#FCE3A6]/80 pb-6 lg:pb-0">
+            <div>
+              <div class="flex items-center justify-between gap-2 mb-2">
+                <span class="text-xs font-bold text-[#8C5800] uppercase tracking-wider">LUMIFUL SCORE</span>
+                <button onclick="openScoreDetailModal()" class="px-3 py-1 bg-white/90 hover:bg-white text-[#253047] text-[11px] font-bold rounded-[10px] transition border border-[#FCE3A6] shrink-0">
+                  詳細内訳 →
+                </button>
+              </div>
+
+              <div class="flex items-baseline gap-2 my-2">
+                <div id="results-score" class="text-5xl sm:text-6xl font-extrabold text-[#253047] tracking-tight">0</div>
+                <span class="text-sm font-bold text-[#6F7785]">/ 100 点</span>
+              </div>
+
+              <p class="text-xs text-[#6F7785] leading-relaxed">
+                現在の入力条件をもとに算出した LUMIFUL SCORE です。
+              </p>
+            </div>
+
+            <div class="pt-3 border-t border-[#FCE3A6]/80 flex items-center justify-between text-xs">
+              <span class="text-[#6F7785]">Base: <strong id="results-base-score" class="text-[#253047]">0</strong> 点</span>
+              <span class="text-[#8C5800]">AI補正: <strong id="results-ai-adjustment" class="text-[#8C5800]">0</strong> 点</span>
+            </div>
+          </div>
+
+          <!-- Right: LUMI Interpretation Side -->
+          <div class="lg:col-span-7 space-y-3">
+            <div class="flex items-center gap-3">
+              <img src="./assets/lumi-spark.png" alt="LUMI" class="w-12 h-12 sm:w-14 sm:h-14 object-contain shrink-0" />
+              <div>
+                <h3 class="font-extrabold text-[#253047] text-sm sm:text-base">LUMIから見た今回の結果</h3>
+                <p class="text-[11px] text-[#6F7785]">AIコンパニオンによるライフプラン総合分析</p>
+              </div>
+            </div>
+
+            <div id="results-lumi-text" class="text-xs sm:text-sm text-[#253047] leading-relaxed py-1">
+              入力条件をもとに、資産・収支・将来の余力を確認してみましょう。
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Main Result 3 Cards -->
+        <div class="space-y-3">
+          <h3 class="text-xs font-bold text-[#6F7785] uppercase tracking-wider">未来の重要な3つの数字</h3>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6">
+            
+            <div class="bg-white rounded-[20px] p-5 sm:p-6 border border-[#ECEBE6] space-y-2 relative overflow-hidden">
+              <div class="flex items-center justify-between text-xs font-bold text-[#0369a1]">
+                <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-[#65B9E8]"></span>生涯収支カバー率</span>
+                <i class="fa-solid fa-chart-pie text-[#65B9E8]"></i>
+              </div>
+              <div id="results-cover-rate" class="text-3xl sm:text-4xl font-extrabold text-[#253047] tracking-tight">-</div>
+              <p class="text-[11px] text-[#6F7785]">計画期間全体の維持カバー力</p>
+            </div>
+
+            <div class="bg-white rounded-[20px] p-5 sm:p-6 border border-[#ECEBE6] space-y-2 relative overflow-hidden">
+              <div class="flex items-center justify-between text-xs font-bold text-[#047857]">
+                <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-[#72D6B5]"></span>最終金融資産</span>
+                <i class="fa-solid fa-piggy-bank text-[#72D6B5]"></i>
+              </div>
+              <div id="results-final-assets" class="text-3xl sm:text-4xl font-extrabold text-[#253047] tracking-tight">0 万円</div>
+              <p class="text-[11px] text-[#6F7785]">目標年齢時点の金融資産見込み</p>
+            </div>
+
+            <div class="bg-white rounded-[20px] p-5 sm:p-6 border border-[#ECEBE6] space-y-2 relative overflow-hidden">
+              <div class="flex items-center justify-between text-xs font-bold text-[#BE123C]">
+                <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-[#FF8FA3]"></span>最終純資産</span>
+                <i class="fa-solid fa-house-chimney text-[#FF8FA3]"></i>
+              </div>
+              <div id="results-final-networth" class="text-3xl sm:text-4xl font-extrabold text-[#253047] tracking-tight">0 万円</div>
+              <p class="text-[11px] text-[#6F7785]">不動産等を含めた最終想定純資産</p>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- 未来を3つの期間で見る -->
+        <div class="bg-white rounded-[24px] p-6 sm:p-8 border border-[#ECEBE6] space-y-6">
+          <div>
+            <h3 class="font-extrabold text-[#253047] text-base sm:text-lg">未来を3つの期間で見る</h3>
+            <p class="text-xs sm:text-sm text-[#6F7785] mt-1">細かな年次数字ではなく、人生の大きなフェーズごとに結果を捉えます。</p>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="bg-[#FAFAF7] p-5 rounded-[20px] border border-[#ECEBE6] space-y-2">
+              <span class="text-[10px] font-bold bg-[#EAF6FC] text-[#0369a1] px-2.5 py-0.5 rounded-full">Period 01</span>
+              <h4 class="text-sm font-extrabold text-[#253047] pt-1">現在 → 退職</h4>
+              <p id="period-1-range" class="text-xs text-[#6F7785] font-semibold">--歳 〜 --歳</p>
+            </div>
+
+            <div class="bg-[#FAFAF7] p-5 rounded-[20px] border border-[#ECEBE6] space-y-2">
+              <span class="text-[10px] font-bold bg-[#FFF9E6] text-[#8C5800] px-2.5 py-0.5 rounded-full">Period 02</span>
+              <h4 class="text-sm font-extrabold text-[#253047] pt-1">退職 → 年金開始</h4>
+              <p id="period-2-range" class="text-xs text-[#6F7785] font-semibold">--歳 〜 --歳</p>
+            </div>
+
+            <div class="bg-[#FAFAF7] p-5 rounded-[20px] border border-[#ECEBE6] space-y-2">
+              <span class="text-[10px] font-bold bg-[#EAF8F3] text-[#047857] px-2.5 py-0.5 rounded-full">Period 03</span>
+              <h4 class="text-sm font-extrabold text-[#253047] pt-1">年金開始 → シミュレーション終了</h4>
+              <p id="period-3-range" class="text-xs text-[#6F7785] font-semibold">--歳 〜 --歳</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 今回の結果で見るポイント -->
+        <div class="bg-white rounded-[24px] p-6 sm:p-8 border border-[#ECEBE6] space-y-5">
+          <div>
+            <h3 class="font-extrabold text-[#253047] text-base sm:text-lg">今回の結果で見るポイント</h3>
+            <p class="text-xs sm:text-sm text-[#6F7785] mt-1">数字の良し悪しではなく、判断するときに確認したいポイントを整理します。</p>
+          </div>
+
+          <div class="space-y-3">
+            <div class="bg-[#FAFAF7] p-4 rounded-[18px] border border-[#ECEBE6] flex items-start gap-3.5">
+              <div class="w-9 h-9 rounded-full bg-[#EAF6FC] text-[#0369a1] flex items-center justify-center text-xs font-bold shrink-0 mt-0.5">
+                <i class="fa-solid fa-piggy-bank"></i>
+              </div>
+              <div class="text-xs space-y-1">
+                <h4 class="font-bold text-[#253047]">長期の資産余力</h4>
+                <p class="text-[#6F7785] leading-relaxed">最終金融資産を確認して、長期的にどの程度の資産が残る想定かを確認できます。</p>
+              </div>
+            </div>
+
+            <div class="bg-[#FAFAF7] p-4 rounded-[18px] border border-[#ECEBE6] flex items-start gap-3.5">
+              <div class="w-9 h-9 rounded-full bg-[#EAF8F3] text-[#047857] flex items-center justify-center text-xs font-bold shrink-0 mt-0.5">
+                <i class="fa-solid fa-wallet"></i>
+              </div>
+              <div class="text-xs space-y-1">
+                <h4 class="font-bold text-[#253047]">年間収支のバランス</h4>
+                <p class="text-[#6F7785] leading-relaxed">「資産詳細」画面で、年ごとの収入・支出・資産残高の具体的な動きを確認できます。</p>
+              </div>
+            </div>
+
+            <div class="bg-[#FAFAF7] p-4 rounded-[18px] border border-[#ECEBE6] flex items-start gap-3.5">
+              <div class="w-9 h-9 rounded-full bg-[#FFF0F3] text-[#BE123C] flex items-center justify-center text-xs font-bold shrink-0 mt-0.5">
+                <i class="fa-solid fa-calendar-check"></i>
+              </div>
+              <div class="text-xs space-y-1">
+                <h4 class="font-bold text-[#253047]">ライフイベントの影響</h4>
+                <p class="text-[#6F7785] leading-relaxed">登録した大きな支出や臨時収入が、将来の資産推移へどのように反映されるか確認できます。</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 詳細画面へのCTA -->
+        <div class="bg-[#FFFBF0] rounded-[24px] p-6 sm:p-8 border border-[#F0E2B7] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
+          <div>
+            <h3 class="font-extrabold text-[#253047] text-base sm:text-lg">もっと詳しく未来を確認する</h3>
+            <p class="text-xs sm:text-sm text-[#6F7785] mt-1">長期の推移は「年間推移グラフ」、前提条件の変更は「シミュレーション入力」で確認できます。</p>
+          </div>
+
+          <div class="flex items-center gap-3 w-full sm:w-auto">
+            <button onclick="switchView('annualProjection')" class="flex-1 sm:flex-none px-5 py-3 btn-lumi-primary text-xs sm:text-sm font-bold whitespace-nowrap shadow-sm">
+              年間推移を見る →
+            </button>
+            <button onclick="switchView('simulationInput')" class="flex-1 sm:flex-none px-5 py-3 btn-lumi-secondary text-xs sm:text-sm font-bold whitespace-nowrap">
+              条件を変更する
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- VIEW 4: ANNUAL PROJECTION VIEW -->
+      <div id="annualProjectionView" class="hidden space-y-6">
+        
+        <!-- Page Header -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-2 border-b border-[#ECEBE6]">
+          <div class="space-y-1">
+            <h2 class="text-2xl sm:text-3xl font-extrabold text-[#253047] tracking-tight flex items-center gap-2">
+              <i class="fa-solid fa-arrow-trend-up text-[#8C5800]"></i> 年間推移グラフ
+            </h2>
+            <p class="text-xs sm:text-sm text-[#6F7785] leading-relaxed max-w-2xl">
+              資産・純資産・年間収支が、これからどのように変化していくかを年齢ごとに確認できます。
+            </p>
+          </div>
+          <div class="bg-[#FEFBF0] px-3.5 py-1.5 rounded-[12px] border border-[#F0E2B7] shrink-0 self-start sm:self-auto">
+            <span class="text-[11px] font-bold text-[#8C5800] flex items-center gap-1.5">
+              <i class="fa-solid fa-circle-check text-[#D97706]"></i> 現在の設定を反映した推移
+            </span>
+          </div>
+        </div>
+
+        <!-- LUMI Graph Guide -->
+        <div class="bg-[#FEFBF0] rounded-[20px] p-4 sm:p-5 border border-[#F0E2B7] flex items-start sm:items-center gap-3.5">
+          <img src="./assets/lumi-spark.png" alt="LUMI" class="w-12 h-12 sm:w-14 sm:h-14 object-contain shrink-0" />
+          <div class="space-y-1">
+            <h4 class="text-xs sm:text-sm font-extrabold text-[#253047] flex items-center gap-1.5">
+              <span>LUMIのグラフガイド</span>
+            </h4>
+            <p class="text-xs text-[#6F7785] leading-relaxed">
+              線の高さだけでなく、変化するタイミングに注目してみましょう。住宅購入や退職、年金開始などの前後を見ると、資産が動く理由を理解しやすくなります。
+            </p>
+          </div>
+        </div>
+
+        <!-- Main Projection Chart Card -->
+        <div class="bg-white rounded-[24px] p-5 sm:p-6 border border-[#ECEBE6] space-y-4">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-[#ECEBE6]">
+            <div>
+              <h3 class="font-extrabold text-[#253047] text-sm sm:text-base flex items-center gap-2">
+                <i class="fa-solid fa-chart-line text-[#65B9E8]"></i> 総資産 ＆ 年間純収支 推移
+              </h3>
+              <p class="text-xs text-[#6F7785] mt-0.5">金融資産・純資産・年間純収支の長期シミュレーション</p>
+            </div>
+            
+            <div class="flex items-center gap-3 text-xs bg-[#FAFAF7] px-3 py-1.5 rounded-[12px] border border-[#ECEBE6] self-start sm:self-auto">
+              <div class="flex items-center gap-1.5">
+                <span class="text-[#6F7785] font-medium">想定利回り:</span>
+                <span id="annual-yield-badge-val" class="font-extrabold text-[#D97706]">0.0%</span>
+              </div>
+              <div class="h-3 w-px bg-[#ECEBE6]"></div>
+              <div class="flex items-center gap-1.5">
+                <span class="text-[#6F7785] font-medium">インフレ率:</span>
+                <span id="annual-inflation-badge-val" class="font-extrabold text-[#D97706]">1.5%</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="relative w-full h-[280px] sm:h-[380px]">
+            <canvas id="annualProjectionChart"></canvas>
+          </div>
+        </div>
+
+        <!-- Summary Area -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
+          <div class="bg-white rounded-[20px] p-4 sm:p-5 border border-[#ECEBE6] space-y-1">
+            <div class="flex items-center justify-between text-xs font-bold text-[#047857]">
+              <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-[#72D6B5]"></span>最終金融資産</span>
+              <i class="fa-solid fa-piggy-bank text-[#72D6B5]"></i>
+            </div>
+            <div id="annual-summary-final-assets" class="text-2xl sm:text-3xl font-extrabold text-[#253047] tracking-tight">0 万円</div>
+            <p class="text-[11px] text-[#6F7785]">目標年齢時点の金融資産見込み</p>
+          </div>
+
+          <div class="bg-white rounded-[20px] p-4 sm:p-5 border border-[#ECEBE6] space-y-1">
+            <div class="flex items-center justify-between text-xs font-bold text-[#BE123C]">
+              <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-[#FF8FA3]"></span>最終純資産</span>
+              <i class="fa-solid fa-house-chimney text-[#FF8FA3]"></i>
+            </div>
+            <div id="annual-summary-final-networth" class="text-2xl sm:text-3xl font-extrabold text-[#253047] tracking-tight">0 万円</div>
+            <p class="text-[11px] text-[#6F7785]">不動産等を含めた最終想定純資産</p>
+          </div>
+
+          <div class="bg-white rounded-[20px] p-4 sm:p-5 border border-[#ECEBE6] space-y-1">
+            <div class="flex items-center justify-between text-xs font-bold text-[#0369a1]">
+              <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-[#65B9E8]"></span>生涯収支カバー率</span>
+              <i class="fa-solid fa-chart-pie text-[#65B9E8]"></i>
+            </div>
+            <div id="annual-summary-cover-rate" class="text-2xl sm:text-3xl font-extrabold text-[#253047] tracking-tight">-</div>
+            <p class="text-[11px] text-[#6F7785]">計画期間全体の維持カバー力</p>
+          </div>
+        </div>
+
+        <!-- 資産が動く主なタイミング -->
+        <div class="bg-white rounded-[22px] p-5 sm:p-6 border border-[#ECEBE6] space-y-4">
+          <div>
+            <h3 class="font-extrabold text-[#253047] text-sm sm:text-base">資産が動く主なタイミング</h3>
+            <p class="text-xs text-[#6F7785] mt-0.5">登録したライフイベントを、未来の時間軸とあわせて確認できます。</p>
+          </div>
+
+          <div id="annualTimelineContainer">
+            <!-- Rendered dynamically -->
+          </div>
+        </div>
+
+        <!-- CTA -->
+        <div class="bg-[#FFFBF0] rounded-[22px] p-5 sm:p-6 border border-[#F0E2B7] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div>
+            <h3 class="font-bold text-[#253047] text-sm sm:text-base">数字をもっと詳しく確認する</h3>
+            <p class="text-xs text-[#6F7785] mt-0.5">年ごとの具体的な収入・支出・資産残高は「資産詳細」で確認できます。</p>
+          </div>
+
+          <div class="flex items-center gap-2.5 w-full sm:w-auto">
+            <button onclick="switchView('assetDetails')" class="flex-1 sm:flex-none px-5 py-3 btn-lumi-primary text-xs sm:text-sm font-bold whitespace-nowrap shadow-sm">
+              資産詳細を見る →
+            </button>
+            <button onclick="switchView('simulationInput')" class="flex-1 sm:flex-none px-5 py-3 btn-lumi-secondary text-xs sm:text-sm font-bold whitespace-nowrap">
+              条件を変更する
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- VIEW 5: ASSET DETAILS VIEW -->
+      <div id="assetDetailsView" class="hidden space-y-6">
+        
+        <!-- Page Header -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-2 border-b border-[#ECEBE6]">
+          <div class="space-y-1">
+            <h2 class="text-2xl sm:text-3xl font-extrabold text-[#253047] tracking-tight flex items-center gap-2">
+              <i class="fa-solid fa-wallet text-[#65B9E8]"></i> 資産詳細
+            </h2>
+            <p class="text-xs sm:text-sm text-[#6F7785] leading-relaxed max-w-2xl">
+              年ごとの収入・支出・資産の変化を詳しく確認できます。
+            </p>
+          </div>
+
+          <div class="bg-[#FEFBF0] px-3.5 py-1.5 rounded-[12px] border border-[#F0E2B7] shrink-0 text-left sm:text-right self-start sm:self-auto">
+            <span class="text-[10px] text-[#8C5800] font-bold block">シミュレーション期間</span>
+            <span class="text-xs sm:text-sm font-extrabold text-[#253047]" id="assetPeriodBadge">--歳 → --歳</span>
+          </div>
+        </div>
+
+        <!-- LUMI View Guide Banner -->
+        <div class="bg-[#FEFBF0] rounded-[20px] p-4 border border-[#F0E2B7] flex items-center gap-3.5">
+          <img src="./assets/lumi-spark.png" alt="LUMI" class="w-12 h-12 object-contain shrink-0" />
+          <div>
+            <h4 class="text-xs font-bold text-[#253047] flex items-center gap-1.5 mb-0.5">
+              <span>LUMIの見方ガイド</span>
+            </h4>
+            <p class="text-xs text-[#6F7785] leading-relaxed">
+              年間収支がマイナスの年があっても、それだけで問題とは限りません。資産残高が長期的にどう推移するかと合わせて確認しましょう。
+            </p>
+          </div>
+        </div>
+
+        <!-- Asset Summary Cards Grid (3 Cards) -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
+          
+          <div class="bg-white rounded-[20px] p-4 border border-[#ECEBE6] space-y-1">
+            <div class="flex items-center justify-between text-xs font-semibold text-[#6F7785]">
+              <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-[#72D6B5]"></span>最終金融資産</span>
+              <i class="fa-solid fa-piggy-bank text-[#72D6B5]"></i>
+            </div>
+            <div id="summaryFinalAssetVal" class="text-lg sm:text-xl font-extrabold text-[#047857] tracking-tight">0 万円</div>
+            <p class="text-[10px] text-[#6F7785]">目標年齢時点の想定値</p>
+          </div>
+
+          <div class="bg-white rounded-[20px] p-4 border border-[#ECEBE6] space-y-1">
+            <div class="flex items-center justify-between text-xs font-semibold text-[#6F7785]">
+              <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-[#FFC83D]"></span>想定運用利回り</span>
+              <i class="fa-solid fa-arrow-trend-up text-[#FFC83D]"></i>
+            </div>
+            <div id="summaryReturnVal" class="text-lg sm:text-xl font-extrabold text-[#D97706] tracking-tight">0.0 %</div>
+            <p class="text-[10px] text-[#6F7785]">設定中の想定年利</p>
+          </div>
+
+          <div class="bg-white rounded-[20px] p-4 border border-[#ECEBE6] space-y-1">
+            <div class="flex items-center justify-between text-xs font-semibold text-[#6F7785]">
+              <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-[#FF8FA3]"></span>年間運用益</span>
+              <i class="fa-solid fa-chart-line text-[#FF8FA3]"></i>
+            </div>
+            <div id="summaryYieldVal" class="text-lg sm:text-xl font-extrabold text-[#253047] tracking-tight">0 万円</div>
+            <p class="text-[10px] text-[#6F7785]">現在条件での年間予想</p>
+          </div>
+
+        </div>
+
+        <!-- Annual Cash Flow Detail Table Card -->
+        <div class="bg-white rounded-[24px] p-5 sm:p-6 border border-[#ECEBE6] space-y-4">
+          <div>
+            <h3 class="font-bold text-[#253047] text-sm sm:text-base flex items-center gap-2">
+              <i class="fa-solid fa-list-check text-[#8C5800]"></i> 年次資金フロー明細一覧
+            </h3>
+            <p class="text-xs text-[#6F7785] mt-0.5">各年の収入・生活費・ライフイベント・運用結果と、年末時点の資産残高を確認できます。</p>
+          </div>
+
+          <div class="overflow-x-auto max-h-[550px] overflow-y-auto rounded-[18px] border border-[#ECEBE6]">
+            <table class="w-full text-left text-xs whitespace-nowrap">
+              <thead class="bg-[#FAFAF7] text-[#253047] font-bold border-b border-[#ECEBE6] sticky top-0 z-10">
+                <tr>
+                  <th class="p-3 text-center">年齢</th>
+                  <th class="p-3 text-right">通常収入</th>
+                  <th class="p-3 text-right">年間支出</th>
+                  <th class="p-3 text-right">生活収支</th>
+                  <th class="p-3 text-right">年間運用益</th>
+                  <th class="p-3 text-right">運用益活用</th>
+                  <th class="p-3 text-right">元本売却額</th>
+                  <th class="p-3 text-center">活用フェーズ</th>
+                  <th class="p-3 text-right">臨時収入</th>
+                  <th class="p-3 text-right">年末現金</th>
+                  <th class="p-3 text-right">金融資産</th>
+                  <th class="p-3 text-right bg-[#FEFBF0]">純資産</th>
+                </tr>
+              </thead>
+              <tbody id="cashflowTableBody" class="divide-y divide-[#ECEBE6]">
+                <!-- Rendered via JS -->
+              </tbody>
+            </table>
+          </div>
+
+          <p class="text-[11px] text-[#6F7785] italic text-center">
+            ※ 数値は入力条件をもとにしたシミュレーションです。実際の運用成果や将来の収支を保証するものではありません。
+          </p>
+        </div>
+
+        <!-- Bottom CTA -->
+        <div class="bg-[#FFFBF0] rounded-[24px] p-5 sm:p-6 border border-[#F0E2B7] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div>
+            <h3 class="font-bold text-[#253047] text-sm sm:text-base">未来の推移をグラフで見る</h3>
+            <p class="text-xs text-[#6F7785] mt-0.5">長期的な資産と収支の全体の流れは「年間推移グラフ」で確認できます。</p>
+          </div>
+
+          <div class="flex items-center gap-2.5 w-full sm:w-auto">
+            <button onclick="switchView('annualProjection')" class="flex-1 sm:flex-none px-5 py-3 btn-lumi-primary text-xs sm:text-sm font-bold whitespace-nowrap shadow-sm">
+              年間推移を見る →
+            </button>
+            <button onclick="switchView('simulationInput')" class="flex-1 sm:flex-none px-5 py-3 btn-lumi-secondary text-xs sm:text-sm font-bold whitespace-nowrap">
+              条件を変更する
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- VIEW 6: LIFE EVENTS VIEW -->
+      <div id="lifeEventsView" class="hidden space-y-6">
+        
+        <!-- Page Header -->
+        <div class="space-y-1 mb-1">
+          <h1 class="text-2xl sm:text-3xl font-extrabold text-[#253047] tracking-tight flex items-center gap-2">
+            <i class="fa-solid fa-calendar-days text-[#8C5800]"></i> ライフイベント
+          </h1>
+          <p class="text-xs sm:text-sm text-[#6F7785] leading-relaxed max-w-2xl">
+            住宅購入、旅行、教育、退職金など、これからの予定を未来予測に反映できます。
+          </p>
+        </div>
+
+        <!-- LUMI Life Plan Guide Banner -->
+        <div class="bg-[#FEFBF0] rounded-[20px] p-4 sm:p-5 border border-[#F0E2B7] flex items-center gap-3.5">
+          <img src="./assets/lumi-spark.png" alt="LUMI" class="w-11 h-11 sm:w-12 sm:h-12 object-contain shrink-0" />
+          <div>
+            <h4 class="text-xs sm:text-sm font-bold text-[#253047] flex items-center gap-1.5 mb-0.5">
+              <span>LUMIのヒント</span>
+            </h4>
+            <p class="text-xs text-[#6F7785] leading-relaxed">
+              まだ決まっていない予定でも大丈夫。今考えている未来を置いてみましょう。
+            </p>
+          </div>
+        </div>
+
+        <!-- Main Life Events Surface -->
+        <div class="bg-white rounded-[24px] p-5 sm:p-7 border border-[#ECEBE6] space-y-4">
+          <div class="flex items-center justify-between flex-wrap gap-3 pb-3 border-b border-[#ECEBE6]">
+            <div>
+              <h3 class="font-extrabold text-[#253047] text-sm sm:text-base flex items-center gap-2">
+                <i class="fa-solid fa-calendar-plus text-[#D97706]"></i> これからのライフプラン
+              </h3>
+              <p class="text-xs text-[#6F7785] mt-0.5">将来予定している出来事や目標を時間軸で確認できます</p>
+            </div>
+
+            <button onclick="openAddEventModal()" class="px-4 py-2.5 btn-lumi-primary text-xs sm:text-sm font-bold flex items-center gap-1.5 whitespace-nowrap shrink-0 shadow-sm">
+              <i class="fa-solid fa-plus"></i>
+              <span>ライフプランを追加</span>
+            </button>
+          </div>
+
+          <!-- Table Container -->
+          <div class="overflow-x-auto rounded-[18px] border border-[#ECEBE6]">
+            <table class="w-full text-left text-xs sm:text-sm">
+              <thead class="bg-[#FAFAF7] text-[#6F7785] font-bold border-b border-[#ECEBE6]">
+                <tr>
+                  <th class="p-3 whitespace-nowrap">区分</th>
+                  <th class="p-3 whitespace-nowrap">対象年齢 (本人)</th>
+                  <th class="p-3 whitespace-nowrap">イベント内容</th>
+                  <th class="p-3 text-right whitespace-nowrap">金額 (万円)</th>
+                  <th class="p-3 text-center whitespace-nowrap">操作</th>
+                </tr>
+              </thead>
+              <tbody id="eventsTableBody" class="divide-y divide-[#ECEBE6]">
+                <!-- Rendered via JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- VIEW 7: AI ADVISOR (LUMI) VIEW -->
+      <div id="lumiAdvisorView" class="hidden space-y-6">
+        
+        <!-- Page Header -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-2 border-b border-[#ECEBE6]">
+          <div class="space-y-1">
+            <h2 class="text-2xl sm:text-3xl font-extrabold text-[#253047] tracking-tight flex items-center gap-2">
+              <i class="fa-solid fa-heart text-[#FF8FA3]"></i> LUMI Advisor
+            </h2>
+            <p class="text-xs sm:text-sm text-[#6F7785] leading-relaxed">
+              数字だけでは見えない、あなたの未来を一緒に考えます。
+            </p>
+          </div>
+          <div class="bg-[#FEFBF0] px-3.5 py-1.5 rounded-[12px] border border-[#F0E2B7] shrink-0 self-start sm:self-auto">
+            <span class="text-[11px] font-bold text-[#8C5800] flex items-center gap-1.5">
+              <i class="fa-solid fa-wand-magic-sparkles text-[#D97706]"></i> AIライフプラン分析
+            </span>
+          </div>
+        </div>
+
+        <!-- LUMI Welcome / Main Analysis Card -->
+        <div class="bg-[#FEFBF0] rounded-[24px] p-5 sm:p-7 border border-[#F0E2B7] space-y-5 shadow-sm">
+          <div class="flex items-start gap-4 pb-4 border-b border-[#F0E2B7]/80">
+            <img src="./assets/lumi-spark.png" alt="LUMI" class="w-12 h-12 sm:w-14 sm:h-14 object-contain shrink-0 mt-0.5" />
+            <div class="space-y-1">
+              <h3 class="font-extrabold text-[#253047] text-base sm:text-lg">こんにちは、LUMIです。</h3>
+              <p class="text-xs sm:text-sm text-[#6F7785] leading-relaxed">
+                あなたのシミュレーション結果をもとに、資産・収支・これからの選択肢を一緒に整理します。
+              </p>
+            </div>
+          </div>
+
+          <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4">
+            <div class="space-y-2 w-full min-w-0 flex-1">
+              <h4 class="font-bold text-[#253047] text-xs sm:text-sm flex items-center gap-1.5">
+                <i class="fa-solid fa-comment-dots text-[#D97706]"></i>
+                <span>LUMIの現在の分析</span>
+              </h4>
+              <p id="lumi-main-analysis-text" class="text-xs sm:text-sm text-[#253047] leading-relaxed bg-white/90 p-4 sm:p-5 rounded-[18px] border border-[#F0E2B7] shadow-sm">
+                現在のシミュレーション結果をもとに、資産・収支・将来の余力を一緒に確認してみましょう。
+              </p>
+            </div>
+
+            <div class="self-end md:self-center shrink-0">
+              <button onclick="generateAIDiagnosis()" class="px-5 py-3 btn-lumi-primary text-xs sm:text-sm font-bold flex items-center gap-2 whitespace-nowrap shadow-sm h-[44px]">
+                <i class="fa-solid fa-arrows-rotate text-xs"></i>
+                <span>LUMIに分析してもらう</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Current Plan Snapshot -->
+        <div class="space-y-3">
+          <div>
+            <h3 class="font-extrabold text-[#253047] text-sm sm:text-base">今のプランを確認する</h3>
+            <p class="text-xs text-[#6F7785] mt-0.5">現在のシミュレーション結果を、主要な数字から確認できます。</p>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+            <div class="bg-white rounded-[20px] p-4 sm:p-5 border border-[#ECEBE6] space-y-1">
+              <div class="text-xs font-bold text-[#8C5800]">LUMIFUL SCORE</div>
+              <div id="lumi-snapshot-score" class="text-2xl sm:text-3xl font-extrabold text-[#253047] tracking-tight">0</div>
+              <p class="text-[11px] text-[#6F7785]">現在の条件をもとにした総合スコア</p>
+            </div>
+
+            <div class="bg-white rounded-[20px] p-4 sm:p-5 border border-[#ECEBE6] space-y-1">
+              <div class="text-xs font-bold text-[#0369a1]">生涯収支カバー率</div>
+              <div id="lumi-snapshot-cover-rate" class="text-2xl sm:text-3xl font-extrabold text-[#253047] tracking-tight">-</div>
+              <p class="text-[11px] text-[#6F7785]">将来の支出に対する収支カバーの目安</p>
+            </div>
+
+            <div class="bg-white rounded-[20px] p-4 sm:p-5 border border-[#ECEBE6] space-y-1">
+              <div class="text-xs font-bold text-[#047857]">最終金融資産</div>
+              <div id="lumi-snapshot-final-assets" class="text-2xl sm:text-3xl font-extrabold text-[#253047] tracking-tight">0 万円</div>
+              <p class="text-[11px] text-[#6F7785]">シミュレーション終了時点の金融資産</p>
+            </div>
+
+            <div class="bg-white rounded-[20px] p-4 sm:p-5 border border-[#ECEBE6] space-y-1">
+              <div class="text-xs font-bold text-[#BE123C]">最終純資産</div>
+              <div id="lumi-snapshot-final-networth" class="text-2xl sm:text-3xl font-extrabold text-[#253047] tracking-tight">0 万円</div>
+              <p class="text-[11px] text-[#6F7785]">シミュレーション終了時点の純資産</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- LUMI Analysis Detail -->
+        <div class="bg-white rounded-[22px] p-5 sm:p-6 border border-[#ECEBE6] space-y-4">
+          <div>
+            <h3 class="font-extrabold text-[#253047] text-sm sm:text-base">LUMIと結果を整理する</h3>
+            <p class="text-xs text-[#6F7785] mt-0.5">現在のAI診断結果を、確認しやすい形で整理します。</p>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
+            <div class="bg-[#FAFAF7] p-4 sm:p-5 rounded-[18px] border border-[#ECEBE6] space-y-2">
+              <h4 class="font-bold text-[#253047] text-xs sm:text-sm flex items-center gap-1.5">
+                <i class="fa-solid fa-clipboard-check text-[#D97706]"></i>
+                <span>現在の分析</span>
+              </h4>
+              <p id="lumi-analysis-detail-text" class="text-xs sm:text-sm text-[#6F7785] leading-relaxed">
+                入力条件をもとに、資産・収支・将来の余力を確認してみましょう。
+              </p>
+            </div>
+
+            <div class="bg-[#FAFAF7] p-4 sm:p-5 rounded-[18px] border border-[#ECEBE6] space-y-3">
+              <h4 class="font-bold text-[#253047] text-xs sm:text-sm flex items-center gap-1.5">
+                <i class="fa-solid fa-compass text-[#65B9E8]"></i>
+                <span>次に確認したいこと</span>
+              </h4>
+
+              <div class="space-y-2.5 text-xs">
+                <div onclick="switchView('simulationInput')" class="p-3 bg-white rounded-[14px] border border-[#ECEBE6] hover:border-[#65B9E8] transition cursor-pointer flex items-center justify-between gap-2">
+                  <div>
+                    <div class="font-bold text-[#253047]">条件を変えて確認する</div>
+                    <div class="text-[11px] text-[#6F7785]">収入・生活費・運用条件などを変更して未来を確認</div>
+                  </div>
+                  <i class="fa-solid fa-chevron-right text-[#6F7785] text-xs shrink-0"></i>
+                </div>
+
+                <div onclick="switchView('annualProjection')" class="p-3 bg-white rounded-[14px] border border-[#ECEBE6] hover:border-[#65B9E8] transition cursor-pointer flex items-center justify-between gap-2">
+                  <div>
+                    <div class="font-bold text-[#253047]">長期の変化を見る</div>
+                    <div class="text-[11px] text-[#6F7785]">資産と年間収支が年齢とともにどう変化するか確認</div>
+                  </div>
+                  <i class="fa-solid fa-chevron-right text-[#6F7785] text-xs shrink-0"></i>
+                </div>
+
+                <div onclick="switchView('assetDetails')" class="p-3 bg-white rounded-[14px] border border-[#ECEBE6] hover:border-[#65B9E8] transition cursor-pointer flex items-center justify-between gap-2">
+                  <div>
+                    <div class="font-bold text-[#253047]">年ごとの数字を見る</div>
+                    <div class="text-[11px] text-[#6F7785]">各年の収入・支出・資産残高を詳しく確認</div>
+                  </div>
+                  <i class="fa-solid fa-chevron-right text-[#6F7785] text-xs shrink-0"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Next Action Guide -->
+        <div class="bg-white rounded-[22px] p-5 sm:p-6 border border-[#ECEBE6] space-y-4">
+          <div>
+            <h3 class="font-extrabold text-[#253047] text-sm sm:text-base">未来を調整してみる</h3>
+            <p class="text-xs text-[#6F7785] mt-0.5">気になる条件を変更すると、未来のシミュレーションも変化します。</p>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
+            <div class="bg-[#FAFAF7] p-4 rounded-[18px] border border-[#ECEBE6] flex flex-col justify-between space-y-3">
+              <div class="space-y-1">
+                <h4 class="font-bold text-[#253047] text-xs sm:text-sm">条件を変更する</h4>
+                <p class="text-[11px] text-[#6F7785] leading-relaxed">収入・生活費・運用条件など、基本条件を変更します。</p>
+              </div>
+              <button onclick="switchView('simulationInput')" class="w-full py-2 btn-lumi-secondary text-xs font-bold whitespace-nowrap">
+                シミュレーション入力へ
+              </button>
+            </div>
+
+            <div class="bg-[#FAFAF7] p-4 rounded-[18px] border border-[#ECEBE6] flex flex-col justify-between space-y-3">
+              <div class="space-y-1">
+                <h4 class="font-bold text-[#253047] text-xs sm:text-sm">ライフイベントを追加する</h4>
+                <p class="text-[11px] text-[#6F7785] leading-relaxed">住宅、旅行、教育、車など、将来予定しているイベントを追加します。</p>
+              </div>
+              <button onclick="switchView('lifeEvents')" class="w-full py-2 btn-lumi-secondary text-xs font-bold flex items-center justify-center gap-1 whitespace-nowrap">
+                <i class="fa-solid fa-plus text-[10px]"></i>
+                <span>ライフプランを追加</span>
+              </button>
+            </div>
+
+            <div class="bg-[#FAFAF7] p-4 rounded-[18px] border border-[#ECEBE6] flex flex-col justify-between space-y-3">
+              <div class="space-y-1">
+                <h4 class="font-bold text-[#253047] text-xs sm:text-sm">結果を確認する</h4>
+                <p class="text-[11px] text-[#6F7785] leading-relaxed">変更した条件をもとに、シミュレーション結果を確認します。</p>
+              </div>
+              <button onclick="switchView('simulationResults')" class="w-full py-2 btn-lumi-primary text-xs font-bold whitespace-nowrap">
+                結果を見る
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bottom Guide -->
+        <div class="bg-[#FFFBF0] rounded-[22px] p-5 sm:p-6 border border-[#F0E2B7] space-y-4">
+          <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <div>
+              <h3 class="font-bold text-[#253047] text-sm sm:text-base">未来は、何度でも調整できます。</h3>
+              <p class="text-xs text-[#6F7785] mt-0.5">条件を変えながら、自分に合った未来の形を少しずつ見つけていきましょう。</p>
+            </div>
+
+            <div class="flex items-center gap-2.5 w-full sm:w-auto shrink-0">
+              <button onclick="switchView('simulationInput')" class="flex-1 sm:flex-none px-4 py-2.5 btn-lumi-primary text-xs font-bold whitespace-nowrap shadow-sm">
+                シミュレーション条件を変更
+              </button>
+              <button onclick="switchView('simulationResults')" class="flex-1 sm:flex-none px-4 py-2.5 btn-lumi-secondary text-xs font-bold whitespace-nowrap">
+                未来をもう一度確認
+              </button>
+            </div>
+          </div>
+
+          <div class="pt-3 border-t border-[#F0E2B7]/80 text-[11px] text-[#6F7785] leading-relaxed">
+            ※ LUMI Advisorの分析は、入力された数値条件をもとにしたライフプラン参考情報であり、将来の経済的成果や投資リターンを保証するものではありません。
+          </div>
+        </div>
+
+      </div>
+
+      <!-- VIEW 8: SETTINGS / PLAN MANAGEMENT VIEW -->
+      <div id="settingsView" class="hidden space-y-6">
+        
+        <!-- Page Header -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-2 border-b border-[#ECEBE6]">
+          <div class="space-y-1">
+            <h2 class="text-2xl sm:text-3xl font-extrabold text-[#253047] tracking-tight flex items-center gap-2">
+              <i class="fa-solid fa-gear text-[#8C5800]"></i> 設定 / プラン管理
+            </h2>
+            <p class="text-xs sm:text-sm text-[#6F7785] leading-relaxed">
+              アカウントや保存したプラン、データの管理ができます。
+            </p>
+          </div>
+          <div class="bg-[#FEFBF0] px-3.5 py-1.5 rounded-[12px] border border-[#F0E2B7] shrink-0 self-start sm:self-auto">
+            <span class="text-[11px] font-bold text-[#8C5800] flex items-center gap-1.5">
+              <i class="fa-solid fa-sliders text-[#D97706]"></i> LUMIFUL Settings
+            </span>
+          </div>
+        </div>
+
+        <!-- Account & Saved Plans Section -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 sm:gap-6">
+          
+          <!-- Account Card -->
+          <div class="bg-white rounded-[24px] p-5 sm:p-6 border border-[#ECEBE6] space-y-4 flex flex-col justify-between">
+            <div class="space-y-3">
+              <div class="flex items-center justify-between pb-2.5 border-b border-[#ECEBE6]">
+                <h3 class="font-extrabold text-[#253047] text-sm sm:text-base flex items-center gap-2">
+                  <i class="fa-solid fa-user-gear text-[#0369a1]"></i> アカウント
+                </h3>
+                <span id="settingsAccountStatusTag" class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#EAF6FC] text-[#0369a1]">
+                  未ログイン
+                </span>
+              </div>
+
+              <div class="bg-[#FAFAF7] p-4 rounded-[18px] border border-[#ECEBE6] space-y-1.5">
+                <div class="text-[11px] font-semibold text-[#6F7785]">現在のアカウント情報</div>
+                <div id="settingsUserEmail" class="text-xs sm:text-sm font-extrabold text-[#253047] break-all">
+                  未ログイン（ゲスト状態）
+                </div>
+              </div>
+            </div>
+
+            <button onclick="openAuthModal()" class="w-full py-2.5 btn-lumi-primary text-xs font-bold whitespace-nowrap shadow-sm mt-2">
+              アカウント管理 / ログイン画面を開く
+            </button>
+          </div>
+
+          <!-- Saved Plans Card -->
+          <div class="bg-white rounded-[24px] p-5 sm:p-6 border border-[#ECEBE6] space-y-4 flex flex-col justify-between">
+            <div class="space-y-3">
+              <div class="flex items-center justify-between pb-2.5 border-b border-[#ECEBE6]">
+                <h3 class="font-extrabold text-[#253047] text-sm sm:text-base flex items-center gap-2">
+                  <i class="fa-solid fa-folder-open text-[#D97706]"></i> 保存したプラン
+                </h3>
+                <span class="text-[10px] font-semibold bg-[#FFF9E6] text-[#8C5800] px-2.5 py-0.5 rounded-full border border-[#FCE3A6] whitespace-nowrap">
+                  マルチプラン
+                </span>
+              </div>
+
+              <div class="space-y-1">
+                <p class="text-xs text-[#6F7785] leading-relaxed">
+                  保存したシミュレーションプランを確認・管理できます。条件を保存しておくと、複数のライフプランを比較・確認するときに便利です。
+                </p>
+              </div>
+            </div>
+
+            <button onclick="openPlansModal()" class="w-full py-2.5 btn-lumi-primary text-xs font-bold flex items-center justify-center gap-2 whitespace-nowrap shadow-sm mt-2">
+              <i class="fa-solid fa-folder-open text-xs"></i>
+              <span>保存したプランを見る →</span>
+            </button>
+          </div>
+
+        </div>
+
+        <!-- Data & Sharing Card -->
+        <div class="bg-white rounded-[24px] p-5 sm:p-6 border border-[#ECEBE6] space-y-4">
+          <div>
+            <h3 class="font-extrabold text-[#253047] text-sm sm:text-base flex items-center gap-2">
+              <i class="fa-solid fa-share-nodes text-[#FF8FA3]"></i> データ・共有
+            </h3>
+            <p class="text-xs text-[#6F7785] mt-0.5">現在のシミュレーションを共有したり、データとして保存できます。</p>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <div class="bg-[#FAFAF7] p-4 rounded-[18px] border border-[#ECEBE6] space-y-3 flex flex-col justify-between">
+              <div class="space-y-1">
+                <div class="text-xs font-bold text-[#253047] flex items-center gap-1.5">
+                  <i class="fa-solid fa-mobile-screen-button text-[#FF8FA3]"></i>
+                  <span>スマホへ送る</span>
+                </div>
+                <p class="text-[11px] text-[#6F7785] leading-relaxed">現在のプランをスマートフォンで確認できます。</p>
+              </div>
+              <button onclick="openShareModal()" class="w-full py-2 btn-lumi-secondary text-xs font-bold whitespace-nowrap">
+                共有URL発行
+              </button>
+            </div>
+
+            <div class="bg-[#FAFAF7] p-4 rounded-[18px] border border-[#ECEBE6] space-y-3 flex flex-col justify-between">
+              <div class="space-y-1">
+                <div class="text-xs font-bold text-[#253047] flex items-center gap-1.5">
+                  <i class="fa-solid fa-file-csv text-[#72D6B5]"></i>
+                  <span>CSV出力</span>
+                </div>
+                <p class="text-[11px] text-[#6F7785] leading-relaxed">年次シミュレーションデータを書き出します。</p>
+              </div>
+              <button onclick="exportCSV()" class="w-full py-2 btn-lumi-ghost text-xs font-bold whitespace-nowrap">
+                CSVで保存
+              </button>
+            </div>
+
+            <div class="bg-[#FAFAF7] p-4 rounded-[18px] border border-[#ECEBE6] space-y-3 flex flex-col justify-between">
+              <div class="space-y-1">
+                <div class="text-xs font-bold text-[#253047] flex items-center gap-1.5">
+                  <i class="fa-solid fa-print text-[#253047]"></i>
+                  <span>印刷 / PDF</span>
+                </div>
+                <p class="text-[11px] text-[#6F7785] leading-relaxed">現在のシミュレーション結果を印刷・PDF保存できます。</p>
+              </div>
+              <button onclick="window.print()" class="w-full py-2 bg-[#253047] hover:bg-[#1e2638] text-white text-xs font-bold rounded-[14px] transition whitespace-nowrap">
+                印刷 / PDF
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Simulation Settings Guide & About LUMIFUL -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-5 sm:gap-6">
+          <div class="bg-white rounded-[24px] p-5 sm:p-6 border border-[#ECEBE6] space-y-4 flex flex-col justify-between">
+            <div class="space-y-2">
+              <h3 class="font-extrabold text-[#253047] text-sm sm:text-base flex items-center gap-2">
+                <i class="fa-solid fa-sliders text-[#65B9E8]"></i> シミュレーション設定
+              </h3>
+              <p class="text-xs text-[#6F7785] leading-relaxed">
+                年齢・収入・生活費・資産・運用条件などは、シミュレーション入力画面から変更できます。
+              </p>
+            </div>
+
+            <button onclick="switchView('simulationInput')" class="w-full py-2.5 btn-lumi-secondary text-xs font-bold whitespace-nowrap">
+              シミュレーション条件を変更 →
+            </button>
+          </div>
+
+          <div class="bg-white rounded-[24px] p-5 sm:p-6 border border-[#ECEBE6] space-y-3 flex flex-col justify-between">
+            <div class="space-y-2">
+              <div class="flex items-center gap-3">
+                <img src="./assets/lumiful-logo.png" alt="LUMIFUL" class="h-8 w-auto object-contain" />
+              </div>
+              <p class="text-xs text-[#6F7785] leading-relaxed">
+                LUMIFULは、人生のお金と未来を分かりやすく整理し、自分らしい選択を考えるためのライフプランシミュレーターです。
+              </p>
+            </div>
+            <div class="text-[10px] text-[#6F7785] font-semibold pt-1">
+              Bright Life Planning Architecture
+            </div>
+          </div>
+        </div>
+
+        <!-- Bottom Guide Card -->
+        <div class="bg-[#FFFBF0] rounded-[24px] p-5 sm:p-6 border border-[#F0E2B7] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div class="space-y-1">
+            <h3 class="font-bold text-[#253047] text-sm sm:text-base">未来は、一度決めて終わりではありません。</h3>
+            <p class="text-xs text-[#6F7785] leading-relaxed">
+              生活や目標が変わったときは、いつでも条件を見直して、新しい未来を確認できます。
+            </p>
+          </div>
+
+          <div class="flex items-center gap-2.5 w-full sm:w-auto shrink-0">
+            <button onclick="switchView('dashboard')" class="flex-1 sm:flex-none px-4 py-2.5 btn-lumi-primary text-xs font-bold whitespace-nowrap shadow-sm">
+              未来を確認する →
+            </button>
+            <button onclick="switchView('simulationInput')" class="flex-1 sm:flex-none px-4 py-2.5 btn-lumi-secondary text-xs font-bold whitespace-nowrap">
+              条件を変更する
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+    </main>
+  </div>
+
+  <!-- MOBILE BOTTOM NAVIGATION (Visible on Mobile/Tablet < 1024px) -->
+  <div class="lg:hidden fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-[#ECEBE6] z-30 flex items-center justify-around py-2 px-1 shadow-lg no-print">
+    <button onclick="switchView('dashboard')" class="flex flex-col items-center gap-1 text-[10px] font-bold text-[#253047]">
+      <i class="fa-solid fa-house text-base text-[#FFC83D]"></i>
+      <span>ホーム</span>
+    </button>
+    <button onclick="switchView('simulationInput')" class="flex flex-col items-center gap-1 text-[10px] font-bold text-[#6F7785]">
+      <i class="fa-solid fa-sliders text-base"></i>
+      <span>入力</span>
+    </button>
+    <button onclick="switchView('simulationResults')" class="flex flex-col items-center gap-1 text-[10px] font-bold text-[#6F7785]">
+      <i class="fa-solid fa-chart-line text-base"></i>
+      <span>結果</span>
+    </button>
+    <button onclick="switchView('assetDetails')" class="flex flex-col items-center gap-1 text-[10px] font-bold text-[#6F7785]">
+      <i class="fa-solid fa-wallet text-base"></i>
+      <span>資産詳細</span>
+    </button>
+    <button onclick="switchView('lifeEvents')" class="flex flex-col items-center gap-1 text-[10px] font-bold text-[#6F7785]">
+      <i class="fa-solid fa-calendar-days text-base"></i>
+      <span>イベント</span>
+    </button>
+  </div>
+
+  <!-- MODAL 1: Lumiful Score Detail Breakdown -->
+  <div id="scoreDetailModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-3xl max-w-lg w-full p-5 sm:p-6 shadow-2xl border border-slate-100 max-h-[90vh] overflow-y-auto">
+      <div class="flex items-center justify-between mb-4 border-b border-slate-100 pb-3">
+        <div>
+          <h3 class="text-base font-bold text-slate-800 flex items-center gap-2">
+            <i class="fa-solid fa-wand-magic-sparkles text-amber-500"></i> Lumiful Score 総合スコア分析内訳
+          </h3>
+          <p class="text-xs text-slate-500">Base Score + AI Adjustment による多角的評価</p>
+        </div>
+        <button onclick="closeScoreDetailModal()" class="text-slate-400 hover:text-slate-600 w-8 h-8 rounded-full flex items-center justify-center">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+
+      <div class="space-y-4 text-xs text-slate-700">
+        <div class="bg-slate-900 text-white p-4 rounded-2xl flex items-center justify-between">
+          <div>
+            <div class="text-[10px] text-amber-300 font-bold uppercase tracking-wider">総合スコア</div>
+            <div class="flex items-baseline gap-1.5 mt-0.5">
+              <span id="detailScoreFinal" class="text-3xl font-black text-amber-300">0</span>
+              <span class="text-xs text-slate-300 font-bold">/ 100 点</span>
+            </div>
+            <div id="detailScoreBadge" class="text-[10px] font-bold text-slate-300 mt-1">未診断</div>
+          </div>
+
+          <div class="text-right space-y-1">
+            <div class="text-[11px] text-slate-300">客観基礎点 (Base Score): <strong id="detailBaseScore" class="text-white">0</strong>点</div>
+            <div class="text-[11px] text-slate-300">AI補正 (AI Adjustment): <strong id="detailAiAdj" class="text-amber-300">0</strong>点</div>
+            <div class="text-[9px] text-amber-300 italic" id="detailAiStatusNotice">※ AI評価反映済み</div>
+          </div>
+        </div>
+
+        <div class="bg-slate-50 p-3.5 rounded-2xl border border-slate-200 space-y-2">
+          <h4 class="font-bold text-slate-800 text-xs flex items-center justify-between">
+            <span><i class="fa-solid fa-calculator text-amber-600 mr-1"></i> Base Score 評価項目</span>
+            <span class="text-[10px] text-slate-500">合計100点ベース</span>
+          </h4>
+          
+          <div class="space-y-1.5 text-[11px]">
+            <div class="flex justify-between items-center py-1 border-b border-slate-200/60">
+              <span>① 資金維持可能性 (終了時まで枯渇しないか)</span>
+              <span id="factor-longevity" class="font-bold text-slate-800">-</span>
+            </div>
+            <div class="flex justify-between items-center py-1 border-b border-slate-200/60">
+              <span>② 最終金融資産 & 純資産のゆとり</span>
+              <span id="factor-final-asset" class="font-bold text-slate-800">-</span>
+            </div>
+            <div class="flex justify-between items-center py-1 border-b border-slate-200/60">
+              <span>③ 最低金融資産水準 (生活防衛資金)</span>
+              <span id="factor-min-asset" class="font-bold text-slate-800">-</span>
+            </div>
+            <div class="flex justify-between items-center py-1 border-b border-slate-200/60">
+              <span>④ 運用益カバー率 & 元本取り崩し計画</span>
+              <span id="factor-yield-cover" class="font-bold text-slate-800">-</span>
+            </div>
+            <div class="flex justify-between items-center py-1">
+              <span>⑤ 引退後安定性 & 大型イベント耐久性</span>
+              <span id="factor-stability" class="font-bold text-slate-800">-</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="space-y-3">
+          <div class="bg-emerald-50 p-3.5 rounded-2xl border border-emerald-200/80">
+            <h4 class="font-bold text-emerald-900 text-xs mb-1.5 flex items-center gap-1.5">
+              <i class="fa-solid fa-circle-check text-emerald-600"></i> 人生計画の強み
+            </h4>
+            <ul id="scoreDetailStrengths" class="list-disc list-inside text-emerald-800 space-y-1 text-[11px]">
+              <li>データ入力後に表示されます</li>
+            </ul>
+          </div>
+
+          <div class="bg-amber-50 p-3.5 rounded-2xl border border-amber-200/80">
+            <h4 class="font-bold text-amber-900 text-xs mb-1.5 flex items-center gap-1.5">
+              <i class="fa-solid fa-triangle-exclamation text-amber-600"></i> 注意点・潜在リスク
+            </h4>
+            <ul id="scoreDetailRisks" class="list-disc list-inside text-amber-800 space-y-1 text-[11px]">
+              <li>データ入力後に表示されます</li>
+            </ul>
+          </div>
+
+          <div class="bg-sky-50 p-3.5 rounded-2xl border border-sky-200/80">
+            <h4 class="font-bold text-sky-900 text-xs mb-1.5 flex items-center gap-1.5">
+              <i class="fa-solid fa-lightbulb text-sky-600"></i> LUMIFUL AI改善アドバイス
+            </h4>
+            <p id="scoreDetailSuggestion" class="text-sky-800 leading-relaxed text-[11px]">
+              条件を設定すると改善案が提示されます。
+            </p>
+          </div>
+        </div>
+
+        <button onclick="closeScoreDetailModal()" class="w-full py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl transition">
+          閉じる
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 2: Auth Modal -->
+  <div id="authModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-3xl max-w-md w-full p-5 sm:p-6 shadow-2xl border border-slate-100">
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="text-base font-bold text-slate-800 flex items-center gap-2">
+          <i class="fa-solid fa-user-shield text-amber-600"></i> LUMIFUL マイアカウント
+        </h3>
+        <button onclick="closeAuthModal()" class="text-slate-400 hover:text-slate-600 w-8 h-8 rounded-full flex items-center justify-center">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+
+      <div id="authContentLoggedOut" class="space-y-4">
+        <p class="text-xs text-slate-600 leading-relaxed">
+          アカウントを作成・ログインすると、シミュレーション設定がクラウド/ローカルに安全保存され、数値入力・変更が可能になります。
+        </p>
+
+        <form id="loginForm" onsubmit="handleAccountLogin(event)" class="space-y-3">
+          <div>
+            <label class="block text-[11px] font-semibold text-slate-600 mb-1">メールアドレス（またはID）</label>
+            <input type="email" id="authEmail" required placeholder="example@lumiful.com" class="w-full px-3 py-2 border border-slate-300 rounded-xl text-xs font-bold text-slate-800">
+          </div>
+          <div>
+            <label class="block text-[11px] font-semibold text-slate-600 mb-1">パスワード（8桁以上）</label>
+            <input type="password" id="authPassword" required minlength="8" placeholder="8桁以上のパスワード" class="w-full px-3 py-2 border border-slate-300 rounded-xl text-xs font-bold text-slate-800">
+          </div>
+
+          <div id="authErrorMsg" class="text-rose-600 text-xs font-bold hidden"></div>
+
+          <div class="flex gap-2 pt-1">
+            <button type="submit" class="w-full py-2.5 btn-lumi-primary text-xs sm:text-sm font-bold flex items-center justify-center gap-1.5 whitespace-nowrap shadow-md">
+              <i class="fa-solid fa-right-to-bracket"></i>
+              <span class="whitespace-nowrap">ログイン / アカウント作成</span>
+            </button>
+          </div>
+        </form>
+
+        <div class="relative flex py-1 items-center">
+          <div class="flex-grow border-t border-slate-200"></div>
+          <span class="flex-shrink mx-2 text-[10px] text-slate-400 font-bold">または</span>
+          <div class="flex-grow border-t border-slate-200"></div>
+        </div>
+
+        <button onclick="handleAnonymousAuth()" class="w-full py-2.5 bg-sky-500 hover:bg-sky-600 text-white text-xs sm:text-sm font-bold rounded-[14px] transition shadow-sm flex items-center justify-center gap-1.5 whitespace-nowrap">
+          <i class="fa-solid fa-bolt text-sky-100"></i>
+          <span class="whitespace-nowrap">ワンクリック簡易ログイン（ゲスト）</span>
+        </button>
+      </div>
+
+      <div id="authContentLoggedIn" class="space-y-4 hidden">
+        <div class="bg-amber-50 p-4 rounded-2xl border border-amber-100 space-y-2">
+          <div class="text-xs text-amber-900 font-bold flex items-center gap-1.5">
+            <i class="fa-solid fa-circle-check text-emerald-500"></i> ログイン中
+          </div>
+          <div id="userEmailDisplay" class="text-sm font-black text-slate-800 break-all"></div>
+          <p class="text-[11px] text-slate-500">現在シミュレーションデータは安全に自動保存されています。</p>
+        </div>
+
+        <button onclick="handleAccountLogout()" class="w-full py-2.5 bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs font-bold rounded-xl transition border border-rose-200 flex items-center justify-center gap-1.5 whitespace-nowrap">
+          <i class="fa-solid fa-right-from-bracket"></i>
+          <span class="whitespace-nowrap">ログアウト</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 3: Plans Modal -->
+  <div id="plansModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-3xl max-w-md w-full p-5 sm:p-6 shadow-2xl border border-slate-100">
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="text-base font-bold text-slate-800 flex items-center gap-2">
+          <i class="fa-solid fa-folder-open text-sky-600"></i> LUMIFUL プラン管理
+        </h3>
+        <button onclick="closePlansModal()" class="text-slate-400 hover:text-slate-600 w-8 h-8 rounded-full flex items-center justify-center">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+
+      <div class="space-y-4 text-xs">
+        <div class="flex gap-2">
+          <input type="text" id="newPlanName" placeholder="プラン名（例: リッチ退職案）" class="flex-1 px-3 py-2 border border-slate-300 rounded-xl font-bold">
+          <button onclick="saveCurrentPlanAsNew()" class="px-3 py-2 btn-lumi-primary font-bold shrink-0 whitespace-nowrap">
+            保存
+          </button>
+        </div>
+
+        <div class="border border-slate-200 rounded-2xl p-2 max-h-56 overflow-y-auto space-y-1.5" id="savedPlansList">
+          <!-- Saved plans rendered via JS -->
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 4: Share Modal -->
+  <div id="shareModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-3xl max-w-md w-full p-5 sm:p-6 shadow-2xl border border-slate-100">
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="text-base font-bold text-slate-800 flex items-center gap-2">
+          <i class="fa-solid fa-share-nodes text-pink-600"></i> 外出先で見る (スマホへ送る)
+        </h3>
+        <button onclick="closeShareModal()" class="text-slate-400 hover:text-slate-600 w-8 h-8 rounded-full flex items-center justify-center">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+      <div class="space-y-4 text-xs text-slate-700">
+        <p class="leading-relaxed">現在のシミュレーション状態を専用URLに変換しました。<br>このURLを自分のLINEやメールに送るだけで、サーバー設定不要で外出先のスマホから同じデータを開けます。</p>
+        <div>
+          <textarea id="shareUrlText" readonly rows="3" class="w-full px-3 py-2 border border-slate-300 rounded-xl bg-slate-50 text-[10px] text-slate-500 break-all focus:outline-none"></textarea>
+        </div>
+        <div class="flex gap-2">
+          <button onclick="copyShareUrl()" class="flex-1 py-2.5 btn-lumi-primary font-bold flex items-center justify-center gap-1.5 whitespace-nowrap">
+            <i class="fa-solid fa-copy"></i>
+            <span class="whitespace-nowrap">URLコピー</span>
+          </button>
+          <a id="lineShareBtn" href="#" target="_blank" class="flex-1 py-2.5 bg-[#06C755] hover:bg-[#05b34c] text-white font-bold rounded-[14px] transition shadow-md flex items-center justify-center gap-1.5 whitespace-nowrap">
+            <i class="fa-brands fa-line text-base"></i>
+            <span class="whitespace-nowrap">LINEで送る</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL 5: Event Creation Modal -->
+  <div id="addEventModal" class="fixed inset-0 bg-slate-900/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-[24px] max-w-md w-full p-6 sm:p-7 shadow-xl border border-[#ECEBE6]">
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="text-base font-extrabold text-[#253047] flex items-center gap-2">
+          <i class="fa-solid fa-calendar-plus text-[#D97706]"></i> ライフプランを追加
+        </h3>
+        <button onclick="closeAddEventModal()" class="text-[#6F7785] hover:text-[#253047] w-8 h-8 rounded-full flex items-center justify-center">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+
+      <form id="eventForm" onsubmit="saveEvent(event)" class="space-y-3.5">
+        <div>
+          <label class="block text-xs font-semibold text-[#4F586A] mb-1">イベント種別</label>
+          <div class="grid grid-cols-2 gap-2">
+            <label class="flex items-center justify-center p-2.5 border rounded-[14px] cursor-pointer text-xs font-bold text-[#253047] has-[:checked]:bg-[#FFF0F3] has-[:checked]:border-[#FF8FA3] has-[:checked]:text-[#BE123C] whitespace-nowrap transition">
+              <input type="radio" name="eventType" value="expense" checked class="sr-only">
+              <i class="fa-solid fa-minus-circle mr-1.5"></i> 支出イベント
+            </label>
+            <label class="flex items-center justify-center p-2.5 border rounded-[14px] cursor-pointer text-xs font-bold text-[#253047] has-[:checked]:bg-[#EAF8F3] has-[:checked]:border-[#72D6B5] has-[:checked]:text-[#047857] whitespace-nowrap transition">
+              <input type="radio" name="eventType" value="income" class="sr-only">
+              <i class="fa-solid fa-plus-circle mr-1.5"></i> 臨時収入イベント
+            </label>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="block text-xs font-semibold text-[#4F586A] mb-1">発生年齢 (本人)</label>
+            <select id="eventAge" class="lumi-input w-full px-3 py-2 text-xs font-bold bg-white">
+              <!-- Rendered dynamically -->
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-semibold text-[#4F586A] mb-1">金額 (万円)</label>
+            <input type="number" id="eventAmount" required min="1" step="1" onfocus="this.select()" onblur="if(this.value==='')this.value='0';" placeholder="例: 300" class="lumi-input w-full px-3 py-2 text-xs font-bold">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-[#4F586A] mb-1">イベント名 / 内容</label>
+          <input type="text" id="eventTitle" required placeholder="例: リフォーム / 株式一部売却" class="lumi-input w-full px-3 py-2 text-xs font-bold">
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-[#4F586A] mb-1">アイコン</label>
+          <select id="eventIcon" class="lumi-input w-full px-3 py-2 text-xs font-bold bg-white text-[#253047]">
+            <option value="fa-house">🏠 住宅・不動産・リフォーム</option>
+            <option value="fa-car">🚗 自動車・買い替え・交通</option>
+            <option value="fa-graduation-cap">🎓 教育・学費・子育て</option>
+            <option value="fa-ring">💍 結婚・家族イベント</option>
+            <option value="fa-plane">✈️ 旅行・レジャー・趣味</option>
+            <option value="fa-briefcase-medical">🏥 医療・健康・介護</option>
+            <option value="fa-sack-dollar">💰 退職金・一時収入・ボーナス</option>
+            <option value="fa-building-columns">🏛️ 相続・資産売却</option>
+            <option value="fa-gift">🎁 贈与・祝い金・高額購入</option>
+            <option value="fa-star" selected>⭐ その他</option>
+          </select>
+        </div>
+
+        <div class="pt-2 flex justify-end gap-2">
+          <button type="button" onclick="closeAddEventModal()" class="px-4 py-2.5 btn-lumi-ghost text-xs font-bold whitespace-nowrap">キャンセル</button>
+          <button type="submit" class="px-5 py-2.5 btn-lumi-primary text-xs font-bold whitespace-nowrap shadow-sm">保存する</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+
+    // Custom Toast Notification System
+    window.showToast = function(message, type = 'info') {
+      const container = document.getElementById('toastContainer');
+      if (!container) return;
+
+      const toast = document.createElement('div');
+      const icon = type === 'success' ? 'fa-circle-check text-emerald-400'
+                 : type === 'warning' ? 'fa-triangle-exclamation text-amber-400'
+                 : type === 'error' ? 'fa-circle-xmark text-rose-400'
+                 : 'fa-circle-info text-sky-400';
+
+      toast.className = `pointer-events-auto flex items-center gap-2 px-4 py-3 bg-slate-900/90 text-white text-xs font-bold rounded-2xl shadow-xl border border-slate-700/80 backdrop-blur-md transition-all duration-300 transform translate-y-2 opacity-0`;
+      toast.innerHTML = `<i class="fa-solid ${icon} text-base shrink-0"></i><span>${message}</span>`;
+
+      container.appendChild(toast);
+
+      requestAnimationFrame(() => {
+        toast.classList.remove('translate-y-2', 'opacity-0');
+      });
+
+      setTimeout(() => {
+        toast.classList.add('opacity-0', 'translate-y-2');
+        setTimeout(() => toast.remove(), 300);
+      }, 3200);
+    };
+
+    // Navigation View Switching Function (8 Views)
+    window.switchView = function(viewName) {
+      const dashView = document.getElementById('dashboardView');
+      const inputView = document.getElementById('simulationInputView');
+      const resultsView = document.getElementById('simulationResultsView');
+      const projectionView = document.getElementById('annualProjectionView');
+      const assetView = document.getElementById('assetDetailsView');
+      const eventsView = document.getElementById('lifeEventsView');
+      const lumiView = document.getElementById('lumiAdvisorView');
+      const settingsView = document.getElementById('settingsView');
+
+      const navHome = document.getElementById('nav-item-home');
+      const navInput = document.getElementById('nav-item-input');
+      const navResults = document.getElementById('nav-item-results');
+      const navProj = document.getElementById('nav-item-projection');
+      const navAssets = document.getElementById('nav-item-assets');
+      const navEvents = document.getElementById('nav-item-events');
+      const navLumi = document.getElementById('nav-item-lumi');
+      const navSettings = document.getElementById('nav-item-settings');
+
+      if (dashView) dashView.classList.add('hidden');
+      if (inputView) inputView.classList.add('hidden');
+      if (resultsView) resultsView.classList.add('hidden');
+      if (projectionView) projectionView.classList.add('hidden');
+      if (assetView) assetView.classList.add('hidden');
+      if (eventsView) eventsView.classList.add('hidden');
+      if (lumiView) lumiView.classList.add('hidden');
+      if (settingsView) settingsView.classList.add('hidden');
+
+      [navHome, navInput, navResults, navProj, navAssets, navEvents, navLumi, navSettings].forEach(nav => {
+        if (nav) {
+          nav.classList.remove('bg-[#FFF2CD]', 'text-[#253047]', 'font-bold');
+          nav.classList.add('text-[#6F7785]');
+        }
+      });
+
+      if (viewName === 'dashboard') {
+        if (dashView) dashView.classList.remove('hidden');
+        if (navHome) {
+          navHome.classList.add('bg-[#FFF2CD]', 'text-[#253047]', 'font-bold');
+          navHome.classList.remove('text-[#6F7785]');
+        }
+      } else if (viewName === 'simulationInput') {
+        if (inputView) inputView.classList.remove('hidden');
+        if (navInput) {
+          navInput.classList.add('bg-[#FFF2CD]', 'text-[#253047]', 'font-bold');
+          navInput.classList.remove('text-[#6F7785]');
+        }
+      } else if (viewName === 'simulationResults') {
+        if (resultsView) resultsView.classList.remove('hidden');
+        if (navResults) {
+          navResults.classList.add('bg-[#FFF2CD]', 'text-[#253047]', 'font-bold');
+          navResults.classList.remove('text-[#6F7785]');
+        }
+        window.syncSimulationResultsUI();
+      } else if (viewName === 'annualProjection') {
+        if (projectionView) projectionView.classList.remove('hidden');
+        if (navProj) {
+          navProj.classList.add('bg-[#FFF2CD]', 'text-[#253047]', 'font-bold');
+          navProj.classList.remove('text-[#6F7785]');
+        }
+        window.syncAnnualProjectionUI();
+      } else if (viewName === 'assetDetails') {
+        if (assetView) assetView.classList.remove('hidden');
+        if (navAssets) {
+          navAssets.classList.add('bg-[#FFF2CD]', 'text-[#253047]', 'font-bold');
+          navAssets.classList.remove('text-[#6F7785]');
+        }
+        window.syncAssetSummaryValues();
+      } else if (viewName === 'lifeEvents') {
+        if (eventsView) eventsView.classList.remove('hidden');
+        if (navEvents) {
+          navEvents.classList.add('bg-[#FFF2CD]', 'text-[#253047]', 'font-bold');
+          navEvents.classList.remove('text-[#6F7785]');
+        }
+      } else if (viewName === 'lumiAdvisor') {
+        if (lumiView) lumiView.classList.remove('hidden');
+        if (navLumi) {
+          navLumi.classList.add('bg-[#FFF2CD]', 'text-[#253047]', 'font-bold');
+          navLumi.classList.remove('text-[#6F7785]');
+        }
+        window.syncLumiAdvisorUI();
+      } else if (viewName === 'settings') {
+        if (settingsView) settingsView.classList.remove('hidden');
+        if (navSettings) {
+          navSettings.classList.add('bg-[#FFF2CD]', 'text-[#253047]', 'font-bold');
+          navSettings.classList.remove('text-[#6F7785]');
+        }
+        window.syncSettingsUI();
+      }
+    };
+
+    // Lightweight Copy/Sync ONLY for Settings View
+    window.syncSettingsUI = function() {
+      try {
+        const savedEmail = localStorage.getItem('lumiful_user_email');
+        const emailElem = document.getElementById('settingsUserEmail');
+        const statusTag = document.getElementById('settingsAccountStatusTag');
+
+        if (emailElem) {
+          if (savedEmail) {
+            emailElem.innerText = savedEmail;
+            if (statusTag) {
+              statusTag.innerText = 'ログイン中';
+              statusTag.className = 'px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#EAF8F3] text-[#047857]';
+            }
+          } else {
+            emailElem.innerText = '未ログイン（ゲスト状態）';
+            if (statusTag) {
+              statusTag.innerText = '未ログイン';
+              statusTag.className = 'px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#FFF9E6] text-[#8C5800]';
+            }
+          }
+        }
+      } catch (e) {
+        console.error("syncSettingsUI notice:", e);
+      }
+    };
+
+    // Lightweight Copy/Sync ONLY for LUMI Advisor View
+    window.syncLumiAdvisorUI = function() {
+      const scoreElem = document.getElementById('kpi-score');
+      const targetScore = document.getElementById('lumi-snapshot-score');
+      if (scoreElem && targetScore) targetScore.innerText = scoreElem.innerText || '0';
+
+      const coverElem = document.getElementById('kpi-cover-rate');
+      const targetCover = document.getElementById('lumi-snapshot-cover-rate');
+      if (coverElem && targetCover) targetCover.innerText = coverElem.innerText || '-';
+
+      const finalAssetElem = document.getElementById('kpi-final-assets');
+      const targetFinalAsset = document.getElementById('lumi-snapshot-final-assets');
+      if (finalAssetElem && targetFinalAsset) targetFinalAsset.innerText = finalAssetElem.innerText || '0 万円';
+
+      const finalNetWorthElem = document.getElementById('kpi-final-networth');
+      const targetFinalNetWorth = document.getElementById('lumi-snapshot-final-networth');
+      if (finalNetWorthElem && targetFinalNetWorth) targetFinalNetWorth.innerText = (finalNetWorthElem.innerText || '0') + ' 万円';
+
+      const diagElem = document.getElementById('kpi-diagnosis-text');
+      const mainAnalysis = document.getElementById('lumi-main-analysis-text');
+      const detailAnalysis = document.getElementById('lumi-analysis-detail-text');
+
+      const fallbackText = '入力条件をもとに、資産・収支・将来の余力を確認してみましょう。';
+      const textToDisplay = (diagElem && diagElem.innerText.trim()) ? diagElem.innerText.trim() : fallbackText;
+
+      if (mainAnalysis) mainAnalysis.innerText = textToDisplay;
+      if (detailAnalysis) detailAnalysis.innerText = textToDisplay;
+    };
+
+    // Sync existing state/DOM values to Simulation Results View
+    window.syncSimulationResultsUI = function() {
+      const scoreElem = document.getElementById('kpi-score');
+      const targetScoreElem = document.getElementById('results-score');
+      if (scoreElem && targetScoreElem) targetScoreElem.innerText = scoreElem.innerText || '0';
+
+      const baseScoreElem = document.getElementById('kpi-base-score');
+      const targetBaseElem = document.getElementById('results-base-score');
+      if (baseScoreElem && targetBaseElem) targetBaseElem.innerText = baseScoreElem.innerText || '0';
+
+      const aiAdjElem = document.getElementById('kpi-ai-adj');
+      const targetAiAdjElem = document.getElementById('results-ai-adjustment');
+      if (aiAdjElem && targetAiAdjElem) targetAiAdjElem.innerText = aiAdjElem.innerText || '0';
+
+      const lumiDiagElem = document.getElementById('kpi-diagnosis-text');
+      const targetLumiTextElem = document.getElementById('results-lumi-text');
+      if (lumiDiagElem && targetLumiTextElem) {
+        targetLumiTextElem.innerText = lumiDiagElem.innerText || '入力条件をもとに、資産・収支・将来の余力を確認してみましょう。';
+      }
+
+      const coverRateElem = document.getElementById('kpi-cover-rate');
+      const targetCoverRateElem = document.getElementById('results-cover-rate');
+      if (coverRateElem && targetCoverRateElem) targetCoverRateElem.innerText = coverRateElem.innerText || '-';
+
+      const finalAssetsElem = document.getElementById('kpi-final-assets');
+      const targetFinalAssetsElem = document.getElementById('results-final-assets');
+      if (finalAssetsElem && targetFinalAssetsElem) targetFinalAssetsElem.innerText = finalAssetsElem.innerText || '0 万円';
+
+      const finalNetWorthElem = document.getElementById('kpi-final-networth');
+      const targetFinalNetWorthElem = document.getElementById('results-final-networth');
+      if (finalNetWorthElem && targetFinalNetWorthElem) targetFinalNetWorthElem.innerText = (finalNetWorthElem.innerText || '0') + ' 万円';
+
+      // 3 Periods Ranges (Direct display of configured values without arbitrary math)
+      const p1Elem = document.getElementById('period-1-range');
+      if (p1Elem) {
+        const start = simState.selfCurrentAge > 0 ? `${simState.selfCurrentAge}歳` : '--歳';
+        const end = simState.selfRetireAge > 0 ? `${simState.selfRetireAge}歳` : '--歳';
+        p1Elem.innerText = `${start} 〜 ${end}`;
+      }
+
+      const p2Elem = document.getElementById('period-2-range');
+      if (p2Elem) {
+        const start = simState.selfRetireAge > 0 ? `${simState.selfRetireAge}歳` : '--歳';
+        const end = simState.selfPensionStartAge > 0 ? `${simState.selfPensionStartAge}歳` : '--歳';
+        p2Elem.innerText = `${start} 〜 ${end}`;
+      }
+
+      const p3Elem = document.getElementById('period-3-range');
+      if (p3Elem) {
+        const start = simState.selfPensionStartAge > 0 ? `${simState.selfPensionStartAge}歳` : '--歳';
+        const end = simState.targetAge > 0 ? `${simState.targetAge}歳` : '--歳';
+        p3Elem.innerText = `${start} 〜 ${end}`;
+      }
+    };
+
+    // Sync values to Annual Projection View
+    window.syncAnnualProjectionUI = function() {
+      const yieldBadge = document.getElementById('annual-yield-badge-val');
+      if (yieldBadge) yieldBadge.innerText = `${(simState.returnRate || 0.0).toFixed(1)}%`;
+
+      const infBadge = document.getElementById('annual-inflation-badge-val');
+      if (infBadge) infBadge.innerText = `${(simState.inflationRate || 1.5).toFixed(1)}%`;
+
+      const finalAssets = document.getElementById('kpi-final-assets');
+      const targetFinalAssets = document.getElementById('annual-summary-final-assets');
+      if (finalAssets && targetFinalAssets) targetFinalAssets.innerText = finalAssets.innerText || '0 万円';
+
+      const finalNetWorth = document.getElementById('kpi-final-networth');
+      const targetFinalNetWorth = document.getElementById('annual-summary-final-networth');
+      if (finalNetWorth && targetFinalNetWorth) targetFinalNetWorth.innerText = (finalNetWorth.innerText || '0') + ' 万円';
+
+      const coverRate = document.getElementById('kpi-cover-rate');
+      const targetCoverRate = document.getElementById('annual-summary-cover-rate');
+      if (coverRate && targetCoverRate) targetCoverRate.innerText = coverRate.innerText || '-';
+
+      // Render Timeline from simState.events ONLY (strictly using ev.age)
+      const timelineContainer = document.getElementById('annualTimelineContainer');
+      if (timelineContainer) {
+        timelineContainer.innerHTML = '';
+        if (!simState.events || simState.events.length === 0) {
+          timelineContainer.innerHTML = `
+            <div class="bg-[#FAFAF7] p-5 rounded-[18px] border border-[#ECEBE6] text-center space-y-3">
+              <p class="text-xs text-[#6F7785] leading-relaxed">
+                まだライフイベントが登録されていません。<br>住宅購入、旅行、教育、車などを登録すると、年間推移と合わせて確認できます。
+              </p>
+              <button onclick="switchView('lifeEvents')" class="px-4 py-2 btn-lumi-primary text-xs font-bold inline-flex items-center gap-1.5 shadow-sm">
+                <i class="fa-solid fa-plus text-xs"></i>
+                <span>ライフプランを追加</span>
+              </button>
+            </div>
+          `;
+        } else {
+          const list = document.createElement('div');
+          list.className = 'space-y-2.5';
+          simState.events.forEach(ev => {
+            const ageDisplay = (ev && ev.age !== undefined && ev.age !== null && ev.age !== '') ? `${ev.age}歳` : '--歳';
+            const isExpense = ev.type === 'expense';
+            const iconClass = ev.icon || 'fa-star';
+
+            const item = document.createElement('div');
+            item.className = 'bg-[#FAFAF7] p-3.5 rounded-[16px] border border-[#ECEBE6] flex items-center justify-between gap-3 text-xs';
+            item.innerHTML = `
+              <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded-lg ${isExpense ? 'bg-rose-50 text-rose-600' : 'bg-emerald-50 text-emerald-600'} flex items-center justify-center text-xs shrink-0 font-bold">
+                  <i class="fa-solid ${iconClass}"></i>
+                </div>
+                <div>
+                  <div class="font-bold text-[#253047] flex items-center gap-2">
+                    <span>${ev.title}</span>
+                    <span class="text-[10px] px-2 py-0.5 rounded-full font-bold ${isExpense ? 'bg-rose-100 text-rose-700' : 'bg-emerald-100 text-emerald-700'}">${isExpense ? '支出' : '収入'}</span>
+                  </div>
+                  <div class="text-[11px] text-[#6F7785] font-semibold">${ageDisplay}</div>
+                </div>
+              </div>
+              <div class="font-black text-sm ${isExpense ? 'text-rose-600' : 'text-emerald-600'} shrink-0">
+                ${isExpense ? '-' : '+'}${ev.amount.toLocaleString()} 万円
+              </div>
+            `;
+            list.appendChild(item);
+          });
+          timelineContainer.appendChild(list);
+        }
+      }
+
+      window.renderAnnualProjectionChart();
+    };
+
+    // Sync values to Asset Details Summary cards
+    window.syncAssetSummaryValues = function() {
+      const finalAssetElem = document.getElementById('summaryFinalAssetVal');
+      const kpiFinal = document.getElementById('kpi-final-assets');
+      if (finalAssetElem && kpiFinal) {
+        finalAssetElem.innerText = kpiFinal.innerText || '0 万円';
+      }
+
+      const returnElem = document.getElementById('summaryReturnVal');
+      if (returnElem) {
+        returnElem.innerText = `${(simState.returnRate || 0.0).toFixed(1)} %`;
+      }
+
+      const yieldElem = document.getElementById('summaryYieldVal');
+      const kpiYield = document.getElementById('kpi-annual-yield');
+      if (yieldElem && kpiYield) {
+        yieldElem.innerText = kpiYield.innerText || '0 万円';
+      }
+
+      const periodBadge = document.getElementById('assetPeriodBadge');
+      if (periodBadge) {
+        const startAge = (simState.selfCurrentAge !== undefined && simState.selfCurrentAge !== null && simState.selfCurrentAge > 0) 
+          ? `${simState.selfCurrentAge}歳` 
+          : '--歳';
+        const endAge = (simState.targetAge !== undefined && simState.targetAge !== null && simState.targetAge > 0) 
+          ? `${simState.targetAge}歳` 
+          : '--歳';
+        periodBadge.innerText = `${startAge} → ${endAge}`;
+      }
+    };
+
+    window.simState = {
+      selfCurrentAge: 0,
+      selfIncome: 0,
+      selfRetireAge: 0,
+      selfPension: 0,
+      selfPensionStartAge: 65,
+
+      hasSpouse: false,
+      spouseCurrentAge: 0,
+      spouseRetireAge: 0,
+      spouseIncome: 0,
+      spousePension: 0,
+      spousePensionStartAge: 65,
+
+      initialInvest: 0,
+      initialCash: 0,
+      realEstateValue: 0,
+
+      livingExpense: 0,
+      housingExpense: 0,
+      housingEndAge: 0,
+
+      returnRate: 0.0,
+      inflationRate: 1.5,
+      targetAge: 80,
+
+      events: [],
+      savedPlans: []
+    };
+
+    window.currentTableRows = [];
+    window.currentBaseScore = 0;
+    window.currentAiAdjustment = 0;
+    window.currentFinalScore = 0;
+    window.scoreBreakdownDetails = null;
+    window.assetChart = null;
+    window.annualProjectionChart = null;
+
+    window.aiDebounceTimer = null;
+    window.aiAbortController = null;
+
+    async function fetchWithExponentialBackoff(url, options, retries = 3, backoff = 1000) {
+      for (let i = 0; i < retries; i++) {
+        try {
+          const response = await fetch(url, options);
+          if (response.ok) return response;
+          if (response.status === 429 || response.status >= 500) {
+            await new Promise(res => setTimeout(res, backoff * Math.pow(2, i)));
+            continue;
+          }
+          return response;
+        } catch (err) {
+          if (err.name === 'AbortError') throw err;
+          if (i === retries - 1) throw err;
+          await new Promise(res => setTimeout(res, backoff * Math.pow(2, i)));
+        }
+      }
+      throw new Error('API Request Failed after retries');
+    }
+
+    function setupAgeSelects() {
+      const ageSelectIds = [
+        { id: 'selfCurrentAge', min: 0, max: 100 },
+        { id: 'selfRetireAge', min: 0, max: 90 },
+        { id: 'selfPensionStartAge', min: 0, max: 75 },
+        { id: 'spouseCurrentAge', min: 0, max: 100 },
+        { id: 'spouseRetireAge', min: 0, max: 80 },
+        { id: 'spousePensionStartAge', min: 0, max: 75 },
+        { id: 'housingEndAge', min: 0, max: 100 },
+        { id: 'targetAge', min: 0, max: 100 },
+        { id: 'eventAge', min: 18, max: 100 }
+      ];
+
+      ageSelectIds.forEach(config => {
+        const el = document.getElementById(config.id);
+        if (!el) return;
+        el.innerHTML = '';
+
+        if (config.min === 0) {
+          const optZero = document.createElement('option');
+          optZero.value = 0;
+          optZero.textContent = '未設定';
+          el.appendChild(optZero);
+        }
+
+        const startAge = config.min === 0 ? 18 : config.min;
+        for (let a = startAge; a <= config.max; a++) {
+          const opt = document.createElement('option');
+          opt.value = a;
+          opt.textContent = `${a}歳`;
+          el.appendChild(opt);
+        }
+      });
+    }
+
+    window.readStateFromForm = function() {
+      const getNum = id => {
+        const el = document.getElementById(id);
+        if (!el) return 0;
+        const val = parseFloat(el.value);
+        return isNaN(val) ? 0 : Math.max(0, val);
+      };
+      const getVal = id => {
+        const el = document.getElementById(id);
+        if (!el) return 0;
+        return parseInt(el.value, 10) || 0;
+      };
+
+      simState.selfCurrentAge = getVal('selfCurrentAge');
+      simState.selfIncome = getNum('selfIncome');
+      simState.selfRetireAge = getVal('selfRetireAge');
+      simState.selfPension = getNum('selfPension');
+      simState.selfPensionStartAge = getVal('selfPensionStartAge');
+
+      const spouseCheck = document.getElementById('hasSpouse');
+      simState.hasSpouse = spouseCheck ? spouseCheck.checked : false;
+      simState.spouseCurrentAge = getVal('spouseCurrentAge');
+      simState.spouseRetireAge = getVal('spouseRetireAge');
+      simState.spouseIncome = getNum('spouseIncome');
+      simState.spousePension = getNum('spousePension');
+      simState.spousePensionStartAge = getVal('spousePensionStartAge');
+
+      simState.initialInvest = getNum('initialInvest');
+      simState.initialCash = getNum('initialCash');
+      simState.realEstateValue = getNum('realEstateValue');
+
+      simState.livingExpense = getNum('livingExpense');
+      simState.housingExpense = getNum('housingExpense');
+      simState.housingEndAge = getVal('housingEndAge');
+
+      const slider = document.getElementById('returnRateSlider');
+      simState.returnRate = slider ? parseFloat(slider.value) : 0.0;
+      simState.targetAge = getVal('targetAge');
+    };
+
+    window.populateFormFromState = function() {
+      const setVal = (id, val) => {
+        const el = document.getElementById(id);
+        if (el) el.value = val !== undefined ? val : 0;
+      };
+
+      setVal('selfCurrentAge', simState.selfCurrentAge);
+      setVal('selfIncome', simState.selfIncome);
+      setVal('selfRetireAge', simState.selfRetireAge);
+      setVal('selfPension', simState.selfPension);
+      setVal('selfPensionStartAge', simState.selfPensionStartAge || 65);
+
+      const spouseCheck = document.getElementById('hasSpouse');
+      if (spouseCheck) spouseCheck.checked = !!simState.hasSpouse;
+      window.toggleSpouseForm();
+
+      setVal('spouseCurrentAge', simState.spouseCurrentAge);
+      setVal('spouseRetireAge', simState.spouseRetireAge);
+      setVal('spouseIncome', simState.spouseIncome);
+      setVal('spousePension', simState.spousePension);
+      setVal('spousePensionStartAge', simState.spousePensionStartAge || 65);
+
+      setVal('initialInvest', simState.initialInvest);
+      setVal('initialCash', simState.initialCash);
+      setVal('realEstateValue', simState.realEstateValue);
+
+      setVal('livingExpense', simState.livingExpense);
+      setVal('housingExpense', simState.housingExpense);
+      setVal('housingEndAge', simState.housingEndAge);
+
+      const slider = document.getElementById('returnRateSlider');
+      if (slider) {
+        slider.value = simState.returnRate || 0.0;
+        window.updateSliders();
+      }
+
+      setVal('targetAge', simState.targetAge || 80);
+      window.setInflationPreset(simState.inflationRate || 1.5);
+    };
+
+    window.checkAuthState = function() {
+      try {
+        const savedEmail = localStorage.getItem('lumiful_user_email');
+        const loggedOutBox = document.getElementById('authContentLoggedOut');
+        const loggedInBox = document.getElementById('authContentLoggedIn');
+        const authBtnText = document.getElementById('authBtnText');
+        const authBtnIcon = document.getElementById('authBtnIcon');
+        const lockOverlay = document.getElementById('authLockOverlay');
+
+        if (savedEmail) {
+          if (loggedOutBox) loggedOutBox.classList.add('hidden');
+          if (loggedInBox) loggedInBox.classList.remove('hidden');
+          const userEmailDisplay = document.getElementById('userEmailDisplay');
+          if (userEmailDisplay) userEmailDisplay.innerText = savedEmail;
+          if (authBtnText) authBtnText.innerText = 'アカウント同期中';
+          if (authBtnIcon) authBtnIcon.className = 'fa-solid fa-user-check text-[#253047]';
+          if (lockOverlay) lockOverlay.classList.add('hidden');
+
+          window.setInputsDisabled(false);
+        } else {
+          if (loggedOutBox) loggedOutBox.classList.remove('hidden');
+          if (loggedInBox) loggedInBox.classList.add('hidden');
+          if (authBtnText) authBtnText.innerText = 'アカウント作成 / ログイン';
+          if (authBtnIcon) authBtnIcon.className = 'fa-solid fa-user-circle text-[#253047]';
+          if (lockOverlay) lockOverlay.classList.remove('hidden');
+
+          window.setInputsDisabled(true);
+        }
+      } catch (e) {
+        console.error("checkAuthState notice:", e);
+      }
+    };
+
+    window.setInputsDisabled = function(disabled) {
+      const inputs = document.querySelectorAll('#inputTabsContainer input, #inputTabsContainer select, #inputTabsContainer button:not(#authLockOverlay button)');
+      inputs.forEach(el => {
+        el.disabled = disabled;
+        if (disabled) {
+          el.classList.add('cursor-not-allowed', 'opacity-60');
+        } else {
+          el.classList.remove('cursor-not-allowed', 'opacity-60');
+        }
+      });
+    };
+
+    window.openAuthModal = function() {
+      const el = document.getElementById('authModal');
+      if (el) el.classList.remove('hidden');
+    };
+    window.closeAuthModal = function() {
+      const el = document.getElementById('authModal');
+      if (el) el.classList.add('hidden');
+    };
+    window.openPlansModal = function() {
+      try {
+        if (!localStorage.getItem('lumiful_user_email')) {
+          openAuthModal();
+          return;
+        }
+      } catch (e) {}
+      const el = document.getElementById('plansModal');
+      if (el) el.classList.remove('hidden');
+      window.renderPlansList();
+    };
+    window.closePlansModal = function() {
+      const el = document.getElementById('plansModal');
+      if (el) el.classList.add('hidden');
+    };
+    window.openShareModal = function() {
+      const el = document.getElementById('shareModal');
+      if (el) el.classList.remove('hidden');
+      if (typeof LZString !== 'undefined') {
+        const shareState = JSON.parse(JSON.stringify(simState));
+        delete shareState.savedPlans;
+        const compressed = LZString.compressToEncodedURIComponent(JSON.stringify(shareState));
+        const url = window.location.origin + window.location.pathname + '?data=' + compressed;
+        const shareTextElem = document.getElementById('shareUrlText');
+        if (shareTextElem) shareTextElem.value = url;
+        const lineText = encodeURIComponent('【LUMIFUL】シミュレーションデータ:\n') + encodeURIComponent(url);
+        const lineBtn = document.getElementById('lineShareBtn');
+        if (lineBtn) lineBtn.href = `https://line.me/R/msg/text/?${lineText}`;
+      }
+    };
+    window.closeShareModal = function() {
+      const el = document.getElementById('shareModal');
+      if (el) el.classList.add('hidden');
+    };
+    window.copyShareUrl = function() {
+      const urlText = document.getElementById('shareUrlText');
+      if (!urlText) return;
+      urlText.select();
+      urlText.setSelectionRange(0, 99999);
+      document.execCommand('copy');
+      window.showToast('URLをコピーしました！LINE等に貼り付けて送信できます。', 'success');
+    };
+    window.openAddEventModal = function() {
+      try {
+        if (!localStorage.getItem('lumiful_user_email')) {
+          openAuthModal();
+          return;
+        }
+      } catch (e) {}
+      const el = document.getElementById('addEventModal');
+      if (el) el.classList.remove('hidden');
+    };
+    window.closeAddEventModal = function() {
+      const el = document.getElementById('addEventModal');
+      if (el) el.classList.add('hidden');
+      const form = document.getElementById('eventForm');
+      if (form) form.reset();
+    };
+    window.openScoreDetailModal = function() {
+      const el = document.getElementById('scoreDetailModal');
+      if (el) el.classList.remove('hidden');
+    };
+    window.closeScoreDetailModal = function() {
+      const el = document.getElementById('scoreDetailModal');
+      if (el) el.classList.add('hidden');
+    };
+
+    window.handleAccountLogin = function(e) {
+      e.preventDefault();
+      const emailInput = document.getElementById('authEmail');
+      const email = emailInput ? emailInput.value : '';
+      if (email) {
+        try {
+          localStorage.setItem('lumiful_user_email', email);
+        } catch (err) {}
+        window.checkAuthState();
+        window.closeAuthModal();
+        window.recalculateAllFast();
+        window.showToast('ログインしました', 'success');
+      }
+    };
+
+    window.handleAnonymousAuth = function() {
+      try {
+        localStorage.setItem('lumiful_user_email', 'guest@lumiful.local (ゲスト)');
+      } catch (err) {}
+      window.checkAuthState();
+      window.closeAuthModal();
+      window.recalculateAllFast();
+      window.showToast('ゲストとしてログインしました', 'info');
+    };
+
+    window.handleAccountLogout = function() {
+      try {
+        localStorage.removeItem('lumiful_user_email');
+      } catch (err) {}
+      window.checkAuthState();
+      window.closeAuthModal();
+      window.showToast('ログアウトしました', 'info');
+    };
+
+    window.renderPlansList = function() {
+      const container = document.getElementById('savedPlansList');
+      if (!container) return;
+      container.innerHTML = '';
+
+      if (!simState.savedPlans || simState.savedPlans.length === 0) {
+        container.innerHTML = `<div class="p-3 text-center text-slate-400">保存されたプランはありません</div>`;
+        return;
+      }
+
+      simState.savedPlans.forEach((plan, idx) => {
+        const item = document.createElement('div');
+        item.className = 'flex items-center justify-between p-2.5 bg-slate-50 rounded-xl border border-slate-200';
+        item.innerHTML = `
+          <div>
+            <div class="font-bold text-slate-800 text-xs">${plan.name}</div>
+            <div class="text-[10px] text-slate-400">${plan.date || ''}</div>
+          </div>
+          <div class="flex items-center gap-1.5">
+            <button onclick="loadPlan(${idx})" class="px-2.5 py-1 btn-lumi-primary text-[10px] whitespace-nowrap">読込</button>
+            <button onclick="deletePlan(${idx})" class="px-2 py-1 bg-rose-100 text-rose-600 font-bold rounded-lg text-[10px]"><i class="fa-solid fa-trash"></i></button>
+          </div>
+        `;
+        container.appendChild(item);
+      });
+    };
+
+    window.saveCurrentPlanAsNew = function() {
+      const input = document.getElementById('newPlanName');
+      const name = input ? input.value.trim() : '';
+      if (!name) return;
+
+      if (!simState.savedPlans) simState.savedPlans = [];
+      const planData = JSON.parse(JSON.stringify(simState));
+      delete planData.savedPlans;
+
+      simState.savedPlans.push({
+        name,
+        date: new Date().toLocaleDateString('ja-JP'),
+        state: planData
+      });
+
+      if (input) input.value = '';
+      try {
+        localStorage.setItem('lumiful_saved_plans', JSON.stringify(simState.savedPlans));
+      } catch (e) {}
+      window.renderPlansList();
+      window.showToast(`プラン「${name}」を保存しました`, 'success');
+    };
+
+    window.loadPlan = function(idx) {
+      if (!simState.savedPlans || !simState.savedPlans[idx]) return;
+      const targetState = simState.savedPlans[idx].state;
+      const savedPlansRef = simState.savedPlans;
+      Object.assign(simState, targetState);
+      simState.savedPlans = savedPlansRef;
+      window.populateFormFromState();
+      window.recalculateAllFast();
+      window.closePlansModal();
+      window.showToast(`プランを読み込みました`, 'success');
+    };
+
+    window.deletePlan = function(idx) {
+      if (!simState.savedPlans) return;
+      simState.savedPlans.splice(idx, 1);
+      try {
+        localStorage.setItem('lumiful_saved_plans', JSON.stringify(simState.savedPlans));
+      } catch (e) {}
+      window.renderPlansList();
+      window.showToast('プランを削除しました', 'info');
+    };
+
+    window.exportCSV = function() {
+      if (!window.currentTableRows || window.currentTableRows.length === 0) {
+        window.showToast('出力可能な明細データがありません。条件を入力してください。', 'warning');
+        return;
+      }
+
+      let csvContent = '\uFEFF年齢,通常収入,年間支出,生活収支,年間運用益,運用益活用,元本売却額,活用フェーズ,臨時収入,年末現金,金融資産,純資産\n';
+
+      window.currentTableRows.forEach(r => {
+        csvContent += `${r.age}歳,${r.normalIncome},${r.totalExpense},${r.netCashflow},${r.annualYield},${r.yieldUsed},${r.principalSold},"${r.phase}",${r.eventIncomeTotal},${r.currentCash},${r.financialAsset},${r.netWorth}\n`;
+      });
+
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.setAttribute('href', url);
+      link.setAttribute('download', `lumiful_cashflow_${new Date().toISOString().slice(0, 10)}.csv`);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.showToast('CSVを出力しました', 'success');
+    };
+
+    window.toggleSpouseForm = function() {
+      const spouseCheck = document.getElementById('hasSpouse');
+      const formGroup = document.getElementById('spouseFormGroup');
+      if (spouseCheck && formGroup) {
+        if (spouseCheck.checked) {
+          formGroup.classList.remove('opacity-40', 'pointer-events-none');
+        } else {
+          formGroup.classList.add('opacity-40', 'pointer-events-none');
+        }
+      }
+    };
+
+    window.updateSliders = function() {
+      const slider = document.getElementById('returnRateSlider');
+      if (slider) {
+        const val = parseFloat(slider.value || 0).toFixed(1);
+        const sliderReturnVal = document.getElementById('slider-return-val');
+        if (sliderReturnVal) sliderReturnVal.innerText = val + '%';
+        const chartSliderYieldVal = document.getElementById('chart-slider-yield-val');
+        if (chartSliderYieldVal) chartSliderYieldVal.innerText = val + '%';
+      }
+      window.recalculateAllFast();
+    };
+
+    window.setInflationPreset = function(rate) {
+      simState.inflationRate = rate;
+      const sliderInflationVal = document.getElementById('slider-inflation-val');
+      if (sliderInflationVal) sliderInflationVal.innerText = rate.toFixed(1) + '%';
+      const chartSliderInflationVal = document.getElementById('chart-slider-inflation-val');
+      if (chartSliderInflationVal) chartSliderInflationVal.innerText = rate.toFixed(1) + '%';
+
+      const activeClasses = ['bg-[#FFC83D]', 'text-[#253047]', 'font-bold'];
+      const inactiveClasses = ['bg-white', 'text-slate-600'];
+
+      [1.0, 1.5, 2.0].forEach(r => {
+        const key = r.toFixed(1).replace('.', '');
+        const btnH = document.getElementById(`header-inf-${key}`);
+        const btnC = document.getElementById(`card-inf-${key}`);
+        const isActive = (r === rate);
+
+        [btnH, btnC].forEach(btn => {
+          if (!btn) return;
+          if (isActive) {
+            btn.classList.add(...activeClasses);
+            btn.classList.remove(...inactiveClasses);
+          } else {
+            btn.classList.remove(...activeClasses);
+            btn.classList.add(...inactiveClasses);
+          }
+        });
+      });
+
+      window.recalculateAllFast();
+    };
+
+    function calculateBaseScore(s, tableRows, firstYearYield, firstYearNetCash) {
+      if (!tableRows || tableRows.length === 0) return { totalScore: 0, factors: {} };
+
+      const totalYears = tableRows.length;
+      const targetAge = s.targetAge > 0 ? s.targetAge : 80;
+      const retireAge = s.selfRetireAge > 0 ? s.selfRetireAge : 65;
+      const finalRow = tableRows[tableRows.length - 1];
+
+      let longevityPts = 35;
+      let insolvencyAge = null;
+      for (let r of tableRows) {
+        if (r.shortage > 0) {
+          insolvencyAge = r.age;
+          break;
+        }
+      }
+      if (insolvencyAge !== null) {
+        const effectiveSelfAge = s.selfCurrentAge > 0 ? s.selfCurrentAge : 40;
+        const yearsSustained = insolvencyAge - effectiveSelfAge;
+        const ratio = Math.max(0, yearsSustained / Math.max(1, totalYears));
+        longevityPts = Math.round(ratio * 25);
+      }
+
+      let finalAssetPts = 0;
+      const finalFin = finalRow.financialAsset;
+      const finalNet = finalRow.netWorth;
+      if (finalFin >= 2000 || finalNet >= 3000) finalAssetPts = 20;
+      else if (finalFin >= 1000 || finalNet >= 1500) finalAssetPts = 16;
+      else if (finalFin >= 500) finalAssetPts = 12;
+      else if (finalFin > 0) finalAssetPts = 8;
+      else finalAssetPts = 4;
+
+      let minFinAsset = Math.min(...tableRows.map(r => r.financialAsset));
+      let minCushionPts = 0;
+      const yearlyExpenseAvg = s.livingExpense + (s.housingEndAge === 0 || (s.selfCurrentAge > 0 && s.selfCurrentAge < s.housingEndAge) ? s.housingExpense : 0);
+      if (minFinAsset >= yearlyExpenseAvg * 2) minCushionPts = 10;
+      else if (minFinAsset >= yearlyExpenseAvg) minCushionPts = 7;
+      else if (minFinAsset >= 100) minCushionPts = 4;
+      else minCushionPts = 2;
+
+      let yieldCoverPts = 0;
+      let capitalWithdrawalStartAge = null;
+      for (let r of tableRows) {
+        if (r.principalSold > 0) {
+          capitalWithdrawalStartAge = r.age;
+          break;
+        }
+      }
+
+      if (firstYearNetCash >= 0) {
+        yieldCoverPts += 12;
+      } else {
+        const deficit = Math.abs(firstYearNetCash);
+        const ratio = firstYearYield / Math.max(1, deficit);
+        if (ratio >= 1.0) yieldCoverPts += 12;
+        else if (ratio >= 0.5) yieldCoverPts += 8;
+        else yieldCoverPts += 4;
+      }
+
+      if (capitalWithdrawalStartAge === null) {
+        yieldCoverPts += 8;
+      } else if (capitalWithdrawalStartAge >= targetAge - 10) {
+        yieldCoverPts += 7;
+      } else if (capitalWithdrawalStartAge >= retireAge) {
+        yieldCoverPts += 5;
+      } else {
+        yieldCoverPts += 2;
+      }
+
+      let stabilityPts = 0;
+      const postRetireRows = tableRows.filter(r => r.age >= retireAge);
+      if (postRetireRows.length > 0) {
+        const avgPostNet = postRetireRows.reduce((acc, r) => acc + r.netCashflow, 0) / postRetireRows.length;
+        if (avgPostNet >= -50) stabilityPts += 10;
+        else if (avgPostNet >= -150) stabilityPts += 7;
+        else stabilityPts += 3;
+      } else {
+        stabilityPts += 8;
+      }
+
+      if (s.events && s.events.length > 0) {
+        if (minFinAsset >= yearlyExpenseAvg * 2 && insolvencyAge === null) {
+          stabilityPts += 5;
+        } else if (insolvencyAge === null) {
+          stabilityPts += 3;
+        }
+      } else {
+        stabilityPts += 4;
+      }
+
+      const totalBaseScore = Math.min(100, Math.max(0, longevityPts + finalAssetPts + minCushionPts + yieldCoverPts + stabilityPts));
+
+      return {
+        totalScore: totalBaseScore,
+        factors: {
+          longevityPts: `${longevityPts} / 35点`,
+          finalAssetPts: `${finalAssetPts} / 20点`,
+          minCushionPts: `${minCushionPts} / 10点`,
+          yieldCoverPts: `${yieldCoverPts} / 20点`,
+          stabilityPts: `${stabilityPts} / 15点`,
+          insolvencyAge,
+          minFinAsset,
+          capitalWithdrawalStartAge
+        }
+      };
+    }
+
+    function generateFallbackDiagnosisText(s, tableRows) {
+      if (!tableRows || tableRows.length === 0) {
+        return 'プロファイルや収支、資産の数値を設定すると、数値シミュレーションと連動したリアルタイムAI分析アドバイスが表示されます。';
+      }
+      const targetAge = s.targetAge > 0 ? s.targetAge : 80;
+      const finalRow = tableRows[tableRows.length - 1];
+      let insolvencyAge = null;
+      for (let r of tableRows) {
+        if (r.shortage > 0) {
+          insolvencyAge = r.age;
+          break;
+        }
+      }
+
+      const minAsset = Math.min(...tableRows.map(r => r.financialAsset));
+
+      if (insolvencyAge !== null) {
+        return `【数値評価】現在の計画では${insolvencyAge}歳で資金不足が発生する試算です。収入・支出・運用条件または資産配分の見直し余地があります。`;
+      } else if (finalRow.financialAsset === 0) {
+        return `【数値評価】現在の計画は${targetAge}歳まで必要な支出を賄えますが、最終的に金融資産を使い切る試算です。資金不足は発生していませんが、資産余力は小さい計画です。`;
+      } else {
+        return `【数値評価】現在の計画は${targetAge}歳まで必要な支出を賄える試算結果です。最低金融資産水準は${minAsset.toLocaleString()}万円、想定利回り${s.returnRate.toFixed(1)}%に基づく客観数値評価を表示しています。`;
+      }
+    }
+
+    window.recalculateAllFast = function() {
+      window.readStateFromForm();
+
+      const hasAnyInput = (
+        simState.selfCurrentAge > 0 ||
+        simState.selfIncome > 0 ||
+        simState.selfPension > 0 ||
+        simState.initialInvest > 0 ||
+        simState.initialCash > 0 ||
+        simState.realEstateValue > 0 ||
+        simState.livingExpense > 0 ||
+        simState.housingExpense > 0 ||
+        (simState.hasSpouse && (simState.spouseIncome > 0 || simState.spousePension > 0)) ||
+        (simState.events && simState.events.length > 0)
+      );
+
+      if (!hasAnyInput) {
+        currentBaseScore = 0;
+        currentAiAdjustment = 0;
+        currentFinalScore = 0;
+
+        const kpiScore = document.getElementById('kpi-score');
+        if (kpiScore) kpiScore.innerText = '0';
+        const kpiBase = document.getElementById('kpi-base-score');
+        if (kpiBase) kpiBase.innerText = '0';
+        const kpiAiAdj = document.getElementById('kpi-ai-adj');
+        if (kpiAiAdj) kpiAiAdj.innerText = '0';
+        
+        const scoreBadgeElem = document.getElementById('kpi-score-badge');
+        if (scoreBadgeElem) {
+          scoreBadgeElem.className = 'px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#FFC83D] text-[#253047]';
+          scoreBadgeElem.innerText = '⚪ 未設定';
+        }
+        const kpiScoreStatus = document.getElementById('kpi-score-status-text');
+        if (kpiScoreStatus) kpiScoreStatus.innerText = '条件を入力してください';
+        const kpiAnnualYield = document.getElementById('kpi-annual-yield');
+        if (kpiAnnualYield) kpiAnnualYield.innerHTML = `0 万円<span class="text-xs font-normal text-[#6F7785]"> /年</span>`;
+        
+        const badgeElem = document.getElementById('kpi-phase-badge');
+        if (badgeElem) {
+          badgeElem.innerText = '⚪ 未設定';
+          badgeElem.className = 'px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#FAFAF7] text-[#253047] border border-[#ECEBE6]';
+        }
+
+        const kpiCoverElem = document.getElementById('kpi-cover-rate');
+        if (kpiCoverElem) {
+          kpiCoverElem.innerText = '-';
+          kpiCoverElem.className = 'text-2xl sm:text-3xl font-extrabold text-[#253047] tracking-tight my-2';
+        }
+
+        const kpiFinalAgeLabel = document.getElementById('kpi-final-age-label');
+        if (kpiFinalAgeLabel) kpiFinalAgeLabel.innerText = '80';
+        const kpiFinalAssets = document.getElementById('kpi-final-assets');
+        if (kpiFinalAssets) kpiFinalAssets.innerText = '0 万円';
+        const kpiFinalNetWorth = document.getElementById('kpi-final-networth');
+        if (kpiFinalNetWorth) kpiFinalNetWorth.innerText = '0';
+        const kpiDiagnosisText = document.getElementById('kpi-diagnosis-text');
+        if (kpiDiagnosisText) kpiDiagnosisText.innerText = 'プロファイルや収支、資産の数値を設定すると、数値シミュレーションと連動したリアルタイムAI分析アドバイスが表示されます。';
+
+        window.renderTable([]);
+        window.renderChart([], [], [], []);
+        window.renderAnnualProjectionChart([], [], [], []);
+        window.renderEvents();
+        window.syncAssetSummaryValues();
+        window.syncSimulationResultsUI();
+        window.syncAnnualProjectionUI();
+        window.syncLumiAdvisorUI();
+        return;
+      }
+
+      const effectiveSelfAge = simState.selfCurrentAge > 0 ? simState.selfCurrentAge : 40;
+      const effectiveTargetAge = (simState.targetAge > 0 && simState.targetAge > effectiveSelfAge) 
+        ? simState.targetAge 
+        : Math.max(80, effectiveSelfAge + 10);
+
+      const yearsCount = Math.max(1, effectiveTargetAge - effectiveSelfAge + 1);
+
+      let currentInvest = simState.initialInvest;
+      let currentCash = simState.initialCash;
+
+      const labels = [];
+      const investData = [];
+      const netWorthData = [];
+      const cashflowData = [];
+      const tableRows = [];
+
+      let firstYearYield = 0;
+      let firstYearPhase = '';
+      let firstYearNetCash = 0;
+
+      for (let i = 0; i < yearsCount; i++) {
+        const selfAge = effectiveSelfAge + i;
+        const spouseAge = (simState.spouseCurrentAge > 0 ? simState.spouseCurrentAge : effectiveSelfAge) + i;
+
+        let selfWorkInc = (selfAge < (simState.selfRetireAge || 65)) ? simState.selfIncome : 0;
+        let selfPenInc = (selfAge >= (simState.selfPensionStartAge || 65)) ? simState.selfPension : 0;
+
+        let spouseWorkInc = 0;
+        let spousePenInc = 0;
+        if (simState.hasSpouse) {
+          spouseWorkInc = (spouseAge < (simState.spouseRetireAge || 65)) ? simState.spouseIncome : 0;
+          spousePenInc = (spouseAge >= (simState.spousePensionStartAge || 65)) ? simState.spousePension : 0;
+        }
+
+        let eventExpenseTotal = 0;
+        let eventIncomeTotal = 0;
+        if (simState.events) {
+          simState.events.forEach(ev => {
+            if (ev.age === selfAge) {
+              if (ev.type === 'expense') eventExpenseTotal += ev.amount;
+              if (ev.type === 'income') eventIncomeTotal += ev.amount;
+            }
+          });
+        }
+
+        const normalIncome = selfWorkInc + selfPenInc + spouseWorkInc + spousePenInc;
+        const totalIncome = normalIncome + eventIncomeTotal;
+
+        const infFactor = Math.pow(1 + (simState.inflationRate / 100), i);
+        let housingExp = (simState.housingEndAge === 0 || selfAge < simState.housingEndAge) ? simState.housingExpense : 0;
+        const totalExpense = Math.round((simState.livingExpense + housingExp) * infFactor) + eventExpenseTotal;
+        const netCashflow = totalIncome - totalExpense;
+
+        const annualYield = Math.round(currentInvest * (simState.returnRate / 100));
+
+        let yieldUsed = 0;
+        let cashUsed = 0;
+        let principalSold = 0;
+        let shortage = 0;
+        let phase = '🟢 収入内で生活';
+
+        if (netCashflow >= 0) {
+          currentCash += netCashflow;
+          currentInvest += annualYield;
+          phase = '🟢 収入内で生活';
+        } else {
+          let remDeficit = Math.abs(netCashflow);
+
+          yieldUsed = Math.min(remDeficit, annualYield);
+          remDeficit -= yieldUsed;
+
+          const remainingYield = annualYield - yieldUsed;
+          currentInvest += remainingYield;
+
+          if (remDeficit > 0) {
+            cashUsed = Math.min(remDeficit, currentCash);
+            currentCash -= cashUsed;
+            remDeficit -= cashUsed;
+          }
+
+          if (remDeficit > 0) {
+            principalSold = Math.min(remDeficit, currentInvest);
+            currentInvest -= principalSold;
+            remDeficit -= principalSold;
+          }
+
+          if (remDeficit > 0) {
+            shortage = remDeficit;
+          }
+
+          if (shortage > 0) {
+            phase = '🔴 資金不足';
+          } else if (principalSold > 0) {
+            phase = '🟠 運用益＋安全資産＋投資資産';
+          } else if (cashUsed > 0) {
+            phase = '🟡 運用益＋安全資産';
+          } else if (yieldUsed > 0) {
+            phase = '🟢 運用益のみ';
+          }
+        }
+
+        const financialAsset = Math.max(0, Math.round(currentInvest + currentCash));
+        const netWorth = Math.round(financialAsset + simState.realEstateValue);
+
+        if (i === 0) {
+          firstYearYield = annualYield;
+          firstYearPhase = phase;
+          firstYearNetCash = netCashflow;
+        }
+
+        labels.push(`${selfAge}歳`);
+        investData.push(financialAsset);
+        netWorthData.push(netWorth);
+        cashflowData.push(netCashflow);
+
+        tableRows.push({
+          age: selfAge,
+          normalIncome,
+          totalExpense,
+          netCashflow,
+          annualYield,
+          yieldUsed,
+          cashUsed,
+          principalSold,
+          shortage,
+          phase,
+          eventIncomeTotal,
+          currentCash: Math.round(currentCash),
+          financialAsset,
+          netWorth
+        });
+      }
+
+      window.currentTableRows = tableRows;
+      window.lastChartLabels = labels;
+      window.lastInvestData = investData;
+      window.lastNetWorthData = netWorthData;
+      window.lastCashflowData = cashflowData;
+
+      const finalAssets = investData[investData.length - 1] || 0;
+      const finalNetWorth = netWorthData[netWorthData.length - 1] || 0;
+
+      const totalYield = tableRows.reduce((acc, r) => acc + r.annualYield, 0);
+      const avgYield = Math.round(totalYield / tableRows.length);
+
+      const kpiYieldElem = document.getElementById('kpi-annual-yield');
+      if (kpiYieldElem) kpiYieldElem.innerHTML = `${avgYield.toLocaleString()} 万円<span class="text-xs font-normal text-[#6F7785]"> /年</span>`;
+      
+      const phaseBadge = document.getElementById('kpi-phase-badge');
+      if (phaseBadge) {
+        phaseBadge.innerText = `累計 ${totalYield.toLocaleString()} 万円`;
+        phaseBadge.className = 'px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#FAFAF7] text-[#253047] border border-[#ECEBE6]';
+      }
+
+      const coverRateElem = document.getElementById('kpi-cover-rate');
+      const coverSubtextElem = document.getElementById('kpi-cover-subtext');
+      if (coverRateElem) {
+        const totalDeficit = tableRows.reduce((acc, r) => acc + (r.netCashflow < 0 ? Math.abs(r.netCashflow) : 0), 0);
+        const totalCovered = tableRows.reduce((acc, r) => acc + r.yieldUsed + r.cashUsed, 0);
+        const minFinAsset = Math.min(...tableRows.map(r => r.financialAsset));
+        const finalFinAsset = tableRows[tableRows.length - 1] ? tableRows[tableRows.length - 1].financialAsset : 0;
+        const yearlyExpenseAvg = simState.livingExpense + (simState.housingEndAge === 0 || (simState.selfCurrentAge > 0 && simState.selfCurrentAge < simState.housingEndAge) ? simState.housingExpense : 0);
+
+        let insolvencyAge = null;
+        for (let r of tableRows) {
+          if (r.shortage > 0) {
+            insolvencyAge = r.age;
+            break;
+          }
+        }
+
+        if (insolvencyAge !== null) {
+          const rate = totalDeficit > 0 ? Math.min(99, Math.round((totalCovered / totalDeficit) * 100)) : 0;
+          coverRateElem.innerText = `${rate}% カバー`;
+          coverRateElem.className = 'text-2xl sm:text-3xl font-extrabold text-rose-600 tracking-tight my-2';
+          if (coverSubtextElem) {
+            coverSubtextElem.innerText = `🚨 ${insolvencyAge}歳頃に資金不足。インフレ・運用下振れに要警戒`;
+            coverSubtextElem.className = 'text-[11px] text-rose-600 font-bold pt-3 border-t border-[#ECEBE6] mt-2 truncate';
+          }
+        } else if (totalDeficit === 0) {
+          coverRateElem.innerText = '全期間 100% カバー';
+          coverRateElem.className = 'text-2xl sm:text-3xl font-extrabold text-emerald-700 tracking-tight my-2';
+          if (coverSubtextElem) {
+            if (minFinAsset >= yearlyExpenseAvg * 3) {
+              coverSubtextElem.innerText = `✨ 収支黒字で極めて健全。インフレ・波乱にも強い十分な余力あり`;
+              coverSubtextElem.className = 'text-[11px] text-emerald-800 font-bold pt-3 border-t border-[#ECEBE6] mt-2 truncate';
+            } else {
+              coverSubtextElem.innerText = `🟢 目標${effectiveTargetAge}歳まで収入内で生活維持（黒字傾向）`;
+              coverSubtextElem.className = 'text-[11px] text-emerald-700 font-semibold pt-3 border-t border-[#ECEBE6] mt-2 truncate';
+            }
+          }
+        } else {
+          coverRateElem.innerText = '全期間 100% カバー';
+          coverRateElem.className = 'text-2xl sm:text-3xl font-extrabold text-emerald-700 tracking-tight my-2';
+          if (coverSubtextElem) {
+            if (minFinAsset >= yearlyExpenseAvg * 3 && finalFinAsset >= yearlyExpenseAvg * 2) {
+              coverSubtextElem.innerText = `✨ 十分な余力あり。インフレや運用変動を吸収し取り崩しも安心`;
+              coverSubtextElem.className = 'text-[11px] text-emerald-800 font-bold pt-3 border-t border-[#ECEBE6] mt-2 truncate';
+            } else if (minFinAsset >= yearlyExpenseAvg * 1.5) {
+              coverSubtextElem.innerText = `🟢 計画的に取り崩し目標${effectiveTargetAge}歳まで到達。安定した余力`;
+              coverSubtextElem.className = 'text-[11px] text-emerald-700 font-semibold pt-3 border-t border-[#ECEBE6] mt-2 truncate';
+            } else {
+              coverSubtextElem.innerText = `⚠️ 達成予定も余力僅少。インフレ加速や運用下振れで危険水域の恐れ`;
+              coverSubtextElem.className = 'text-[11px] text-amber-800 font-bold pt-3 border-t border-[#ECEBE6] mt-2 truncate';
+            }
+          }
+        }
+      }
+
+      const finalAgeLabel = document.getElementById('kpi-final-age-label');
+      if (finalAgeLabel) finalAgeLabel.innerText = effectiveTargetAge;
+      const finalAssetsElem = document.getElementById('kpi-final-assets');
+      if (finalAssetsElem) finalAssetsElem.innerText = `${finalAssets.toLocaleString()} 万円`;
+      
+      const netWorthElem = document.getElementById('kpi-final-networth');
+      if (netWorthElem) {
+        netWorthElem.innerText = finalNetWorth.toLocaleString();
+      }
+
+      const baseResult = calculateBaseScore(simState, tableRows, firstYearYield, firstYearNetCash);
+      currentBaseScore = baseResult.totalScore;
+      scoreBreakdownDetails = baseResult.factors;
+
+      window.updateScoreDashboardUI();
+      window.renderTable(tableRows);
+      window.renderChart(labels, investData, netWorthData, cashflowData);
+      window.renderAnnualProjectionChart(labels, investData, netWorthData, cashflowData);
+      window.renderEvents();
+      window.syncAssetSummaryValues();
+      window.syncSimulationResultsUI();
+      window.syncAnnualProjectionUI();
+      window.syncLumiAdvisorUI();
+
+      window.scheduleAIDiagnosis();
+    };
+
+    window.updateScoreDashboardUI = function() {
+      const finalScore = Math.min(100, Math.max(0, currentBaseScore + currentAiAdjustment));
+      currentFinalScore = finalScore;
+
+      const kpiScore = document.getElementById('kpi-score');
+      if (kpiScore) kpiScore.innerText = finalScore;
+      const kpiBase = document.getElementById('kpi-base-score');
+      if (kpiBase) kpiBase.innerText = currentBaseScore;
+      const kpiAiAdj = document.getElementById('kpi-ai-adj');
+      if (kpiAiAdj) kpiAiAdj.innerText = (currentAiAdjustment >= 0 ? '+' : '') + currentAiAdjustment;
+
+      const scoreBadgeElem = document.getElementById('kpi-score-badge');
+      const statusTextElem = document.getElementById('kpi-score-status-text');
+
+      if (finalScore >= 80) {
+        if (scoreBadgeElem) {
+          scoreBadgeElem.className = 'px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#72D6B5] text-[#253047]';
+          scoreBadgeElem.innerText = '🟢 健全・安定';
+        }
+        if (statusTextElem) statusTextElem.innerText = '目標年齢まで非常に安定した資金計画です';
+      } else if (finalScore >= 60) {
+        if (scoreBadgeElem) {
+          scoreBadgeElem.className = 'px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#FFC83D] text-[#253047]';
+          scoreBadgeElem.innerText = '🟡 概ね安定';
+        }
+        if (statusTextElem) statusTextElem.innerText = '概ね問題ありませんが、取崩し・インフレに留意';
+      } else {
+        if (scoreBadgeElem) {
+          scoreBadgeElem.className = 'px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#FF8FA3] text-[#253047]';
+          scoreBadgeElem.innerText = '🔴 要見直し';
+        }
+        if (statusTextElem) statusTextElem.innerText = '途中で資金不足が発生するリスクがあります';
+      }
+
+      const detailScoreFinal = document.getElementById('detailScoreFinal');
+      if (detailScoreFinal) detailScoreFinal.innerText = finalScore;
+      const detailBaseScore = document.getElementById('detailBaseScore');
+      if (detailBaseScore) detailBaseScore.innerText = currentBaseScore;
+      const detailAiAdj = document.getElementById('detailAiAdj');
+      if (detailAiAdj) detailAiAdj.innerText = (currentAiAdjustment >= 0 ? '+' : '') + currentAiAdjustment;
+
+      if (scoreBreakdownDetails) {
+        const factorLongevity = document.getElementById('factor-longevity');
+        if (factorLongevity) factorLongevity.innerText = scoreBreakdownDetails.longevityPts || '-';
+        const factorFinalAsset = document.getElementById('factor-final-asset');
+        if (factorFinalAsset) factorFinalAsset.innerText = scoreBreakdownDetails.finalAssetPts || '-';
+        const factorMinAsset = document.getElementById('factor-min-asset');
+        if (factorMinAsset) factorMinAsset.innerText = scoreBreakdownDetails.minCushionPts || '-';
+        const factorYieldCover = document.getElementById('factor-yield-cover');
+        if (factorYieldCover) factorYieldCover.innerText = scoreBreakdownDetails.yieldCoverPts || '-';
+        const factorStability = document.getElementById('factor-stability');
+        if (factorStability) factorStability.innerText = scoreBreakdownDetails.stabilityPts || '-';
+      }
+
+      const fallbackText = generateFallbackDiagnosisText(simState, window.currentTableRows);
+      const diagTextElem = document.getElementById('kpi-diagnosis-text');
+      if (diagTextElem && (!diagTextElem.dataset.aiUpdated || diagTextElem.dataset.aiUpdated === 'false')) {
+        diagTextElem.innerText = fallbackText;
+      }
+      window.syncSimulationResultsUI();
+      window.syncLumiAdvisorUI();
+    };
+
+    window.renderTable = function(rows) {
+      const tbody = document.getElementById('cashflowTableBody');
+      if (!tbody) return;
+      tbody.innerHTML = '';
+
+      if (!rows || rows.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="12" class="p-4 text-center text-slate-400">プロファイルと条件を入力してください</td></tr>`;
+        return;
+      }
+
+      rows.forEach(r => {
+        const tr = document.createElement('tr');
+        tr.className = 'hover:bg-slate-50 border-b border-slate-100';
+
+        const phaseColor = r.phase.includes('🔴') ? 'text-rose-600 font-bold'
+                         : r.phase.includes('🟠') ? 'text-amber-600 font-bold'
+                         : r.phase.includes('🟡') ? 'text-amber-600'
+                         : 'text-emerald-600 font-semibold';
+
+        tr.innerHTML = `
+          <td class="p-2.5 text-center font-bold text-slate-700">${r.age}歳</td>
+          <td class="p-2.5 text-right font-medium">${r.normalIncome.toLocaleString()}</td>
+          <td class="p-2.5 text-right font-medium text-slate-600">${r.totalExpense.toLocaleString()}</td>
+          <td class="p-2.5 text-right font-bold ${r.netCashflow >= 0 ? 'text-emerald-600' : 'text-rose-600'}">${r.netCashflow > 0 ? '+' : ''}${r.netCashflow.toLocaleString()}</td>
+          <td class="p-2.5 text-right font-semibold text-amber-600">${r.annualYield.toLocaleString()}</td>
+          <td class="p-2.5 text-right text-slate-600">${r.yieldUsed.toLocaleString()}</td>
+          <td class="p-2.5 text-right font-bold ${r.principalSold > 0 ? 'text-amber-600' : 'text-slate-400'}">${r.principalSold.toLocaleString()}</td>
+          <td class="p-2.5 text-center text-[11px] ${phaseColor}">${r.phase}</td>
+          <td class="p-2.5 text-right text-emerald-600 font-medium">${r.eventIncomeTotal > 0 ? '+' + r.eventIncomeTotal.toLocaleString() : '-'}</td>
+          <td class="p-2.5 text-right font-semibold text-emerald-700">${r.currentCash.toLocaleString()}</td>
+          <td class="p-2.5 text-right font-bold text-amber-700">${r.financialAsset.toLocaleString()}</td>
+          <td class="p-2.5 text-right font-black text-slate-900 bg-slate-50">${r.netWorth.toLocaleString()}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    };
+
+    window.renderChart = function(labels, investData, netWorthData, cashflowData) {
+      const ctx = document.getElementById('assetChart');
+      if (!ctx) return;
+
+      if (window.assetChart) {
+        window.assetChart.destroy();
+      }
+
+      window.assetChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: labels,
+          datasets: [
+            {
+              type: 'line',
+              label: '金融資産 (万円)',
+              data: investData,
+              borderColor: '#65B9E8',
+              backgroundColor: 'rgba(101, 185, 232, 0.12)',
+              borderWidth: 2.5,
+              pointRadius: 0,
+              pointHoverRadius: 4,
+              fill: true,
+              yAxisID: 'y'
+            },
+            {
+              type: 'line',
+              label: '純資産 (万円)',
+              data: netWorthData,
+              borderColor: '#72D6B5',
+              borderWidth: 2,
+              borderDash: [4, 4],
+              pointRadius: 0,
+              pointHoverRadius: 4,
+              fill: false,
+              yAxisID: 'y'
+            },
+            {
+              type: 'bar',
+              label: '年間純収支 (万円)',
+              data: cashflowData,
+              backgroundColor: cashflowData.map(v => v >= 0 ? 'rgba(114, 214, 181, 0.7)' : 'rgba(255, 143, 163, 0.7)'),
+              borderRadius: 4,
+              yAxisID: 'y1'
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          interaction: { mode: 'index', intersect: false },
+          scales: {
+            y: {
+              type: 'linear',
+              display: true,
+              position: 'left',
+              grid: { color: '#F0F1F2' },
+              ticks: { color: '#6F7785', font: { size: 10 } },
+              title: { display: true, text: '資産残高 (万円)', font: { size: 10 }, color: '#6F7785' }
+            },
+            y1: {
+              type: 'linear',
+              display: true,
+              position: 'right',
+              grid: { drawOnChartArea: false },
+              ticks: { color: '#6F7785', font: { size: 10 } },
+              title: { display: true, text: '年間収支 (万円)', font: { size: 10 }, color: '#6F7785' }
+            },
+            x: {
+              grid: { display: false },
+              ticks: { color: '#6F7785', maxTicksLimit: 12, font: { size: 10 } }
+            }
+          },
+          plugins: {
+            legend: { position: 'top', labels: { boxWidth: 12, font: { size: 11 }, color: '#253047' } },
+            tooltip: {
+              backgroundColor: '#FFFFFF',
+              titleColor: '#253047',
+              bodyColor: '#253047',
+              borderColor: '#ECEBE6',
+              borderWidth: 1,
+              padding: 10,
+              boxPadding: 4
+            }
+          }
+        }
+      });
+    };
+
+    // Render Annual Projection Chart
+    window.renderAnnualProjectionChart = function(labels, investData, netWorthData, cashflowData) {
+      const ctx = document.getElementById('annualProjectionChart');
+      if (!ctx) return;
+
+      const lbls = labels || window.lastChartLabels || [];
+      const inv = investData || window.lastInvestData || [];
+      const net = netWorthData || window.lastNetWorthData || [];
+      const cf = cashflowData || window.lastCashflowData || [];
+
+      if (window.annualProjectionChart) {
+        window.annualProjectionChart.destroy();
+      }
+
+      window.annualProjectionChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: lbls,
+          datasets: [
+            {
+              type: 'line',
+              label: '金融資産 (万円)',
+              data: inv,
+              borderColor: '#65B9E8',
+              backgroundColor: 'rgba(101, 185, 232, 0.12)',
+              borderWidth: 2.5,
+              pointRadius: 0,
+              pointHoverRadius: 4,
+              fill: true,
+              yAxisID: 'y'
+            },
+            {
+              type: 'line',
+              label: '純資産 (万円)',
+              data: net,
+              borderColor: '#72D6B5',
+              borderWidth: 2,
+              borderDash: [4, 4],
+              pointRadius: 0,
+              pointHoverRadius: 4,
+              fill: false,
+              yAxisID: 'y'
+            },
+            {
+              type: 'bar',
+              label: '年間純収支 (万円)',
+              data: cf,
+              backgroundColor: cf.map(v => v >= 0 ? 'rgba(114, 214, 181, 0.7)' : 'rgba(255, 143, 163, 0.7)'),
+              borderRadius: 4,
+              yAxisID: 'y1'
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          interaction: { mode: 'index', intersect: false },
+          scales: {
+            y: {
+              type: 'linear',
+              display: true,
+              position: 'left',
+              grid: { color: '#F0F1F2' },
+              ticks: { color: '#6F7785', font: { size: 10 } },
+              title: { display: true, text: '資産残高 (万円)', font: { size: 10 }, color: '#6F7785' }
+            },
+            y1: {
+              type: 'linear',
+              display: true,
+              position: 'right',
+              grid: { drawOnChartArea: false },
+              ticks: { color: '#6F7785', font: { size: 10 } },
+              title: { display: true, text: '年間収支 (万円)', font: { size: 10 }, color: '#6F7785' }
+            },
+            x: {
+              grid: { display: false },
+              ticks: { color: '#6F7785', maxTicksLimit: 12, font: { size: 10 } }
+            }
+          },
+          plugins: {
+            legend: { position: 'top', labels: { boxWidth: 12, font: { size: 11 }, color: '#253047' } },
+            tooltip: {
+              backgroundColor: '#FFFFFF',
+              titleColor: '#253047',
+              bodyColor: '#253047',
+              borderColor: '#ECEBE6',
+              borderWidth: 1,
+              padding: 10,
+              boxPadding: 4
+            }
+          }
+        }
+      });
+    };
+
+    window.renderEvents = function() {
+      const tbody = document.getElementById('eventsTableBody');
+      if (!tbody) return;
+      tbody.innerHTML = '';
+
+      if (!simState.events || simState.events.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="5" class="p-8 text-center">
+              <div class="max-w-md mx-auto space-y-3">
+                <div class="w-12 h-12 mx-auto rounded-full bg-[#FEFBF0] text-[#D97706] flex items-center justify-center text-xl">
+                  <i class="fa-solid fa-calendar-minus"></i>
+                </div>
+                <p class="text-xs sm:text-sm font-bold text-[#253047]">まだライフイベントが登録されていません</p>
+                <p class="text-xs text-[#6F7785] leading-relaxed">
+                  住宅購入、車、旅行、教育、退職金などを登録すると、未来予測へ反映されます。
+                </p>
+                <button onclick="openAddEventModal()" class="px-4 py-2 btn-lumi-primary text-xs font-bold inline-flex items-center gap-1.5 shadow-sm mt-1">
+                  <i class="fa-solid fa-plus"></i>
+                  <span>ライフプランを追加</span>
+                </button>
+              </div>
+            </td>
+          </tr>
+        `;
+        return;
+      }
+
+      simState.events.forEach((ev, idx) => {
+        const tr = document.createElement('tr');
+        tr.className = 'hover:bg-slate-50 border-b border-slate-100';
+
+        const isExpense = ev.type === 'expense';
+        const iconClass = ev.icon || 'fa-star';
+
+        tr.innerHTML = `
+          <td class="p-3">
+            <span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${isExpense ? 'bg-rose-100 text-rose-700' : 'bg-emerald-100 text-emerald-700'} whitespace-nowrap">
+              ${isExpense ? '支出' : '収入'}
+            </span>
+          </td>
+          <td class="p-3 font-bold text-slate-700 whitespace-nowrap">${ev.age}歳</td>
+          <td class="p-3 font-semibold text-slate-800 flex items-center gap-2">
+            <div class="w-6 h-6 rounded-lg ${isExpense ? 'bg-rose-50 text-rose-600' : 'bg-emerald-50 text-emerald-600'} flex items-center justify-center text-xs shrink-0">
+              <i class="fa-solid ${iconClass}"></i>
+            </div>
+            <span>${ev.title}</span>
+          </td>
+          <td class="p-3 text-right font-black ${isExpense ? 'text-rose-600' : 'text-emerald-600'} whitespace-nowrap">
+            ${isExpense ? '-' : '+'}${ev.amount.toLocaleString()}
+          </td>
+          <td class="p-3 text-center">
+            <button onclick="removeEvent(${idx})" class="text-slate-400 hover:text-rose-600 transition p-1">
+              <i class="fa-solid fa-trash-can"></i>
+            </button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    };
+
+    window.saveEvent = function(e) {
+      e.preventDefault();
+      const type = document.querySelector('input[name="eventType"]:checked').value;
+      const age = parseInt(document.getElementById('eventAge').value, 10);
+      const amount = parseFloat(document.getElementById('eventAmount').value);
+      const title = document.getElementById('eventTitle').value.trim();
+      const icon = document.getElementById('eventIcon')?.value || 'fa-star';
+
+      if (!age || !amount || !title) return;
+
+      if (!simState.events) simState.events = [];
+      simState.events.push({ type, age, amount, title, icon });
+      simState.events.sort((a, b) => a.age - b.age);
+
+      window.closeAddEventModal();
+      window.recalculateAllFast();
+      window.showToast('ライフイベントを追加しました', 'success');
+    };
+
+    window.removeEvent = function(idx) {
+      if (!simState.events) return;
+      simState.events.splice(idx, 1);
+      window.recalculateAllFast();
+      window.showToast('イベントを削除しました', 'info');
+    };
+
+    window.scheduleAIDiagnosis = function() {
+      if (window.aiDebounceTimer) clearTimeout(window.aiDebounceTimer);
+      window.aiDebounceTimer = setTimeout(() => {
+        window.generateAIDiagnosis();
+      }, 1500);
+    };
+
+    window.generateAIDiagnosis = async function() {
+      const spinner = document.getElementById('ai-loading-spinner');
+      const diagTextElem = document.getElementById('kpi-diagnosis-text');
+
+      if (!window.currentTableRows || window.currentTableRows.length === 0) return;
+
+      // Safe API Key check - do not call external API if key is empty
+      const apiKey = "";
+      if (!apiKey || apiKey.trim() === "") {
+        const fallbackText = generateFallbackDiagnosisText(simState, window.currentTableRows);
+        if (diagTextElem) {
+          diagTextElem.innerText = fallbackText;
+          diagTextElem.dataset.aiUpdated = "false";
+        }
+        if (spinner) spinner.classList.add('hidden');
+        return;
+      }
+
+      if (spinner) spinner.classList.remove('hidden');
+
+      if (window.aiAbortController) window.aiAbortController.abort();
+      window.aiAbortController = new AbortController();
+
+      try {
+        const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
+
+        const userPrompt = `
+以下のLUMIFUL試算データに基づき、プロのFPAIアドバイザーとして評価・補正・アドバイスを行ってください。
+
+【ユーザーのプロファイル＆シミュレーションデータ】
+- 現在年齢: ${simState.selfCurrentAge > 0 ? simState.selfCurrentAge : '未設定'}歳 / 目標終了年齢: ${simState.targetAge > 0 ? simState.targetAge : 80}歳
+- Base Score（客観基礎点）: ${currentBaseScore}点 / 100点
+- 初期投資資産: ${simState.initialInvest}万円 / 初期安全資産: ${simState.initialCash}万円 / 不動産評価額: ${simState.realEstateValue}万円
+- 年間基本生活費: ${simState.livingExpense}万円 / 住居費: ${simState.housingExpense}万円 (完済:${simState.housingEndAge > 0 ? simState.housingEndAge + '歳' : 'なし'})
+- 配偶者有無: ${simState.hasSpouse ? 'あり' : 'なし'}
+- 想定運用利回り: ${simState.returnRate}% / インフレ率: ${simState.inflationRate}%
+- ライフイベント数: ${(simState.events || []).length}件
+- 最終年の想定金融資産: ${window.currentTableRows[window.currentTableRows.length - 1]?.financialAsset || 0}万円
+- 最低到達金融資産額: ${Math.min(...window.currentTableRows.map(r => r.financialAsset))}万円
+- 資金不足発生年齢: ${window.currentTableRows.find(r => r.shortage > 0)?.age || '発生なし'}歳
+- 元本売却開始年齢: ${window.currentTableRows.find(r => r.principalSold > 0)?.age || '開始なし'}歳
+`;
+
+        const systemPrompt = `
+あなたは「LUMIFUL（ルミフル）」の専任AIコンパニオン＆ファイナンシャル・プランナーです。
+
+【LUMIFUL の根幹思想（絶対原則）】
+1. アプリの目的は「資産を無制限に最大化・貯め込むこと」ではありません。
+   目的は「未来のお金の流れを可視化し、自分の現在地を理解し、安心して人生を選択すること（光で人生を照らす）」です。
+2. 最重要コンセプト：「資産を使うことを恐れず、資産が尽きることだけを避ける。」
+3. 資産を計画的に取り崩したこと、人生を楽しむために使ったこと、終了時点で資産が減っていることをネガティブに評価したり無闇に減点してはいけません。
+4. 資産残高の多さ＝人生の成功ではありません。必要な支出を安全に賄い、目標年齢まで資金を維持できているなら、極めて健全で素晴らしい計画です。
+5. ただし、途中で資金不足（shortage > 0）が発生し、生活が立ち行かなくなるリスクがある場合は、厳格かつ建設的に警告と改善案を提示してください。
+6. ユーザーに伝えるべきメッセージは「もっとお金を増やしましょう」ではなく、「この計画なら、どの程度安心して人生の選択肢を広げられるか」です。
+
+【評価ルール & レスポンス仕様】
+- AI Adjustment (adjustment) は -10 から +10 の範囲で設定してください。安全な範囲で資産を活用できている場合はプラス補正を行ってください。
+- レスポンスは必ず以下の指定JSON形式のみで出力してください。
+
+JSON Schema:
+{
+  "adjustment": number (-10 to 10),
+  "summary": "画面上部のAIアドバイザー欄に表示する、ユーザーに寄り添う親身で具体的な短評メッセージ(120文字程度)",
+  "strengths": ["人生計画の強み1", "人生計画の強み2"],
+  "risks": ["注意点・潜在リスク1"],
+  "suggestion": "今後の人生選択に向けた具体的で前向きな改善提案・アドバイス"
+}
+`;
+
+        const payload = {
+          contents: [{ parts: [{ text: userPrompt }] }],
+          systemInstruction: { parts: [{ text: systemPrompt }] },
+          generationConfig: {
+            responseMimeType: "application/json",
+            responseSchema: {
+              type: "OBJECT",
+              properties: {
+                adjustment: { type: "NUMBER" },
+                summary: { type: "STRING" },
+                strengths: { type: "ARRAY", items: { type: "STRING" } },
+                risks: { type: "ARRAY", items: { type: "STRING" } },
+                suggestion: { type: "STRING" }
+              },
+              required: ["adjustment", "summary", "strengths", "risks", "suggestion"]
+            }
+          }
+        };
+
+        const response = await fetchWithExponentialBackoff(apiUrl, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+          signal: window.aiAbortController.signal
+        });
+
+        const result = await response.json();
+        const jsonText = result?.candidates?.[0]?.content?.parts?.[0]?.text;
+
+        if (jsonText) {
+          const aiRes = JSON.parse(jsonText);
+          
+          currentAiAdjustment = Math.min(10, Math.max(-10, Math.round(aiRes.adjustment || 0)));
+          window.updateScoreDashboardUI();
+
+          if (diagTextElem) {
+            diagTextElem.innerText = aiRes.summary || generateFallbackDiagnosisText(simState, window.currentTableRows);
+            diagTextElem.dataset.aiUpdated = "true";
+          }
+
+          const strengthsList = document.getElementById('scoreDetailStrengths');
+          const risksList = document.getElementById('scoreDetailRisks');
+          const suggElem = document.getElementById('scoreDetailSuggestion');
+
+          if (strengthsList && aiRes.strengths && aiRes.strengths.length > 0) {
+            strengthsList.innerHTML = aiRes.strengths.map(s => `<li>${s}</li>`).join('');
+          }
+          if (risksList && aiRes.risks && aiRes.risks.length > 0) {
+            risksList.innerHTML = aiRes.risks.map(r => `<li>${r}</li>`).join('');
+          }
+          if (suggElem && aiRes.suggestion) {
+            suggElem.innerText = aiRes.suggestion;
+          }
+
+          const noticeElem = document.getElementById('detailAiStatusNotice');
+          if (noticeElem) noticeElem.innerText = '※ Gemini AI による総合評価反映済み';
+        }
+
+      } catch (err) {
+        if (err.name !== 'AbortError') {
+          console.debug("AI Diagnosis notice (using fallback):", err);
+          const fallbackText = generateFallbackDiagnosisText(simState, window.currentTableRows);
+          if (diagTextElem) {
+            diagTextElem.innerText = fallbackText;
+            diagTextElem.dataset.aiUpdated = "false";
+          }
+        }
+      } finally {
+        if (spinner) spinner.classList.add('hidden');
+      }
+    };
+
+    window.onload = function() {
+      setupAgeSelects();
+
+      // Check for compressed URL data safely
+      try {
+        const urlParams = new URLSearchParams(window.location.search);
+        const dataParam = urlParams.get('data');
+        if (dataParam && typeof LZString !== 'undefined') {
+          const decompressed = LZString.decompressFromEncodedURIComponent(dataParam);
+          if (decompressed) {
+            const parsed = JSON.parse(decompressed);
+            Object.assign(simState, parsed);
+            window.showToast('URLからシミュレーションデータを復元しました', 'success');
+          }
+        }
+      } catch (e) {
+        console.error("Failed to restore URL data safely:", e);
+      }
+
+      window.populateFormFromState();
+      window.checkAuthState();
+      window.recalculateAllFast();
+    };
+  </script>
+</body>
+</html>
