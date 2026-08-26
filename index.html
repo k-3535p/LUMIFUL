@@ -218,7 +218,7 @@
             <span>資産詳細</span>
           </button>
           <button id="nav-item-lumi" onclick="switchView('lumiAdvisor')" class="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-[14px] text-[#6F7785] hover:bg-[#FAFAF7] hover:text-[#253047] transition text-left">
-            <i class="fa-solid fa-heart text-[#FF8FA3] text-sm w-4 text-center"></i>
+            <i class="fa-solid fa-heart text-sm w-4 text-center"></i>
             <span>AIアドバイザー (LUMI)</span>
           </button>
           <button id="nav-item-settings" onclick="switchView('settings')" class="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-[14px] text-[#6F7785] hover:bg-[#FAFAF7] hover:text-[#253047] transition text-left">
@@ -285,12 +285,12 @@
 
       <!-- VIEW 1: DASHBOARD VIEW -->
       <div id="dashboardView" class="space-y-6">
-
+        
         <!-- DASHBOARD HERO & KPI SECTION -->
         <section id="hero-section" class="space-y-4">
           
-          <!-- 4 KPI EQUAL GRID -->
-          <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+          <!-- 4 KPI EQUAL GRID (Phase 5A Equal 4-Card Layout) -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             
             <!-- KPI 1: LUMIFUL SCORE CARD -->
             <div class="bg-[#FFFDF8] rounded-[24px] p-3.5 sm:p-5 border border-[#ECEBE6] flex flex-col justify-between relative overflow-hidden transition shadow-sm">
@@ -301,9 +301,9 @@
               <div class="relative z-10 space-y-2 sm:space-y-3">
                 <!-- Header: Title (Top Left) & Dynamic Badge (Top Right) -->
                 <div class="flex items-center justify-between gap-1 sm:gap-2">
-                  <div class="flex items-center gap-1 text-[10px] sm:text-xs font-bold tracking-wider uppercase truncate">
-                    <span class="text-[#253047]">LUMIFUL</span>
-                    <span class="text-[#FFC83D]">SCORE</span>
+                  <div class="shrink-0 font-extrabold uppercase leading-[0.92]" aria-label="LUMIFUL SCORE">
+                    <span class="block text-[13px] sm:text-[15px] tracking-[0.08em] text-[#253047] whitespace-nowrap">LUMIFUL</span>
+                    <span class="block text-[13px] sm:text-[15px] tracking-[0.30em] text-[#FFC83D] whitespace-nowrap">SCORE</span>
                   </div>
                   <div>
                     <span id="kpi-score-badge" class="px-2 py-0.5 rounded-full text-[9px] sm:text-[10px] font-semibold bg-[#FAFAF7] text-[#6F7785] border border-[#ECEBE6] shrink-0 inline-block truncate max-w-full">
@@ -362,64 +362,63 @@
 
             </div>
 
-            <!-- KPI 2: 年間運用益 -->
-            <div class="bg-white rounded-[24px] p-3.5 sm:p-6 border border-[#ECEBE6] flex flex-col justify-between relative overflow-hidden transition">
+            <!-- KPI 2: 年間運用益 (専用画像アセットを絶対保護・維持) -->
+            <div class="bg-white rounded-[24px] p-5 sm:p-6 pb-3.5 sm:pb-5 border border-[#ECEBE6] flex flex-col justify-between relative overflow-hidden transition">
               <div>
-                <div class="flex items-center justify-between gap-1 sm:gap-2 mb-1">
-                  <span class="text-[10px] sm:text-xs font-bold text-[#6F7785] line-clamp-2 sm:line-clamp-1">資産が生活を支える力</span>
-                  <img src="./assets/kpi-annual-yield.png" alt="" class="w-10 h-10 sm:w-14 sm:h-14 object-contain shrink-0 pointer-events-none" />
+                <div class="flex items-center justify-between gap-2 mb-1">
+                  <span class="text-xs font-bold text-[#6F7785]">資産が生活を支える力</span>
+                  <img src="./assets/kpi-annual-yield.png" alt="" class="w-10 h-10 object-contain shrink-0 pointer-events-none" />
                 </div>
-                <div class="text-[10px] sm:text-[11px] font-bold text-[#8C5800] mb-1 sm:mb-2 truncate">平均年間運用益 (生涯)</div>
-                <div id="kpi-annual-yield" class="text-lg sm:text-3xl font-extrabold text-[#253047] tracking-tight whitespace-nowrap">
-                  0 万円<span class="text-[10px] sm:text-xs font-normal text-[#6F7785]"> /年</span>
+                <div class="text-[11px] font-bold text-[#8C5800] mb-2">平均年間運用益 (生涯)</div>
+                <div id="kpi-annual-yield" class="text-2xl sm:text-3xl font-extrabold text-[#253047] tracking-tight">
+                  0 万円<span class="text-xs font-normal text-[#6F7785]"> /年</span>
                 </div>
               </div>
 
-              <div class="flex items-center justify-between pt-2 sm:pt-3 border-t border-[#ECEBE6] mt-2 sm:mt-3">
-                <span id="kpi-phase-badge" class="px-2 sm:px-2.5 py-0.5 rounded-full text-[9px] sm:text-[10px] font-bold bg-[#FAFAF7] text-[#6F7785] border border-[#ECEBE6] truncate max-w-full">
-                  ⚪ 未設定
+              <div class="flex items-center justify-end pt-3 border-t border-[#ECEBE6] mt-3">
+                <span id="kpi-phase-badge" class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#FAFAF7] text-[#6F7785] border border-[#ECEBE6]">
+                  累計運用益 未設定
                 </span>
               </div>
             </div>
 
-            <!-- KPI 3: 生涯収支カバー率 -->
-            <div class="bg-white rounded-[24px] p-3.5 sm:p-6 border border-[#ECEBE6] flex flex-col justify-between relative overflow-hidden transition">
+            <!-- KPI 3: 生涯収支カバー率 (専用画像アセットを絶対保護・維持) -->
+            <div class="bg-white rounded-[24px] p-5 sm:p-6 pb-3.5 sm:pb-5 border border-[#ECEBE6] flex flex-col justify-between relative overflow-hidden transition">
               <div>
-                <div class="flex items-center justify-between gap-1 sm:gap-2 mb-1">
-                  <span class="text-[10px] sm:text-xs font-bold text-[#6F7785] flex items-center gap-1 line-clamp-2 sm:line-clamp-1">
+                <div class="flex items-center justify-between gap-2 mb-1">
+                  <span class="text-xs font-bold text-[#6F7785] flex items-center gap-1">
                     生涯収支カバー率
-                    <i class="fa-solid fa-circle-info text-[#6F7785]/60 text-[10px] cursor-help hidden sm:inline" title="目標年齢までの生涯を通じ、生活費の不足額を運用益と安全資産でどれだけ安全にカバーし切れたかを表します。"></i>
+                    <i class="fa-solid fa-circle-info text-[#6F7785]/60 text-[10px] cursor-help" title="目標年齢までの生涯を通じ、生活費の不足額を運用益と安全資産でどれだけ安全にカバーし切れたかを表します。"></i>
                   </span>
-                  <img src="./assets/kpi-cover-rate.png" alt="" class="w-10 h-10 sm:w-14 sm:h-14 object-contain shrink-0 pointer-events-none" />
+                  <img src="./assets/kpi-cover-rate.png" alt="" class="w-10 h-10 object-contain shrink-0 pointer-events-none" />
                 </div>
-                <div class="text-[10px] sm:text-[11px] font-bold text-[#65B9E8] mb-1 sm:mb-2 truncate">生涯の資金維持達成率</div>
-                <div id="kpi-cover-rate" class="text-base sm:text-2xl font-extrabold text-[#6F7785] tracking-tight whitespace-nowrap">
+                <div class="text-[11px] font-bold text-[#65B9E8] mb-2">生涯の資金維持達成率</div>
+                <div id="kpi-cover-rate" class="text-xl sm:text-2xl font-extrabold text-[#6F7785] tracking-tight whitespace-nowrap">
                   -
                 </div>
               </div>
 
-              <div id="kpi-cover-subtext" class="text-[10px] sm:text-[11px] text-[#6F7785] pt-2 sm:pt-3 border-t border-[#ECEBE6] mt-2 sm:mt-3 truncate">
-                <span class="sm:hidden">目標年齢までの資金維持力</span>
-                <span class="hidden sm:inline">目標年齢まで資金を維持し切るカバー力</span>
+              <div id="kpi-cover-subtext" class="text-[11px] text-[#6F7785] pt-3 border-t border-[#ECEBE6] mt-3 truncate">
+                目標年齢まで資金を維持し切るカバー力
               </div>
             </div>
 
-            <!-- KPI 4: 目標年齢時点の想定資産 -->
-            <div class="bg-white rounded-[24px] p-3.5 sm:p-6 border border-[#ECEBE6] flex flex-col justify-between relative overflow-hidden transition">
+            <!-- KPI 4: 目標年齢時点の想定資産 (専用画像アセットを絶対保護・維持) -->
+            <div class="bg-white rounded-[24px] p-5 sm:p-6 pb-3.5 sm:pb-5 border border-[#ECEBE6] flex flex-col justify-between relative overflow-hidden transition">
               <div>
-                <div class="flex items-center justify-between gap-1 sm:gap-2 mb-1">
-                  <span class="text-[10px] sm:text-xs font-bold text-[#6F7785] line-clamp-2 sm:line-clamp-1">
+                <div class="flex items-center justify-between gap-2 mb-1">
+                  <span class="text-xs font-bold text-[#6F7785]">
                     <span id="kpi-final-age-label">80</span>歳時点の想定資産
                   </span>
-                  <img src="./assets/kpi-future-assets.png" alt="" class="w-10 h-10 sm:w-14 sm:h-14 object-contain shrink-0 pointer-events-none" />
+                  <img src="./assets/kpi-future-assets.png" alt="" class="w-10 h-10 object-contain shrink-0 pointer-events-none" />
                 </div>
-                <div id="kpi-final-assets" class="text-lg sm:text-3xl font-extrabold text-[#253047] tracking-tight mt-1 sm:mt-3 whitespace-nowrap">
+                <div id="kpi-final-assets" class="text-2xl sm:text-3xl font-extrabold text-[#253047] tracking-tight mt-3">
                   0 万円
                 </div>
               </div>
 
-              <div id="kpi-final-status" class="text-[10px] sm:text-[11px] text-[#6F7785] pt-2 sm:pt-3 border-t border-[#ECEBE6] mt-2 sm:mt-3 truncate">
-                純資産: <span id="kpi-final-networth" class="font-bold text-[#253047]">0</span> 万円
+              <div id="kpi-final-status" class="text-[11px] text-[#6F7785] pt-3 border-t border-[#ECEBE6] mt-3">
+                利用可能資産のみで算出
               </div>
             </div>
 
@@ -451,7 +450,7 @@
 
             <div class="relative min-h-[50px]">
               <p id="kpi-diagnosis-text" class="text-xs sm:text-sm text-[#253047] leading-relaxed font-medium">
-                プロファイルや収支、資産の数値を設定すると、数値シミュレーションと連動したリアルタイムAI分析アドバイスが表示されます。
+                プロファイルや収支、資産の数値を設定すると、数値シミュレーションと連動したAI分析アドバイスが表示されます。
               </p>
 
               <div id="ai-loading-spinner" class="hidden absolute inset-0 bg-[#FEFBF0]/90 backdrop-blur-sm rounded-[16px] flex items-center justify-center gap-2 text-[#8C5800] text-xs font-bold z-10">
@@ -550,221 +549,48 @@
             </div>
           </div>
 
-          <div id="tabContent-profile" class="p-5 sm:p-7">
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              
-              <!-- BLOCK 1: 基本プロフィール -->
-              <div class="bg-white rounded-[20px] p-5 border border-[#ECEBE6] space-y-4">
-                <div class="flex items-center justify-between pb-3 border-b border-[#ECEBE6]">
-                  <div class="flex items-center gap-2">
-                    <span class="w-6 h-6 rounded-full bg-[#FFF9E6] text-[#8C5800] font-bold text-xs flex items-center justify-center">01</span>
-                    <h3 class="font-bold text-[#253047] text-sm flex items-center gap-1.5">
-                      <i class="fa-solid fa-user-gear text-[#FFC83D]"></i>
-                      <span>基本プロフィール</span>
-                    </h3>
+          <div id="tabContent-profile" class="p-5 sm:p-7 space-y-5">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
+              <section class="bg-white rounded-[20px] p-5 border border-[#ECEBE6] space-y-4">
+                <div class="flex items-center gap-2 pb-3 border-b border-[#ECEBE6]"><span class="w-6 h-6 rounded-full bg-[#FFF9E6] text-[#8C5800] font-bold text-xs flex items-center justify-center">01</span><h3 class="font-bold text-[#253047] text-sm">あなたについて</h3></div>
+                <div class="grid grid-cols-2 gap-3"><div><label class="block text-xs font-semibold text-[#4F586A] mb-1">現在の年齢</label><input id="v2CurrentAge" type="number" min="18" max="100" class="w-full px-3 lumi-input text-xs font-bold" oninput="syncV2InputAndRecalculate()"></div><div><label class="block text-xs font-semibold text-[#4F586A] mb-1">シミュレーション終了年齢</label><input id="v2TargetAge" type="number" min="40" max="110" class="w-full px-3 lumi-input text-xs font-bold" oninput="syncV2InputAndRecalculate()"></div></div>
+                <label class="flex items-center gap-2 text-xs font-bold text-[#253047]"><input id="v2HasSpouse" type="checkbox" onchange="toggleV2Spouse(); syncV2InputAndRecalculate()" class="w-4 h-4 rounded"><span>配偶者あり</span></label>
+                <div id="v2SpouseAgeWrap" class="hidden"><label class="block text-xs font-semibold text-[#4F586A] mb-1">配偶者の年齢</label><input id="v2SpouseAge" type="number" min="18" max="100" class="w-full px-3 lumi-input text-xs font-bold" oninput="syncV2InputAndRecalculate()"></div>
+              </section>
+              <section class="bg-white rounded-[20px] p-5 border border-[#ECEBE6] space-y-4">
+                <div class="flex items-center justify-between pb-3 border-b border-[#ECEBE6]"><div class="flex items-center gap-2"><span class="w-6 h-6 rounded-full bg-[#EAF6FC] text-[#65B9E8] font-bold text-xs flex items-center justify-center">02</span><h3 class="font-bold text-[#253047] text-sm">収入</h3></div><button type="button" onclick="addV2Income()" class="px-3 py-1.5 btn-lumi-secondary text-xs font-bold"><i class="fa-solid fa-plus mr-1"></i>収入を追加</button></div>
+                <div id="v2IncomeList" class="space-y-3"></div>
+              </section>
+              <section class="bg-white rounded-[20px] p-5 border border-[#ECEBE6] space-y-4">
+                <div class="flex items-center gap-2 pb-3 border-b border-[#ECEBE6]"><span class="w-6 h-6 rounded-full bg-[#FFF0F3] text-[#FF8FA3] font-bold text-xs flex items-center justify-center">03</span><h3 class="font-bold text-[#253047] text-sm">毎月の暮らし</h3></div>
+                <div><label class="block text-xs font-semibold text-[#4F586A] mb-1">生活費 <span class="font-normal text-[#8A909C]">（住居費を除く）</span></label><div class="flex items-center gap-2"><input id="v2LivingMonthly" type="number" min="0" step="1" class="w-full px-3 lumi-input text-xs font-bold" oninput="syncV2InputAndRecalculate()"><span class="text-xs text-[#6F7785] shrink-0">万円/月</span></div></div>
+                <div><label class="block text-xs font-semibold text-[#4F586A] mb-1">現在の住まい</label><select id="v2HousingType" onchange="renderV2HousingFields(); syncV2InputAndRecalculate()" class="w-full px-3 lumi-input text-xs font-bold bg-white"><option value="rent">賃貸</option><option value="owned_with_loan">持ち家（ローンあり）</option><option value="owned_no_loan">持ち家（ローンなし）</option><option value="other">その他</option></select></div>
+                <div id="v2HousingFields"></div>
+              </section>
+              <section class="bg-white rounded-[20px] p-5 border border-[#ECEBE6] space-y-4 lg:col-span-2">
+                <div class="flex items-center gap-2 pb-3 border-b border-[#ECEBE6]"><span class="w-6 h-6 rounded-full bg-[#EAF8F3] text-[#4FAE8E] font-bold text-xs flex items-center justify-center">04</span><div><h3 class="font-bold text-[#253047] text-sm">資産</h3><p class="text-[10px] text-[#8A909C] mt-0.5">LUMIFULでは「人生を支える資産」と「売却を検討できる資産」「生活のための資産」を分けて管理します。</p></div></div>
+                <div class="grid grid-cols-1 xl:grid-cols-3 gap-4">
+                  <div class="rounded-[18px] border border-[#D8EEE5] bg-[#FCFFFD] p-4 space-y-3">
+                    <div class="flex items-center justify-between gap-2"><div><div class="flex items-center gap-2"><i class="fa-solid fa-wallet text-[#4FAE8E]"></i><h4 class="text-xs font-bold text-[#253047]">利用可能資産</h4></div><p class="text-[10px] text-[#6F7785] mt-1">シミュレーション・運用・取り崩しの対象</p></div><button type="button" onclick="addV2Asset()" class="px-2.5 py-1.5 btn-lumi-secondary text-[11px] font-bold whitespace-nowrap"><i class="fa-solid fa-plus mr-1"></i>追加</button></div>
+                    <div id="v2AssetList" class="space-y-3"></div>
                   </div>
-                  <span class="text-[10px] font-bold bg-[#FFF9E6] text-[#8C5800] px-2.5 py-0.5 rounded-full">本人設定</span>
-                </div>
-
-                <div class="space-y-3.5">
-                  <div class="grid grid-cols-2 gap-3">
-                    <div>
-                      <label class="block text-xs font-semibold text-[#4F586A] mb-1">現在の年齢</label>
-                      <select id="selfCurrentAge" onchange="recalculateAllFast()" class="w-full px-3 lumi-input text-xs font-bold bg-white">
-                      </select>
-                    </div>
-                    <div>
-                      <label class="block text-xs font-semibold text-[#4F586A] mb-1">完全引退年齢</label>
-                      <select id="selfRetireAge" onchange="recalculateAllFast()" class="w-full px-3 lumi-input text-xs font-bold bg-white">
-                      </select>
-                    </div>
+                  <div class="rounded-[18px] border border-[#F0E2B7] bg-[#FFFDF7] p-4 space-y-3">
+                    <div class="flex items-center justify-between gap-2"><div><div class="flex items-center gap-2"><i class="fa-solid fa-building text-[#C28A00]"></i><h4 class="text-xs font-bold text-[#253047]">売却可能資産</h4></div><p class="text-[10px] text-[#6F7785] mt-1">可視化のみ・自動で取り崩しません</p></div><button type="button" onclick="addV2PotentialAsset()" class="px-2.5 py-1.5 btn-lumi-secondary text-[11px] font-bold whitespace-nowrap"><i class="fa-solid fa-plus mr-1"></i>追加</button></div>
+                    <div id="v2PotentialAssetList" class="space-y-3"></div>
                   </div>
-
-                  <div>
-                    <label class="block text-xs font-semibold text-[#4F586A] mb-1">事業・副業の手取り年収</label>
-                    <div class="flex items-center gap-2">
-                      <input type="number" id="selfIncome" value="0" min="0" step="10" onfocus="this.select()" onblur="if(this.value==='')this.value='0';" oninput="recalculateAllFast()" class="w-full px-3 lumi-input text-xs font-bold">
-                      <span class="text-xs text-[#6F7785] shrink-0">万円/年</span>
-                    </div>
-                  </div>
-
-                  <div class="pt-3 border-t border-[#ECEBE6]">
-                    <label class="block text-xs font-semibold text-[#4F586A] mb-1">公的年金（手取り想定年額）</label>
-                    <div class="flex items-center gap-2 mb-2">
-                      <input type="number" id="selfPension" value="0" min="0" step="5" onfocus="this.select()" onblur="if(this.value==='')this.value='0';" oninput="recalculateAllFast()" class="w-full px-3 lumi-input text-xs font-bold">
-                      <span class="text-xs text-[#6F7785] shrink-0">万円/年</span>
-                    </div>
-                    <div class="flex items-center gap-2">
-                      <span class="text-xs text-[#6F7785] shrink-0">受給開始:</span>
-                      <select id="selfPensionStartAge" onchange="recalculateAllFast()" class="w-24 px-2 lumi-input text-xs font-bold bg-white text-center">
-                      </select>
-                    </div>
+                  <div class="rounded-[18px] border border-[#E8E7F7] bg-[#FCFBFF] p-4 space-y-3">
+                    <div class="flex items-center justify-between gap-2"><div><div class="flex items-center gap-2"><i class="fa-solid fa-house text-[#7C6FD0]"></i><h4 class="text-xs font-bold text-[#253047]">生活資産</h4></div><p class="text-[10px] text-[#6F7785] mt-1">自宅など・シミュレーション対象外</p></div><button type="button" onclick="addV2LifestyleAsset()" class="px-2.5 py-1.5 btn-lumi-secondary text-[11px] font-bold whitespace-nowrap"><i class="fa-solid fa-plus mr-1"></i>追加</button></div>
+                    <div id="v2LifestyleAssetList" class="space-y-3"></div>
                   </div>
                 </div>
-              </div>
-
-              <!-- BLOCK 2: 配偶者設定 -->
-              <div class="bg-white rounded-[20px] p-5 border border-[#ECEBE6] space-y-4">
-                <div class="flex items-center justify-between pb-3 border-b border-[#ECEBE6]">
-                  <div class="flex items-center gap-2">
-                    <span class="w-6 h-6 rounded-full bg-[#EAF6FC] text-[#65B9E8] font-bold text-xs flex items-center justify-center">02</span>
-                    <h3 class="font-bold text-[#253047] text-sm flex items-center gap-1.5">
-                      <i class="fa-solid fa-user-group text-[#65B9E8]"></i>
-                      <span>配偶者設定</span>
-                    </h3>
-                  </div>
-                  <label class="flex items-center gap-1.5 text-xs font-bold text-[#253047] cursor-pointer bg-[#FAFAF7] hover:bg-[#F5F4EF] px-2.5 py-1 rounded-[10px] border border-[#ECEBE6] transition whitespace-nowrap">
-                    <input type="checkbox" id="hasSpouse" onchange="toggleSpouseForm(); recalculateAllFast();" class="w-3.5 h-3.5 text-[#65B9E8] rounded focus:ring-0">
-                    <span>配偶者あり</span>
-                  </label>
-                </div>
-
-                <div id="spouseFormGroup" class="space-y-3.5 opacity-40 pointer-events-none transition-opacity duration-200">
-                  <div class="grid grid-cols-2 gap-3">
-                    <div>
-                      <label class="block text-xs font-semibold text-[#4F586A] mb-1">現在の年齢</label>
-                      <select id="spouseCurrentAge" onchange="recalculateAllFast()" class="w-full px-3 lumi-input text-xs font-bold bg-white">
-                      </select>
-                    </div>
-                    <div>
-                      <label class="block text-xs font-semibold text-[#4F586A] mb-1">就労終了年齢</label>
-                      <select id="spouseRetireAge" onchange="recalculateAllFast()" class="w-full px-3 lumi-input text-xs font-bold bg-white">
-                      </select>
-                    </div>
-                  </div>
-
-                  <div>
-                    <label class="block text-xs font-semibold text-[#4F586A] mb-1">パート・就労の手取り年収</label>
-                    <div class="flex items-center gap-2">
-                      <input type="number" id="spouseIncome" value="0" min="0" step="10" onfocus="this.select()" onblur="if(this.value==='')this.value='0';" oninput="recalculateAllFast()" class="w-full px-3 lumi-input text-xs font-bold">
-                      <span class="text-xs text-[#6F7785] shrink-0">万円/年</span>
-                    </div>
-                  </div>
-
-                  <div class="pt-3 border-t border-[#ECEBE6]">
-                    <label class="block text-xs font-semibold text-[#4F586A] mb-1">公的年金（手取り想定年額）</label>
-                    <div class="flex items-center gap-2 mb-2">
-                      <input type="number" id="spousePension" value="0" min="0" step="5" onfocus="this.select()" onblur="if(this.value==='')this.value='0';" oninput="recalculateAllFast()" class="w-full px-3 lumi-input text-xs font-bold">
-                      <span class="text-xs text-[#6F7785] shrink-0">万円/年</span>
-                    </div>
-                    <div class="flex items-center gap-2">
-                      <span class="text-xs text-[#6F7785] shrink-0">受給開始:</span>
-                      <select id="spousePensionStartAge" onchange="recalculateAllFast()" class="w-24 px-2 lumi-input text-xs font-bold bg-white text-center">
-                      </select>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <!-- BLOCK 3: 現在の保有資産 -->
-              <div class="bg-white rounded-[20px] p-5 border border-[#ECEBE6] space-y-4">
-                <div class="flex items-center justify-between pb-3 border-b border-[#ECEBE6]">
-                  <div class="flex items-center gap-2">
-                    <span class="w-6 h-6 rounded-full bg-[#EAF8F3] text-[#72D6B5] font-bold text-xs flex items-center justify-center">03</span>
-                    <h3 class="font-bold text-[#253047] text-sm flex items-center gap-1.5">
-                      <i class="fa-solid fa-coins text-[#72D6B5]"></i>
-                      <span>現在の保有資産</span>
-                    </h3>
-                  </div>
-                  <span class="text-[10px] font-bold bg-[#EAF8F3] text-[#253047] px-2.5 py-0.5 rounded-full">金融・不動産</span>
-                </div>
-
-                <div class="space-y-3.5">
-                  <div class="grid grid-cols-2 gap-3">
-                    <div>
-                      <label class="block text-xs font-semibold text-[#4F586A] mb-1">投資資産（株式・投信等）</label>
-                      <input type="number" id="initialInvest" value="0" min="0" step="50" onfocus="this.select()" onblur="if(this.value==='')this.value='0';" oninput="recalculateAllFast()" class="w-full px-3 lumi-input text-xs font-bold">
-                    </div>
-                    <div>
-                      <label class="block text-xs font-semibold text-[#4F586A] mb-1">安全資産（国債・現金等）</label>
-                      <input type="number" id="initialCash" value="0" min="0" step="50" onfocus="this.select()" onblur="if(this.value==='')this.value='0';" oninput="recalculateAllFast()" class="w-full px-3 lumi-input text-xs font-bold">
-                    </div>
-                  </div>
-
-                  <div>
-                    <label class="block text-xs font-semibold text-[#4F586A] mb-1">不動産・その他価値（純資産評価）</label>
-                    <div class="flex items-center gap-2">
-                      <input type="number" id="realEstateValue" value="0" min="0" step="100" onfocus="this.select()" onblur="if(this.value==='')this.value='0';" oninput="recalculateAllFast()" class="w-full px-3 lumi-input text-xs font-bold">
-                      <span class="text-xs text-[#6F7785] shrink-0">万円</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <!-- BLOCK 4: 生活費 ＆ シミュレーション条件 -->
-              <div class="bg-white rounded-[20px] p-5 border border-[#ECEBE6] space-y-4">
-                <div class="flex items-center justify-between pb-3 border-b border-[#ECEBE6]">
-                  <div class="flex items-center gap-2">
-                    <span class="w-6 h-6 rounded-full bg-[#FFF0F3] text-[#FF8FA3] font-bold text-xs flex items-center justify-center">04</span>
-                    <h3 class="font-bold text-[#253047] text-sm flex items-center gap-1.5">
-                      <i class="fa-solid fa-house-user text-[#FF8FA3]"></i>
-                      <span>生活費 ＆ 未来条件</span>
-                    </h3>
-                  </div>
-                  <span class="text-[10px] font-bold bg-[#FFF0F3] text-[#253047] px-2.5 py-0.5 rounded-full">未来設定</span>
-                </div>
-
-                <div class="space-y-3.5">
-                  <div>
-                    <label class="block text-xs font-semibold text-[#4F586A] mb-1">基本生活費（年間）</label>
-                    <div class="flex items-center gap-2">
-                      <input type="number" id="livingExpense" value="0" min="0" step="10" onfocus="this.select()" onblur="if(this.value==='')this.value='0';" oninput="recalculateAllFast()" class="w-full px-3 lumi-input text-xs font-bold">
-                      <span class="text-xs text-[#6F7785] shrink-0">万円/年</span>
-                    </div>
-                  </div>
-
-                  <div>
-                    <label class="block text-xs font-semibold text-[#4F586A] mb-1">住居費（年間）</label>
-                    <div class="flex items-center gap-2 mb-2">
-                      <input type="number" id="housingExpense" value="0" min="0" step="10" onfocus="this.select()" onblur="if(this.value==='')this.value='0';" oninput="recalculateAllFast()" class="w-full px-3 lumi-input text-xs font-bold">
-                      <span class="text-xs text-[#6F7785] shrink-0">万円/年</span>
-                    </div>
-                    <div class="flex items-center gap-2">
-                      <span class="text-xs text-[#6F7785] shrink-0">完済/終了年齢:</span>
-                      <select id="housingEndAge" onchange="recalculateAllFast()" class="w-28 px-2 lumi-input text-xs font-bold bg-white text-center">
-                      </select>
-                    </div>
-                  </div>
-
-                  <div class="pt-3 border-t border-[#ECEBE6] space-y-3.5">
-                    <div>
-                      <div class="flex justify-between items-center mb-1">
-                        <label class="text-xs font-semibold text-[#4F586A]">想定運用利回り</label>
-                        <span id="slider-return-val" class="text-xs font-bold text-[#8C5800]">0.0%</span>
-                      </div>
-                      <input type="range" id="returnRateSlider" min="0" max="15" step="0.5" value="0.0" oninput="updateSliders()" class="w-full accent-[#FFC83D] h-2 bg-[#FAFAF7] border border-[#ECEBE6] rounded-lg cursor-pointer">
-                    </div>
-
-                    <div>
-                      <div class="flex justify-between items-center mb-1.5">
-                        <label class="text-xs font-semibold text-[#4F586A]">生活費インフレ率</label>
-                        <span id="slider-inflation-val" class="text-xs font-bold text-[#8C5800]">1.5%</span>
-                      </div>
-                      <div class="grid grid-cols-3 gap-2">
-                        <button onclick="setInflationPreset(1.0)" id="card-inf-10" class="py-1.5 text-xs font-bold rounded-[12px] border transition text-center whitespace-nowrap">楽観 1.0%</button>
-                        <button onclick="setInflationPreset(1.5)" id="card-inf-15" class="py-1.5 text-xs font-bold rounded-[12px] border transition bg-[#FFC83D] text-[#253047]">標準 1.5%</button>
-                        <button onclick="setInflationPreset(2.0)" id="card-inf-20" class="py-1.5 text-xs font-bold rounded-[12px] border transition text-center whitespace-nowrap">保守 2.0%</button>
-                      </div>
-                    </div>
-
-                    <div>
-                      <label class="block text-xs font-semibold text-[#4F586A] mb-1">シミュレーション終了年齢</label>
-                      <select id="targetAge" onchange="recalculateAllFast()" class="w-full px-3 lumi-input text-xs font-bold bg-white">
-                      </select>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
+              </section>
+              <section class="bg-white rounded-[20px] p-5 border border-[#ECEBE6] space-y-4 lg:col-span-2">
+                <div class="flex items-center justify-between pb-3 border-b border-[#ECEBE6]"><div class="flex items-center gap-2"><span class="w-6 h-6 rounded-full bg-[#F3F0FF] text-[#7C6FD0] font-bold text-xs flex items-center justify-center">05</span><h3 class="font-bold text-[#253047] text-sm">その他のローン・返済</h3></div><button type="button" onclick="addV2Payment()" class="px-3 py-1.5 btn-lumi-secondary text-xs font-bold"><i class="fa-solid fa-plus mr-1"></i>返済を追加</button></div>
+                <div id="v2PaymentList" class="space-y-3"></div>
+              </section>
             </div>
-
-            <div class="mt-8 pt-5 border-t border-[#ECEBE6] flex justify-center">
-              <button onclick="switchView('dashboard'); window.scrollTo({top: 0, behavior: 'smooth'});" class="px-8 py-3 btn-lumi-primary text-sm font-bold flex items-center gap-2">
-                <span>この条件で未来を確認</span>
-                <i class="fa-solid fa-arrow-right"></i>
-              </button>
-            </div>
-
+            <details class="bg-[#FAFAF7] rounded-[18px] border border-[#ECEBE6] p-4"><summary class="cursor-pointer text-xs font-bold text-[#4F586A]">詳細設定</summary><div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4"><div><label class="block text-xs font-semibold text-[#4F586A] mb-1">生活費インフレ率</label><div class="flex items-center gap-2"><input id="v2InflationRate" type="number" min="0" max="10" step="0.1" class="w-full px-3 lumi-input text-xs font-bold" oninput="syncV2InputAndRecalculate()"><span class="text-xs text-[#6F7785]">%</span></div></div></div></details>
+            <div class="pt-5 border-t border-[#ECEBE6] flex justify-center"><button onclick="syncV2InputAndRecalculate(); switchView('dashboard'); window.scrollTo({top:0,behavior:'smooth'});" class="px-8 py-3 btn-lumi-primary text-sm font-bold flex items-center gap-2"><span>この条件で未来を確認</span><i class="fa-solid fa-arrow-right"></i></button></div>
           </div>
         </div>
 
@@ -774,10 +600,7 @@
       <div id="simulationResultsView" class="hidden space-y-6">
         
         <div class="space-y-1 mb-1">
-          <h1 class="text-2xl sm:text-3xl font-extrabold text-[#253047] tracking-tight flex items-center gap-2">
-            <i class="fa-solid fa-chart-line text-[#65B9E8]"></i>
-            <span>シミュレーション結果</span>
-          </h1>
+          <h1 class="text-2xl sm:text-3xl font-extrabold text-[#253047] tracking-tight flex items-center gap-2"><i class="fa-solid fa-chart-line text-[#65B9E8]"></i><span>シミュレーション結果</span></h1>
           <p class="text-xs sm:text-sm text-[#6F7785]">現在の条件から、あなたの未来を整理しました。</p>
         </div>
 
@@ -843,24 +666,24 @@
 
             <div class="bg-white rounded-[20px] p-5 border border-[#ECEBE6] space-y-2">
               <div class="flex items-center justify-between text-xs font-bold text-[#6F7785]">
-                <span>最終金融資産</span>
+                <span>最終利用可能資産</span>
                 <div class="w-6 h-6 rounded-full bg-[#EAF8F3] text-[#72D6B5] flex items-center justify-center text-xs">
                   <i class="fa-solid fa-coins"></i>
                 </div>
               </div>
               <div id="results-final-assets" class="text-2xl font-extrabold text-[#253047] tracking-tight">0 万円</div>
-              <p class="text-[11px] text-[#6F7785]">シミュレーション終了時点の現金・投資残高</p>
+              <p class="text-[11px] text-[#6F7785]">人生の支出に使える資産の終了時点残高</p>
             </div>
 
             <div class="bg-white rounded-[20px] p-5 border border-[#ECEBE6] space-y-2">
               <div class="flex items-center justify-between text-xs font-bold text-[#6F7785]">
-                <span>最終純資産</span>
+                <span>売却可能資産</span>
                 <div class="w-6 h-6 rounded-full bg-[#FFF0F3] text-[#FF8FA3] flex items-center justify-center text-xs">
                   <i class="fa-solid fa-building"></i>
                 </div>
               </div>
               <div id="results-final-networth" class="text-2xl font-extrabold text-[#253047] tracking-tight">0 万円</div>
-              <p class="text-[11px] text-[#6F7785]">不動産価値を含めた最終的な資産総額</p>
+              <p class="text-[11px] text-[#6F7785]">必要時に売却を検討できる資産（SCORE対象外）</p>
             </div>
 
           </div>
@@ -918,10 +741,7 @@
       <div id="annualProjectionView" class="hidden space-y-6">
         
         <div class="space-y-1 mb-1">
-          <h1 class="text-2xl sm:text-3xl font-extrabold text-[#253047] tracking-tight flex items-center gap-2">
-            <i class="fa-solid fa-arrow-trend-up text-[#65B9E8]"></i>
-            <span>年間推移グラフ</span>
-          </h1>
+          <h1 class="text-2xl sm:text-3xl font-extrabold text-[#253047] tracking-tight flex items-center gap-2"><i class="fa-solid fa-arrow-trend-up text-[#65B9E8]"></i><span>年間推移グラフ</span></h1>
           <p class="text-xs sm:text-sm text-[#6F7785]">資産と年間収支が、これからどのように変化していくかを確認できます。</p>
         </div>
 
@@ -942,7 +762,7 @@
           <div class="flex items-center justify-between pb-3 border-b border-[#ECEBE6]">
             <h2 class="text-base font-bold text-[#253047] flex items-center gap-2">
               <i class="fa-solid fa-arrow-trend-up text-[#65B9E8]"></i>
-              <span>総資産・収支の長期的推移</span>
+              <span>利用可能資産・収支の長期的推移</span>
             </h2>
           </div>
 
@@ -953,11 +773,11 @@
 
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <div class="bg-white rounded-[20px] p-5 border border-[#ECEBE6] space-y-1">
-            <span class="text-xs font-bold text-[#6F7785]">最終金融資産</span>
+            <span class="text-xs font-bold text-[#6F7785]">最終利用可能資産</span>
             <div id="proj-final-assets" class="text-2xl font-extrabold text-[#253047]">0 万円</div>
           </div>
           <div class="bg-white rounded-[20px] p-5 border border-[#ECEBE6] space-y-1">
-            <span class="text-xs font-bold text-[#6F7785]">最終純資産</span>
+            <span class="text-xs font-bold text-[#6F7785]">売却可能資産</span>
             <div id="proj-final-networth" class="text-2xl font-extrabold text-[#253047]">0 万円</div>
           </div>
           <div class="bg-white rounded-[20px] p-5 border border-[#ECEBE6] space-y-1">
@@ -991,17 +811,22 @@
       <div id="assetDetailsView" class="hidden space-y-6">
         
         <div class="space-y-1 mb-1">
-          <h1 class="text-2xl sm:text-3xl font-extrabold text-[#253047] tracking-tight flex items-center gap-2">
-            <i class="fa-solid fa-wallet text-[#72D6B5]"></i>
-            <span>資産詳細</span>
-          </h1>
+          <h1 class="text-2xl sm:text-3xl font-extrabold text-[#253047] tracking-tight flex items-center gap-2"><i class="fa-solid fa-wallet text-[#72D6B5]"></i><span>資産詳細</span></h1>
           <p class="text-xs sm:text-sm text-[#6F7785]">年ごとの収入・支出・資産の変化を詳しく確認できます。</p>
         </div>
 
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <div class="bg-white rounded-[20px] p-5 border border-[#ECEBE6] space-y-1">
-            <span class="text-xs font-bold text-[#6F7785]">最終金融資産</span>
+        <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-5 gap-4">
+          <div class="bg-white rounded-[20px] p-5 border border-[#D8EEE5] space-y-1">
+            <span class="text-xs font-bold text-[#4FAE8E]">最終利用可能資産</span>
             <div id="asset-final-assets" class="text-2xl font-extrabold text-[#253047]">0 万円</div>
+          </div>
+          <div class="bg-white rounded-[20px] p-5 border border-[#F0E2B7] space-y-1">
+            <span class="text-xs font-bold text-[#C28A00]">売却可能資産</span>
+            <div id="asset-potential-assets" class="text-2xl font-extrabold text-[#253047]">0 万円</div>
+          </div>
+          <div class="bg-white rounded-[20px] p-5 border border-[#E8E7F7] space-y-1">
+            <span class="text-xs font-bold text-[#7C6FD0]">生活資産</span>
+            <div id="asset-lifestyle-assets" class="text-2xl font-extrabold text-[#253047]">0 万円</div>
           </div>
           <div class="bg-white rounded-[20px] p-5 border border-[#ECEBE6] space-y-1">
             <span class="text-xs font-bold text-[#6F7785]">想定運用利回り</span>
@@ -1035,8 +860,8 @@
                   <th class="p-2.5 text-center">活用フェーズ</th>
                   <th class="p-2.5 text-right">臨時収入</th>
                   <th class="p-2.5 text-right">年末現金</th>
-                  <th class="p-2.5 text-right">金融資産</th>
-                  <th class="p-2.5 text-right bg-[#F5F4EF]">純資産</th>
+                  <th class="p-2.5 text-right">利用可能資産</th>
+                  <th class="p-2.5 text-right bg-[#F5F4EF]">売却可能資産</th>
                 </tr>
               </thead>
               <tbody id="cashflowTableBody" class="divide-y divide-[#ECEBE6]">
@@ -1060,10 +885,7 @@
       <div id="lifeEventsView" class="hidden space-y-6">
         
         <div class="space-y-1 mb-1">
-          <h1 class="text-2xl sm:text-3xl font-extrabold text-[#253047] tracking-tight flex items-center gap-2">
-            <i class="fa-solid fa-calendar-days text-[#FFC83D]"></i>
-            <span>ライフイベント</span>
-          </h1>
+          <h1 class="text-2xl sm:text-3xl font-extrabold text-[#253047] tracking-tight flex items-center gap-2"><i class="fa-solid fa-calendar-days text-[#FF8FA3]"></i><span>ライフイベント</span></h1>
           <p class="text-xs sm:text-sm text-[#6F7785]">住宅購入、旅行、教育、退職金など、これからの予定を未来予測に反映できます。</p>
         </div>
 
@@ -1081,13 +903,13 @@
         </div>
 
         <div class="bg-white rounded-[24px] p-5 sm:p-6 border border-[#ECEBE6] space-y-4">
-          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-[#ECEBE6]">
+          <div class="flex items-center justify-between pb-3 border-b border-[#ECEBE6]">
             <h3 class="text-base font-bold text-[#253047] flex items-center gap-2">
               <i class="fa-solid fa-calendar-plus text-[#FFC83D]"></i>
               <span>これからのライフイベント</span>
             </h3>
 
-            <button onclick="openAddEventModal()" class="w-full sm:w-auto px-4 py-2 btn-lumi-primary text-xs font-bold flex items-center justify-center gap-1.5 whitespace-nowrap shrink-0">
+            <button onclick="openAddEventModal()" class="px-4 py-2 btn-lumi-primary text-xs font-bold flex items-center gap-1.5 whitespace-nowrap shrink-0">
               <i class="fa-solid fa-plus"></i>
               <span>ライフイベントを追加</span>
             </button>
@@ -1118,7 +940,7 @@
         <div class="space-y-1 mb-1">
           <h1 class="text-2xl sm:text-3xl font-extrabold text-[#253047] tracking-tight flex items-center gap-2">
             <i class="fa-solid fa-heart text-[#FF8FA3]"></i>
-            <span>LUMI AIアドバイザー</span>
+            <span>LUMI Advisor</span>
           </h1>
           <p class="text-xs sm:text-sm text-[#6F7785]">数字だけでは見えない、あなたの未来を一緒に考えます。</p>
         </div>
@@ -1162,10 +984,7 @@
         
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-1">
           <div class="space-y-1">
-            <h1 class="text-2xl sm:text-3xl font-extrabold text-[#253047] tracking-tight flex items-center gap-2">
-              <i class="fa-solid fa-gear text-[#6F7785]"></i>
-              <span>設定 / プラン管理</span>
-            </h1>
+            <h1 class="text-2xl sm:text-3xl font-extrabold text-[#253047] tracking-tight flex items-center gap-2"><i class="fa-solid fa-gear text-[#6F7785]"></i><span>設定 / プラン管理</span></h1>
             <p class="text-xs sm:text-sm text-[#6F7785]">アカウントや保存したプラン、データの管理ができます。</p>
           </div>
           <span class="px-3 py-1 rounded-[12px] text-xs font-bold bg-[#FEFBF0] text-[#8C5800] border border-[#F0E2B7] self-start sm:self-auto">
@@ -1368,7 +1187,7 @@
               <span id="factor-longevity" class="font-bold text-[#253047]">-</span>
             </div>
             <div class="flex justify-between items-center py-1 border-b border-[#ECEBE6]">
-              <span>② 最終金融資産 & 純資産のゆとり</span>
+              <span>② 最終利用可能資産のゆとり</span>
               <span id="factor-final-asset" class="font-bold text-[#253047]">-</span>
             </div>
             <div class="flex justify-between items-center py-1 border-b border-[#ECEBE6]">
@@ -1549,7 +1368,7 @@
     <div class="bg-white rounded-[24px] max-w-md w-full p-5 sm:p-6 shadow-xl border border-[#ECEBE6]">
       <div class="flex items-center justify-between mb-4">
         <h3 class="text-base font-bold text-[#253047] flex items-center gap-2">
-          <i class="fa-solid fa-calendar-plus text-[#FFC83D]"></i> ライフイベントを追加
+          <i class="fa-solid fa-calendar-plus text-[#FFC83D]"></i> ライフプランを追加
         </h3>
         <button onclick="closeAddEventModal()" class="text-[#6F7785] hover:text-[#253047] w-8 h-8 rounded-full flex items-center justify-center">
           <i class="fa-solid fa-xmark text-lg"></i>
@@ -1558,52 +1377,53 @@
 
       <form id="eventForm" onsubmit="saveEvent(event)" class="space-y-3.5">
         <div>
-          <label class="block text-xs font-semibold text-[#4F586A] mb-1">イベント種別</label>
+          <label class="block text-xs font-semibold text-[#4F586A] mb-1">イベント形式</label>
           <div class="grid grid-cols-2 gap-2">
-            <label class="flex items-center justify-center p-2.5 border border-[#ECEBE6] rounded-[14px] cursor-pointer text-xs font-bold text-[#253047] has-[:checked]:bg-[#FFF0F3] has-[:checked]:border-[#FF8FA3] has-[:checked]:text-[#FF8FA3] whitespace-nowrap">
-              <input type="radio" name="eventType" value="expense" checked class="sr-only">
-              <i class="fa-solid fa-minus-circle mr-1.5"></i> 支出イベント
+            <label class="flex items-center justify-center p-2.5 border border-[#ECEBE6] rounded-[14px] cursor-pointer text-xs font-bold text-[#253047] has-[:checked]:bg-[#FEFBF0] has-[:checked]:border-[#FFC83D] whitespace-nowrap">
+              <input type="radio" name="eventKind" value="simple" checked onchange="toggleEventKindFields()" class="sr-only">通常イベント
             </label>
-            <label class="flex items-center justify-center p-2.5 border border-[#ECEBE6] rounded-[14px] cursor-pointer text-xs font-bold text-[#253047] has-[:checked]:bg-[#EAF8F3] has-[:checked]:border-[#72D6B5] has-[:checked]:text-[#72D6B5] whitespace-nowrap">
-              <input type="radio" name="eventType" value="income" class="sr-only">
-              <i class="fa-solid fa-plus-circle mr-1.5"></i> 臨時収入イベント
+            <label class="flex items-center justify-center p-2.5 border border-[#ECEBE6] rounded-[14px] cursor-pointer text-xs font-bold text-[#253047] has-[:checked]:bg-[#EAF8F3] has-[:checked]:border-[#72D6B5] whitespace-nowrap">
+              <input type="radio" name="eventKind" value="home_purchase" onchange="toggleEventKindFields()" class="sr-only">住宅購入
             </label>
           </div>
         </div>
 
-        <div class="grid grid-cols-2 gap-2">
+        <div id="simpleEventFields" class="space-y-3.5">
           <div>
-            <label class="block text-xs font-semibold text-[#4F586A] mb-1">発生年齢 (本人)</label>
-            <select id="eventAge" class="w-full px-3 lumi-input text-xs font-bold bg-white">
-            </select>
+            <label class="block text-xs font-semibold text-[#4F586A] mb-1">イベント種別</label>
+            <div class="grid grid-cols-2 gap-2">
+              <label class="flex items-center justify-center p-2.5 border border-[#ECEBE6] rounded-[14px] cursor-pointer text-xs font-bold text-[#253047] has-[:checked]:bg-[#FFF0F3] has-[:checked]:border-[#FF8FA3] has-[:checked]:text-[#FF8FA3] whitespace-nowrap">
+                <input type="radio" name="eventType" value="expense" checked class="sr-only"><i class="fa-solid fa-minus-circle mr-1.5"></i> 支出イベント
+              </label>
+              <label class="flex items-center justify-center p-2.5 border border-[#ECEBE6] rounded-[14px] cursor-pointer text-xs font-bold text-[#253047] has-[:checked]:bg-[#EAF8F3] has-[:checked]:border-[#72D6B5] has-[:checked]:text-[#72D6B5] whitespace-nowrap">
+                <input type="radio" name="eventType" value="income" class="sr-only"><i class="fa-solid fa-plus-circle mr-1.5"></i> 臨時収入イベント
+              </label>
+            </div>
           </div>
-          <div>
-            <label class="block text-xs font-semibold text-[#4F586A] mb-1">金額 (万円)</label>
-            <input type="number" id="eventAmount" required min="1" step="1" onfocus="this.select()" onblur="if(this.value==='')this.value='0';" placeholder="例: 300" class="w-full px-3 lumi-input text-xs font-bold">
+          <div class="grid grid-cols-2 gap-2">
+            <div><label class="block text-xs font-semibold text-[#4F586A] mb-1">発生年齢 (本人)</label><select id="eventAge" class="w-full px-3 lumi-input text-xs font-bold bg-white"></select></div>
+            <div><label class="block text-xs font-semibold text-[#4F586A] mb-1">金額 (万円)</label><input type="number" id="eventAmount" min="1" step="1" placeholder="例: 300" class="w-full px-3 lumi-input text-xs font-bold"></div>
           </div>
+          <div><label class="block text-xs font-semibold text-[#4F586A] mb-1">イベント名 / 内容</label><input type="text" id="eventTitle" placeholder="例: リフォーム / 株式一部売却" class="w-full px-3 lumi-input text-xs font-bold"></div>
+          <div><label class="block text-xs font-semibold text-[#4F586A] mb-1">アイコン</label><select id="eventIcon" class="w-full px-3 lumi-input text-xs font-bold bg-white text-[#253047]"><option value="fa-house">🏠 住宅・不動産・リフォーム</option><option value="fa-car">🚗 自動車・買い替え・交通</option><option value="fa-graduation-cap">🎓 教育・学費・子育て</option><option value="fa-ring">💍 結婚・家族イベント</option><option value="fa-plane">✈️ 旅行・レジャー・趣味</option><option value="fa-briefcase-medical">🏥 医療・健康・介護</option><option value="fa-sack-dollar">💰 退職金・一時収入・ボーナス</option><option value="fa-building-columns">🏛️ 相続・資産売却</option><option value="fa-gift">🎁 贈与・祝い金・高額購入</option><option value="fa-star" selected>その他</option></select></div>
         </div>
 
-        <div>
-          <label class="block text-xs font-semibold text-[#4F586A] mb-1">イベント名 / 内容</label>
-          <input type="text" id="eventTitle" required placeholder="例: リフォーム / 株式一部売却" class="w-full px-3 lumi-input text-xs font-bold">
+        <div id="homePurchaseEventFields" class="hidden space-y-3.5">
+          <div class="grid grid-cols-2 gap-2">
+            <div><label class="block text-xs font-semibold text-[#4F586A] mb-1">購入年齢</label><select id="homePurchaseAge" class="w-full px-3 lumi-input text-xs font-bold bg-white"></select></div>
+            <div><label class="block text-xs font-semibold text-[#4F586A] mb-1">物件価格</label><div class="flex items-center gap-1"><input id="homePropertyPrice" type="number" min="0" step="1" class="w-full px-3 lumi-input text-xs font-bold"><span class="text-xs text-[#6F7785]">万円</span></div></div>
+          </div>
+          <div class="grid grid-cols-2 gap-2">
+            <div><label class="block text-xs font-semibold text-[#4F586A] mb-1">頭金</label><div class="flex items-center gap-1"><input id="homeDownPayment" type="number" min="0" step="1" class="w-full px-3 lumi-input text-xs font-bold"><span class="text-xs text-[#6F7785]">万円</span></div></div>
+            <div><label class="block text-xs font-semibold text-[#4F586A] mb-1">借入額</label><div class="flex items-center gap-1"><input id="homeLoanAmount" type="number" min="0" step="1" class="w-full px-3 lumi-input text-xs font-bold"><span class="text-xs text-[#6F7785]">万円</span></div></div>
+          </div>
+          <div class="grid grid-cols-2 gap-2">
+            <div><label class="block text-xs font-semibold text-[#4F586A] mb-1">金利</label><div class="flex items-center gap-1"><input id="homeInterestRate" type="number" min="0" step="0.01" value="1" class="w-full px-3 lumi-input text-xs font-bold"><span class="text-xs text-[#6F7785]">%</span></div></div>
+            <div><label class="block text-xs font-semibold text-[#4F586A] mb-1">返済期間</label><div class="flex items-center gap-1"><input id="homeLoanYears" type="number" min="1" max="50" value="35" class="w-full px-3 lumi-input text-xs font-bold"><span class="text-xs text-[#6F7785]">年</span></div></div>
+          </div>
+          <details class="rounded-[14px] border border-[#ECEBE6] bg-[#FAFAF7] p-3"><summary class="cursor-pointer text-xs font-bold text-[#6F7785]">任意項目</summary><div class="grid grid-cols-2 gap-2 mt-3"><div><label class="block text-[11px] font-semibold text-[#4F586A] mb-1">購入時諸費用</label><div class="flex items-center gap-1"><input id="homePurchaseCosts" type="number" min="0" step="1" value="0" class="w-full px-2 lumi-input text-xs font-bold"><span class="text-[10px] text-[#6F7785]">万円</span></div></div><div><label class="block text-[11px] font-semibold text-[#4F586A] mb-1">住居維持費</label><div class="flex items-center gap-1"><input id="homeMaintenanceCost" type="number" min="0" step="1" value="0" class="w-full px-2 lumi-input text-xs font-bold"><span class="text-[10px] text-[#6F7785]">万円/年</span></div></div></div></details>
+          <p class="text-[10px] text-[#8A909C] leading-relaxed">購入年から現在の家賃を終了し、元利均等返済による住宅ローンと住居維持費を反映します。自宅価値は生活資産として表示し、利用可能資産・SCOREには含めません。</p>
         </div>
-
-        <div>
-          <label class="block text-xs font-semibold text-[#4F586A] mb-1">アイコン</label>
-          <select id="eventIcon" class="w-full px-3 lumi-input text-xs font-bold bg-white text-[#253047]">
-            <option value="fa-house">🏠 住宅・不動産・リフォーム</option>
-            <option value="fa-car">🚗 自動車・買い替え・交通</option>
-            <option value="fa-graduation-cap">🎓 教育・学費・子育て</option>
-            <option value="fa-ring">💍 結婚・家族イベント</option>
-            <option value="fa-plane">✈️ 旅行・レジャー・趣味</option>
-            <option value="fa-briefcase-medical">🏥 医療・健康・介護</option>
-            <option value="fa-sack-dollar">💰 退職金・一時収入・ボーナス</option>
-            <option value="fa-building-columns">🏛️ 相続・資産売却</option>
-            <option value="fa-gift">🎁 贈与・祝い金・高額購入</option>
-            <option value="fa-star" selected>その他</option>
-          </select>
-        </div>
-
         <div class="pt-2 flex justify-end gap-2">
           <button type="button" onclick="closeAddEventModal()" class="px-4 py-2 btn-lumi-ghost text-xs font-bold whitespace-nowrap">キャンセル</button>
           <button type="submit" class="px-4 py-2 btn-lumi-primary text-xs font-bold whitespace-nowrap">保存する</button>
@@ -1639,49 +1459,700 @@
       }, 3200);
     };
 
-    window.simState = {
-      selfCurrentAge: 0,
-      selfIncome: 0,
-      selfRetireAge: 0,
-      selfPension: 0,
-      selfPensionStartAge: 65,
+    /* ============================================================
+       PHASE 6 / STEP 1 — DATA MODEL SCHEMA v2
+       ------------------------------------------------------------
+       Production Schema v2 definition.
+       - Schema v2 is the sole active runtime model.
+       - v1 data is supported only at persistence boundaries through migration.
+       ============================================================ */
+    window.LUMIFUL_SCHEMA_VERSION = 2;
 
-      hasSpouse: false,
-      spouseCurrentAge: 0,
-      spouseRetireAge: 0,
-      spouseIncome: 0,
-      spousePension: 0,
-      spousePensionStartAge: 65,
+    window.LUMIFUL_V2_ENUMS = Object.freeze({
+      incomeCategories: Object.freeze(['salary', 'business', 'side', 'pension', 'dividend', 'realestate', 'other']),
+      incomeOwners: Object.freeze(['self', 'spouse']),
+      assetClasses: Object.freeze(['simulation', 'potential', 'lifestyle']),
+      simulationAssetCategories: Object.freeze(['cash', 'investment_fund', 'stock', 'bond', 'other']),
+      assetOwners: Object.freeze(['self', 'spouse', 'shared']),
+      withdrawalPriorities: Object.freeze(['auto', 'high', 'medium', 'low', 'excluded']),
+      paymentCategories: Object.freeze(['car', 'education', 'business', 'other']),
+      housingTypes: Object.freeze(['rent', 'owned_with_loan', 'owned_no_loan', 'other']),
+      eventKinds: Object.freeze(['simple', 'smart']),
+      eventDirections: Object.freeze(['income', 'expense'])
+    });
 
-      initialInvest: 0,
-      initialCash: 0,
-      realEstateValue: 0,
-
-      livingExpense: 0,
-      housingExpense: 0,
-      housingEndAge: 0,
-
-      returnRate: 0.0,
-      inflationRate: 1.5,
-      targetAge: 80,
-
-      events: [],
-      savedPlans: []
+    window.createEmptyDataModelV2 = function() {
+      return {
+        schemaVersion: 2,
+        profile: {
+          currentAge: 0,
+          hasSpouse: false,
+          spouseAge: null,
+          targetAge: 90
+        },
+        incomes: [],
+        living: {
+          expense: {
+            amount: 0,
+            frequency: 'monthly'
+          },
+          housing: {
+            type: 'other',
+            monthlyAmount: 0,
+            endAge: null
+          }
+        },
+        assets: [],
+        payments: [],
+        settings: {
+          inflationRate: 1.5
+        },
+        lifeEvents: []
+      };
     };
 
-    window.currentTableRows = [];
-    window.currentBaseScore = 0;
-    window.currentAiAdjustment = 0;
-    window.currentFinalScore = 0;
-    window.scoreBreakdownDetails = null;
-    window.assetChart = null;
-    window.annualProjectionChart = null;
+    window.LUMIFUL_V2_SCHEMA_DEFINITION = Object.freeze({
+      root: Object.freeze(['schemaVersion', 'profile', 'incomes', 'living', 'assets', 'payments', 'settings', 'lifeEvents']),
+      income: Object.freeze(['id', 'category', 'name', 'owner', 'amount', 'frequency', 'startAge', 'endAge']),
+      simulationAsset: Object.freeze(['id', 'assetClass', 'category', 'name', 'owner', 'value', 'expectedReturn', 'withdrawalSetting', 'withdrawalPriority']),
+      potentialAsset: Object.freeze(['id', 'assetClass', 'category', 'name', 'owner', 'value']),
+      lifestyleAsset: Object.freeze(['id', 'assetClass', 'category', 'name', 'owner', 'value']),
+      payment: Object.freeze(['id', 'category', 'name', 'amount', 'frequency', 'startAge', 'endAge']),
+      simpleEvent: Object.freeze(['id', 'kind', 'category', 'title', 'age', 'direction', 'amount', 'icon']),
+      housingSmartEvent: Object.freeze(['id', 'kind', 'category', 'age', 'propertyPrice', 'purchaseMethod', 'downPayment', 'loanAmount', 'interestRate', 'loanYears', 'purchaseCosts', 'maintenanceCost', 'maintenanceFrequency'])
+    });
 
-    window.lastChartLabels = [];
-    window.lastInvestData = [];
-    window.lastNetWorthData = [];
-    window.lastCashflowData = [];
 
+    /* ============================================================
+       PHASE 6 / STEP 2 — MIGRATION LAYER v1 -> v2
+       ------------------------------------------------------------
+       Persistence-boundary compatibility only.
+       - Converts saved/shared v1 data into Schema v2 without mutating the source.
+       - Never participates in the production calculation path.
+       - Ambiguous v1 housing data remains category-neutral
+         ('other') so migration does not invent rent/mortgage intent.
+       ============================================================ */
+    window.migrateV1ToV2 = function(legacyState) {
+      const source = legacyState && typeof legacyState === 'object'
+        ? legacyState
+        : {};
+      const v2 = window.createEmptyDataModelV2();
+
+      const numberOrZero = value => {
+        const n = Number(value);
+        return Number.isFinite(n) ? Math.max(0, n) : 0;
+      };
+      const positiveAgeOr = (value, fallback) => {
+        const n = parseInt(value, 10);
+        return Number.isFinite(n) && n > 0 ? n : fallback;
+      };
+      const legacyWorkEndAge = (retireAge, fallbackRetireAge = 65) =>
+        Math.max(0, positiveAgeOr(retireAge, fallbackRetireAge) - 1);
+      const makeId = (prefix, index) => `legacy_${prefix}_${String(index + 1).padStart(3, '0')}`;
+
+      const currentAge = positiveAgeOr(source.selfCurrentAge, 0);
+      const targetAge = positiveAgeOr(source.targetAge, 90);
+      const hasSpouse = !!source.hasSpouse;
+      const spouseAge = hasSpouse ? positiveAgeOr(source.spouseCurrentAge, currentAge || 0) : null;
+
+      v2.profile = {
+        currentAge,
+        hasSpouse,
+        spouseAge,
+        targetAge
+      };
+
+      let incomeIndex = 0;
+      const pushIncome = ({ category, name, owner, amount, startAge, endAge }) => {
+        const normalizedAmount = numberOrZero(amount);
+        if (normalizedAmount <= 0) return;
+        v2.incomes.push({
+          id: makeId('income', incomeIndex++),
+          category,
+          name,
+          owner,
+          amount: normalizedAmount,
+          frequency: 'yearly',
+          startAge: Math.max(0, startAge || 0),
+          endAge: Math.max(0, endAge || 0)
+        });
+      };
+
+      pushIncome({
+        category: 'salary',
+        name: '本人収入',
+        owner: 'self',
+        amount: source.selfIncome,
+        startAge: currentAge,
+        // Legacy engine pays work income while age < retireAge.
+        endAge: legacyWorkEndAge(source.selfRetireAge)
+      });
+      pushIncome({
+        category: 'pension',
+        name: '本人年金',
+        owner: 'self',
+        amount: source.selfPension,
+        startAge: positiveAgeOr(source.selfPensionStartAge, 65),
+        endAge: Math.max(targetAge, 120)
+      });
+
+      if (hasSpouse) {
+        pushIncome({
+          category: 'salary',
+          name: '配偶者収入',
+          owner: 'spouse',
+          amount: source.spouseIncome,
+          startAge: spouseAge || 0,
+          endAge: legacyWorkEndAge(source.spouseRetireAge)
+        });
+        pushIncome({
+          category: 'pension',
+          name: '配偶者年金',
+          owner: 'spouse',
+          amount: source.spousePension,
+          startAge: positiveAgeOr(source.spousePensionStartAge, 65),
+          endAge: Math.max(targetAge, 120)
+        });
+      }
+
+      const initialCash = numberOrZero(source.initialCash);
+      const initialInvest = numberOrZero(source.initialInvest);
+      const realEstateValue = numberOrZero(source.realEstateValue);
+      let assetIndex = 0;
+
+      if (initialCash > 0) {
+        v2.assets.push({
+          id: makeId('asset', assetIndex++),
+          assetClass: 'simulation',
+          category: 'cash',
+          name: '安全資産（移行）',
+          owner: 'self',
+          value: initialCash,
+          expectedReturn: 0,
+          withdrawalSetting: 'auto',
+          withdrawalPriority: null
+        });
+      }
+
+      if (initialInvest > 0) {
+        v2.assets.push({
+          id: makeId('asset', assetIndex++),
+          assetClass: 'simulation',
+          category: 'investment_fund',
+          name: '投資資産（移行）',
+          owner: 'self',
+          value: initialInvest,
+          expectedReturn: numberOrZero(source.returnRate),
+          withdrawalSetting: 'auto',
+          withdrawalPriority: null
+        });
+      }
+
+      if (realEstateValue > 0) {
+        v2.assets.push({
+          id: makeId('asset', assetIndex++),
+          assetClass: 'potential',
+          category: 'real_estate',
+          name: '不動産・その他価値（移行）',
+          owner: 'self',
+          value: realEstateValue
+        });
+      }
+
+      // Legacy livingExpense / housingExpense are annual amounts.
+      v2.living.expense = {
+        amount: numberOrZero(source.livingExpense),
+        frequency: 'yearly'
+      };
+      v2.living.housing = {
+        // Legacy data does not distinguish rent from mortgage.
+        type: 'other',
+        monthlyAmount: numberOrZero(source.housingExpense) / 12,
+        endAge: positiveAgeOr(source.housingEndAge, null)
+      };
+
+      v2.settings = {
+        inflationRate: numberOrZero(source.inflationRate ?? 1.5)
+      };
+
+      const legacyEvents = Array.isArray(source.events) ? source.events : [];
+      v2.lifeEvents = legacyEvents.map((event, index) => ({
+        id: makeId('event', index),
+        kind: 'simple',
+        category: 'other',
+        title: String(event?.title || 'ライフイベント'),
+        age: positiveAgeOr(event?.age, 0),
+        direction: event?.type === 'income' ? 'income' : 'expense',
+        amount: numberOrZero(event?.amount),
+        icon: String(event?.icon || 'fa-star')
+      }));
+
+      // No legacy equivalent exists yet for non-housing recurring payments.
+      v2.payments = [];
+
+      return v2;
+    };
+
+    /* ============================================================
+       PHASE 6 / STEP 3 — CALCULATION ENGINE v2
+       ------------------------------------------------------------
+       Parallel calculation only.
+       - Legacy recalculateAllFast() remains the active UI engine.
+       - Engine v2 does NOT write to currentTableRows, KPI, SCORE,
+         charts, forms, saved plans, URL state, or navigation.
+       - It accepts Schema v2 data and returns detached results.
+       - Step 4 will compare these results with the Legacy engine.
+       ============================================================ */
+
+    window.LUMIFUL_V2_ENGINE_VERSION = '2.0-step8';
+
+    window.normalizeAnnualAmountV2 = function(amount, frequency) {
+      const n = Number(amount);
+      const safe = Number.isFinite(n) ? Math.max(0, n) : 0;
+      return frequency === 'monthly' ? safe * 12 : safe;
+    };
+
+    window.resolveWithdrawalPriorityV2 = function(asset) {
+      const explicit = asset?.withdrawalPriority;
+      if (['high', 'medium', 'low', 'excluded'].includes(explicit)) return explicit;
+      if (asset?.withdrawalSetting === 'excluded') return 'excluded';
+
+      // Step 3 default policy for "auto". This is intentionally isolated
+      // so the recommendation logic can be changed later without touching
+      // the withdrawal engine itself.
+      if (asset?.category === 'cash') return 'high';
+      if (asset?.category === 'bond') return 'medium';
+      return 'low';
+    };
+
+    window.calculateIncomeV2 = function(model, selfAge, spouseAge) {
+      const incomes = Array.isArray(model?.incomes) ? model.incomes : [];
+      let normalIncome = 0;
+
+      incomes.forEach(income => {
+        const ownerAge = income?.owner === 'spouse' ? spouseAge : selfAge;
+        const startAge = Number(income?.startAge ?? 0);
+        const endAge = Number(income?.endAge ?? 120);
+        if (ownerAge >= startAge && ownerAge <= endAge) {
+          normalIncome += window.normalizeAnnualAmountV2(income?.amount, income?.frequency);
+        }
+      });
+
+      return Math.round(normalIncome);
+    };
+
+    window.calculateLivingExpenseV2 = function(model, yearIndex) {
+      const base = window.normalizeAnnualAmountV2(
+        model?.living?.expense?.amount,
+        model?.living?.expense?.frequency
+      );
+      const inflationRate = Number(model?.settings?.inflationRate || 0) / 100;
+      return Math.round(base * Math.pow(1 + inflationRate, yearIndex));
+    };
+
+    window.calculateHousingExpenseV2 = function(model, selfAge, yearIndex) {
+      const housing = model?.living?.housing || {};
+      const endAge = Number(housing?.endAge);
+      const active = !Number.isFinite(endAge) || endAge <= 0 || selfAge < endAge;
+      if (!active) return 0;
+
+      const base = window.normalizeAnnualAmountV2(housing?.monthlyAmount, 'monthly');
+      const inflationRate = Number(model?.settings?.inflationRate || 0) / 100;
+      return Math.round(base * Math.pow(1 + inflationRate, yearIndex));
+    };
+
+    window.calculatePaymentsV2 = function(model, selfAge, yearIndex) {
+      const payments = Array.isArray(model?.payments) ? model.payments : [];
+      const inflationRate = Number(model?.settings?.inflationRate || 0) / 100;
+      let total = 0;
+
+      payments.forEach(payment => {
+        const startAge = Number(payment?.startAge ?? 0);
+        const endAge = Number(payment?.endAge ?? 120);
+        if (selfAge >= startAge && selfAge <= endAge) {
+          // Contractual repayments are nominal fixed cash flows in v2.
+          total += window.normalizeAnnualAmountV2(payment?.amount, payment?.frequency);
+        }
+      });
+
+      return Math.round(total);
+    };
+
+    /* ============================================================
+       PHASE 6 / STEP 10 — LIFE EVENT v2 + HOUSING SMART EVENT
+       ============================================================ */
+    window.calculateMortgageAnnualPaymentV2 = function(principal, annualRatePct, loanYears) {
+      const P = Math.max(0, Number(principal) || 0);
+      const years = Math.max(0, Number(loanYears) || 0);
+      if (P <= 0 || years <= 0) return 0;
+      const n = Math.round(years * 12);
+      const r = Math.max(0, Number(annualRatePct) || 0) / 100 / 12;
+      const monthly = r === 0 ? P / n : P * r * Math.pow(1 + r, n) / (Math.pow(1 + r, n) - 1);
+      return Math.round(monthly * 12);
+    };
+
+    window.resolveHousingSmartEventV2 = function(model, selfAge) {
+      const events = (Array.isArray(model?.lifeEvents) ? model.lifeEvents : [])
+        .filter(e => e?.kind === 'smart' && e?.category === 'home_purchase')
+        .sort((a,b) => Number(a.age||0) - Number(b.age||0));
+      let eventExpense = 0, mortgageExpense = 0, maintenanceExpense = 0, lifestyleHomeValue = 0;
+      let hasPurchasedHome = false;
+      events.forEach(event => {
+        const purchaseAge = Number(event.age || 0);
+        if (purchaseAge <= 0 || selfAge < purchaseAge) return;
+        hasPurchasedHome = true;
+        lifestyleHomeValue = Math.max(0, Number(event.propertyPrice) || 0);
+        if (selfAge === purchaseAge) {
+          eventExpense += Math.max(0, Number(event.downPayment) || 0) + Math.max(0, Number(event.purchaseCosts) || 0);
+        }
+        const yearsFromPurchase = selfAge - purchaseAge;
+        const loanYears = Math.max(0, Number(event.loanYears) || 0);
+        if (yearsFromPurchase < loanYears) {
+          mortgageExpense += window.calculateMortgageAnnualPaymentV2(event.loanAmount, event.interestRate, loanYears);
+        }
+        const maintenanceBase = Math.max(0, Number(event.maintenanceCost) || 0);
+        const inflationRate = Number(model?.settings?.inflationRate || 0) / 100;
+        maintenanceExpense += Math.round(maintenanceBase * Math.pow(1 + inflationRate, yearsFromPurchase));
+      });
+      return {
+        eventExpense: Math.round(eventExpense),
+        mortgageExpense: Math.round(mortgageExpense),
+        maintenanceExpense: Math.round(maintenanceExpense),
+        lifestyleHomeValue: Math.round(lifestyleHomeValue),
+        hasPurchasedHome
+      };
+    };
+
+    window.resolveLifeEventsV2 = function(model, selfAge) {
+      const events = Array.isArray(model?.lifeEvents) ? model.lifeEvents : [];
+      let eventIncome = 0;
+      let eventExpense = 0;
+      events.forEach(event => {
+        if (event?.kind !== 'simple' || Number(event?.age) !== selfAge) return;
+        const amount = Math.max(0, Number(event?.amount) || 0);
+        if (event?.direction === 'income') eventIncome += amount;
+        else eventExpense += amount;
+      });
+      return { eventIncome: Math.round(eventIncome), eventExpense: Math.round(eventExpense) };
+    };
+
+    window.calculateAssetReturnsV2 = function(assetBalances) {
+      let totalReturn = 0;
+      const returnsByAsset = {};
+
+      assetBalances.forEach(asset => {
+        if (asset.assetClass !== 'simulation') return;
+        const annualReturn = Math.round(
+          Math.max(0, asset.balance) * (Number(asset.expectedReturn || 0) / 100)
+        );
+        returnsByAsset[asset.id] = annualReturn;
+        totalReturn += annualReturn;
+      });
+
+      return { totalReturn, returnsByAsset };
+    };
+
+    window.applyProRataWithdrawalV2 = function(assetBalances, priority, amountNeeded) {
+      let remaining = Math.max(0, amountNeeded);
+      if (remaining <= 0) return { used: 0, remaining: 0 };
+
+      const eligible = assetBalances.filter(asset =>
+        asset.assetClass === 'simulation' &&
+        window.resolveWithdrawalPriorityV2(asset) === priority &&
+        asset.balance > 0
+      );
+
+      const groupBalance = eligible.reduce((sum, asset) => sum + asset.balance, 0);
+      if (groupBalance <= 0) return { used: 0, remaining };
+
+      const target = Math.min(remaining, groupBalance);
+      let distributed = 0;
+
+      eligible.forEach((asset, index) => {
+        const isLast = index === eligible.length - 1;
+        const share = isLast
+          ? target - distributed
+          : Math.min(asset.balance, target * (asset.balance / groupBalance));
+        const actual = Math.min(asset.balance, Math.max(0, share));
+        asset.balance -= actual;
+        distributed += actual;
+      });
+
+      return {
+        used: distributed,
+        remaining: Math.max(0, remaining - distributed)
+      };
+    };
+
+    window.applyWithdrawalsV2 = function(assetBalances, deficitAfterYield) {
+      let remaining = Math.max(0, deficitAfterYield);
+      const result = {
+        withdrawalHigh: 0,
+        withdrawalMedium: 0,
+        withdrawalLow: 0,
+        shortage: 0,
+        phase: 'income'
+      };
+
+      for (const priority of ['high', 'medium', 'low']) {
+        if (remaining <= 0) break;
+        const step = window.applyProRataWithdrawalV2(assetBalances, priority, remaining);
+        result[`withdrawal${priority.charAt(0).toUpperCase() + priority.slice(1)}`] = step.used;
+        remaining = step.remaining;
+      }
+
+      result.shortage = remaining;
+      if (result.shortage > 0) result.phase = 'shortage';
+      else if (result.withdrawalLow > 0) result.phase = 'low';
+      else if (result.withdrawalMedium > 0) result.phase = 'medium';
+      else if (result.withdrawalHigh > 0) result.phase = 'high';
+
+      return result;
+    };
+
+    window.buildYearResultV2 = function(params) {
+      const simulationAssets = params.assetBalances.filter(a => a.assetClass === 'simulation');
+      const availableAssets = Math.max(0, Math.round(simulationAssets.reduce((sum, a) => sum + a.balance, 0)));
+      const potentialAssets = Math.max(0, Math.round(params.assetBalances
+        .filter(a => a.assetClass === 'potential')
+        .reduce((sum, a) => sum + a.balance, 0)));
+      const lifestyleAssets = Math.max(0, Math.round(params.assetBalances
+        .filter(a => a.assetClass === 'lifestyle')
+        .reduce((sum, a) => sum + a.balance, 0) + (Number(params.dynamicLifestyleAssets) || 0)));
+
+      return {
+        age: params.selfAge,
+        income: params.normalIncome,
+        normalIncome: params.normalIncome,
+        livingExpense: params.livingExpense,
+        housingExpense: params.housingExpense,
+        payments: params.payments,
+        totalExpense: params.totalExpense,
+        eventIncome: params.eventIncome,
+        eventIncomeTotal: params.eventIncome,
+        eventExpense: params.eventExpense,
+        netCashflow: params.netCashflow,
+        investmentReturn: params.annualYield,
+        annualYield: params.annualYield,
+        returnUsed: params.yieldUsed,
+        yieldUsed: params.yieldUsed,
+        withdrawalHigh: Math.round(params.withdrawalHigh),
+        withdrawalMedium: Math.round(params.withdrawalMedium),
+        withdrawalLow: Math.round(params.withdrawalLow),
+        shortage: Math.round(params.shortage),
+        availableAssets,
+        financialAsset: availableAssets,
+        potentialAssets,
+        lifestyleAssets,
+        phase: params.phase,
+        assetBalances: params.assetBalances.map(asset => ({
+          id: asset.id,
+          assetClass: asset.assetClass,
+          category: asset.category,
+          name: asset.name,
+          balance: Math.max(0, Math.round(asset.balance)),
+          expectedReturn: Number(asset.expectedReturn || 0),
+          withdrawalPriority: asset.assetClass === 'simulation'
+            ? window.resolveWithdrawalPriorityV2(asset)
+            : null
+        }))
+      };
+    };
+
+    window.calculateSimulationV2 = function(dataModelV2) {
+      const model = dataModelV2 && typeof dataModelV2 === 'object'
+        ? dataModelV2
+        : window.createEmptyDataModelV2();
+
+      const currentAgeRaw = Number(model?.profile?.currentAge || 0);
+      const currentAge = currentAgeRaw > 0 ? currentAgeRaw : 40;
+      const targetAgeRaw = Number(model?.profile?.targetAge || 0);
+      const targetAge = targetAgeRaw > currentAge ? targetAgeRaw : Math.max(80, currentAge + 10);
+      const spouseStartAgeRaw = Number(model?.profile?.spouseAge || 0);
+      const spouseStartAge = spouseStartAgeRaw > 0 ? spouseStartAgeRaw : currentAge;
+      const yearsCount = Math.max(1, targetAge - currentAge + 1);
+
+      // Detached mutable balances. The source model is never mutated.
+      const assetBalances = (Array.isArray(model?.assets) ? model.assets : []).map(asset => ({
+        ...asset,
+        balance: Math.max(0, Number(asset?.value) || 0)
+      }));
+
+      const ensureCashAsset = () => {
+        let cash = assetBalances.find(asset =>
+          asset.assetClass === 'simulation' && asset.category === 'cash'
+        );
+        if (!cash) {
+          cash = {
+            id: 'engine_v2_cash_reserve',
+            assetClass: 'simulation',
+            category: 'cash',
+            name: '現金・預金',
+            owner: 'shared',
+            value: 0,
+            balance: 0,
+            expectedReturn: 0,
+            withdrawalSetting: 'auto',
+            withdrawalPriority: null
+          };
+          assetBalances.push(cash);
+        }
+        return cash;
+      };
+
+      const rows = [];
+
+      for (let i = 0; i < yearsCount; i++) {
+        const selfAge = currentAge + i;
+        const spouseAge = spouseStartAge + i;
+
+        const normalIncome = window.calculateIncomeV2(model, selfAge, spouseAge);
+        const livingExpense = window.calculateLivingExpenseV2(model, i);
+        const housingSmart = window.resolveHousingSmartEventV2(model, selfAge);
+        // Once a home-purchase Smart Event has occurred, the pre-existing rent/housing cost ends.
+        const baseHousingExpense = housingSmart.hasPurchasedHome ? 0 : window.calculateHousingExpenseV2(model, selfAge, i);
+        const housingExpense = baseHousingExpense + housingSmart.mortgageExpense + housingSmart.maintenanceExpense;
+        const payments = window.calculatePaymentsV2(model, selfAge, i);
+        const simpleEvents = window.resolveLifeEventsV2(model, selfAge);
+        const eventIncome = simpleEvents.eventIncome;
+        const eventExpense = simpleEvents.eventExpense + housingSmart.eventExpense;
+
+        const totalExpense = livingExpense + housingExpense + payments + eventExpense;
+        const totalIncome = normalIncome + eventIncome;
+        const netCashflow = totalIncome - totalExpense;
+
+        const { totalReturn: annualYield, returnsByAsset } = window.calculateAssetReturnsV2(assetBalances);
+
+        let yieldUsed = 0;
+        let withdrawalHigh = 0;
+        let withdrawalMedium = 0;
+        let withdrawalLow = 0;
+        let shortage = 0;
+        let phase = 'income';
+
+        if (netCashflow >= 0) {
+          ensureCashAsset().balance += netCashflow;
+          assetBalances.forEach(asset => {
+            if (asset.assetClass === 'simulation') {
+              asset.balance += returnsByAsset[asset.id] || 0;
+            }
+          });
+        } else {
+          let remainingDeficit = Math.abs(netCashflow);
+
+          // LUMIFUL core principle: the amount generated as investment return
+          // in the current year supports the deficit before principal is used.
+          yieldUsed = Math.min(remainingDeficit, annualYield);
+          remainingDeficit -= yieldUsed;
+
+          // Only the unused portion of each asset's return is reinvested.
+          if (annualYield > 0) {
+            const reinvestRatio = (annualYield - yieldUsed) / annualYield;
+            assetBalances.forEach(asset => {
+              if (asset.assetClass === 'simulation') {
+                asset.balance += (returnsByAsset[asset.id] || 0) * reinvestRatio;
+              }
+            });
+          }
+
+          if (remainingDeficit > 0) {
+            const withdrawals = window.applyWithdrawalsV2(assetBalances, remainingDeficit);
+            withdrawalHigh = withdrawals.withdrawalHigh;
+            withdrawalMedium = withdrawals.withdrawalMedium;
+            withdrawalLow = withdrawals.withdrawalLow;
+            shortage = withdrawals.shortage;
+            phase = withdrawals.phase;
+          } else if (yieldUsed > 0) {
+            phase = 'yield';
+          }
+        }
+
+        rows.push(window.buildYearResultV2({
+          selfAge,
+          normalIncome,
+          livingExpense,
+          housingExpense,
+          payments,
+          totalExpense,
+          eventIncome,
+          eventExpense,
+          netCashflow,
+          annualYield,
+          yieldUsed,
+          withdrawalHigh,
+          withdrawalMedium,
+          withdrawalLow,
+          shortage,
+          phase,
+          assetBalances,
+          dynamicLifestyleAssets: housingSmart.lifestyleHomeValue
+        }));
+      }
+
+      return {
+        schemaVersion: 2,
+        engineVersion: window.LUMIFUL_V2_ENGINE_VERSION,
+        currentAge,
+        targetAge,
+        rows,
+        summary: {
+          finalAvailableAssets: rows.length ? rows[rows.length - 1].availableAssets : 0,
+          finalPotentialAssets: rows.length ? rows[rows.length - 1].potentialAssets : 0,
+          totalInvestmentReturn: rows.reduce((sum, row) => sum + row.investmentReturn, 0),
+          firstShortageAge: (rows.find(row => row.shortage > 0) || {}).age || null
+        }
+      };
+    };
+
+    // Development-only helper for Step 4 parity testing.
+    // It does not change the active UI or Legacy result state.
+    
+    /* ============================================================
+       PHASE 6 / STEP 5 — YEAR RESULT ADAPTER
+       ------------------------------------------------------------
+       Dashboard result adapter.
+       - Maps Engine v2 results to the existing presentation fields.
+       - Available Assets remains the canonical asset measure.
+       - Potential/Lifestyle assets stay outside the simulation score.
+       ============================================================ */
+    window.LUMIFUL_V2_RESULT_ADAPTER_VERSION = '2.0-step5';
+
+    
+    window.adaptSimulationV2ForDashboard = function(simulationV2) {
+      const result = simulationV2 && typeof simulationV2 === 'object' ? simulationV2 : {};
+      const rows = Array.isArray(result.rows)
+        ? result.rows.map(rowV2 => ({
+            ...rowV2,
+            normalIncome: Number(rowV2.normalIncome ?? rowV2.income ?? 0),
+            totalExpense: Number(rowV2.totalExpense ?? ((rowV2.livingExpense||0)+(rowV2.housingExpense||0)+(rowV2.payments||0)+(rowV2.eventExpense||0))),
+            netCashflow: Number(rowV2.netCashflow || 0),
+            annualYield: Number(rowV2.annualYield ?? rowV2.investmentReturn ?? 0),
+            yieldUsed: Number(rowV2.yieldUsed ?? rowV2.returnUsed ?? 0),
+            cashUsed: Number(rowV2.cashUsed ?? rowV2.withdrawalHigh ?? 0),
+            principalSold: Number(rowV2.principalSold ?? ((rowV2.withdrawalMedium||0)+(rowV2.withdrawalLow||0))),
+            financialAsset: Number(rowV2.financialAsset ?? rowV2.availableAssets ?? 0),
+            currentCash: Number(rowV2.currentCash || 0),
+            eventIncomeTotal: Number(rowV2.eventIncomeTotal ?? rowV2.eventIncome ?? 0)
+          }))
+        : [];
+
+      return {
+        adapterVersion: window.LUMIFUL_V2_RESULT_ADAPTER_VERSION,
+        schemaVersion: Number(result.schemaVersion) || 2,
+        engineVersion: result.engineVersion || window.LUMIFUL_V2_ENGINE_VERSION,
+        currentAge: Number(result.currentAge) || 0,
+        targetAge: Number(result.targetAge) || 0,
+        rows,
+        summary: {
+          ...(result.summary || {}),
+          finalAvailableAssets: rows.length ? rows[rows.length - 1].availableAssets : 0,
+          firstShortageAge: (rows.find(row => row.shortage > 0) || {}).age || null
+        }
+      };
+    };
+
+    // Development-only preview. No active state or UI is mutated.
+    
     window.aiDebounceTimer = null;
     window.aiAbortController = null;
 
@@ -1714,7 +2185,8 @@
         { id: 'spousePensionStartAge', min: 0, max: 75 },
         { id: 'housingEndAge', min: 0, max: 100 },
         { id: 'targetAge', min: 0, max: 100 },
-        { id: 'eventAge', min: 18, max: 100 }
+        { id: 'eventAge', min: 18, max: 100 },
+        { id: 'homePurchaseAge', min: 18, max: 100 }
       ];
 
       ageSelectIds.forEach(config => {
@@ -1739,86 +2211,8 @@
       });
     }
 
-    window.readStateFromForm = function() {
-      const getNum = id => {
-        const el = document.getElementById(id);
-        if (!el) return 0;
-        const val = parseFloat(el.value);
-        return isNaN(val) ? 0 : Math.max(0, val);
-      };
-      const getVal = id => {
-        const el = document.getElementById(id);
-        if (!el) return 0;
-        return parseInt(el.value, 10) || 0;
-      };
-
-      simState.selfCurrentAge = getVal('selfCurrentAge');
-      simState.selfIncome = getNum('selfIncome');
-      simState.selfRetireAge = getVal('selfRetireAge');
-      simState.selfPension = getNum('selfPension');
-      simState.selfPensionStartAge = getVal('selfPensionStartAge');
-
-      const spouseCheck = document.getElementById('hasSpouse');
-      simState.hasSpouse = spouseCheck ? spouseCheck.checked : false;
-      simState.spouseCurrentAge = getVal('spouseCurrentAge');
-      simState.spouseRetireAge = getVal('spouseRetireAge');
-      simState.spouseIncome = getNum('spouseIncome');
-      simState.spousePension = getNum('spousePension');
-      simState.spousePensionStartAge = getVal('spousePensionStartAge');
-
-      simState.initialInvest = getNum('initialInvest');
-      simState.initialCash = getNum('initialCash');
-      simState.realEstateValue = getNum('realEstateValue');
-
-      simState.livingExpense = getNum('livingExpense');
-      simState.housingExpense = getNum('housingExpense');
-      simState.housingEndAge = getVal('housingEndAge');
-
-      const slider = document.getElementById('returnRateSlider');
-      simState.returnRate = slider ? parseFloat(slider.value) : 0.0;
-      simState.targetAge = getVal('targetAge');
-    };
-
-    window.populateFormFromState = function() {
-      const setVal = (id, val) => {
-        const el = document.getElementById(id);
-        if (el) el.value = val !== undefined ? val : 0;
-      };
-
-      setVal('selfCurrentAge', simState.selfCurrentAge);
-      setVal('selfIncome', simState.selfIncome);
-      setVal('selfRetireAge', simState.selfRetireAge);
-      setVal('selfPension', simState.selfPension);
-      setVal('selfPensionStartAge', simState.selfPensionStartAge || 65);
-
-      const spouseCheck = document.getElementById('hasSpouse');
-      if (spouseCheck) spouseCheck.checked = !!simState.hasSpouse;
-      window.toggleSpouseForm();
-
-      setVal('spouseCurrentAge', simState.spouseCurrentAge);
-      setVal('spouseRetireAge', simState.spouseRetireAge);
-      setVal('spouseIncome', simState.spouseIncome);
-      setVal('spousePension', simState.spousePension);
-      setVal('spousePensionStartAge', simState.spousePensionStartAge || 65);
-
-      setVal('initialInvest', simState.initialInvest);
-      setVal('initialCash', simState.initialCash);
-      setVal('realEstateValue', simState.realEstateValue);
-
-      setVal('livingExpense', simState.livingExpense);
-      setVal('housingExpense', simState.housingExpense);
-      setVal('housingEndAge', simState.housingEndAge);
-
-      const slider = document.getElementById('returnRateSlider');
-      if (slider) {
-        slider.value = simState.returnRate || 0.0;
-        window.updateSliders();
-      }
-
-      setVal('targetAge', simState.targetAge || 80);
-      window.setInflationPreset(simState.inflationRate || 1.5);
-    };
-
+    
+    
     window.checkAuthState = function() {
       const savedEmail = localStorage.getItem('lumiful_user_email') || localStorage.getItem('lc_user_email');
       const loggedOutBox = document.getElementById('authContentLoggedOut');
@@ -1859,6 +2253,71 @@
       });
     };
 
+
+
+    /* ============================================================
+       PHASE 6 / STEP 12 — SAVE / LOAD / SHARE SCHEMA v2
+       ------------------------------------------------------------
+       - New saves persist Schema v2 only.
+       - Existing v1 saved plans and v1 share URLs remain readable
+         through migrateV1ToV2().
+       - URL sharing serializes Schema v2 directly.
+       - Login/auth behavior is intentionally unchanged.
+       ============================================================ */
+    window.LUMIFUL_SAVE_SCHEMA_VERSION = 2;
+
+    window.cloneDataModelV2 = function(model) {
+      return JSON.parse(JSON.stringify(model || window.createEmptyDataModelV2()));
+    };
+
+    window.normalizeDataModelV2 = function(input) {
+      if (!input || typeof input !== 'object') return window.createEmptyDataModelV2();
+      if (Number(input.schemaVersion) !== 2) return window.migrateV1ToV2(input);
+      const base = window.createEmptyDataModelV2();
+      return {
+        schemaVersion: 2,
+        profile: { ...base.profile, ...(input.profile || {}) },
+        incomes: Array.isArray(input.incomes) ? input.incomes.map(x => ({ ...x })) : [],
+        living: {
+          expense: { ...base.living.expense, ...(input.living?.expense || {}) },
+          housing: { ...base.living.housing, ...(input.living?.housing || {}) }
+        },
+        assets: Array.isArray(input.assets) ? input.assets.map(x => ({ ...x })) : [],
+        payments: Array.isArray(input.payments) ? input.payments.map(x => ({ ...x })) : [],
+        settings: { ...base.settings, ...(input.settings || {}) },
+        lifeEvents: Array.isArray(input.lifeEvents) ? input.lifeEvents.map(x => ({ ...x })) : []
+      };
+    };
+
+    window.getCurrentDataModelV2ForPersistence = function() {
+      if (window.v2InputInitialized && typeof window.syncV2InputAndRecalculate === 'function') {
+        // Ensure visible v2 form edits are committed before persistence.
+        window.syncV2InputAndRecalculate();
+      }
+      return window.cloneDataModelV2(window.normalizeDataModelV2(window.ensureV2InputModel()));
+    };
+
+    window.loadSavedPlansFromStorageV2 = function() {
+      try {
+        const raw = localStorage.getItem('lumiful_saved_plans');
+        const parsed = raw ? JSON.parse(raw) : [];
+        window.savedPlansV2 = Array.isArray(parsed) ? parsed : [];
+      } catch (error) {
+        console.warn('[LUMIFUL] Failed to read saved plans.', error);
+        window.savedPlansV2 = [];
+      }
+      return window.savedPlansV2;
+    };
+
+    window.restorePersistedStateV2 = function(rawState) {
+      const model = window.normalizeDataModelV2(rawState);
+      window.activeDataModelV2 = window.cloneDataModelV2(model);
+      window.v2InputInitialized = true;
+      if (typeof window.renderV2InputUI === 'function') window.renderV2InputUI();
+      if (typeof window.recalculateAllFast === 'function') window.recalculateAllFast();
+      return window.activeDataModelV2;
+    };
+
     window.openAuthModal = function() {
       const el = document.getElementById('authModal');
       if (el) el.classList.remove('hidden');
@@ -1884,7 +2343,8 @@
       const el = document.getElementById('shareModal');
       if (el) el.classList.remove('hidden');
       if (typeof LZString !== 'undefined') {
-        const compressed = LZString.compressToEncodedURIComponent(JSON.stringify(simState));
+        const shareData = window.getCurrentDataModelV2ForPersistence();
+        const compressed = LZString.compressToEncodedURIComponent(JSON.stringify(shareData));
         const url = window.location.origin + window.location.pathname + '?data=' + compressed;
         document.getElementById('shareUrlText').value = url;
         const lineText = encodeURIComponent('【LUMIFUL】シミュレーションデータ:\n') + encodeURIComponent(url);
@@ -1909,12 +2369,17 @@
       }
       const el = document.getElementById('addEventModal');
       if (el) el.classList.remove('hidden');
+      window.toggleEventKindFields();
+      const price=document.getElementById('homePropertyPrice'), down=document.getElementById('homeDownPayment'), loan=document.getElementById('homeLoanAmount');
+      const autoLoan=()=>{ if(price&&down&&loan) loan.value=Math.max(0,Number(price.value||0)-Number(down.value||0)); };
+      if(price&&!price.dataset.autoLoanBound){price.addEventListener('input',autoLoan);down?.addEventListener('input',autoLoan);price.dataset.autoLoanBound='1';}
     };
     window.closeAddEventModal = function() {
       const el = document.getElementById('addEventModal');
       if (el) el.classList.add('hidden');
       const form = document.getElementById('eventForm');
       if (form) form.reset();
+      window.toggleEventKindFields();
     };
     window.openScoreDetailModal = function() {
       const el = document.getElementById('scoreDetailModal');
@@ -1958,12 +2423,12 @@
       if (!container) return;
       container.innerHTML = '';
 
-      if (!simState.savedPlans || simState.savedPlans.length === 0) {
+      if (!window.savedPlansV2 || window.savedPlansV2.length === 0) {
         container.innerHTML = `<div class="p-3 text-center text-[#6F7785]">保存されたプランはありません</div>`;
         return;
       }
 
-      simState.savedPlans.forEach((plan, idx) => {
+      window.savedPlansV2.forEach((plan, idx) => {
         const item = document.createElement('div');
         item.className = 'flex items-center justify-between p-2.5 bg-[#FAFAF7] rounded-[14px] border border-[#ECEBE6]';
         item.innerHTML = `
@@ -1985,38 +2450,34 @@
       const name = input ? input.value.trim() : '';
       if (!name) return;
 
-      if (!simState.savedPlans) simState.savedPlans = [];
-      const planData = JSON.parse(JSON.stringify(simState));
-      delete planData.savedPlans;
+      if (!Array.isArray(window.savedPlansV2)) window.loadSavedPlansFromStorageV2();
+      const planData = window.getCurrentDataModelV2ForPersistence();
 
-      simState.savedPlans.push({
+      window.savedPlansV2.push({
         name,
         date: new Date().toLocaleDateString('ja-JP'),
+        schemaVersion: 2,
         state: planData
       });
 
       if (input) input.value = '';
-      localStorage.setItem('lumiful_saved_plans', JSON.stringify(simState.savedPlans));
+      localStorage.setItem('lumiful_saved_plans', JSON.stringify(window.savedPlansV2));
       window.renderPlansList();
       window.showToast(`プラン「${name}」を保存しました`, 'success');
     };
 
     window.loadPlan = function(idx) {
-      if (!simState.savedPlans || !simState.savedPlans[idx]) return;
-      const targetState = simState.savedPlans[idx].state;
-      const savedPlansRef = simState.savedPlans;
-      Object.assign(simState, targetState);
-      simState.savedPlans = savedPlansRef;
-      window.populateFormFromState();
-      window.recalculateAllFast();
+      if (!window.savedPlansV2 || !window.savedPlansV2[idx]) return;
+      const targetState = window.savedPlansV2[idx].state;
+      window.restorePersistedStateV2(targetState);
       window.closePlansModal();
       window.showToast(`プランを読み込みました`, 'success');
     };
 
     window.deletePlan = function(idx) {
-      if (!simState.savedPlans) return;
-      simState.savedPlans.splice(idx, 1);
-      localStorage.setItem('lumiful_saved_plans', JSON.stringify(simState.savedPlans));
+      if (!window.savedPlansV2) return;
+      window.savedPlansV2.splice(idx, 1);
+      localStorage.setItem('lumiful_saved_plans', JSON.stringify(window.savedPlansV2));
       window.renderPlansList();
       window.showToast('プランを削除しました', 'info');
     };
@@ -2027,10 +2488,10 @@
         return;
       }
 
-      let csvContent = '\uFEFF年齢,通常収入,年間支出,生活収支,年間運用益,運用益活用,元本売却額,活用フェーズ,臨時収入,年末現金,金融資産,純資産\n';
+      let csvContent = '\uFEFF年齢,通常収入,年間支出,生活収支,年間運用益,運用益活用,元本売却額,活用フェーズ,臨時収入,年末現金,利用可能資産,売却可能資産\n';
 
       window.currentTableRows.forEach(r => {
-        csvContent += `${r.age}歳,${r.normalIncome},${r.totalExpense},${r.netCashflow},${r.annualYield},${r.yieldUsed},${r.principalSold},"${r.phase}",${r.eventIncomeTotal},${r.currentCash},${r.financialAsset},${r.netWorth}\n`;
+        csvContent += `${r.age}歳,${r.normalIncome},${r.totalExpense},${r.netCashflow},${r.annualYield},${r.yieldUsed},${r.principalSold},"${r.phase}",${r.eventIncomeTotal},${r.currentCash},${r.financialAsset},${Number(r.potentialAssets ?? 0)}\n`;
       });
 
       const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
@@ -2045,6 +2506,7 @@
     };
 
     window.switchView = function(viewName) {
+      if (viewName === 'simulationInput' && typeof window.renderV2InputUI === 'function') window.renderV2InputUI();
       const views = [
         'dashboardView',
         'simulationInputView',
@@ -2082,10 +2544,19 @@
       Object.keys(navMap).forEach(key => {
         const navBtn = document.getElementById(navMap[key]);
         if (navBtn) {
+          const navIcon = navBtn.querySelector('i');
           if (key === viewName) {
             navBtn.className = "w-full flex items-center gap-3 px-3.5 py-2.5 rounded-[14px] bg-[#FFF2CD] text-[#253047] font-bold transition text-left";
+            if (navIcon) {
+              navIcon.classList.remove('text-[#6F7785]');
+              navIcon.classList.add('text-[#8C5800]');
+            }
           } else {
             navBtn.className = "w-full flex items-center gap-3 px-3.5 py-2.5 rounded-[14px] text-[#6F7785] hover:bg-[#FAFAF7] hover:text-[#253047] transition text-left";
+            if (navIcon) {
+              navIcon.classList.remove('text-[#8C5800]');
+              navIcon.classList.add('text-[#6F7785]');
+            }
           }
         }
       });
@@ -2120,7 +2591,10 @@
     };
 
     window.setInflationPreset = function(rate) {
-      simState.inflationRate = rate;
+      const model = window.ensureV2InputModel();
+      model.settings.inflationRate = rate;
+      const v2Inflation = document.getElementById('v2InflationRate');
+      if (v2Inflation) v2Inflation.value = rate;
       document.getElementById('slider-inflation-val').innerText = rate.toFixed(1) + '%';
       document.getElementById('chart-slider-inflation-val').innerText = rate.toFixed(1) + '%';
 
@@ -2148,78 +2622,70 @@
       window.recalculateAllFast();
     };
 
-    function calculateBaseScore(s, tableRows, firstYearYield, firstYearNetCash) {
+    // STEP 11: Architecture v2 official score engine.
+    // Only Simulation / Available Assets affect BASE SCORE.
+    // Potential and Lifestyle Assets are intentionally excluded from scoring.
+    function calculateBaseScoreV2(model, tableRows, firstYearYield, firstYearNetCash) {
       if (!tableRows || tableRows.length === 0) return { totalScore: 0, factors: {} };
 
+      const currentAge = Number(model?.profile?.currentAge) || tableRows[0].age || 40;
+      const targetAge = Number(model?.profile?.targetAge) || tableRows[tableRows.length - 1].age || 90;
       const totalYears = tableRows.length;
-      const targetAge = s.targetAge || 80;
       const finalRow = tableRows[tableRows.length - 1];
 
       let longevityPts = 35;
-      let insolvencyAge = null;
-      for (let r of tableRows) {
-        if (r.shortage > 0) {
-          insolvencyAge = r.age;
-          break;
-        }
-      }
+      const shortageRow = tableRows.find(r => Number(r.shortage || 0) > 0);
+      const insolvencyAge = shortageRow ? shortageRow.age : null;
       if (insolvencyAge !== null) {
-        const effectiveSelfAge = s.selfCurrentAge > 0 ? s.selfCurrentAge : 40;
-        const yearsSustained = insolvencyAge - effectiveSelfAge;
+        const yearsSustained = Math.max(0, insolvencyAge - currentAge);
         const ratio = Math.max(0, yearsSustained / Math.max(1, totalYears));
         longevityPts = Math.round(ratio * 25);
       }
 
+      // Final asset score uses Available Assets only. No net-worth fallback.
+      const finalAvailable = Number(finalRow.availableAssets ?? finalRow.financialAsset ?? 0);
       let finalAssetPts = 0;
-      const finalFin = finalRow.financialAsset;
-      const finalNet = finalRow.netWorth;
-      if (finalFin >= 2000 || finalNet >= 3000) finalAssetPts = 20;
-      else if (finalFin >= 1000 || finalNet >= 1500) finalAssetPts = 16;
-      else if (finalFin >= 500) finalAssetPts = 12;
-      else if (finalFin > 0) finalAssetPts = 8;
+      if (finalAvailable >= 2000) finalAssetPts = 20;
+      else if (finalAvailable >= 1000) finalAssetPts = 16;
+      else if (finalAvailable >= 500) finalAssetPts = 12;
+      else if (finalAvailable > 0) finalAssetPts = 8;
       else finalAssetPts = 4;
 
-      let minFinAsset = Math.min(...tableRows.map(r => r.financialAsset));
+      const minAvailable = Math.min(...tableRows.map(r => Number(r.availableAssets ?? r.financialAsset ?? 0)));
+      const annualCoreExpense = tableRows.length
+        ? tableRows.reduce((sum, r) => sum + Number(r.livingExpense || 0) + Number(r.housingExpense || 0) + Number(r.payments || 0), 0) / tableRows.length
+        : 0;
       let minCushionPts = 0;
-      const yearlyExpenseAvg = s.livingExpense + (s.housingEndAge === 0 || s.selfCurrentAge < s.housingEndAge ? s.housingExpense : 0);
-      if (minFinAsset >= yearlyExpenseAvg * 2) minCushionPts = 10;
-      else if (minFinAsset >= yearlyExpenseAvg) minCushionPts = 7;
-      else if (minFinAsset >= 100) minCushionPts = 4;
+      if (minAvailable >= annualCoreExpense * 2) minCushionPts = 10;
+      else if (minAvailable >= annualCoreExpense) minCushionPts = 7;
+      else if (minAvailable >= 100) minCushionPts = 4;
       else minCushionPts = 2;
 
       let yieldCoverPts = 0;
-      let capitalWithdrawalStartAge = null;
-      for (let r of tableRows) {
-        if (r.principalSold > 0) {
-          capitalWithdrawalStartAge = r.age;
-          break;
-        }
-      }
+      const capitalWithdrawalRow = tableRows.find(r =>
+        Number(r.withdrawalHigh || 0) + Number(r.withdrawalMedium || 0) + Number(r.withdrawalLow || 0) > 0
+      );
+      const capitalWithdrawalStartAge = capitalWithdrawalRow ? capitalWithdrawalRow.age : null;
 
       if (firstYearNetCash >= 0) {
         yieldCoverPts += 12;
       } else {
         const deficit = Math.abs(firstYearNetCash);
-        const ratio = firstYearYield / Math.max(1, deficit);
+        const ratio = Number(firstYearYield || 0) / Math.max(1, deficit);
         if (ratio >= 1.0) yieldCoverPts += 12;
         else if (ratio >= 0.5) yieldCoverPts += 8;
         else yieldCoverPts += 4;
       }
 
-      if (capitalWithdrawalStartAge === null) {
-        yieldCoverPts += 8;
-      } else if (capitalWithdrawalStartAge >= targetAge - 10) {
-        yieldCoverPts += 7;
-      } else if (capitalWithdrawalStartAge >= 65) {
-        yieldCoverPts += 5;
-      } else {
-        yieldCoverPts += 2;
-      }
+      if (capitalWithdrawalStartAge === null) yieldCoverPts += 8;
+      else if (capitalWithdrawalStartAge >= targetAge - 10) yieldCoverPts += 7;
+      else if (capitalWithdrawalStartAge >= 65) yieldCoverPts += 5;
+      else yieldCoverPts += 2;
 
       let stabilityPts = 0;
       const postRetireRows = tableRows.filter(r => r.age >= 65);
       if (postRetireRows.length > 0) {
-        const avgPostNet = postRetireRows.reduce((acc, r) => acc + r.netCashflow, 0) / postRetireRows.length;
+        const avgPostNet = postRetireRows.reduce((acc, r) => acc + Number(r.netCashflow || 0), 0) / postRetireRows.length;
         if (avgPostNet >= -50) stabilityPts += 10;
         else if (avgPostNet >= -150) stabilityPts += 7;
         else stabilityPts += 3;
@@ -2227,17 +2693,17 @@
         stabilityPts += 8;
       }
 
-      if (s.events && s.events.length > 0) {
-        if (minFinAsset >= yearlyExpenseAvg * 2 && insolvencyAge === null) {
-          stabilityPts += 5;
-        } else if (insolvencyAge === null) {
-          stabilityPts += 3;
-        }
+      const hasEvents = Array.isArray(model?.lifeEvents) && model.lifeEvents.length > 0;
+      if (hasEvents) {
+        if (minAvailable >= annualCoreExpense * 2 && insolvencyAge === null) stabilityPts += 5;
+        else if (insolvencyAge === null) stabilityPts += 3;
       } else {
         stabilityPts += 4;
       }
 
-      const totalBaseScore = Math.min(100, Math.max(0, longevityPts + finalAssetPts + minCushionPts + yieldCoverPts + stabilityPts));
+      const totalBaseScore = Math.min(100, Math.max(0,
+        longevityPts + finalAssetPts + minCushionPts + yieldCoverPts + stabilityPts
+      ));
 
       return {
         totalScore: totalBaseScore,
@@ -2248,240 +2714,223 @@
           yieldCoverPts: `${yieldCoverPts} / 20点`,
           stabilityPts: `${stabilityPts} / 15点`,
           insolvencyAge,
-          minFinAsset,
-          capitalWithdrawalStartAge
+          minFinAsset: Math.round(minAvailable),
+          minAvailableAssets: Math.round(minAvailable),
+          finalAvailableAssets: Math.round(finalAvailable),
+          capitalWithdrawalStartAge,
+          scoreAssetBasis: 'availableAssets'
         }
       };
     }
 
-    function generateFallbackDiagnosisText(s, tableRows) {
+    /* ============================================================
+       PHASE 6 / STEP 15 — AI & DISPLAY CONSUMERS → SCHEMA v2
+       ------------------------------------------------------------
+       Production diagnosis, SCORE explanatory text, and chart labels
+       now consume Schema v2 / Available Assets terminology directly.
+       Legacy engine remains only for migration/parity test purposes.
+       ============================================================ */
+    function generateFallbackDiagnosisTextV2(model, tableRows) {
       if (!tableRows || tableRows.length === 0) {
-        return 'プロファイルや収支、資産の数値を設定すると、数値シミュレーションと連動したリアルタイムAI分析アドバイスが表示されます。';
+        return 'プロファイルや収支、資産の数値を設定すると、数値シミュレーションと連動したLUMI分析アドバイスが表示されます。';
       }
-      const targetAge = s.targetAge || 80;
+      const normalized = window.normalizeDataModelV2(model || window.ensureV2InputModel());
+      const targetAge = Number(normalized.profile?.targetAge || 90);
       const finalRow = tableRows[tableRows.length - 1];
-      let insolvencyAge = null;
-      for (let r of tableRows) {
-        if (r.shortage > 0) {
-          insolvencyAge = r.age;
-          break;
-        }
-      }
-
-      const minAsset = Math.min(...tableRows.map(r => r.financialAsset));
+      const insolvencyAge = tableRows.find(r => Number(r.shortage || 0) > 0)?.age ?? null;
+      const availableSeries = tableRows.map(r => Number(r.availableAssets ?? r.financialAsset ?? 0));
+      const minAvailable = availableSeries.length ? Math.min(...availableSeries) : 0;
+      const simulationAssets = (normalized.assets || []).filter(a => a.assetClass === 'simulation');
+      const totalSimulationAssets = simulationAssets.reduce((sum, a) => sum + Number(a.value || 0), 0);
+      const weightedReturn = totalSimulationAssets > 0
+        ? simulationAssets.reduce((sum, a) => sum + Number(a.value || 0) * Number(a.expectedReturn || 0), 0) / totalSimulationAssets
+        : 0;
 
       if (insolvencyAge !== null) {
-        return `【数値評価】現在の計画では${insolvencyAge}歳で資金不足が発生する試算です。収入・支出・運用条件または資産配分の見直し余地があります。`;
-      } else if (finalRow.financialAsset === 0) {
-        return `【数値評価】現在の計画は${targetAge}歳まで必要な支出を賄えますが、最終的に金融資産を使い切る試算です。資金不足は発生していませんが、資産余力は小さい計画です。`;
-      } else {
-        return `【数値評価】現在の計画は${targetAge}歳まで必要な支出を賄える試算結果です。最低金融資産水準は${minAsset.toLocaleString()}万円、想定利回り${s.returnRate.toFixed(1)}%に基づく客観数値評価を表示しています。`;
+        return `【数値評価】現在の計画では${insolvencyAge}歳で利用可能資産だけでは資金不足が発生する試算です。収入・支出・運用条件・取り崩し設定や、登録済みの売却可能資産を含む選択肢を検討できます。`;
       }
+      if (Number(finalRow.availableAssets ?? finalRow.financialAsset ?? 0) === 0) {
+        return `【数値評価】現在の計画は${targetAge}歳まで必要な支出を賄えますが、終了時点で利用可能資産を使い切る試算です。資産を活用できていますが、将来の選択余力は小さめです。`;
+      }
+      return `【数値評価】現在の計画は${targetAge}歳まで必要な支出を賄える試算です。最低利用可能資産は${Math.round(minAvailable).toLocaleString()}万円、登録資産の加重平均想定利回りは約${weightedReturn.toFixed(1)}%です。`;
     }
 
-    window.recalculateAllFast = function() {
-      window.readStateFromForm();
 
-      const hasAnyInput = (
-        simState.selfCurrentAge > 0 ||
-        simState.selfIncome > 0 ||
-        simState.selfPension > 0 ||
-        simState.initialInvest > 0 ||
-        simState.initialCash > 0 ||
-        simState.realEstateValue > 0 ||
-        simState.livingExpense > 0 ||
-        simState.housingExpense > 0 ||
-        (simState.hasSpouse && (simState.spouseIncome > 0 || simState.spousePension > 0)) ||
-        (simState.events && simState.events.length > 0)
-      );
+    
+    /* ============================================================
+       PHASE 6 / STEP 7 — INPUT UI v2
+       ------------------------------------------------------------
+       The simulation input screen now edits Schema v2 directly.
+       Existing Dashboard/KPI/SCORE consumers remain unchanged.
+       Save/load schema is intentionally NOT migrated in this step.
+       Withdrawal priority detail UI is intentionally deferred to Step 8.
+       ============================================================ */
+    window.LUMIFUL_INPUT_V2_VERSION = '2.0-step9';
+    window.activeDataModelV2 = null;
+    window.v2InputInitialized = false;
 
-      if (!hasAnyInput) {
-        currentBaseScore = 0;
-        currentAiAdjustment = 0;
-        currentFinalScore = 0;
+    const v2Num = (id, fallback = 0) => {
+      const el = document.getElementById(id); const n = el ? Number(el.value) : NaN;
+      return Number.isFinite(n) ? Math.max(0, n) : fallback;
+    };
+    const v2Esc = value => String(value ?? '').replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+    const v2Id = prefix => `${prefix}_${Date.now()}_${Math.random().toString(36).slice(2,7)}`;
 
-        document.getElementById('kpi-score').innerText = '0';
-        document.getElementById('kpi-base-score').innerText = '0';
-        document.getElementById('kpi-ai-adj').innerText = '0';
-        
-        const scoreBadgeElem = document.getElementById('kpi-score-badge');
-        if (scoreBadgeElem) {
-          scoreBadgeElem.className = 'px-2 py-0.5 rounded-full text-[9px] sm:text-[10px] font-semibold bg-[#FAFAF7] text-[#6F7785] border border-[#ECEBE6] shrink-0 inline-block truncate max-w-full';
-          scoreBadgeElem.innerText = '⚪ 未設定';
-        }
-        document.getElementById('kpi-score-status-text').innerHTML = '<span class="sm:hidden">条件を入力</span><span class="hidden sm:inline">条件を入力してください</span>';
-        document.getElementById('kpi-annual-yield').innerHTML = `0 万円<span class="text-[10px] sm:text-xs font-normal text-[#6F7785]"> /年</span>`;
-        
-        const badgeElem = document.getElementById('kpi-phase-badge');
-        if (badgeElem) {
-          badgeElem.innerText = '⚪ 未設定';
-          badgeElem.className = 'px-2 sm:px-2.5 py-0.5 rounded-full text-[9px] sm:text-[10px] font-bold bg-[#FAFAF7] text-[#6F7785] border border-[#ECEBE6] truncate max-w-full';
-        }
+    window.ensureV2InputModel = function() {
+      if (!window.activeDataModelV2) window.activeDataModelV2 = window.createEmptyDataModelV2();
+      return window.activeDataModelV2;
+    };
+    window.toggleV2Spouse = function() {
+      const checked = !!document.getElementById('v2HasSpouse')?.checked;
+      document.getElementById('v2SpouseAgeWrap')?.classList.toggle('hidden', !checked);
+    };
+    window.renderV2HousingFields = function() {
+      const model = window.ensureV2InputModel();
+      const type = document.getElementById('v2HousingType')?.value || model.living?.housing?.type || 'rent';
+      const box = document.getElementById('v2HousingFields'); if (!box) return;
+      const monthly = Number(model.living?.housing?.monthlyAmount || 0);
+      const endAge = Number(model.living?.housing?.endAge || 0);
+      if (type === 'rent') box.innerHTML = `<label class="block text-xs font-semibold text-[#4F586A] mb-1">家賃</label><div class="flex items-center gap-2"><input id="v2HousingMonthly" type="number" min="0" step="1" value="${monthly}" class="w-full px-3 lumi-input text-xs font-bold" oninput="syncV2InputAndRecalculate()"><span class="text-xs text-[#6F7785] shrink-0">万円/月</span></div>`;
+      else if (type === 'owned_with_loan') box.innerHTML = `<div class="grid grid-cols-2 gap-3"><div><label class="block text-xs font-semibold text-[#4F586A] mb-1">住宅ローン返済額</label><div class="flex items-center gap-2"><input id="v2HousingMonthly" type="number" min="0" step="1" value="${monthly}" class="w-full px-3 lumi-input text-xs font-bold" oninput="syncV2InputAndRecalculate()"><span class="text-xs text-[#6F7785] shrink-0">万円/月</span></div></div><div><label class="block text-xs font-semibold text-[#4F586A] mb-1">返済終了年齢</label><input id="v2HousingEndAge" type="number" min="18" max="110" value="${endAge || ''}" class="w-full px-3 lumi-input text-xs font-bold" oninput="syncV2InputAndRecalculate()"></div></div>`;
+      else box.innerHTML = type === 'other' ? `<label class="block text-xs font-semibold text-[#4F586A] mb-1">住居費</label><div class="flex items-center gap-2"><input id="v2HousingMonthly" type="number" min="0" step="1" value="${monthly}" class="w-full px-3 lumi-input text-xs font-bold" oninput="syncV2InputAndRecalculate()"><span class="text-xs text-[#6F7785] shrink-0">万円/月</span></div>` : `<p class="text-xs text-[#8A909C]">住宅ローン返済はありません。</p>`;
+    };
+    window.renderV2IncomeList = function() {
+      const model=window.ensureV2InputModel(), box=document.getElementById('v2IncomeList'); if(!box)return;
+      if(!model.incomes.length){box.innerHTML='<p class="text-xs text-[#8A909C] py-2">収入はまだ登録されていません。</p>';return;}
+      box.innerHTML=model.incomes.map((x,i)=>`<div class="rounded-[16px] border border-[#ECEBE6] bg-[#FAFAF7] p-3 space-y-2"><div class="grid grid-cols-2 sm:grid-cols-6 gap-2"><select data-v2-income="category" data-i="${i}" class="px-2 lumi-input text-xs font-bold bg-white"><option value="salary" ${x.category==='salary'?'selected':''}>給与</option><option value="business" ${x.category==='business'?'selected':''}>事業</option><option value="side" ${x.category==='side'?'selected':''}>副業</option><option value="pension" ${x.category==='pension'?'selected':''}>年金</option><option value="dividend" ${x.category==='dividend'?'selected':''}>配当</option><option value="realestate" ${x.category==='realestate'?'selected':''}>不動産収入</option><option value="other" ${x.category==='other'?'selected':''}>その他</option></select><input data-v2-income="name" data-i="${i}" value="${v2Esc(x.name)}" placeholder="名称" class="px-2 lumi-input text-xs font-bold"><input data-v2-income="amount" data-i="${i}" type="number" min="0" value="${Number(x.amount||0)}" placeholder="金額" class="px-2 lumi-input text-xs font-bold"><select data-v2-income="frequency" data-i="${i}" class="px-2 lumi-input text-xs font-bold bg-white"><option value="yearly" ${x.frequency==='yearly'?'selected':''}>万円/年</option><option value="monthly" ${x.frequency==='monthly'?'selected':''}>万円/月</option></select><input data-v2-income="endAge" data-i="${i}" type="number" min="18" max="110" value="${Number(x.endAge||0)||''}" placeholder="終了年齢" class="px-2 lumi-input text-xs font-bold"><button type="button" onclick="removeV2Income(${i})" class="text-xs font-bold text-[#A65B67]">削除</button></div><div class="flex gap-3 text-[10px] text-[#6F7785]"><label>対象 <select data-v2-income="owner" data-i="${i}" class="ml-1 bg-white border border-[#ECEBE6] rounded px-1.5 py-1"><option value="self" ${x.owner==='self'?'selected':''}>本人</option><option value="spouse" ${x.owner==='spouse'?'selected':''}>配偶者</option></select></label><span>開始 ${Number(x.startAge||model.profile.currentAge)}歳</span></div></div>`).join('');
+      box.querySelectorAll('[data-v2-income]').forEach(el=>el.addEventListener('input',window.syncV2InputAndRecalculate)); box.querySelectorAll('select[data-v2-income]').forEach(el=>el.addEventListener('change',window.syncV2InputAndRecalculate));
+    };
+    /* ============================================================
+       PHASE 6 / STEP 9 — POTENTIAL & LIFESTYLE ASSET UI
+       ------------------------------------------------------------
+       Separates Simulation Assets, Potential Assets, and Lifestyle
+       Assets in the input experience. Potential/Lifestyle remain
+       outside automatic simulation withdrawals and outside SCORE.
+       ============================================================ */
+    window.renderV2AssetList = function(){const m=window.ensureV2InputModel(),box=document.getElementById('v2AssetList');if(!box)return;const arr=m.assets.filter(a=>a.assetClass==='simulation');if(!arr.length){box.innerHTML='<p class="text-xs text-[#8A909C] py-2">利用可能資産はまだ登録されていません。</p>';return;}box.innerHTML=arr.map((x,j)=>{const i=m.assets.indexOf(x);const setting=(x.withdrawalSetting==='excluded'||x.withdrawalPriority==='excluded')?'excluded':(['high','medium','low'].includes(x.withdrawalPriority)?x.withdrawalPriority:'auto');return `<div class="rounded-[14px] border border-[#D8EEE5] bg-white p-3"><div class="grid grid-cols-2 gap-2"><select data-v2-asset="category" data-i="${i}" class="px-2 lumi-input text-xs font-bold bg-white"><option value="cash" ${x.category==='cash'?'selected':''}>現金・預金</option><option value="investment_fund" ${x.category==='investment_fund'?'selected':''}>投資信託</option><option value="stock" ${x.category==='stock'?'selected':''}>株式</option><option value="bond" ${x.category==='bond'?'selected':''}>債券</option><option value="other" ${x.category==='other'?'selected':''}>その他</option></select><input data-v2-asset="name" data-i="${i}" value="${v2Esc(x.name)}" placeholder="資産名" class="px-2 lumi-input text-xs font-bold"><div class="flex items-center gap-1"><input data-v2-asset="value" data-i="${i}" type="number" min="0" value="${Number(x.value||0)}" class="w-full px-2 lumi-input text-xs font-bold"><span class="text-[10px] text-[#6F7785]">万円</span></div><div class="flex items-center gap-1"><input data-v2-asset="expectedReturn" data-i="${i}" type="number" min="0" max="30" step="0.1" value="${Number(x.expectedReturn||0)}" class="w-full px-2 lumi-input text-xs font-bold"><span class="text-[10px] text-[#6F7785]">%</span></div></div><div class="flex justify-end mt-2"><button type="button" onclick="removeV2Asset(${i})" class="text-[11px] font-bold text-[#A65B67]">削除</button></div><details class="mt-2 pt-2 border-t border-[#E8E7E1]"><summary class="cursor-pointer select-none text-[11px] font-bold text-[#6F7785]">取り崩し設定 <span class="font-normal">（通常は自動でOK）</span></summary><div class="mt-2 flex items-center gap-2 flex-wrap"><select data-v2-withdrawal data-i="${i}" class="px-3 py-2 lumi-input text-xs font-bold bg-white min-w-[132px]"><option value="auto" ${setting==='auto'?'selected':''}>自動</option><option value="high" ${setting==='high'?'selected':''}>高</option><option value="medium" ${setting==='medium'?'selected':''}>中</option><option value="low" ${setting==='low'?'selected':''}>低</option><option value="excluded" ${setting==='excluded'?'selected':''}>対象外</option></select><span class="text-[10px] text-[#8A909C]">同じ優先度は残高比率で取り崩します。</span></div></details></div>`}).join('');box.querySelectorAll('[data-v2-asset]').forEach(el=>el.addEventListener('input',window.syncV2InputAndRecalculate));box.querySelectorAll('select[data-v2-asset]').forEach(el=>el.addEventListener('change',window.syncV2InputAndRecalculate));box.querySelectorAll('[data-v2-withdrawal]').forEach(el=>el.addEventListener('change',window.syncV2InputAndRecalculate));};
+    window.renderV2PotentialAssetList = function(){const m=window.ensureV2InputModel(),box=document.getElementById('v2PotentialAssetList');if(!box)return;const arr=m.assets.filter(a=>a.assetClass==='potential');if(!arr.length){box.innerHTML='<p class="text-xs text-[#8A909C] py-2">売却可能資産はまだ登録されていません。</p>';return;}box.innerHTML=arr.map(x=>{const i=m.assets.indexOf(x);return `<div class="rounded-[14px] border border-[#F0E2B7] bg-white p-3 space-y-2"><div class="grid grid-cols-2 gap-2"><select data-v2-asset="category" data-i="${i}" class="px-2 lumi-input text-xs font-bold bg-white"><option value="real_estate" ${x.category==='real_estate'?'selected':''}>不動産</option><option value="private_stock" ${x.category==='private_stock'?'selected':''}>非上場株式</option><option value="business_equity" ${x.category==='business_equity'?'selected':''}>事業持分</option><option value="other" ${x.category==='other'?'selected':''}>その他</option></select><input data-v2-asset="name" data-i="${i}" value="${v2Esc(x.name)}" placeholder="資産名" class="px-2 lumi-input text-xs font-bold"><div class="col-span-2 flex items-center gap-1"><input data-v2-asset="value" data-i="${i}" type="number" min="0" value="${Number(x.value||0)}" class="w-full px-2 lumi-input text-xs font-bold"><span class="text-[10px] text-[#6F7785]">万円</span></div></div><div class="flex justify-between items-center"><span class="text-[10px] text-[#8A909C]">シミュレーションには自動反映されません</span><button type="button" onclick="removeV2PotentialAsset(${i})" class="text-[11px] font-bold text-[#A65B67]">削除</button></div></div>`}).join('');box.querySelectorAll('[data-v2-asset]').forEach(el=>el.addEventListener('input',window.syncV2InputAndRecalculate));box.querySelectorAll('select[data-v2-asset]').forEach(el=>el.addEventListener('change',window.syncV2InputAndRecalculate));};
+    window.renderV2LifestyleAssetList = function(){const m=window.ensureV2InputModel(),box=document.getElementById('v2LifestyleAssetList');if(!box)return;const arr=m.assets.filter(a=>a.assetClass==='lifestyle');if(!arr.length){box.innerHTML='<p class="text-xs text-[#8A909C] py-2">生活資産はまだ登録されていません。</p>';return;}box.innerHTML=arr.map(x=>{const i=m.assets.indexOf(x);return `<div class="rounded-[14px] border border-[#E8E7F7] bg-white p-3 space-y-2"><div class="grid grid-cols-2 gap-2"><select data-v2-asset="category" data-i="${i}" class="px-2 lumi-input text-xs font-bold bg-white"><option value="home" ${x.category==='home'?'selected':''}>自宅</option><option value="car" ${x.category==='car'?'selected':''}>自家用車</option><option value="other" ${x.category==='other'?'selected':''}>その他</option></select><input data-v2-asset="name" data-i="${i}" value="${v2Esc(x.name)}" placeholder="資産名" class="px-2 lumi-input text-xs font-bold"><div class="col-span-2 flex items-center gap-1"><input data-v2-asset="value" data-i="${i}" type="number" min="0" value="${Number(x.value||0)}" class="w-full px-2 lumi-input text-xs font-bold"><span class="text-[10px] text-[#6F7785]">万円</span></div></div><div class="flex justify-between items-center"><span class="text-[10px] text-[#8A909C]">保有状況として表示のみ</span><button type="button" onclick="removeV2LifestyleAsset(${i})" class="text-[11px] font-bold text-[#A65B67]">削除</button></div></div>`}).join('');box.querySelectorAll('[data-v2-asset]').forEach(el=>el.addEventListener('input',window.syncV2InputAndRecalculate));box.querySelectorAll('select[data-v2-asset]').forEach(el=>el.addEventListener('change',window.syncV2InputAndRecalculate));};
+    window.renderV2PaymentList=function(){const m=window.ensureV2InputModel(),box=document.getElementById('v2PaymentList');if(!box)return;if(!m.payments.length){box.innerHTML='<p class="text-xs text-[#8A909C] py-2">その他の返済はありません。</p>';return;}box.innerHTML=m.payments.map((x,i)=>`<div class="rounded-[16px] border border-[#ECEBE6] bg-[#FAFAF7] p-3"><div class="grid grid-cols-2 sm:grid-cols-6 gap-2"><select data-v2-payment="category" data-i="${i}" class="px-2 lumi-input text-xs font-bold bg-white"><option value="car" ${x.category==='car'?'selected':''}>自動車</option><option value="education" ${x.category==='education'?'selected':''}>教育</option><option value="business" ${x.category==='business'?'selected':''}>事業</option><option value="other" ${x.category==='other'?'selected':''}>その他</option></select><input data-v2-payment="name" data-i="${i}" value="${v2Esc(x.name)}" placeholder="名称" class="px-2 lumi-input text-xs font-bold"><input data-v2-payment="amount" data-i="${i}" type="number" min="0" value="${Number(x.amount||0)}" class="px-2 lumi-input text-xs font-bold"><select data-v2-payment="frequency" data-i="${i}" class="px-2 lumi-input text-xs font-bold bg-white"><option value="monthly" ${x.frequency==='monthly'?'selected':''}>万円/月</option><option value="yearly" ${x.frequency==='yearly'?'selected':''}>万円/年</option></select><input data-v2-payment="endAge" data-i="${i}" type="number" min="18" max="110" value="${Number(x.endAge||0)||''}" placeholder="終了年齢" class="px-2 lumi-input text-xs font-bold"><button type="button" onclick="removeV2Payment(${i})" class="text-xs font-bold text-[#A65B67]">削除</button></div></div>`).join('');box.querySelectorAll('[data-v2-payment]').forEach(el=>el.addEventListener('input',window.syncV2InputAndRecalculate));box.querySelectorAll('select[data-v2-payment]').forEach(el=>el.addEventListener('change',window.syncV2InputAndRecalculate));};
+    window.renderV2InputUI=function(){const m=window.ensureV2InputModel();const set=(id,v)=>{const e=document.getElementById(id);if(e)e.value=v??''};set('v2CurrentAge',m.profile.currentAge||40);set('v2TargetAge',m.profile.targetAge||90);const sp=document.getElementById('v2HasSpouse');if(sp)sp.checked=!!m.profile.hasSpouse;set('v2SpouseAge',m.profile.spouseAge||'');set('v2LivingMonthly',Number(m.living?.expense?.amount||0)/12);set('v2HousingType',m.living?.housing?.type||'rent');set('v2InflationRate',m.settings?.inflationRate??1.5);window.toggleV2Spouse();window.renderV2HousingFields();window.renderV2IncomeList();window.renderV2AssetList();window.renderV2PotentialAssetList();window.renderV2LifestyleAssetList();window.renderV2PaymentList();window.v2InputInitialized=true;};
+    window.syncV2InputAndRecalculate=function(){const m=window.ensureV2InputModel();m.profile.currentAge=Math.max(18,Math.round(v2Num('v2CurrentAge',40)));m.profile.targetAge=Math.max(m.profile.currentAge,Math.round(v2Num('v2TargetAge',90)));m.profile.hasSpouse=!!document.getElementById('v2HasSpouse')?.checked;m.profile.spouseAge=m.profile.hasSpouse?Math.max(18,Math.round(v2Num('v2SpouseAge',m.profile.currentAge))):null;m.living.expense={amount:v2Num('v2LivingMonthly')*12,frequency:'yearly'};const ht=document.getElementById('v2HousingType')?.value||'rent';m.living.housing={type:ht,monthlyAmount:v2Num('v2HousingMonthly'),endAge:ht==='owned_with_loan'?Math.round(v2Num('v2HousingEndAge')):null};m.settings.inflationRate=v2Num('v2InflationRate',1.5);document.querySelectorAll('[data-v2-income]').forEach(el=>{const x=m.incomes[Number(el.dataset.i)];if(!x)return;const k=el.dataset.v2Income;x[k]=(k==='amount'||k==='endAge')?Number(el.value||0):el.value;x.startAge=m.profile.currentAge;});document.querySelectorAll('[data-v2-asset]').forEach(el=>{const x=m.assets[Number(el.dataset.i)];if(!x)return;const k=el.dataset.v2Asset;x[k]=(k==='value'||k==='expectedReturn')?Number(el.value||0):el.value;});document.querySelectorAll('[data-v2-withdrawal]').forEach(el=>{const x=m.assets[Number(el.dataset.i)];if(!x)return;const v=el.value;if(v==='auto'){x.withdrawalSetting='auto';x.withdrawalPriority=null;}else if(v==='excluded'){x.withdrawalSetting='excluded';x.withdrawalPriority='excluded';}else{x.withdrawalSetting='manual';x.withdrawalPriority=v;}});document.querySelectorAll('[data-v2-payment]').forEach(el=>{const x=m.payments[Number(el.dataset.i)];if(!x)return;const k=el.dataset.v2Payment;x[k]=(k==='amount'||k==='endAge')?Number(el.value||0):el.value;x.startAge=m.profile.currentAge;});if(typeof window.recalculateAllFast==='function')window.recalculateAllFast();};
+    window.addV2Income=function(){const m=window.ensureV2InputModel();m.incomes.push({id:v2Id('income'),category:'salary',name:'給与',owner:'self',amount:0,frequency:'yearly',startAge:m.profile.currentAge||40,endAge:65});window.renderV2IncomeList();};window.removeV2Income=function(i){window.ensureV2InputModel().incomes.splice(i,1);window.renderV2IncomeList();window.recalculateAllFast();};
+    window.addV2Asset=function(){const m=window.ensureV2InputModel();m.assets.push({id:v2Id('asset'),assetClass:'simulation',category:'cash',name:'現金・預金',owner:'self',value:0,expectedReturn:0,withdrawalSetting:'auto',withdrawalPriority:null});window.renderV2AssetList();};window.removeV2Asset=function(i){window.ensureV2InputModel().assets.splice(i,1);window.renderV2AssetList();window.recalculateAllFast();};window.addV2PotentialAsset=function(){const m=window.ensureV2InputModel();m.assets.push({id:v2Id('potential'),assetClass:'potential',category:'real_estate',name:'売却可能資産',owner:'self',value:0});window.renderV2PotentialAssetList();};window.removeV2PotentialAsset=function(i){window.ensureV2InputModel().assets.splice(i,1);window.renderV2PotentialAssetList();window.recalculateAllFast();};window.addV2LifestyleAsset=function(){const m=window.ensureV2InputModel();m.assets.push({id:v2Id('lifestyle'),assetClass:'lifestyle',category:'home',name:'自宅',owner:'self',value:0});window.renderV2LifestyleAssetList();};window.removeV2LifestyleAsset=function(i){window.ensureV2InputModel().assets.splice(i,1);window.renderV2LifestyleAssetList();window.recalculateAllFast();};
+    window.addV2Payment=function(){const m=window.ensureV2InputModel();m.payments.push({id:v2Id('payment'),category:'other',name:'返済',amount:0,frequency:'monthly',startAge:m.profile.currentAge||40,endAge:50});window.renderV2PaymentList();};window.removeV2Payment=function(i){window.ensureV2InputModel().payments.splice(i,1);window.renderV2PaymentList();window.recalculateAllFast();};
 
-        const kpiCoverElem = document.getElementById('kpi-cover-rate');
-        if (kpiCoverElem) {
-          kpiCoverElem.innerText = '-';
-          kpiCoverElem.className = 'text-base sm:text-2xl font-extrabold text-[#6F7785] tracking-tight whitespace-nowrap';
-        }
+    /* ============================================================
+       PHASE 6 / FINAL — PRODUCTION ARCHITECTURE LOCK
+       ------------------------------------------------------------
+       Schema v2 + Engine v2 are the sole production runtime path.
+       v1 remains supported only when importing old saved/shared data.
+       ============================================================ */
+    window.LUMIFUL_PHASE6_FINAL = Object.freeze({
+      schemaVersion: 2,
+      engine: 'v2-only',
+      legacyEngineRemoved: true,
+      v1MigrationCompatibility: true,
+      canonicalAssetMetric: 'availableAssets'
+    });
 
-        document.getElementById('kpi-final-age-label').innerText = '80';
-        document.getElementById('kpi-final-assets').innerText = '0 万円';
-        document.getElementById('kpi-final-status').innerHTML = `純資産: <span id="kpi-final-networth" class="font-bold text-[#253047]">0</span> 万円`;
-        document.getElementById('kpi-diagnosis-text').innerText = 'プロファイルや収支、資産の数値を設定すると、数値シミュレーションと連動したリアルタイムAI分析アドバイスが表示されます。';
+    window.hasMeaningfulV2Input = function(model) {
+      const m = window.normalizeDataModelV2(model || window.ensureV2InputModel());
+      const hasIncome = m.incomes.some(x => Number(x.amount || 0) > 0);
+      const hasAsset = m.assets.some(x => Number(x.value || 0) > 0);
+      const hasPayment = m.payments.some(x => Number(x.amount || 0) > 0);
+      const hasEvent = m.lifeEvents.some(x => Number(x.amount || x.propertyPrice || x.downPayment || x.loanAmount || 0) > 0);
+      const living = Number(m.living?.expense?.amount || 0) > 0;
+      const housing = Number(m.living?.housing?.monthlyAmount || 0) > 0;
+      return hasIncome || hasAsset || hasPayment || hasEvent || living || housing;
+    };
 
-        window.renderTable([]);
-        window.renderChart([], [], [], []);
-        window.renderEvents();
-        return;
+    window.renderV2EmptyDashboard = function() {
+      currentBaseScore = 0;
+      currentAiAdjustment = 0;
+      currentFinalScore = 0;
+      window.currentSimulationV2 = { schemaVersion: 2, rows: [] };
+      window.currentAdaptedSimulationV2 = { rows: [] };
+      window.currentTableRows = [];
+
+      const setText = (id, value) => { const el = document.getElementById(id); if (el) el.innerText = value; };
+      setText('kpi-score', '0');
+      setText('kpi-base-score', '0');
+      setText('kpi-ai-adj', '0');
+      setText('kpi-score-status-text', '条件を入力してください');
+      setText('kpi-final-age-label', String(window.ensureV2InputModel()?.profile?.targetAge || 90));
+      setText('kpi-final-assets', '0 万円');
+      setText('asset-potential-assets', '0 万円');
+      setText('asset-lifestyle-assets', '0 万円');
+
+      const scoreBadge = document.getElementById('kpi-score-badge');
+      if (scoreBadge) {
+        scoreBadge.className = 'px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#FAFAF7] text-[#6F7785] border border-[#ECEBE6] shrink-0 inline-block';
+        scoreBadge.innerText = '⚪ 未設定';
+      }
+      const annualYield = document.getElementById('kpi-annual-yield');
+      if (annualYield) annualYield.innerHTML = `0 万円<span class="text-xs font-normal text-[#6F7785]"> /年</span>`;
+      const phaseBadge = document.getElementById('kpi-phase-badge');
+      if (phaseBadge) {
+        phaseBadge.innerText = '累計運用益 未設定';
+        phaseBadge.className = 'px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#FAFAF7] text-[#6F7785] border border-[#ECEBE6]';
+      }
+      const cover = document.getElementById('kpi-cover-rate');
+      if (cover) {
+        cover.innerText = '-';
+        cover.className = 'text-xl sm:text-2xl font-extrabold text-[#6F7785] tracking-tight whitespace-nowrap';
+      }
+      const finalStatus = document.getElementById('kpi-final-status');
+      if (finalStatus) finalStatus.innerHTML = '利用可能資産のみで算出';
+      const diagnosis = document.getElementById('kpi-diagnosis-text');
+      if (diagnosis) diagnosis.innerText = 'プロファイルや収支、資産の数値を設定すると、数値シミュレーションと連動したAI分析アドバイスが表示されます。';
+
+      window.renderTable([]);
+      window.renderChart([], [], [], []);
+      window.renderEvents();
+    };
+
+    // STEP 11 LOCK: KPI/SCORE v2 use Available Assets as the sole simulated asset basis.
+    // Potential/Lifestyle Assets never increase SCORE and are visual context only.
+    window.recalculateAllV2Dashboard = function() {
+      const migrated = window.ensureV2InputModel();
+      if (!window.v2InputInitialized && typeof window.renderV2InputUI === 'function') {
+        window.renderV2InputUI();
       }
 
-      const effectiveSelfAge = simState.selfCurrentAge > 0 ? simState.selfCurrentAge : 40;
-      const effectiveTargetAge = (simState.targetAge > 0 && simState.targetAge > effectiveSelfAge) 
-        ? simState.targetAge 
-        : Math.max(80, effectiveSelfAge + 10);
-
-      const yearsCount = Math.max(1, effectiveTargetAge - effectiveSelfAge + 1);
-
-      let currentInvest = simState.initialInvest;
-      let currentCash = simState.initialCash;
-
-      const labels = [];
-      const investData = [];
-      const netWorthData = [];
-      const cashflowData = [];
-      const tableRows = [];
-
-      let firstYearYield = 0;
-      let firstYearPhase = '';
-      let firstYearNetCash = 0;
-
-      for (let i = 0; i < yearsCount; i++) {
-        const selfAge = effectiveSelfAge + i;
-        const spouseAge = (simState.spouseCurrentAge > 0 ? simState.spouseCurrentAge : effectiveSelfAge) + i;
-
-        let selfWorkInc = (selfAge < (simState.selfRetireAge || 65)) ? simState.selfIncome : 0;
-        let selfPenInc = (selfAge >= (simState.selfPensionStartAge || 65)) ? simState.selfPension : 0;
-
-        let spouseWorkInc = 0;
-        let spousePenInc = 0;
-        if (simState.hasSpouse) {
-          spouseWorkInc = (spouseAge < (simState.spouseRetireAge || 65)) ? simState.spouseIncome : 0;
-          spousePenInc = (spouseAge >= (simState.spousePensionStartAge || 65)) ? simState.spousePension : 0;
-        }
-
-        let eventExpenseTotal = 0;
-        let eventIncomeTotal = 0;
-        if (simState.events) {
-          simState.events.forEach(ev => {
-            if (ev.age === selfAge) {
-              if (ev.type === 'expense') eventExpenseTotal += ev.amount;
-              if (ev.type === 'income') eventIncomeTotal += ev.amount;
-            }
-          });
-        }
-
-        const normalIncome = selfWorkInc + selfPenInc + spouseWorkInc + spousePenInc;
-        const totalIncome = normalIncome + eventIncomeTotal;
-
-        const infFactor = Math.pow(1 + (simState.inflationRate / 100), i);
-        let housingExp = (simState.housingEndAge === 0 || selfAge < simState.housingEndAge) ? simState.housingExpense : 0;
-        const totalExpense = Math.round((simState.livingExpense + housingExp) * infFactor) + eventExpenseTotal;
-        const netCashflow = totalIncome - totalExpense;
-
-        const annualYield = Math.round(currentInvest * (simState.returnRate / 100));
-
-        let yieldUsed = 0;
-        let cashUsed = 0;
-        let principalSold = 0;
-        let shortage = 0;
-        let phase = '🟢 収入内で生活';
-
-        if (netCashflow >= 0) {
-          currentCash += netCashflow;
-          currentInvest += annualYield;
-          phase = '🟢 収入内で生活';
-        } else {
-          let remDeficit = Math.abs(netCashflow);
-
-          yieldUsed = Math.min(remDeficit, annualYield);
-          remDeficit -= yieldUsed;
-
-          const remainingYield = annualYield - yieldUsed;
-          currentInvest += remainingYield;
-
-          if (remDeficit > 0) {
-            cashUsed = Math.min(remDeficit, currentCash);
-            currentCash -= cashUsed;
-            remDeficit -= cashUsed;
-          }
-
-          if (remDeficit > 0) {
-            principalSold = Math.min(remDeficit, currentInvest);
-            currentInvest -= principalSold;
-            remDeficit -= principalSold;
-          }
-
-          if (remDeficit > 0) {
-            shortage = remDeficit;
-          }
-
-          if (shortage > 0) {
-            phase = '🔴 資金不足';
-          } else if (principalSold > 0) {
-            phase = '🟠 運用益＋安全資産＋投資資産';
-          } else if (cashUsed > 0) {
-            phase = '🟡 運用益＋安全資産';
-          } else if (yieldUsed > 0) {
-            phase = '🟢 運用益のみ';
-          }
-        }
-
-        const financialAsset = Math.max(0, Math.round(currentInvest + currentCash));
-        const netWorth = Math.round(financialAsset + simState.realEstateValue);
-
-        if (i === 0) {
-          firstYearYield = annualYield;
-          firstYearPhase = phase;
-          firstYearNetCash = netCashflow;
-        }
-
-        labels.push(`${selfAge}歳`);
-        investData.push(financialAsset);
-        netWorthData.push(netWorth);
-        cashflowData.push(netCashflow);
-
-        tableRows.push({
-          age: selfAge,
-          normalIncome,
-          totalExpense,
-          netCashflow,
-          annualYield,
-          yieldUsed,
-          cashUsed,
-          principalSold,
-          shortage,
-          phase,
-          eventIncomeTotal,
-          currentCash: Math.round(currentCash),
-          financialAsset,
-          netWorth
-        });
+      // Phase 6 final: empty-state rendering is native v2.
+      if (!window.hasMeaningfulV2Input(migrated)) {
+        return window.renderV2EmptyDashboard();
       }
+      const simulationV2 = window.calculateSimulationV2(migrated);
+      const adapted = window.adaptSimulationV2ForDashboard(simulationV2);
+      const tableRows = adapted.rows || [];
 
+      if (!tableRows.length) return window.renderV2EmptyDashboard();
+
+      window.currentSimulationV2 = simulationV2;
+      window.currentAdaptedSimulationV2 = adapted;
       window.currentTableRows = tableRows;
 
-      const finalAssets = investData[investData.length - 1] || 0;
-      const finalNetWorth = netWorthData[netWorthData.length - 1] || 0;
+      const effectiveTargetAge = adapted.targetAge || Number(migrated.profile?.targetAge) || tableRows[tableRows.length - 1].age;
+      const labels = tableRows.map(r => `${r.age}歳`);
+      const investData = tableRows.map(r => r.financialAsset);
+      // STEP 11: second asset series is Potential Assets; net-worth semantics are removed from v2.
+      const potentialAssetsData = tableRows.map(r => Number(r.potentialAssets || 0));
+      const cashflowData = tableRows.map(r => r.netCashflow);
 
+      const firstRow = tableRows[0];
+      const firstYearYield = firstRow ? firstRow.annualYield : 0;
+      const firstYearNetCash = firstRow ? firstRow.netCashflow : 0;
+      const finalAssets = investData[investData.length - 1] || 0;
+      const finalPotentialAssets = tableRows[tableRows.length - 1]?.potentialAssets || 0;
+      const finalLifestyleAssets = tableRows[tableRows.length - 1]?.lifestyleAssets || 0;
       const totalYield = tableRows.reduce((acc, r) => acc + r.annualYield, 0);
       const avgYield = Math.round(totalYield / tableRows.length);
 
-      document.getElementById('kpi-annual-yield').innerHTML = `${avgYield.toLocaleString()} 万円<span class="text-[10px] sm:text-xs font-normal text-[#6F7785]"> /年</span>`;
-      
+      document.getElementById('kpi-annual-yield').innerHTML = `${avgYield.toLocaleString()} 万円<span class="text-xs font-normal text-[#6F7785]"> /年 (平均)</span>`;
+
       const phaseBadge = document.getElementById('kpi-phase-badge');
       if (phaseBadge) {
         phaseBadge.innerText = `累計運用益 ${totalYield.toLocaleString()} 万円`;
-        phaseBadge.className = 'px-2 sm:px-2.5 py-0.5 rounded-full text-[9px] sm:text-[10px] font-bold bg-[#EAF8F3] text-[#253047] border border-[#72D6B5]/30 truncate max-w-full';
+        phaseBadge.className = 'px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#EAF8F3] text-[#253047] border border-[#72D6B5]/30';
       }
 
       const coverRateElem = document.getElementById('kpi-cover-rate');
@@ -2490,50 +2939,47 @@
         const totalDeficit = tableRows.reduce((acc, r) => acc + (r.netCashflow < 0 ? Math.abs(r.netCashflow) : 0), 0);
         const totalCovered = tableRows.reduce((acc, r) => acc + r.yieldUsed + r.cashUsed, 0);
         const minFinAsset = Math.min(...tableRows.map(r => r.financialAsset));
-        const finalFinAsset = tableRows[tableRows.length - 1] ? tableRows[tableRows.length - 1].financialAsset : 0;
-        const yearlyExpenseAvg = simState.livingExpense + (simState.housingEndAge === 0 || simState.selfCurrentAge < simState.housingEndAge ? simState.housingExpense : 0);
-
-        let insolvencyAge = null;
-        for (let r of tableRows) {
-          if (r.shortage > 0) {
-            insolvencyAge = r.age;
-            break;
-          }
-        }
+        const finalFinAsset = tableRows[tableRows.length - 1]?.financialAsset || 0;
+        const baseLivingAnnual = window.normalizeAnnualAmountV2(migrated.living?.expense?.amount, migrated.living?.expense?.frequency);
+        const housing = migrated.living?.housing || {};
+        const baseHousingAnnual = housing.type === 'owned_no_loan' ? 0 : Math.max(0, Number(housing.monthlyAmount || 0)) * 12;
+        const yearlyExpenseAvg = baseLivingAnnual + baseHousingAnnual;
+        const shortageRow = tableRows.find(r => r.shortage > 0);
+        const insolvencyAge = shortageRow ? shortageRow.age : null;
 
         if (insolvencyAge !== null) {
           const rate = totalDeficit > 0 ? Math.min(99, Math.round((totalCovered / totalDeficit) * 100)) : 0;
           coverRateElem.innerText = `${rate}% カバー`;
-          coverRateElem.className = 'text-base sm:text-2xl font-extrabold text-[#FF8FA3] tracking-tight whitespace-nowrap';
+          coverRateElem.className = 'text-xl sm:text-2xl font-extrabold text-[#FF8FA3] tracking-tight whitespace-nowrap';
           if (coverSubtextElem) {
-            coverSubtextElem.innerHTML = `<span class="sm:hidden">🚨 ${insolvencyAge}歳頃に資金不足</span><span class="hidden sm:inline">🚨 ${insolvencyAge}歳頃に資金不足。インフレ・運用下振れに要警戒</span>`;
-            coverSubtextElem.className = 'text-[10px] sm:text-[11px] text-[#FF8FA3] font-bold pt-2 sm:pt-3 border-t border-[#ECEBE6] mt-2 sm:mt-3 truncate';
+            coverSubtextElem.innerText = `🚨 ${insolvencyAge}歳頃に資金不足。インフレ・運用下振れに要警戒`;
+            coverSubtextElem.className = 'text-[11px] text-[#FF8FA3] font-bold pt-3 border-t border-[#ECEBE6] mt-3 truncate';
           }
         } else if (totalDeficit === 0) {
           coverRateElem.innerText = '全期間 100% カバー';
-          coverRateElem.className = 'text-base sm:text-2xl font-extrabold text-[#72D6B5] tracking-tight whitespace-nowrap';
+          coverRateElem.className = 'text-xl sm:text-2xl font-extrabold text-[#72D6B5] tracking-tight whitespace-nowrap';
           if (coverSubtextElem) {
             if (minFinAsset >= yearlyExpenseAvg * 3) {
-              coverSubtextElem.innerHTML = `<span class="sm:hidden">✨ 収支黒字で極めて健全</span><span class="hidden sm:inline">✨ 収支黒字で極めて健全。インフレ・波乱にも強い十分な余力あり</span>`;
-              coverSubtextElem.className = 'text-[10px] sm:text-[11px] text-[#253047] font-bold pt-2 sm:pt-3 border-t border-[#ECEBE6] mt-2 sm:mt-3 truncate';
+              coverSubtextElem.innerText = '✨ 収支黒字で極めて健全。インフレ・波乱にも強い十分な余力あり';
+              coverSubtextElem.className = 'text-[11px] text-[#253047] font-bold pt-3 border-t border-[#ECEBE6] mt-3 truncate';
             } else {
-              coverSubtextElem.innerHTML = `<span class="sm:hidden">🟢 目標${effectiveTargetAge}歳まで黒字</span><span class="hidden sm:inline">🟢 目標${effectiveTargetAge}歳まで収入内で生活維持（黒字傾向）</span>`;
-              coverSubtextElem.className = 'text-[10px] sm:text-[11px] text-[#253047] font-semibold pt-2 sm:pt-3 border-t border-[#ECEBE6] mt-2 sm:mt-3 truncate';
+              coverSubtextElem.innerText = `🟢 目標${effectiveTargetAge}歳まで収入内で生活維持（黒字傾向）`;
+              coverSubtextElem.className = 'text-[11px] text-[#253047] font-semibold pt-3 border-t border-[#ECEBE6] mt-3 truncate';
             }
           }
         } else {
           coverRateElem.innerText = '全期間 100% カバー';
-          coverRateElem.className = 'text-base sm:text-2xl font-extrabold text-[#72D6B5] tracking-tight whitespace-nowrap';
+          coverRateElem.className = 'text-xl sm:text-2xl font-extrabold text-[#72D6B5] tracking-tight whitespace-nowrap';
           if (coverSubtextElem) {
             if (minFinAsset >= yearlyExpenseAvg * 3 && finalFinAsset >= yearlyExpenseAvg * 2) {
-              coverSubtextElem.innerHTML = `<span class="sm:hidden">✨ 十分な余力あり</span><span class="hidden sm:inline">✨ 十分な余力あり。インフレや運用変動を吸収し取り崩しも安心</span>`;
-              coverSubtextElem.className = 'text-[10px] sm:text-[11px] text-[#253047] font-bold pt-2 sm:pt-3 border-t border-[#ECEBE6] mt-2 sm:mt-3 truncate';
+              coverSubtextElem.innerText = '✨ 十分な余力あり。インフレや運用変動を吸収し取り崩しも安心';
+              coverSubtextElem.className = 'text-[11px] text-[#253047] font-bold pt-3 border-t border-[#ECEBE6] mt-3 truncate';
             } else if (minFinAsset >= yearlyExpenseAvg * 1.5) {
-              coverSubtextElem.innerHTML = `<span class="sm:hidden">🟢 安定した資金維持力</span><span class="hidden sm:inline">🟢 計画的に取り崩し目標${effectiveTargetAge}歳まで到達。安定した余力</span>`;
-              coverSubtextElem.className = 'text-[10px] sm:text-[11px] text-[#253047] font-semibold pt-2 sm:pt-3 border-t border-[#ECEBE6] mt-2 sm:mt-3 truncate';
+              coverSubtextElem.innerText = `🟢 計画的に取り崩し目標${effectiveTargetAge}歳まで到達。安定した余力`;
+              coverSubtextElem.className = 'text-[11px] text-[#253047] font-semibold pt-3 border-t border-[#ECEBE6] mt-3 truncate';
             } else {
-              coverSubtextElem.innerHTML = `<span class="sm:hidden">⚠️ 達成予定も余力僅少</span><span class="hidden sm:inline">⚠️ 達成予定も余力僅少。インフレ加速や運用下振れで危険水域の恐れ</span>`;
-              coverSubtextElem.className = 'text-[10px] sm:text-[11px] text-[#8C5800] font-bold pt-2 sm:pt-3 border-t border-[#ECEBE6] mt-2 sm:mt-3 truncate';
+              coverSubtextElem.innerText = '⚠️ 達成予定も余力僅少。インフレ加速や運用下振れで危険水域の恐れ';
+              coverSubtextElem.className = 'text-[11px] text-[#8C5800] font-bold pt-3 border-t border-[#ECEBE6] mt-3 truncate';
             }
           }
         }
@@ -2541,18 +2987,32 @@
 
       document.getElementById('kpi-final-age-label').innerText = effectiveTargetAge;
       document.getElementById('kpi-final-assets').innerText = `${finalAssets.toLocaleString()} 万円`;
-      document.getElementById('kpi-final-status').innerHTML = `純資産: <span id="kpi-final-networth" class="font-bold text-[#253047]">${finalNetWorth.toLocaleString()}</span> 万円`;
+      const potentialCard = document.getElementById('asset-potential-assets');
+      if (potentialCard) potentialCard.innerText = `${Math.round(finalPotentialAssets).toLocaleString()} 万円`;
+      const lifestyleCard = document.getElementById('asset-lifestyle-assets');
+      if (lifestyleCard) lifestyleCard.innerText = `${Math.round(finalLifestyleAssets).toLocaleString()} 万円`;
+      document.getElementById('kpi-final-status').innerHTML = `利用可能資産のみで算出`;
 
-      const baseResult = calculateBaseScore(simState, tableRows, firstYearYield, firstYearNetCash);
+      const baseResult = calculateBaseScoreV2(migrated, tableRows, firstYearYield, firstYearNetCash);
       currentBaseScore = baseResult.totalScore;
       scoreBreakdownDetails = baseResult.factors;
 
       window.updateScoreDashboardUI();
       window.renderTable(tableRows);
-      window.renderChart(labels, investData, netWorthData, cashflowData);
+      window.renderChart(labels, investData, potentialAssetsData, cashflowData);
       window.renderEvents();
-
       window.scheduleAIDiagnosis();
+    };
+
+    window.recalculateAllFast = function() {
+      // Phase 6 final: production calculation path is v2-only.
+      // Do not silently fall back to Legacy; surface v2 failures for correction.
+      try {
+        return window.recalculateAllV2Dashboard();
+      } catch (error) {
+        console.error('[LUMIFUL] Engine v2 dashboard calculation failed.', error);
+        throw error;
+      }
     };
 
     window.updateScoreDashboardUI = function() {
@@ -2568,19 +3028,19 @@
 
       if (finalScore >= 80) {
         if (scoreBadgeElem) {
-          scoreBadgeElem.className = 'px-2 py-0.5 rounded-full text-[9px] sm:text-[10px] font-semibold bg-[#EAF8F3] text-[#253047] border border-[#72D6B5]/40 shrink-0 inline-block truncate max-w-full';
+          scoreBadgeElem.className = 'px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#EAF8F3] text-[#253047] border border-[#72D6B5]/40 shrink-0 inline-block';
           scoreBadgeElem.innerText = '🟢 健全・安定';
         }
         if (statusTextElem) statusTextElem.innerText = '目標年齢まで非常に安定した資金計画です';
       } else if (finalScore >= 60) {
         if (scoreBadgeElem) {
-          scoreBadgeElem.className = 'px-2 py-0.5 rounded-full text-[9px] sm:text-[10px] font-semibold bg-[#FFF9E6] text-[#8C5800] border border-[#FFC83D]/40 shrink-0 inline-block truncate max-w-full';
+          scoreBadgeElem.className = 'px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#FFF9E6] text-[#8C5800] border border-[#FFC83D]/40 shrink-0 inline-block';
           scoreBadgeElem.innerText = '🟡 概ね安定';
         }
         if (statusTextElem) statusTextElem.innerText = '概ね問題ありませんが、取崩し・インフレに留意';
       } else {
         if (scoreBadgeElem) {
-          scoreBadgeElem.className = 'px-2 py-0.5 rounded-full text-[9px] sm:text-[10px] font-semibold bg-[#FFF0F3] text-[#FF8FA3] border border-[#FF8FA3]/40 shrink-0 inline-block truncate max-w-full';
+          scoreBadgeElem.className = 'px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#FFF0F3] text-[#FF8FA3] border border-[#FF8FA3]/40 shrink-0 inline-block';
           scoreBadgeElem.innerText = '🔴 要見直し';
         }
         if (statusTextElem) statusTextElem.innerText = '途中で資金不足が発生するリスクがあります';
@@ -2606,7 +3066,11 @@
         const items = [];
         if (currentBaseScore >= 70) items.push('基礎資金力が非常に高く、生涯にわたって安定した資産を維持できています。');
         if (scoreBreakdownDetails && parseInt(scoreBreakdownDetails.longevityPts) >= 25) items.push('目標終了年齢まで資金枯渇が発生せず、長期耐久性が極めて優秀です。');
-        if (simState.returnRate > 0) items.push(`想定利回り ${simState.returnRate.toFixed(1)}% の運用益が効果的に生活費を補填しています。`);
+        const v2Model = window.normalizeDataModelV2(window.ensureV2InputModel());
+        const simAssets = (v2Model.assets || []).filter(a => a.assetClass === 'simulation');
+        const simAssetTotal = simAssets.reduce((sum, a) => sum + Number(a.value || 0), 0);
+        const weightedReturn = simAssetTotal > 0 ? simAssets.reduce((sum, a) => sum + Number(a.value || 0) * Number(a.expectedReturn || 0), 0) / simAssetTotal : 0;
+        if (weightedReturn > 0) items.push(`登録資産の加重平均想定利回り 約${weightedReturn.toFixed(1)}% の運用益が生活収支を支えています。`);
         if (items.length === 0) items.push('設定条件に基づいた安定した計画のスタートラインにあります。');
         strengthsList.innerHTML = items.map(it => `<li>${it}</li>`).join('');
       }
@@ -2616,18 +3080,19 @@
         if (scoreBreakdownDetails && scoreBreakdownDetails.insolvencyAge) {
           items.push(`${scoreBreakdownDetails.insolvencyAge}歳頃に試算上の資金不足が発生する警戒リスクがあります。`);
         }
-        if (simState.inflationRate >= 1.5) {
-          items.push(`インフレ率 ${simState.inflationRate.toFixed(1)}% により、将来の支出増加負担が段階的に大きくなります。`);
+        const inflationRateV2 = Number(window.normalizeDataModelV2(window.ensureV2InputModel()).settings?.inflationRate || 0);
+        if (inflationRateV2 >= 1.5) {
+          items.push(`インフレ率 ${inflationRateV2.toFixed(1)}% により、将来の支出増加負担が段階的に大きくなります。`);
         }
         if (items.length === 0) items.push('現在のところ重大な資金不足リスクは見当たりません。');
         risksList.innerHTML = items.map(it => `<li>${it}</li>`).join('');
       }
 
       if (suggElem) {
-        suggElem.innerText = generateFallbackDiagnosisText(simState, window.currentTableRows);
+        suggElem.innerText = generateFallbackDiagnosisTextV2(window.ensureV2InputModel(), window.currentTableRows);
       }
 
-      const fallbackText = generateFallbackDiagnosisText(simState, window.currentTableRows);
+      const fallbackText = generateFallbackDiagnosisTextV2(window.ensureV2InputModel(), window.currentTableRows);
       const diagTextElem = document.getElementById('kpi-diagnosis-text');
       if (diagTextElem && (!diagTextElem.dataset.aiUpdated || diagTextElem.dataset.aiUpdated === 'false')) {
         diagTextElem.innerText = fallbackText;
@@ -2687,13 +3152,13 @@
           <td class="p-2.5 text-right text-[#72D6B5] font-medium">${r.eventIncomeTotal > 0 ? '+' + r.eventIncomeTotal.toLocaleString() : '-'}</td>
           <td class="p-2.5 text-right font-semibold text-[#253047]">${r.currentCash.toLocaleString()}</td>
           <td class="p-2.5 text-right font-bold text-[#8C5800]">${r.financialAsset.toLocaleString()}</td>
-          <td class="p-2.5 text-right font-black text-[#253047] bg-[#F5F4EF]">${r.netWorth.toLocaleString()}</td>
+          <td class="p-2.5 text-right font-black text-[#253047] bg-[#F5F4EF]">${Number(r.potentialAssets ?? 0).toLocaleString()}</td>
         `;
         tbody.appendChild(tr);
       });
     };
 
-    window.renderChart = function(labels, investData, netWorthData, cashflowData) {
+    window.renderChart = function(labels, investData, potentialAssetsData, cashflowData) {
       const ctx = document.getElementById('assetChart');
       if (!ctx) return;
 
@@ -2708,7 +3173,7 @@
           datasets: [
             {
               type: 'line',
-              label: '金融資産 (万円)',
+              label: '利用可能資産 (万円)',
               data: investData,
               borderColor: '#D97706',
               backgroundColor: 'rgba(217, 119, 6, 0.08)',
@@ -2719,8 +3184,8 @@
             },
             {
               type: 'line',
-              label: '純資産 (万円)',
-              data: netWorthData,
+              label: '売却可能資産 (万円)',
+              data: potentialAssetsData,
               borderColor: '#65B9E8',
               borderWidth: 2,
               borderDash: [4, 4],
@@ -2770,72 +3235,75 @@
       });
     };
 
+    window.toggleEventKindFields = function() {
+      const kind = document.querySelector('input[name="eventKind"]:checked')?.value || 'simple';
+      document.getElementById('simpleEventFields')?.classList.toggle('hidden', kind !== 'simple');
+      document.getElementById('homePurchaseEventFields')?.classList.toggle('hidden', kind !== 'home_purchase');
+    };
+
     window.renderEvents = function() {
       const tbody = document.getElementById('eventsTableBody');
       if (!tbody) return;
       tbody.innerHTML = '';
-
-      if (!simState.events || simState.events.length === 0) {
+      const model = window.ensureV2InputModel();
+      const events = Array.isArray(model.lifeEvents) ? model.lifeEvents : [];
+      if (!events.length) {
         tbody.innerHTML = `<tr><td colspan="5" class="p-4 text-center text-[#6F7785]">登録されたライフイベントはありません</td></tr>`;
         return;
       }
-
-      simState.events.forEach((ev, idx) => {
+      events.forEach((ev, idx) => {
+        const smartHome = ev.kind === 'smart' && ev.category === 'home_purchase';
+        const isExpense = smartHome || ev.direction !== 'income';
+        const amount = smartHome ? (Number(ev.downPayment||0) + Number(ev.purchaseCosts||0)) : Number(ev.amount||0);
+        const title = smartHome ? '住宅購入' : (ev.title || 'ライフイベント');
+        const detail = smartHome ? `物件 ${Number(ev.propertyPrice||0).toLocaleString()}万円 / ローン ${Number(ev.loanAmount||0).toLocaleString()}万円` : '';
         const tr = document.createElement('tr');
         tr.className = 'hover:bg-[#FAFAF7] border-b border-[#ECEBE6]';
-
-        const isExpense = ev.type === 'expense';
-        const iconClass = ev.icon || 'fa-star';
-
-        tr.innerHTML = `
-          <td class="p-3">
-            <span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold ${isExpense ? 'bg-[#FFF0F3] text-[#FF8FA3]' : 'bg-[#EAF8F3] text-[#72D6B5]'} whitespace-nowrap">
-              ${isExpense ? '支出' : '収入'}
-            </span>
-          </td>
-          <td class="p-3 font-bold text-[#253047] whitespace-nowrap">${ev.age}歳</td>
-          <td class="p-3 font-semibold text-[#253047] flex items-center gap-2">
-            <div class="w-6 h-6 rounded-[8px] ${isExpense ? 'bg-[#FFF0F3] text-[#FF8FA3]' : 'bg-[#EAF8F3] text-[#72D6B5]'} flex items-center justify-center text-xs shrink-0">
-              <i class="fa-solid ${iconClass}"></i>
-            </div>
-            <span>${ev.title}</span>
-          </td>
-          <td class="p-3 text-right font-black ${isExpense ? 'text-[#FF8FA3]' : 'text-[#72D6B5]'} whitespace-nowrap">
-            ${isExpense ? '-' : '+'}${ev.amount.toLocaleString()}
-          </td>
-          <td class="p-3 text-center">
-            <button onclick="removeEvent(${idx})" class="text-[#6F7785] hover:text-[#FF8FA3] transition p-1">
-              <i class="fa-solid fa-trash-can"></i>
-            </button>
-          </td>
-        `;
+        tr.innerHTML = `<td class="p-3"><span class="px-2.5 py-0.5 rounded-full text-[10px] font-bold ${smartHome?'bg-[#FEFBF0] text-[#8C5800]':(isExpense?'bg-[#FFF0F3] text-[#FF8FA3]':'bg-[#EAF8F3] text-[#72D6B5]')} whitespace-nowrap">${smartHome?'住宅購入':(isExpense?'支出':'収入')}</span></td><td class="p-3 font-bold text-[#253047] whitespace-nowrap">${ev.age}歳</td><td class="p-3 font-semibold text-[#253047]"><div class="flex items-center gap-2"><div class="w-6 h-6 rounded-[8px] ${smartHome?'bg-[#FEFBF0] text-[#FFC83D]':(isExpense?'bg-[#FFF0F3] text-[#FF8FA3]':'bg-[#EAF8F3] text-[#72D6B5]')} flex items-center justify-center text-xs shrink-0"><i class="fa-solid ${smartHome?'fa-house':(ev.icon||'fa-star')}"></i></div><div><div>${title}</div>${detail?`<div class="text-[10px] font-normal text-[#8A909C] mt-0.5">${detail}</div>`:''}</div></div></td><td class="p-3 text-right font-black ${isExpense?'text-[#FF8FA3]':'text-[#72D6B5]'} whitespace-nowrap">${smartHome?'初期 ':''}${isExpense?'-':'+'}${amount.toLocaleString()}</td><td class="p-3 text-center"><button onclick="removeEvent(${idx})" class="text-[#6F7785] hover:text-[#FF8FA3] transition p-1"><i class="fa-solid fa-trash-can"></i></button></td>`;
         tbody.appendChild(tr);
       });
     };
 
     window.saveEvent = function(e) {
       e.preventDefault();
-      const type = document.querySelector('input[name="eventType"]:checked').value;
-      const age = parseInt(document.getElementById('eventAge').value, 10);
-      const amount = parseFloat(document.getElementById('eventAmount').value);
-      const title = document.getElementById('eventTitle').value.trim();
-      const icon = document.getElementById('eventIcon')?.value || 'fa-star';
-
-      if (!age || !amount || !title) return;
-
-      if (!simState.events) simState.events = [];
-      simState.events.push({ type, age, amount, title, icon });
-      simState.events.sort((a, b) => a.age - b.age);
-
+      const model = window.ensureV2InputModel();
+      const kind = document.querySelector('input[name="eventKind"]:checked')?.value || 'simple';
+      if (kind === 'home_purchase') {
+        const age = Number(document.getElementById('homePurchaseAge')?.value || 0);
+        const propertyPrice = Math.max(0, Number(document.getElementById('homePropertyPrice')?.value || 0));
+        const downPayment = Math.max(0, Number(document.getElementById('homeDownPayment')?.value || 0));
+        let loanAmount = Math.max(0, Number(document.getElementById('homeLoanAmount')?.value || 0));
+        if (!loanAmount && propertyPrice >= downPayment) loanAmount = propertyPrice - downPayment;
+        const interestRate = Math.max(0, Number(document.getElementById('homeInterestRate')?.value || 0));
+        const loanYears = Math.max(1, Number(document.getElementById('homeLoanYears')?.value || 35));
+        const purchaseCosts = Math.max(0, Number(document.getElementById('homePurchaseCosts')?.value || 0));
+        const maintenanceCost = Math.max(0, Number(document.getElementById('homeMaintenanceCost')?.value || 0));
+        if (!age || propertyPrice <= 0 || downPayment > propertyPrice || loanAmount < 0) {
+          window.showToast('住宅購入の入力内容を確認してください', 'error'); return;
+        }
+        model.lifeEvents.push({id:v2Id('event_home'),kind:'smart',category:'home_purchase',age,propertyPrice,purchaseMethod:loanAmount>0?'mortgage':'cash',downPayment,loanAmount,interestRate,loanYears,purchaseCosts,maintenanceCost,maintenanceFrequency:'yearly'});
+      } else {
+        const direction = document.querySelector('input[name="eventType"]:checked')?.value || 'expense';
+        const age = Number(document.getElementById('eventAge')?.value || 0);
+        const amount = Math.max(0, Number(document.getElementById('eventAmount')?.value || 0));
+        const title = document.getElementById('eventTitle')?.value.trim() || '';
+        const icon = document.getElementById('eventIcon')?.value || 'fa-star';
+        if (!age || amount <= 0 || !title) { window.showToast('イベント内容を入力してください', 'error'); return; }
+        model.lifeEvents.push({id:v2Id('event'),kind:'simple',category:'other',title,age,direction,amount,icon});
+      }
+      model.lifeEvents.sort((a,b)=>Number(a.age||0)-Number(b.age||0));
       window.closeAddEventModal();
       window.recalculateAllFast();
+      window.renderEvents();
       window.showToast('ライフイベントを追加しました', 'success');
     };
 
     window.removeEvent = function(idx) {
-      if (!simState.events) return;
-      simState.events.splice(idx, 1);
+      const model = window.ensureV2InputModel();
+      if (!Array.isArray(model.lifeEvents)) return;
+      model.lifeEvents.splice(idx, 1);
       window.recalculateAllFast();
+      window.renderEvents();
       window.showToast('イベントを削除しました', 'info');
     };
 
@@ -2854,7 +3322,7 @@
 
       const apiKey = "";
       if (!apiKey) {
-        const fallbackText = generateFallbackDiagnosisText(simState, window.currentTableRows);
+        const fallbackText = generateFallbackDiagnosisTextV2(window.ensureV2InputModel(), window.currentTableRows);
         if (diagTextElem) {
           diagTextElem.innerText = fallbackText;
           diagTextElem.dataset.aiUpdated = "false";
@@ -2872,21 +3340,41 @@
       try {
         const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=${apiKey}`;
 
+        const model = window.normalizeDataModelV2(window.ensureV2InputModel());
+        const rows = window.currentTableRows;
+        const simulationAssets = (model.assets || []).filter(a => a.assetClass === 'simulation');
+        const potentialAssets = (model.assets || []).filter(a => a.assetClass === 'potential');
+        const lifestyleAssets = (model.assets || []).filter(a => a.assetClass === 'lifestyle');
+        const availableNow = simulationAssets.reduce((sum, a) => sum + Number(a.value || 0), 0);
+        const potentialNow = potentialAssets.reduce((sum, a) => sum + Number(a.value || 0), 0);
+        const lifestyleNow = lifestyleAssets.reduce((sum, a) => sum + Number(a.value || 0), 0);
+        const weightedReturn = availableNow > 0 ? simulationAssets.reduce((sum, a) => sum + Number(a.value || 0) * Number(a.expectedReturn || 0), 0) / availableNow : 0;
+        const finalAvailable = Number(rows[rows.length - 1]?.availableAssets ?? rows[rows.length - 1]?.financialAsset ?? 0);
+        const minAvailable = Math.min(...rows.map(r => Number(r.availableAssets ?? r.financialAsset ?? 0)));
+        const shortageAge = rows.find(r => Number(r.shortage || 0) > 0)?.age || '発生なし';
+        const withdrawalAge = rows.find(r => Number(r.principalSold || 0) > 0)?.age || '開始なし';
+        const firstYear = rows[0] || {};
+
         const userPrompt = `
-以下のLUMIFUL試算データに基づき、プロのFPAIアドバイザーとして評価・補正・アドバイスを行ってください。
+以下のLUMIFUL Schema v2試算データに基づき、プロのFPAIアドバイザーとして評価・補正・アドバイスを行ってください。
 
 【ユーザーのプロファイル＆シミュレーションデータ】
-- 現在年齢: ${simState.selfCurrentAge || 40}歳 / 目標終了年齢: ${simState.targetAge || 80}歳
+- 現在年齢: ${model.profile.currentAge || 40}歳 / 目標終了年齢: ${model.profile.targetAge || 90}歳
 - Base Score（客観基礎点）: ${currentBaseScore}点 / 100点
-- 初期投資資産: ${simState.initialInvest}万円 / 初期安全資産: ${simState.initialCash}万円 / 不動産評価額: ${simState.realEstateValue}万円
-- 年間基本生活費: ${simState.livingExpense}万円 / 住居費: ${simState.housingExpense}万円 (完済:${simState.housingEndAge || 'なし'}歳)
-- 配偶者有無: ${simState.hasSpouse ? 'あり' : 'なし'}
-- 想定運用利回り: ${simState.returnRate}% / インフレ率: ${simState.inflationRate}%
-- ライフイベント数: ${(simState.events || []).length}件
-- 最終年(${simState.targetAge || 80}歳)の想定金融資産: ${window.currentTableRows[window.currentTableRows.length - 1]?.financialAsset || 0}万円
-- 最低到達金融資産額: ${Math.min(...window.currentTableRows.map(r => r.financialAsset))}万円
-- 資金不足(shortage > 0)発生年齢: ${window.currentTableRows.find(r => r.shortage > 0)?.age || '発生なし'}歳
-- 元本売却(取り崩し)開始年齢: ${window.currentTableRows.find(r => r.principalSold > 0)?.age || '開始なし'}歳
+- 現在の利用可能資産: ${Math.round(availableNow)}万円
+- 売却可能資産（自動計算・SCORE対象外）: ${Math.round(potentialNow)}万円
+- 生活資産（SCORE対象外）: ${Math.round(lifestyleNow)}万円
+- 登録資産の加重平均想定利回り: ${weightedReturn.toFixed(1)}%
+- 年間基本生活費: ${Math.round(Number(model.living?.expense?.amount || 0) * (model.living?.expense?.frequency === 'monthly' ? 12 : 1))}万円
+- 現在の住居区分: ${model.living?.housing?.type || '未設定'} / 住居費: ${Math.round(Number(model.living?.housing?.monthlyAmount || 0) * 12)}万円/年
+- 配偶者有無: ${model.profile.hasSpouse ? 'あり' : 'なし'}
+- インフレ率: ${Number(model.settings?.inflationRate || 0).toFixed(1)}%
+- 収入源: ${(model.incomes || []).length}件 / ライフイベント: ${(model.lifeEvents || []).length}件
+- 初年度年間運用益: ${Number(firstYear.annualYield || 0)}万円 / 初年度運用益活用: ${Number(firstYear.yieldUsed || 0)}万円
+- 最終年(${model.profile.targetAge || 90}歳)の利用可能資産: ${Math.round(finalAvailable)}万円
+- 最低到達利用可能資産: ${Math.round(minAvailable)}万円
+- 資金不足発生年齢: ${shortageAge}歳
+- 資産取り崩し開始年齢: ${withdrawalAge}歳
 `;
 
         const systemPrompt = `
@@ -2951,7 +3439,7 @@ JSON Schema:
           window.updateScoreDashboardUI();
 
           if (diagTextElem) {
-            diagTextElem.innerText = aiRes.summary || generateFallbackDiagnosisText(simState, window.currentTableRows);
+            diagTextElem.innerText = aiRes.summary || generateFallbackDiagnosisTextV2(window.ensureV2InputModel(), window.currentTableRows);
             diagTextElem.dataset.aiUpdated = "true";
           }
 
@@ -2978,7 +3466,7 @@ JSON Schema:
       } catch (err) {
         if (err.name !== 'AbortError') {
           console.debug("AI Diagnosis notice (using fallback):", err);
-          const fallbackText = generateFallbackDiagnosisText(simState, window.currentTableRows);
+          const fallbackText = generateFallbackDiagnosisTextV2(window.ensureV2InputModel(), window.currentTableRows);
           if (diagTextElem) {
             diagTextElem.innerText = fallbackText;
             diagTextElem.dataset.aiUpdated = "false";
@@ -2993,8 +3481,10 @@ JSON Schema:
 
     window.onload = function() {
       setupAgeSelects();
+      window.loadSavedPlansFromStorageV2();
 
-      // Check for compressed URL data (mobile QR sync)
+      // Restore both Schema v2 and legacy v1 compressed share URLs.
+      let restoredFromUrl = false;
       const urlParams = new URLSearchParams(window.location.search);
       const dataParam = urlParams.get('data');
       if (dataParam && typeof LZString !== 'undefined') {
@@ -3002,7 +3492,8 @@ JSON Schema:
           const decompressed = LZString.decompressFromEncodedURIComponent(dataParam);
           if (decompressed) {
             const parsed = JSON.parse(decompressed);
-            Object.assign(simState, parsed);
+            window.restorePersistedStateV2(parsed);
+            restoredFromUrl = true;
             window.showToast('URLからシミュレーションデータを復元しました', 'success');
           }
         } catch (e) {
@@ -3010,10 +3501,28 @@ JSON Schema:
         }
       }
 
-      window.populateFormFromState();
-      window.checkAuthState();
-      window.recalculateAllFast();
+      if (!restoredFromUrl) {
+        window.ensureV2InputModel();
+        window.renderV2InputUI();
+        window.checkAuthState();
+        window.recalculateAllFast();
+      } else {
+        window.checkAuthState();
+      }
     };
+  
+
+    window.LUMIFUL_PHASE6_COMPLETION_AUDIT = Object.freeze({
+      productionEngine: 'v2-only',
+      dashboardConsumers: 'schema-v2-native',
+      legacyEngineProductionUse: false,
+      legacyEngineRemoved: true,
+      legacyParityRetired: true
+    });
+
+    window.LUMIFUL_PHASE6_VERSION = '2.0-final';
+
+    
   </script>
 </body>
 </html>
