@@ -3829,6 +3829,44 @@ JSON Schema:
     };
 
     window.onload = async function() {
+      // PHASE 7B / STEP 3.1 HOTFIX: resolve Firebase Auth before any legacy auth routing.
+      // This prevents a stale Phase 7A localStorage account identity from flashing as signed-in.
+      try {
+        if (typeof window.initializeFirebaseRuntime === 'function' && window.hasUsableFirebaseConfig?.()) {
+          const runtime = await window.initializeFirebaseRuntime();
+          if (runtime?.status === 'ready' && runtime.auth && typeof window.activateFirebaseAuthentication === 'function') {
+            await window.activateFirebaseAuthentication();
+            // Wait briefly for Firebase to resolve persisted auth state before continuing app boot.
+            await new Promise(resolve => {
+              let done = false;
+              let unsub = null;
+              const finish = () => {
+                if (done) return;
+                done = true;
+                try { if (typeof unsub === 'function') unsub(); } catch (_) {}
+                resolve();
+              };
+              const timer = setTimeout(finish, 1800);
+              try {
+                unsub = runtime.auth.onAuthStateChanged(() => {
+                  clearTimeout(timer);
+                  finish();
+                }, () => {
+                  clearTimeout(timer);
+                  finish();
+                });
+              } catch (_) {
+                clearTimeout(timer);
+                finish();
+              }
+            });
+            window.resolveAuthState();
+          }
+        }
+      } catch (error) {
+        console.warn('[LUMIFUL] Firebase auth boot gate notice:', error);
+      }
+
       setupAgeSelects();
       window.loadSavedPlansFromStorageV2();
       window.LUMIFUL_STEP4_BOOTING = true;
@@ -5320,6 +5358,10 @@ JSON Schema:
       if (code.includes('weak-password')) return 'より安全なパスワードを設定してください。';
       if (code.includes('invalid-email')) return 'メールアドレスの形式を確認してください。';
       if (code.includes('operation-not-allowed')) return 'メール / パスワード認証がFirebase側で有効になっていません。';
+      if (code.includes('unauthorized-domain')) return 'この公開ドメインがFirebase Authenticationで許可されていません。Firebase Consoleの Authentication → 設定 → 承認済みドメインに k-3535p.github.io を追加してください。';
+      if (code.includes('api-key-not-valid') || code.includes('invalid-api-key')) return 'Firebase APIキーを確認してください。';
+      if (code.includes('configuration-not-found')) return 'Firebase Authenticationの設定を確認してください。';
+      if (code.includes('firebase-auth-unavailable')) return 'Firebase Authenticationの初期化に失敗しました。ページを再読み込みしてください。';
       if (code.includes('requires-recent-login')) return '安全のため、現在のパスワードでもう一度認証してください。';
       if (code.includes('wrong-password') || code.includes('user-not-found') || code.includes('invalid-credential') || code.includes('invalid-login-credentials')) {
         return mode === 'signup' ? 'アカウントを作成できませんでした。' : 'メールアドレスまたはパスワードを確認してください。';
@@ -5502,26 +5544,45 @@ JSON Schema:
       window.LUMIFUL_PHASE7B_STEP2_AUTH_BUSY = true;
       window.LUMIFUL_STEP5_HANDOFF_IN_PROGRESS = true;
       const wasGuest = window.authState?.status === 'guest';
+      let credential = null;
       try {
         if (wasGuest) await window.flushPendingAutoSaveBeforeAuthChange('firebase-signup-guest-flush');
         const runtime = await window.getFirebaseAuthRuntime();
-        const credential = await runtime.auth.createUserWithEmailAndPassword(email, password);
 
-        if (wasGuest) {
-          try {
-            const handoff = await window.handoffGuestDataToAccount({ email });
-            if (handoff?.migrated) window.showToast('ゲストのシミュレーションをアカウントへ引き継ぎました', 'success');
-          } catch (handoffError) {
-            console.warn('[LUMIFUL] Guest data handoff notice after Firebase signup:', handoffError);
-            window.showToast('アカウントは作成できました。ゲストデータの引継ぎは再確認してください。', 'info');
+        // Keep Firebase account creation failure separate from post-signup data sync failures.
+        try {
+          credential = await runtime.auth.createUserWithEmailAndPassword(email, password);
+        } catch (createError) {
+          console.error('[LUMIFUL] Firebase signup creation failed:', createError?.code, createError);
+          if (errorEl) {
+            errorEl.textContent = window.getFirebaseAuthErrorMessage(createError, 'signup');
+            errorEl.classList.remove('hidden');
           }
+          return;
         }
 
-        localStorage.setItem('lumiful_new_user', '1');
-        await window.syncSessionFromFirebaseUser(credential.user, 'firebase-signup');
-        window.closeAuthModal();
-        window.showToast('LUMIFULへようこそ！', 'success');
+        try {
+          if (wasGuest) {
+            const handoff = await window.handoffGuestDataToAccount({ uid: credential.user?.uid, email });
+            if (handoff?.migrated) window.showToast('ゲストのシミュレーションをアカウントへ引き継ぎました', 'success');
+          }
+
+          localStorage.setItem('lumiful_new_user', '1');
+          await window.syncSessionFromFirebaseUser(credential.user, 'firebase-signup');
+          window.closeAuthModal();
+          window.showToast('LUMIFULへようこそ！', 'success');
+        } catch (syncError) {
+          console.error('[LUMIFUL] Firebase account created but initial sync failed:', syncError);
+          // Firebase has already created and signed in the account. Do not tell the user creation failed.
+          window.resolveAuthState();
+          if (errorEl) {
+            errorEl.textContent = 'アカウントは作成されましたが、初回データ同期に失敗しました。再読み込みするとログイン状態を復元できます。';
+            errorEl.classList.remove('hidden');
+          }
+          window.showToast('アカウント作成済み・初回同期を再確認してください', 'info');
+        }
       } catch (error) {
+        console.error('[LUMIFUL] Firebase signup unexpected error:', error?.code, error);
         if (errorEl) {
           errorEl.textContent = window.getFirebaseAuthErrorMessage(error, 'signup');
           errorEl.classList.remove('hidden');
@@ -5930,6 +5991,14 @@ JSON Schema:
         console.error('[LUMIFUL] Firestore binding activation failed; Phase 7A fallback remains available.', error);
       }
     }, 0);
+
+    window.LUMIFUL_PHASE7B_STEP3_1_HOTFIX = Object.freeze({
+      firebaseAuthBootGate: true,
+      staleMockIdentityFlashPrevented: true,
+      signupCreationAndSyncErrorsSeparated: true,
+      firebaseAuthDiagnostics: true,
+      unauthorizedDomainGuidance: true
+    });
 
     window.LUMIFUL_PHASE7_STEP3 = Object.freeze({
       storageAdapter: true,
