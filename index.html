@@ -155,39 +155,35 @@
 <body class="bg-[#FAFAF7] text-[#253047] min-h-screen font-sans antialiased relative overflow-x-hidden">
 
   <!-- PHASE 7 / STEP 1: WELCOME + AUTH EXPERIENCE (UI LAYER) -->
-  <div id="welcomeAuthView" class="fixed inset-0 z-[70] bg-[#FAFAF7] hidden overflow-y-auto">
-    <div class="min-h-screen flex items-stretch">
-      <div class="w-full grid grid-cols-1 lg:grid-cols-2">
+  <div id="welcomeAuthView" class="fixed inset-0 z-[70] bg-[#FAFAF7] hidden overflow-hidden">
+    <div class="h-[100dvh] min-h-0 flex items-stretch">
+      <div class="w-full h-full grid grid-rows-[44%_56%] lg:grid-rows-1 lg:grid-cols-2">
         <!-- Brand Experience -->
-        <section class="relative overflow-hidden bg-[#FFFDF8] px-6 py-8 sm:px-10 sm:py-10 lg:px-14 lg:py-12 flex flex-col justify-between border-b lg:border-b-0 lg:border-r border-[#ECEBE6]">
+        <section class="relative overflow-hidden bg-[#FFFDF8] px-5 py-4 sm:px-8 sm:py-6 lg:px-14 lg:py-12 flex flex-col border-b lg:border-b-0 lg:border-r border-[#ECEBE6] min-h-0">
           <div class="absolute -top-20 -right-16 w-72 h-72 rounded-full bg-[#FFF2CD] blur-3xl opacity-80 pointer-events-none"></div>
           <div class="absolute bottom-[-80px] left-[-70px] w-64 h-64 rounded-full bg-[#EAF6FC] blur-3xl opacity-70 pointer-events-none"></div>
 
-          <div class="relative z-10">
-            <img src="./assets/lumiful-logo.png" alt="LUMIFUL" class="h-9 sm:h-11 w-auto object-contain" />
+          <div class="relative z-10 shrink-0">
+            <img src="./assets/lumiful-logo.png" alt="LUMIFUL" class="h-7 sm:h-9 lg:h-11 w-auto object-contain" />
           </div>
 
-          <div class="relative z-10 flex flex-col items-center lg:items-start text-center lg:text-left py-8 sm:py-10 lg:py-4">
-            <div class="relative mb-5 sm:mb-7">
+          <div class="relative z-10 flex-1 min-h-0 flex flex-col items-center justify-center text-center lg:px-4">
+            <div class="relative mb-2 sm:mb-3 lg:mb-6">
               <div class="absolute inset-0 rounded-full bg-[#FFF2CD] blur-2xl scale-110 opacity-70"></div>
-              <img src="./assets/lumi-spark.png" alt="LUMI" class="relative w-32 h-32 sm:w-40 sm:h-40 lg:w-48 lg:h-48 object-contain pointer-events-none" />
+              <img src="./assets/lumi-spark.png" alt="LUMI" class="relative w-20 h-20 sm:w-24 sm:h-24 lg:w-48 lg:h-48 object-contain pointer-events-none" />
             </div>
-            <div class="max-w-md space-y-3">
-              <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white border border-[#F0E2B7] text-[10px] sm:text-[11px] font-bold text-[#8C5800]">
+            <div class="w-full max-w-xl space-y-2 lg:space-y-4">
+              <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 lg:px-3 lg:py-1 rounded-full bg-white border border-[#F0E2B7] text-[9px] sm:text-[10px] lg:text-[11px] font-bold text-[#8C5800]">
                 <i class="fa-solid fa-sparkles text-[#FFC83D]"></i>
                 <span>LUMIがあなたの未来づくりをサポート</span>
               </div>
-              <h1 class="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-[#253047] leading-tight">
-                未来を、もっと<br class="hidden sm:block" />自分らしく。
+              <h1 class="font-black tracking-tight text-[#253047] leading-none whitespace-nowrap text-[clamp(1.35rem,6.2vw,2rem)] sm:text-3xl lg:text-5xl">
+                未来を、もっと自分らしく。
               </h1>
-              <p class="text-sm sm:text-base text-[#6F7785] leading-relaxed">
-                お金とこれからの人生を整理して、
-                <span class="font-bold text-[#253047]">LUMIと一緒に自分らしい選択</span>を考えよう。
-              </p>
             </div>
           </div>
 
-          <div class="relative z-10 hidden lg:flex items-center gap-5 text-[11px] text-[#6F7785] font-semibold">
+          <div class="relative z-10 hidden lg:flex items-center justify-center gap-5 text-[11px] text-[#6F7785] font-semibold shrink-0">
             <span class="flex items-center gap-1.5"><i class="fa-solid fa-chart-line text-[#65B9E8]"></i>未来を可視化</span>
             <span class="flex items-center gap-1.5"><i class="fa-solid fa-wallet text-[#72D6B5]"></i>資産を整理</span>
             <span class="flex items-center gap-1.5"><i class="fa-solid fa-heart text-[#FF8FA3]"></i>LUMIが伴走</span>
@@ -195,36 +191,36 @@
         </section>
 
         <!-- Auth Actions -->
-        <section class="bg-white px-5 py-7 sm:px-10 sm:py-10 lg:px-14 lg:py-12 flex items-center justify-center">
-          <div class="w-full max-w-md">
+        <section class="bg-white px-5 py-4 sm:px-8 sm:py-6 lg:px-14 lg:py-12 flex items-start lg:items-center justify-center min-h-0 overflow-hidden">
+          <div class="w-full max-w-md h-full lg:h-auto flex flex-col justify-start lg:justify-center">
             <!-- Welcome Actions -->
-            <div id="welcomeAuthChoice" class="space-y-6">
-              <div class="space-y-2">
+            <div id="welcomeAuthChoice" class="space-y-3 sm:space-y-4 lg:space-y-6 pt-0 sm:pt-1 lg:pt-0">
+              <div class="space-y-1 sm:space-y-2">
                 <p class="text-xs font-bold tracking-wider text-[#8C5800] uppercase">Welcome to LUMIFUL</p>
-                <h2 class="text-2xl sm:text-3xl font-extrabold text-[#253047] tracking-tight">こんにちは！</h2>
-                <p class="text-sm text-[#6F7785] leading-relaxed">
+                <h2 class="text-xl sm:text-2xl lg:text-3xl font-extrabold text-[#253047] tracking-tight">こんにちは！</h2>
+                <p class="text-xs sm:text-sm text-[#6F7785] leading-relaxed">
                   続きから始める方はログイン。はじめての方は、新しいLUMIFULをつくりましょう。
                 </p>
               </div>
 
-              <div class="space-y-3">
-                <button type="button" onclick="showWelcomeAuthPanel('login')" class="w-full min-h-[48px] btn-lumi-primary text-sm font-bold flex items-center justify-center gap-2">
+              <div class="space-y-2 sm:space-y-3">
+                <button type="button" onclick="showWelcomeAuthPanel('login')" class="w-full min-h-[42px] sm:min-h-[48px] btn-lumi-primary text-sm font-bold flex items-center justify-center gap-2">
                   <i class="fa-solid fa-right-to-bracket"></i>
                   <span>ログイン</span>
                 </button>
-                <button type="button" onclick="showWelcomeAuthPanel('signup')" class="w-full min-h-[48px] btn-lumi-secondary text-sm font-bold flex items-center justify-center gap-2">
+                <button type="button" onclick="showWelcomeAuthPanel('signup')" class="w-full min-h-[42px] sm:min-h-[48px] btn-lumi-secondary text-sm font-bold flex items-center justify-center gap-2">
                   <i class="fa-solid fa-user-plus text-[#65B9E8]"></i>
                   <span>はじめて使う</span>
                 </button>
               </div>
 
-              <div class="relative flex items-center py-1">
+              <div class="relative flex items-center py-0 sm:py-1">
                 <div class="flex-1 border-t border-[#ECEBE6]"></div>
                 <span class="px-3 text-[10px] text-[#9AA0AA] font-bold">登録せずに試す</span>
                 <div class="flex-1 border-t border-[#ECEBE6]"></div>
               </div>
 
-              <button type="button" onclick="handleWelcomeGuestStart()" class="w-full min-h-[46px] text-xs sm:text-sm font-bold text-[#253047] bg-[#FAFAF7] hover:bg-[#F5F4EF] border border-[#ECEBE6] rounded-[14px] transition flex items-center justify-center gap-2">
+              <button type="button" onclick="handleWelcomeGuestStart()" class="w-full min-h-[40px] sm:min-h-[46px] text-xs sm:text-sm font-bold text-[#253047] bg-[#FAFAF7] hover:bg-[#F5F4EF] border border-[#ECEBE6] rounded-[14px] transition flex items-center justify-center gap-2">
                 <i class="fa-solid fa-bolt text-[#FFC83D]"></i>
                 <span>ゲストで試す</span>
               </button>
@@ -235,7 +231,7 @@
             </div>
 
             <!-- Login Panel -->
-            <div id="welcomeLoginPanel" class="hidden space-y-5">
+            <div id="welcomeLoginPanel" class="hidden space-y-3 sm:space-y-4 lg:space-y-5">
               <button type="button" onclick="showWelcomeAuthPanel('choice')" class="inline-flex items-center gap-1.5 text-xs font-bold text-[#6F7785] hover:text-[#253047] transition">
                 <i class="fa-solid fa-arrow-left"></i><span>戻る</span>
               </button>
@@ -263,7 +259,7 @@
             </div>
 
             <!-- Sign Up Panel -->
-            <div id="welcomeSignupPanel" class="hidden space-y-5">
+            <div id="welcomeSignupPanel" class="hidden space-y-3 sm:space-y-4 lg:space-y-5">
               <button type="button" onclick="showWelcomeAuthPanel('choice')" class="inline-flex items-center gap-1.5 text-xs font-bold text-[#6F7785] hover:text-[#253047] transition">
                 <i class="fa-solid fa-arrow-left"></i><span>戻る</span>
               </button>
@@ -285,15 +281,14 @@
                   <i class="fa-solid fa-user-plus"></i><span>アカウントを作る</span>
                 </button>
               </form>
-              <p class="text-[10px] text-[#9AA0AA] leading-relaxed text-center">
-                Phase 7BでFirebase Authenticationへ接続します。
-              </p>
+
             </div>
           </div>
         </section>
       </div>
     </div>
   </div>
+  <!-- PHASE 7B / STEP 3.3: LOGIN ONE-SCREEN UI — layout-only; existing LUMIFUL assets/colors preserved -->
 
   <!-- Toast Notification Container -->
   <div id="toastContainer" class="fixed bottom-20 lg:bottom-6 right-4 z-50 flex flex-col gap-2 pointer-events-none"></div>
@@ -5196,7 +5191,7 @@ JSON Schema:
        ============================================================ */
     window.LUMIFUL_FIREBASE_SDK_VERSION = '12.18.0';
     window.LUMIFUL_FIREBASE_CONFIG = window.LUMIFUL_FIREBASE_CONFIG || Object.freeze({
-      apiKey: 'AIzaSyDpG99OXkHLERcRDJFwqTQiA1-GLaZsjR8',
+      apiKey: 'AIzaSyDpG99OXkHLERcRDJFwqTQiA1-GLazSjR8',
       authDomain: 'lumiful.firebaseapp.com',
       projectId: 'lumiful',
       storageBucket: 'lumiful.firebasestorage.app',
