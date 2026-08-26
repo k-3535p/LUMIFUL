@@ -154,6 +154,147 @@
 </head>
 <body class="bg-[#FAFAF7] text-[#253047] min-h-screen font-sans antialiased relative overflow-x-hidden">
 
+  <!-- PHASE 7 / STEP 1: WELCOME + AUTH EXPERIENCE (UI LAYER) -->
+  <div id="welcomeAuthView" class="fixed inset-0 z-[70] bg-[#FAFAF7] hidden overflow-y-auto">
+    <div class="min-h-screen flex items-stretch">
+      <div class="w-full grid grid-cols-1 lg:grid-cols-2">
+        <!-- Brand Experience -->
+        <section class="relative overflow-hidden bg-[#FFFDF8] px-6 py-8 sm:px-10 sm:py-10 lg:px-14 lg:py-12 flex flex-col justify-between border-b lg:border-b-0 lg:border-r border-[#ECEBE6]">
+          <div class="absolute -top-20 -right-16 w-72 h-72 rounded-full bg-[#FFF2CD] blur-3xl opacity-80 pointer-events-none"></div>
+          <div class="absolute bottom-[-80px] left-[-70px] w-64 h-64 rounded-full bg-[#EAF6FC] blur-3xl opacity-70 pointer-events-none"></div>
+
+          <div class="relative z-10">
+            <img src="./assets/lumiful-logo.png" alt="LUMIFUL" class="h-9 sm:h-11 w-auto object-contain" />
+          </div>
+
+          <div class="relative z-10 flex flex-col items-center lg:items-start text-center lg:text-left py-8 sm:py-10 lg:py-4">
+            <div class="relative mb-5 sm:mb-7">
+              <div class="absolute inset-0 rounded-full bg-[#FFF2CD] blur-2xl scale-110 opacity-70"></div>
+              <img src="./assets/lumi-spark.png" alt="LUMI" class="relative w-32 h-32 sm:w-40 sm:h-40 lg:w-48 lg:h-48 object-contain pointer-events-none" />
+            </div>
+            <div class="max-w-md space-y-3">
+              <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white border border-[#F0E2B7] text-[10px] sm:text-[11px] font-bold text-[#8C5800]">
+                <i class="fa-solid fa-sparkles text-[#FFC83D]"></i>
+                <span>LUMIがあなたの未来づくりをサポート</span>
+              </div>
+              <h1 class="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight text-[#253047] leading-tight">
+                未来を、もっと<br class="hidden sm:block" />自分らしく。
+              </h1>
+              <p class="text-sm sm:text-base text-[#6F7785] leading-relaxed">
+                お金とこれからの人生を整理して、
+                <span class="font-bold text-[#253047]">LUMIと一緒に自分らしい選択</span>を考えよう。
+              </p>
+            </div>
+          </div>
+
+          <div class="relative z-10 hidden lg:flex items-center gap-5 text-[11px] text-[#6F7785] font-semibold">
+            <span class="flex items-center gap-1.5"><i class="fa-solid fa-chart-line text-[#65B9E8]"></i>未来を可視化</span>
+            <span class="flex items-center gap-1.5"><i class="fa-solid fa-wallet text-[#72D6B5]"></i>資産を整理</span>
+            <span class="flex items-center gap-1.5"><i class="fa-solid fa-heart text-[#FF8FA3]"></i>LUMIが伴走</span>
+          </div>
+        </section>
+
+        <!-- Auth Actions -->
+        <section class="bg-white px-5 py-7 sm:px-10 sm:py-10 lg:px-14 lg:py-12 flex items-center justify-center">
+          <div class="w-full max-w-md">
+            <!-- Welcome Actions -->
+            <div id="welcomeAuthChoice" class="space-y-6">
+              <div class="space-y-2">
+                <p class="text-xs font-bold tracking-wider text-[#8C5800] uppercase">Welcome to LUMIFUL</p>
+                <h2 class="text-2xl sm:text-3xl font-extrabold text-[#253047] tracking-tight">こんにちは！</h2>
+                <p class="text-sm text-[#6F7785] leading-relaxed">
+                  続きから始める方はログイン。はじめての方は、新しいLUMIFULをつくりましょう。
+                </p>
+              </div>
+
+              <div class="space-y-3">
+                <button type="button" onclick="showWelcomeAuthPanel('login')" class="w-full min-h-[48px] btn-lumi-primary text-sm font-bold flex items-center justify-center gap-2">
+                  <i class="fa-solid fa-right-to-bracket"></i>
+                  <span>ログイン</span>
+                </button>
+                <button type="button" onclick="showWelcomeAuthPanel('signup')" class="w-full min-h-[48px] btn-lumi-secondary text-sm font-bold flex items-center justify-center gap-2">
+                  <i class="fa-solid fa-user-plus text-[#65B9E8]"></i>
+                  <span>はじめて使う</span>
+                </button>
+              </div>
+
+              <div class="relative flex items-center py-1">
+                <div class="flex-1 border-t border-[#ECEBE6]"></div>
+                <span class="px-3 text-[10px] text-[#9AA0AA] font-bold">登録せずに試す</span>
+                <div class="flex-1 border-t border-[#ECEBE6]"></div>
+              </div>
+
+              <button type="button" onclick="handleWelcomeGuestStart()" class="w-full min-h-[46px] text-xs sm:text-sm font-bold text-[#253047] bg-[#FAFAF7] hover:bg-[#F5F4EF] border border-[#ECEBE6] rounded-[14px] transition flex items-center justify-center gap-2">
+                <i class="fa-solid fa-bolt text-[#FFC83D]"></i>
+                <span>ゲストで試す</span>
+              </button>
+
+              <p class="text-[10px] text-[#9AA0AA] leading-relaxed text-center">
+                ゲスト利用のデータはこの端末に保存されます。
+              </p>
+            </div>
+
+            <!-- Login Panel -->
+            <div id="welcomeLoginPanel" class="hidden space-y-5">
+              <button type="button" onclick="showWelcomeAuthPanel('choice')" class="inline-flex items-center gap-1.5 text-xs font-bold text-[#6F7785] hover:text-[#253047] transition">
+                <i class="fa-solid fa-arrow-left"></i><span>戻る</span>
+              </button>
+              <div class="space-y-1.5">
+                <h2 class="text-2xl font-extrabold text-[#253047]">おかえりなさい</h2>
+                <p class="text-sm text-[#6F7785]">保存したLUMIFULを呼び出します。</p>
+              </div>
+              <form onsubmit="handleWelcomeLogin(event)" class="space-y-3">
+                <div>
+                  <label for="welcomeLoginEmail" class="block text-[11px] font-semibold text-[#4F586A] mb-1">メールアドレス</label>
+                  <input type="email" id="welcomeLoginEmail" required autocomplete="email" placeholder="example@lumiful.com" class="w-full px-3 lumi-input text-sm font-bold" />
+                </div>
+                <div>
+                  <label for="welcomeLoginPassword" class="block text-[11px] font-semibold text-[#4F586A] mb-1">パスワード</label>
+                  <input type="password" id="welcomeLoginPassword" required minlength="8" autocomplete="current-password" placeholder="8桁以上のパスワード" class="w-full px-3 lumi-input text-sm font-bold" />
+                </div>
+                <div id="welcomeLoginError" class="hidden text-xs font-bold text-rose-600"></div>
+                <button type="submit" class="w-full min-h-[48px] btn-lumi-primary text-sm font-bold flex items-center justify-center gap-2">
+                  <i class="fa-solid fa-right-to-bracket"></i><span>ログイン</span>
+                </button>
+                <button type="button" onclick="openPasswordRecoveryModal('welcomeLoginEmail')" class="w-full text-[11px] font-bold text-[#6F7785] hover:text-[#8C5800] transition py-1">
+                  パスワードを忘れた方
+                </button>
+              </form>
+            </div>
+
+            <!-- Sign Up Panel -->
+            <div id="welcomeSignupPanel" class="hidden space-y-5">
+              <button type="button" onclick="showWelcomeAuthPanel('choice')" class="inline-flex items-center gap-1.5 text-xs font-bold text-[#6F7785] hover:text-[#253047] transition">
+                <i class="fa-solid fa-arrow-left"></i><span>戻る</span>
+              </button>
+              <div class="space-y-1.5">
+                <h2 class="text-2xl font-extrabold text-[#253047]">LUMIFULをはじめよう</h2>
+                <p class="text-sm text-[#6F7785]">アカウントを作って、あなたの未来を保存できるようにします。</p>
+              </div>
+              <form onsubmit="handleWelcomeSignup(event)" class="space-y-3">
+                <div>
+                  <label for="welcomeSignupEmail" class="block text-[11px] font-semibold text-[#4F586A] mb-1">メールアドレス</label>
+                  <input type="email" id="welcomeSignupEmail" required autocomplete="email" placeholder="example@lumiful.com" class="w-full px-3 lumi-input text-sm font-bold" />
+                </div>
+                <div>
+                  <label for="welcomeSignupPassword" class="block text-[11px] font-semibold text-[#4F586A] mb-1">パスワード</label>
+                  <input type="password" id="welcomeSignupPassword" required minlength="8" autocomplete="new-password" placeholder="8桁以上のパスワード" class="w-full px-3 lumi-input text-sm font-bold" />
+                </div>
+                <div id="welcomeSignupError" class="hidden text-xs font-bold text-rose-600"></div>
+                <button type="submit" class="w-full min-h-[48px] btn-lumi-primary text-sm font-bold flex items-center justify-center gap-2">
+                  <i class="fa-solid fa-user-plus"></i><span>アカウントを作る</span>
+                </button>
+              </form>
+              <p class="text-[10px] text-[#9AA0AA] leading-relaxed text-center">
+                Phase 7BでFirebase Authenticationへ接続します。
+              </p>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+
   <!-- Toast Notification Container -->
   <div id="toastContainer" class="fixed bottom-20 lg:bottom-6 right-4 z-50 flex flex-col gap-2 pointer-events-none"></div>
 
@@ -169,10 +310,13 @@
       class="h-8 w-auto object-contain cursor-pointer"
       onclick="switchView('dashboard')"
     />
-    <button onclick="openAuthModal()" class="px-3.5 py-1.5 btn-lumi-primary text-xs flex items-center gap-1.5 whitespace-nowrap">
+    <div class="flex items-center gap-2">
+      <span id="saveStatusMobile" class="inline-flex items-center gap-1 text-[9px] font-bold text-[#8A909C] whitespace-nowrap" aria-live="polite"><i class="fa-solid fa-cloud"></i><span>保存待機</span></span>
+      <button onclick="openAuthModal()" class="px-3.5 py-1.5 btn-lumi-primary text-xs flex items-center gap-1.5 whitespace-nowrap">
       <i class="fa-solid fa-user-circle"></i>
       <span>ログイン</span>
-    </button>
+      </button>
+    </div>
   </div>
 
   <!-- MAIN APP SHELL CONTAINER -->
@@ -256,6 +400,7 @@
         </div>
 
         <div class="flex items-center gap-2 flex-wrap sm:flex-nowrap">
+          <span id="saveStatusDesktop" class="hidden sm:inline-flex items-center gap-1 text-[10px] font-bold text-[#8A909C] whitespace-nowrap" aria-live="polite"><i class="fa-solid fa-cloud"></i><span>保存待機</span></span>
           <button id="authAccountBtn" onclick="openAuthModal()" class="px-3.5 py-2 btn-lumi-primary text-xs flex items-center gap-1.5 whitespace-nowrap shrink-0">
             <i class="fa-solid fa-user-circle" id="authBtnIcon"></i>
             <span id="authBtnText" class="whitespace-nowrap">アカウント作成 / ログイン</span>
@@ -1261,9 +1406,12 @@
           <div class="flex gap-2 pt-1">
             <button type="submit" class="w-full py-2.5 btn-lumi-primary text-xs sm:text-sm font-bold flex items-center justify-center gap-1.5 whitespace-nowrap">
               <i class="fa-solid fa-right-to-bracket"></i>
-              <span>ログイン / アカウント作成</span>
+              <span>ログイン</span>
             </button>
           </div>
+          <button type="button" onclick="openPasswordRecoveryModal('authEmail')" class="w-full text-[11px] font-bold text-[#6F7785] hover:text-[#8C5800] transition py-1">
+            パスワードを忘れた方
+          </button>
         </form>
 
         <div class="relative flex py-1 items-center">
@@ -1287,11 +1435,76 @@
           <p class="text-[11px] text-[#6F7785]">現在シミュレーションデータは安全に自動保存されています。</p>
         </div>
 
+        <button type="button" onclick="openAccountLifecycleModal()" class="w-full py-2.5 btn-lumi-secondary text-xs font-bold flex items-center justify-center gap-1.5 whitespace-nowrap">
+          <i class="fa-solid fa-user-gear text-[#65B9E8]"></i>
+          <span>アカウント設定</span>
+        </button>
+
         <button onclick="handleAccountLogout()" class="w-full py-2.5 bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs font-bold rounded-[14px] transition border border-rose-200 flex items-center justify-center gap-1.5 whitespace-nowrap">
           <i class="fa-solid fa-right-from-bracket"></i>
           <span>ログアウト</span>
         </button>
       </div>
+    </div>
+  </div>
+
+  <!-- PHASE 7 / STEP 9: ACCOUNT LIFECYCLE / IDENTITY MANAGEMENT -->
+  <div id="accountLifecycleModal" class="fixed inset-0 bg-[#253047]/50 backdrop-blur-sm z-[82] flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-[24px] max-w-lg w-full p-5 sm:p-6 shadow-xl border border-[#ECEBE6] max-h-[90vh] overflow-y-auto">
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="text-base font-bold text-[#253047] flex items-center gap-2"><i class="fa-solid fa-user-gear text-[#65B9E8]"></i><span>アカウント設定</span></h3>
+        <button type="button" onclick="closeAccountLifecycleModal()" class="text-[#6F7785] hover:text-[#253047] w-8 h-8 rounded-full flex items-center justify-center"><i class="fa-solid fa-xmark text-lg"></i></button>
+      </div>
+      <div class="bg-[#FAFAF7] border border-[#ECEBE6] rounded-[16px] p-3 mb-5">
+        <div class="text-[10px] font-bold text-[#8A909C] mb-1">現在のアカウント</div>
+        <div id="accountLifecycleCurrentEmail" class="text-sm font-bold text-[#253047] break-all">-</div>
+      </div>
+      <section class="space-y-3 pb-5 border-b border-[#ECEBE6]">
+        <div><h4 class="text-sm font-bold text-[#253047]">メールアドレスを変更</h4><p class="text-[11px] text-[#6F7785] mt-1">保存中のシミュレーションも新しいアカウントIDへ引き継ぎます。</p></div>
+        <form onsubmit="handleAccountEmailChange(event)" class="space-y-3">
+          <input id="accountLifecycleNewEmail" type="email" required autocomplete="email" placeholder="新しいメールアドレス" class="w-full px-3 lumi-input text-sm font-bold" />
+          <input id="accountLifecyclePassword" type="password" required minlength="8" autocomplete="current-password" placeholder="現在のパスワード" class="w-full px-3 lumi-input text-sm font-bold" />
+          <div id="accountLifecycleChangeMessage" class="hidden text-xs font-bold leading-relaxed"></div>
+          <button id="accountLifecycleChangeBtn" type="submit" class="w-full py-2.5 btn-lumi-primary text-xs font-bold"><i class="fa-solid fa-envelope mr-1.5"></i>メールアドレスを変更</button>
+        </form>
+      </section>
+      <section class="space-y-3 pt-5">
+        <div><h4 class="text-sm font-bold text-rose-700">アカウントを削除</h4><p class="text-[11px] text-[#6F7785] mt-1">このアカウントの認証情報とアカウント保存データをこの端末から削除します。ゲスト領域や別アカウントのデータは削除しません。</p></div>
+        <form onsubmit="handleAccountDeletion(event)" class="space-y-3">
+          <input id="accountLifecycleDeletePassword" type="password" required minlength="8" autocomplete="current-password" placeholder="現在のパスワード" class="w-full px-3 lumi-input text-sm font-bold" />
+          <label class="flex items-start gap-2 text-[11px] font-bold text-[#4F586A]"><input id="accountLifecycleDeleteConfirm" type="checkbox" required class="mt-0.5 w-4 h-4 rounded"><span>アカウント保存データが削除されることを確認しました</span></label>
+          <div id="accountLifecycleDeleteMessage" class="hidden text-xs font-bold leading-relaxed"></div>
+          <button id="accountLifecycleDeleteBtn" type="submit" class="w-full py-2.5 bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs font-bold rounded-[14px] border border-rose-200"><i class="fa-solid fa-trash-can mr-1.5"></i>アカウントを削除</button>
+        </form>
+      </section>
+    </div>
+  </div>
+
+  <!-- PHASE 7 / STEP 8: PASSWORD RECOVERY MODAL -->
+  <div id="passwordRecoveryModal" class="fixed inset-0 bg-[#253047]/50 backdrop-blur-sm z-[80] flex items-center justify-center p-4 hidden">
+    <div class="bg-white rounded-[24px] max-w-md w-full p-5 sm:p-6 shadow-xl border border-[#ECEBE6]">
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="text-base font-bold text-[#253047] flex items-center gap-2">
+          <i class="fa-solid fa-key text-[#FFC83D]"></i><span>パスワードの再設定</span>
+        </h3>
+        <button type="button" onclick="closePasswordRecoveryModal()" class="text-[#6F7785] hover:text-[#253047] w-8 h-8 rounded-full flex items-center justify-center">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+      <p class="text-xs text-[#6F7785] leading-relaxed mb-4">
+        登録したメールアドレスを入力してください。アカウントの有無にかかわらず、同じ案内を表示します。
+      </p>
+      <form onsubmit="handlePasswordRecoveryRequest(event)" class="space-y-3">
+        <div>
+          <label for="passwordRecoveryEmail" class="block text-[11px] font-semibold text-[#4F586A] mb-1">メールアドレス</label>
+          <input type="email" id="passwordRecoveryEmail" required autocomplete="email" placeholder="example@lumiful.com" class="w-full px-3 lumi-input text-sm font-bold" />
+        </div>
+        <div id="passwordRecoveryMessage" class="hidden text-xs font-bold leading-relaxed"></div>
+        <button id="passwordRecoverySubmit" type="submit" class="w-full min-h-[46px] btn-lumi-primary text-sm font-bold flex items-center justify-center gap-2">
+          <i class="fa-solid fa-paper-plane"></i><span>再設定メールを送る</span>
+        </button>
+      </form>
+      <p class="text-[10px] text-[#9AA0AA] leading-relaxed text-center mt-4">Phase 7BでFirebaseのパスワード再設定メールへ接続します。</p>
     </div>
   </div>
 
@@ -2201,22 +2414,95 @@
 
     
     
+    /* ============================================================
+       PHASE 7 / STEP 2 — AUTH STATE + ROUTER
+       ------------------------------------------------------------
+       Auth state is intentionally independent from Firebase for now.
+       Phase 7B will replace resolveAuthState() storage reads with the
+       Firebase auth listener without changing the app routing API.
+       ============================================================ */
+    window.LUMIFUL_GUEST_EMAIL = 'guest@lumiful.local (ゲスト)';
+    window.authState = {
+      status: 'checking', // checking | unauthenticated | guest | authenticated
+      user: null
+    };
+
+    window.getStoredAuthIdentity = function() {
+      const email = localStorage.getItem('lumiful_user_email') || localStorage.getItem('lc_user_email');
+      if (!email) return null;
+      return {
+        email,
+        isGuest: email === window.LUMIFUL_GUEST_EMAIL || email.includes('@lumiful.local')
+      };
+    };
+
+    window.routeByAuthState = function() {
+      const welcome = document.getElementById('welcomeAuthView');
+      const status = window.authState?.status || 'checking';
+
+      if (status === 'checking') {
+        if (welcome) welcome.classList.add('hidden');
+        document.body.classList.add('overflow-hidden');
+        return;
+      }
+
+      if (status === 'unauthenticated') {
+        if (welcome) {
+          window.showWelcomeAuthPanel('choice');
+          welcome.classList.remove('hidden');
+        }
+        document.body.classList.add('overflow-hidden');
+        return;
+      }
+
+      if (welcome) welcome.classList.add('hidden');
+      document.body.classList.remove('overflow-hidden');
+    };
+
+    window.resolveAuthState = function() {
+      window.authState = { status: 'checking', user: null };
+      window.routeByAuthState();
+
+      const identity = window.getStoredAuthIdentity();
+      if (!identity) {
+        window.authState = { status: 'unauthenticated', user: null };
+      } else if (identity.isGuest) {
+        window.authState = {
+          status: 'guest',
+          user: { email: identity.email, isGuest: true }
+        };
+      } else {
+        window.authState = {
+          status: 'authenticated',
+          user: { email: identity.email, isGuest: false }
+        };
+      }
+
+      window.checkAuthState();
+      window.routeByAuthState();
+      return window.authState;
+    };
+
     window.checkAuthState = function() {
-      const savedEmail = localStorage.getItem('lumiful_user_email') || localStorage.getItem('lc_user_email');
+      const state = window.authState || { status: 'unauthenticated', user: null };
+      const isSignedIn = state.status === 'guest' || state.status === 'authenticated';
+      const isGuest = state.status === 'guest';
       const loggedOutBox = document.getElementById('authContentLoggedOut');
       const loggedInBox = document.getElementById('authContentLoggedIn');
       const authBtnText = document.getElementById('authBtnText');
       const authBtnIcon = document.getElementById('authBtnIcon');
       const lockOverlay = document.getElementById('authLockOverlay');
+      const userEmailDisplay = document.getElementById('userEmailDisplay');
 
-      if (savedEmail) {
+      if (isSignedIn) {
         if (loggedOutBox) loggedOutBox.classList.add('hidden');
         if (loggedInBox) loggedInBox.classList.remove('hidden');
-        document.getElementById('userEmailDisplay').innerText = savedEmail;
-        if (authBtnText) authBtnText.innerText = 'アカウント同期中';
-        if (authBtnIcon) authBtnIcon.className = 'fa-solid fa-user-check text-[#8C5800]';
+        if (userEmailDisplay) userEmailDisplay.innerText = isGuest ? 'ゲスト利用中' : (state.user?.email || '');
+        if (authBtnText) authBtnText.innerText = isGuest ? 'ゲスト利用中' : 'アカウント';
+        if (authBtnIcon) authBtnIcon.className = isGuest
+          ? 'fa-solid fa-user-clock text-[#65B9E8]'
+          : 'fa-solid fa-user-check text-[#8C5800]';
         if (lockOverlay) lockOverlay.classList.add('hidden');
-
         window.setInputsDisabled(false);
       } else {
         if (loggedOutBox) loggedOutBox.classList.remove('hidden');
@@ -2224,7 +2510,6 @@
         if (authBtnText) authBtnText.innerText = 'アカウント作成 / ログイン';
         if (authBtnIcon) authBtnIcon.className = 'fa-solid fa-user-circle';
         if (lockOverlay) lockOverlay.classList.remove('hidden');
-
         window.setInputsDisabled(true);
       }
     };
@@ -2307,15 +2592,79 @@
     };
 
     window.openAuthModal = function() {
-      const el = document.getElementById('authModal');
-      if (el) el.classList.remove('hidden');
+      const status = window.authState?.status || 'unauthenticated';
+      if (status === 'authenticated' || status === 'guest') {
+        const legacyAccountModal = document.getElementById('authModal');
+        if (legacyAccountModal) legacyAccountModal.classList.remove('hidden');
+        return;
+      }
+      const welcome = document.getElementById('welcomeAuthView');
+      if (welcome) {
+        window.showWelcomeAuthPanel('choice');
+        welcome.classList.remove('hidden');
+        document.body.classList.add('overflow-hidden');
+      }
     };
     window.closeAuthModal = function() {
-      const el = document.getElementById('authModal');
-      if (el) el.classList.add('hidden');
+      const legacyAccountModal = document.getElementById('authModal');
+      if (legacyAccountModal) legacyAccountModal.classList.add('hidden');
+      const welcome = document.getElementById('welcomeAuthView');
+      if (welcome) welcome.classList.add('hidden');
+      document.body.classList.remove('overflow-hidden');
+    };
+
+    window.showWelcomeAuthPanel = function(panel) {
+      const choice = document.getElementById('welcomeAuthChoice');
+      const login = document.getElementById('welcomeLoginPanel');
+      const signup = document.getElementById('welcomeSignupPanel');
+      if (choice) choice.classList.toggle('hidden', panel !== 'choice');
+      if (login) login.classList.toggle('hidden', panel !== 'login');
+      if (signup) signup.classList.toggle('hidden', panel !== 'signup');
+    };
+
+    window.handleWelcomeLogin = function(event) {
+      event.preventDefault();
+      const email = document.getElementById('welcomeLoginEmail')?.value?.trim();
+      const password = document.getElementById('welcomeLoginPassword')?.value || '';
+      const error = document.getElementById('welcomeLoginError');
+      if (!email || password.length < 8) {
+        if (error) { error.textContent = 'メールアドレスと8桁以上のパスワードを確認してください。'; error.classList.remove('hidden'); }
+        return;
+      }
+      if (error) error.classList.add('hidden');
+      // STEP 1 mock auth: Phase 7B replaces this with Firebase Authentication.
+      localStorage.setItem('lumiful_user_email', email);
+      window.resolveAuthState();
+      window.closeAuthModal();
+      window.recalculateAllFast();
+      window.showToast('ログインしました', 'success');
+    };
+
+    window.handleWelcomeSignup = function(event) {
+      event.preventDefault();
+      const email = document.getElementById('welcomeSignupEmail')?.value?.trim();
+      const password = document.getElementById('welcomeSignupPassword')?.value || '';
+      const error = document.getElementById('welcomeSignupError');
+      if (!email || password.length < 8) {
+        if (error) { error.textContent = 'メールアドレスと8桁以上のパスワードを確認してください。'; error.classList.remove('hidden'); }
+        return;
+      }
+      if (error) error.classList.add('hidden');
+      // STEP 1 mock signup: Phase 7B replaces this with Firebase Authentication.
+      localStorage.setItem('lumiful_user_email', email);
+      localStorage.setItem('lumiful_new_user', '1');
+      window.resolveAuthState();
+      window.closeAuthModal();
+      window.recalculateAllFast();
+      window.showToast('LUMIFULへようこそ！', 'success');
+    };
+
+    window.handleWelcomeGuestStart = function() {
+      window.handleAnonymousAuth();
+      window.closeAuthModal();
     };
     window.openPlansModal = function() {
-      if (!localStorage.getItem('lumiful_user_email') && !localStorage.getItem('lc_user_email')) {
+      if (!['guest', 'authenticated'].includes(window.authState?.status)) {
         openAuthModal();
         return;
       }
@@ -2351,7 +2700,7 @@
       window.showToast('URLをコピーしました！LINE等に貼り付けて送信できます。', 'success');
     };
     window.openAddEventModal = function() {
-      if (!localStorage.getItem('lumiful_user_email') && !localStorage.getItem('lc_user_email')) {
+      if (!['guest', 'authenticated'].includes(window.authState?.status)) {
         openAuthModal();
         return;
       }
@@ -2383,7 +2732,7 @@
       const email = document.getElementById('authEmail').value;
       if (email) {
         localStorage.setItem('lumiful_user_email', email);
-        window.checkAuthState();
+        window.resolveAuthState();
         window.closeAuthModal();
         window.recalculateAllFast();
         window.showToast('ログインしました', 'success');
@@ -2391,18 +2740,18 @@
     };
 
     window.handleAnonymousAuth = function() {
-      localStorage.setItem('lumiful_user_email', 'guest@lumiful.local (ゲスト)');
-      window.checkAuthState();
+      localStorage.setItem('lumiful_user_email', window.LUMIFUL_GUEST_EMAIL);
+      window.resolveAuthState();
       window.closeAuthModal();
       window.recalculateAllFast();
-      window.showToast('ゲストとしてログインしました', 'info');
+      window.showToast('ゲストとして開始しました', 'info');
     };
 
     window.handleAccountLogout = function() {
       localStorage.removeItem('lumiful_user_email');
       localStorage.removeItem('lc_user_email');
-      window.checkAuthState();
       window.closeAuthModal();
+      window.resolveAuthState();
       window.showToast('ログアウトしました', 'info');
     };
 
@@ -3479,11 +3828,13 @@ JSON Schema:
       }
     };
 
-    window.onload = function() {
+    window.onload = async function() {
       setupAgeSelects();
       window.loadSavedPlansFromStorageV2();
+      window.LUMIFUL_STEP4_BOOTING = true;
 
-      // Restore both Schema v2 and legacy v1 compressed share URLs.
+      // Restore shared URL first. A shared simulation is an explicit user action
+      // and therefore takes precedence over stored guest/account data.
       let restoredFromUrl = false;
       const urlParams = new URLSearchParams(window.location.search);
       const dataParam = urlParams.get('data');
@@ -3497,20 +3848,2105 @@ JSON Schema:
             window.showToast('URLからシミュレーションデータを復元しました', 'success');
           }
         } catch (e) {
-          console.error("Failed to restore URL data", e);
+          console.error('Failed to restore URL data', e);
         }
       }
 
-      if (!restoredFromUrl) {
+      window.resolveAuthState();
+
+      if (!restoredFromUrl && ['guest','authenticated'].includes(window.authState?.status)) {
+        const envelope = await window.loadUserData({ restore: true, silent: true });
+        if (!envelope) {
+          window.ensureV2InputModel();
+          window.renderV2InputUI();
+          window.recalculateAllFast();
+        }
+      } else if (!restoredFromUrl) {
         window.ensureV2InputModel();
         window.renderV2InputUI();
-        window.checkAuthState();
         window.recalculateAllFast();
-      } else {
-        window.checkAuthState();
+      }
+
+      window.LUMIFUL_STEP4_BOOTING = false;
+      window.updateSaveStatus('idle');
+      if (restoredFromUrl && ['guest','authenticated'].includes(window.authState?.status)) {
+        window.scheduleAutoSave('shared-url');
       }
     };
   
+
+    /* ============================================================
+       PHASE 7 / STEP 3 — STORAGE ADAPTER
+       ------------------------------------------------------------
+       - Guest data: LocalStorageAdapter
+       - Account data: MockCloudStorageAdapter (Phase 7B -> Firestore)
+       - Phase 6 Schema v2 remains unchanged inside a persistence envelope.
+       - Auto-save / automatic restore are intentionally deferred to STEP 4.
+       ============================================================ */
+    window.LUMIFUL_CURRENT_DATA_KEY = 'lumiful_current_v2';
+    window.LUMIFUL_MOCK_CLOUD_PREFIX = 'lumiful_mock_cloud_v2:';
+
+    window.createPersistenceEnvelopeV2 = function(model, existingEnvelope) {
+      const now = new Date().toISOString();
+      const normalized = window.cloneDataModelV2(window.normalizeDataModelV2(model));
+      return {
+        schemaVersion: 2,
+        createdAt: existingEnvelope?.createdAt || now,
+        updatedAt: now,
+        data: normalized
+      };
+    };
+
+    window.parsePersistenceEnvelopeV2 = function(raw) {
+      if (!raw) return null;
+      const parsed = typeof raw === 'string' ? JSON.parse(raw) : raw;
+      if (!parsed || typeof parsed !== 'object') return null;
+      // STEP 12 compatibility: accept a bare Schema v2/v1 object as well.
+      if (!parsed.data) {
+        return window.createPersistenceEnvelopeV2(window.normalizeDataModelV2(parsed));
+      }
+      return {
+        schemaVersion: 2,
+        createdAt: parsed.createdAt || parsed.updatedAt || new Date().toISOString(),
+        updatedAt: parsed.updatedAt || parsed.createdAt || new Date().toISOString(),
+        data: window.cloneDataModelV2(window.normalizeDataModelV2(parsed.data))
+      };
+    };
+
+    window.LocalStorageAdapter = Object.freeze({
+      name: 'local',
+      async load() {
+        try {
+          return window.parsePersistenceEnvelopeV2(localStorage.getItem(window.LUMIFUL_CURRENT_DATA_KEY));
+        } catch (error) {
+          console.warn('[LUMIFUL] Guest data load failed.', error);
+          return null;
+        }
+      },
+      async save(model) {
+        const previous = await this.load();
+        const envelope = window.createPersistenceEnvelopeV2(model, previous);
+        localStorage.setItem(window.LUMIFUL_CURRENT_DATA_KEY, JSON.stringify(envelope));
+        return envelope;
+      },
+      async clear() {
+        localStorage.removeItem(window.LUMIFUL_CURRENT_DATA_KEY);
+      }
+    });
+
+    window.getMockCloudStorageKey = function(user) {
+      const identity = String(user?.email || user?.uid || '').trim().toLowerCase();
+      if (!identity) throw new Error('Authenticated user identity is required.');
+      return window.LUMIFUL_MOCK_CLOUD_PREFIX + encodeURIComponent(identity);
+    };
+
+    window.MockCloudStorageAdapter = Object.freeze({
+      name: 'mock-cloud',
+      async load(user) {
+        try {
+          const key = window.getMockCloudStorageKey(user);
+          return window.parsePersistenceEnvelopeV2(localStorage.getItem(key));
+        } catch (error) {
+          console.warn('[LUMIFUL] Mock cloud data load failed.', error);
+          return null;
+        }
+      },
+      async save(model, user) {
+        const key = window.getMockCloudStorageKey(user);
+        const previous = await this.load(user);
+        const envelope = window.createPersistenceEnvelopeV2(model, previous);
+        localStorage.setItem(key, JSON.stringify(envelope));
+        return envelope;
+      },
+      async clear(user) {
+        localStorage.removeItem(window.getMockCloudStorageKey(user));
+      }
+    });
+
+    window.getStorageAdapterForAuthState = function(state = window.authState) {
+      if (state?.status === 'guest') return window.LocalStorageAdapter;
+      if (state?.status === 'authenticated') return window.MockCloudStorageAdapter;
+      return null;
+    };
+
+    window.saveUserData = async function() {
+      const state = window.authState || { status: 'unauthenticated', user: null };
+      const adapter = window.getStorageAdapterForAuthState(state);
+      if (!adapter) return null;
+      const model = window.getCurrentDataModelV2ForPersistence();
+      return adapter.save(model, state.user);
+    };
+
+    window.loadUserData = async function(options = {}) {
+      const state = window.authState || { status: 'unauthenticated', user: null };
+      const adapter = window.getStorageAdapterForAuthState(state);
+      if (!adapter) return null;
+      const envelope = await adapter.load(state.user);
+      if (envelope?.data && options.restore !== false) {
+        window.restorePersistedStateV2(envelope.data);
+      }
+      return envelope;
+    };
+
+    /* ============================================================
+       PHASE 7 / STEP 4 — AUTO SAVE / RESTORE / SAVE STATUS
+       ------------------------------------------------------------
+       - Auth-aware automatic restore on app entry.
+       - Debounced auto-save (1.5s) after simulation state changes.
+       - Small non-blocking save status for PC/SP.
+       - Restore/save guards prevent recursive writes.
+       ============================================================ */
+    window.LUMIFUL_AUTOSAVE_DELAY = 1500;
+    window.LUMIFUL_STEP4_RESTORING = false;
+    window.LUMIFUL_STEP4_SAVING = false;
+    window.LUMIFUL_STEP4_SUPPRESS_AUTOSAVE = false;
+    window.LUMIFUL_STEP4_AUTOSAVE_TIMER = null;
+    window.LUMIFUL_STEP4_LAST_SAVED_AT = null;
+
+    window.updateSaveStatus = function(status, detail) {
+      const state = window.authState?.status;
+      const signedIn = state === 'guest' || state === 'authenticated';
+      const map = {
+        idle: ['fa-cloud', signedIn ? '保存済み' : '未接続', '#8A909C'],
+        dirty: ['fa-cloud-arrow-up', '保存待ち', '#8A909C'],
+        saving: ['fa-arrows-rotate fa-spin', '保存中…', '#8C5800'],
+        saved: ['fa-circle-check', '保存済み', '#4F8A70'],
+        loading: ['fa-arrows-rotate fa-spin', '復元中…', '#8C5800'],
+        error: ['fa-triangle-exclamation', detail || '保存できません', '#A65B67']
+      };
+      const conf = map[status] || map.idle;
+      ['saveStatusDesktop','saveStatusMobile'].forEach(id => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.style.color = conf[2];
+        const icon = el.querySelector('i');
+        const text = el.querySelector('span');
+        if (icon) icon.className = 'fa-solid ' + conf[0];
+        if (text) text.textContent = conf[1];
+      });
+    };
+
+    window.scheduleAutoSave = function(reason) {
+      if (window.LUMIFUL_STEP4_BOOTING || window.LUMIFUL_STEP4_RESTORING || window.LUMIFUL_STEP4_SAVING || window.LUMIFUL_STEP4_SUPPRESS_AUTOSAVE) return;
+      if (!['guest','authenticated'].includes(window.authState?.status)) return;
+      clearTimeout(window.LUMIFUL_STEP4_AUTOSAVE_TIMER);
+      window.updateSaveStatus('dirty');
+      window.LUMIFUL_STEP4_AUTOSAVE_TIMER = setTimeout(() => window.performAutoSave(reason), window.LUMIFUL_AUTOSAVE_DELAY);
+    };
+
+    window.performAutoSave = async function(reason) {
+      if (window.LUMIFUL_STEP4_SAVING || window.LUMIFUL_STEP4_RESTORING) return null;
+      if (!['guest','authenticated'].includes(window.authState?.status)) return null;
+      window.LUMIFUL_STEP4_SAVING = true;
+      window.LUMIFUL_STEP4_SUPPRESS_AUTOSAVE = true;
+      window.updateSaveStatus('saving');
+      try {
+        const envelope = await window.saveUserData();
+        window.LUMIFUL_STEP4_LAST_SAVED_AT = envelope?.updatedAt || new Date().toISOString();
+        window.updateSaveStatus('saved');
+        return envelope;
+      } catch (error) {
+        console.error('[LUMIFUL] Auto save failed.', error);
+        window.updateSaveStatus('error');
+        return null;
+      } finally {
+        window.LUMIFUL_STEP4_SUPPRESS_AUTOSAVE = false;
+        window.LUMIFUL_STEP4_SAVING = false;
+      }
+    };
+
+    const _step4LoadUserData = window.loadUserData;
+    window.loadUserData = async function(options = {}) {
+      if (!['guest','authenticated'].includes(window.authState?.status)) return null;
+      window.LUMIFUL_STEP4_RESTORING = true;
+      if (!options.silent) window.updateSaveStatus('loading');
+      try {
+        const envelope = await _step4LoadUserData(options);
+        if (envelope) {
+          window.LUMIFUL_STEP4_LAST_SAVED_AT = envelope.updatedAt || null;
+          window.updateSaveStatus('saved');
+        } else {
+          window.updateSaveStatus('idle');
+        }
+        return envelope;
+      } catch (error) {
+        console.error('[LUMIFUL] Restore failed.', error);
+        window.updateSaveStatus('error', '復元できません');
+        return null;
+      } finally {
+        window.LUMIFUL_STEP4_RESTORING = false;
+      }
+    };
+
+    // Any successful v2 recalculation represents a meaningful state change.
+    // Debouncing keeps this safe for typing and will map cleanly to Firestore in 7B.
+    const _step4RecalculateAllFast = window.recalculateAllFast;
+    window.recalculateAllFast = function(...args) {
+      const result = _step4RecalculateAllFast.apply(this, args);
+      window.scheduleAutoSave('recalculate');
+      return result;
+    };
+
+    window.restoreUserDataForCurrentAuth = async function() {
+      if (!['guest','authenticated'].includes(window.authState?.status)) return null;
+      return window.loadUserData({ restore: true });
+    };
+
+    // Login/guest entry should restore that identity's own data before continuing.
+    const _step4ResolveAuthState = window.resolveAuthState;
+    window.resolveAuthState = function(...args) {
+      const previousStatus = window.authState?.status;
+      const previousIdentity = window.authState?.user?.email || null;
+      const result = _step4ResolveAuthState.apply(this, args);
+      const nextIdentity = window.authState?.user?.email || null;
+      window.updateSaveStatus('idle');
+      if (!window.LUMIFUL_STEP4_BOOTING && ['guest','authenticated'].includes(window.authState?.status) && (previousStatus !== window.authState.status || previousIdentity !== nextIdentity)) {
+        setTimeout(() => window.restoreUserDataForCurrentAuth(), 0);
+      }
+      return result;
+    };
+
+    // Flush a pending save when the tab is backgrounded. localStorage/mock-cloud
+    // writes are synchronous under the adapter, while Firestore 7B will use its own lifecycle handling.
+    document.addEventListener('visibilitychange', () => {
+      if (document.visibilityState === 'hidden' && window.LUMIFUL_STEP4_AUTOSAVE_TIMER) {
+        clearTimeout(window.LUMIFUL_STEP4_AUTOSAVE_TIMER);
+        window.LUMIFUL_STEP4_AUTOSAVE_TIMER = null;
+        window.performAutoSave('visibilitychange');
+      }
+    });
+
+    window.LUMIFUL_PHASE7_STEP4 = Object.freeze({
+      autoSaveEnabled: true,
+      automaticRestoreEnabled: true,
+      debounceMs: 1500,
+      saveStatusUI: true,
+      restoreGuard: true,
+      firebaseConnected: false
+    });
+
+    /* ============================================================
+       PHASE 7 / STEP 5 — GUEST → ACCOUNT DATA HANDOFF
+       ------------------------------------------------------------
+       - Preserve the current guest simulation when a new account is created.
+       - Flush any pending guest autosave before the auth identity changes.
+       - Copy Schema v2 into the account storage only when that account has no data.
+       - Existing account data always wins on normal login.
+       - Guest local data is retained as a local fallback; no destructive migration.
+       - Phase 7B will replace MockCloudStorageAdapter with Firestore without
+         changing this handoff contract.
+       ============================================================ */
+    window.LUMIFUL_STEP5_HANDOFF_IN_PROGRESS = false;
+
+    window.flushPendingAutoSaveBeforeAuthChange = async function(reason = 'auth-change') {
+      if (window.LUMIFUL_STEP4_AUTOSAVE_TIMER) {
+        clearTimeout(window.LUMIFUL_STEP4_AUTOSAVE_TIMER);
+        window.LUMIFUL_STEP4_AUTOSAVE_TIMER = null;
+      }
+      if (['guest','authenticated'].includes(window.authState?.status) && !window.LUMIFUL_STEP4_RESTORING) {
+        return window.performAutoSave(reason);
+      }
+      return null;
+    };
+
+    window.handoffGuestDataToAccount = async function(user, options = {}) {
+      const identity = String(user?.email || user?.uid || '').trim();
+      if (!identity) throw new Error('Account identity is required for guest handoff.');
+
+      const accountUser = { email: identity, isGuest: false };
+      const existingAccountEnvelope = await window.MockCloudStorageAdapter.load(accountUser);
+      if (existingAccountEnvelope?.data && options.overwrite !== true) {
+        return { migrated: false, reason: 'account-data-exists', envelope: existingAccountEnvelope };
+      }
+
+      const guestEnvelope = await window.LocalStorageAdapter.load();
+      const sourceModel = guestEnvelope?.data || window.getCurrentDataModelV2ForPersistence();
+      const envelope = await window.MockCloudStorageAdapter.save(sourceModel, accountUser);
+      return { migrated: true, reason: 'guest-data-copied', envelope };
+    };
+
+    // STEP 5 replaces only the mock sign-up transition. Normal login intentionally
+    // keeps account data authoritative and therefore does not copy guest data.
+    const _step5HandleWelcomeSignup = window.handleWelcomeSignup;
+    window.handleWelcomeSignup = async function(event) {
+      event.preventDefault();
+      if (window.LUMIFUL_STEP5_HANDOFF_IN_PROGRESS) return;
+
+      const email = document.getElementById('welcomeSignupEmail')?.value?.trim();
+      const password = document.getElementById('welcomeSignupPassword')?.value || '';
+      const error = document.getElementById('welcomeSignupError');
+      if (!email || password.length < 8) {
+        if (error) {
+          error.textContent = 'メールアドレスと8桁以上のパスワードを確認してください。';
+          error.classList.remove('hidden');
+        }
+        return;
+      }
+      if (error) error.classList.add('hidden');
+
+      window.LUMIFUL_STEP5_HANDOFF_IN_PROGRESS = true;
+      try {
+        const wasGuest = window.authState?.status === 'guest';
+        if (wasGuest) {
+          await window.flushPendingAutoSaveBeforeAuthChange('signup-handoff');
+          const handoff = await window.handoffGuestDataToAccount({ email });
+          if (handoff.migrated) {
+            window.showToast('ゲストのシミュレーションをアカウントへ引き継ぎました', 'success');
+          }
+        }
+
+        // Mock auth remains intentionally local until Phase 7B.
+        localStorage.setItem('lumiful_user_email', email);
+        localStorage.setItem('lumiful_new_user', '1');
+        window.resolveAuthState();
+        window.closeAuthModal();
+        window.recalculateAllFast();
+        window.showToast('LUMIFULへようこそ！', 'success');
+      } catch (handoffError) {
+        console.error('[LUMIFUL] Guest → account handoff failed.', handoffError);
+        if (error) {
+          error.textContent = 'データの引き継ぎに失敗しました。もう一度お試しください。';
+          error.classList.remove('hidden');
+        }
+        window.updateSaveStatus('error', '引き継ぎできません');
+      } finally {
+        window.LUMIFUL_STEP5_HANDOFF_IN_PROGRESS = false;
+      }
+    };
+
+    window.LUMIFUL_PHASE7_STEP5 = Object.freeze({
+      guestToAccountHandoff: true,
+      flushPendingSaveBeforeAuthChange: true,
+      existingAccountDataWinsOnLogin: true,
+      destructiveGuestClear: false,
+      schemaVersion: 2,
+      firebaseConnected: false
+    });
+
+
+    /* ============================================================
+       PHASE 7 / STEP 6 — AUTH TRANSITION / SESSION ISOLATION
+       ------------------------------------------------------------
+       - Make login / guest / signup / logout an atomic transition.
+       - Flush the previous identity before changing auth state.
+       - Suppress Step 4 autosave/restore races during identity changes.
+       - Restore only the destination identity's own Schema v2 data.
+       - Start from an empty v2 model when the destination has no saved data.
+       - Clear in-memory simulation state on logout to avoid cross-user leakage.
+       - Phase 7B can replace identity + storage backends without changing this API.
+       ============================================================ */
+    window.LUMIFUL_STEP6_AUTH_TRANSITION_IN_PROGRESS = false;
+
+    window.resetInMemorySimulationV2 = function() {
+      const empty = window.cloneDataModelV2(window.createEmptyDataModelV2());
+      window.activeDataModelV2 = empty;
+      window.v2InputInitialized = true;
+      if (typeof window.renderV2InputUI === 'function') window.renderV2InputUI();
+      if (typeof window.recalculateAllFast === 'function') window.recalculateAllFast();
+      return empty;
+    };
+
+    window.transitionAuthIdentity = async function(target = {}, options = {}) {
+      if (window.LUMIFUL_STEP6_AUTH_TRANSITION_IN_PROGRESS) return null;
+      window.LUMIFUL_STEP6_AUTH_TRANSITION_IN_PROGRESS = true;
+
+      const previousBooting = !!window.LUMIFUL_STEP4_BOOTING;
+      const previousSuppress = !!window.LUMIFUL_STEP4_SUPPRESS_AUTOSAVE;
+      const targetEmail = String(target.email || '').trim();
+      const targetGuest = !!target.isGuest;
+      const isLogout = options.logout === true || !targetEmail;
+
+      try {
+        if (!options.skipFlush && ['guest','authenticated'].includes(window.authState?.status)) {
+          await window.flushPendingAutoSaveBeforeAuthChange(options.reason || 'auth-transition');
+        } else if (window.LUMIFUL_STEP4_AUTOSAVE_TIMER) {
+          clearTimeout(window.LUMIFUL_STEP4_AUTOSAVE_TIMER);
+          window.LUMIFUL_STEP4_AUTOSAVE_TIMER = null;
+        }
+
+        // Prevent STEP 4's auth wrapper from scheduling an asynchronous restore
+        // while STEP 6 performs the destination restore synchronously/atomically.
+        window.LUMIFUL_STEP4_BOOTING = true;
+        window.LUMIFUL_STEP4_SUPPRESS_AUTOSAVE = true;
+
+        if (isLogout) {
+          localStorage.removeItem('lumiful_user_email');
+          localStorage.removeItem('lc_user_email');
+        } else {
+          localStorage.setItem('lumiful_user_email', targetGuest ? window.LUMIFUL_GUEST_EMAIL : targetEmail);
+          localStorage.removeItem('lc_user_email');
+        }
+
+        window.resolveAuthState();
+
+        if (isLogout) {
+          window.resetInMemorySimulationV2();
+          window.updateSaveStatus('idle');
+          return { status: 'unauthenticated', restored: false, empty: true };
+        }
+
+        const envelope = await window.loadUserData({ restore: true, silent: true });
+        if (!envelope?.data) {
+          window.resetInMemorySimulationV2();
+        }
+
+        window.updateSaveStatus(envelope?.data ? 'saved' : 'idle');
+        return {
+          status: window.authState?.status || (targetGuest ? 'guest' : 'authenticated'),
+          restored: !!envelope?.data,
+          empty: !envelope?.data,
+          envelope: envelope || null
+        };
+      } catch (error) {
+        console.error('[LUMIFUL] Auth transition failed.', error);
+        window.updateSaveStatus('error', '切替できません');
+        throw error;
+      } finally {
+        window.LUMIFUL_STEP4_SUPPRESS_AUTOSAVE = previousSuppress;
+        window.LUMIFUL_STEP4_BOOTING = previousBooting;
+        window.LUMIFUL_STEP6_AUTH_TRANSITION_IN_PROGRESS = false;
+      }
+    };
+
+    window.handleWelcomeLogin = async function(event) {
+      event.preventDefault();
+      const email = document.getElementById('welcomeLoginEmail')?.value?.trim();
+      const password = document.getElementById('welcomeLoginPassword')?.value || '';
+      const error = document.getElementById('welcomeLoginError');
+      if (!email || password.length < 8) {
+        if (error) {
+          error.textContent = 'メールアドレスと8桁以上のパスワードを確認してください。';
+          error.classList.remove('hidden');
+        }
+        return;
+      }
+      if (error) error.classList.add('hidden');
+
+      try {
+        await window.transitionAuthIdentity({ email, isGuest: false }, { reason: 'welcome-login' });
+        window.closeAuthModal();
+        window.showToast('ログインしました', 'success');
+      } catch (_) {
+        if (error) {
+          error.textContent = 'ログイン後のデータ読込に失敗しました。もう一度お試しください。';
+          error.classList.remove('hidden');
+        }
+      }
+    };
+
+    window.handleAccountLogin = async function(event) {
+      event.preventDefault();
+      const email = document.getElementById('authEmail')?.value?.trim();
+      const password = document.getElementById('authPassword')?.value || '';
+      const error = document.getElementById('authErrorMsg');
+      if (!email || password.length < 8) {
+        if (error) {
+          error.textContent = 'メールアドレスと8桁以上のパスワードを確認してください。';
+          error.classList.remove('hidden');
+        }
+        return;
+      }
+      if (error) error.classList.add('hidden');
+
+      try {
+        await window.transitionAuthIdentity({ email, isGuest: false }, { reason: 'account-login' });
+        window.closeAuthModal();
+        window.showToast('ログインしました', 'success');
+      } catch (_) {
+        if (error) {
+          error.textContent = 'ログイン後のデータ読込に失敗しました。';
+          error.classList.remove('hidden');
+        }
+      }
+    };
+
+    window.handleAnonymousAuth = async function() {
+      try {
+        await window.transitionAuthIdentity(
+          { email: window.LUMIFUL_GUEST_EMAIL, isGuest: true },
+          { reason: 'guest-start' }
+        );
+        window.closeAuthModal();
+        window.showToast('ゲストとして開始しました', 'info');
+      } catch (_) {
+        window.showToast('ゲストデータを開始できませんでした', 'error');
+      }
+    };
+
+    // STEP 6 keeps STEP 5's handoff rule, but performs the final identity switch
+    // through the atomic transition API so no source-account state can bleed across.
+    window.handleWelcomeSignup = async function(event) {
+      event.preventDefault();
+      if (window.LUMIFUL_STEP5_HANDOFF_IN_PROGRESS || window.LUMIFUL_STEP6_AUTH_TRANSITION_IN_PROGRESS) return;
+
+      const email = document.getElementById('welcomeSignupEmail')?.value?.trim();
+      const password = document.getElementById('welcomeSignupPassword')?.value || '';
+      const error = document.getElementById('welcomeSignupError');
+      if (!email || password.length < 8) {
+        if (error) {
+          error.textContent = 'メールアドレスと8桁以上のパスワードを確認してください。';
+          error.classList.remove('hidden');
+        }
+        return;
+      }
+      if (error) error.classList.add('hidden');
+
+      window.LUMIFUL_STEP5_HANDOFF_IN_PROGRESS = true;
+      try {
+        const wasGuest = window.authState?.status === 'guest';
+        if (wasGuest) {
+          await window.flushPendingAutoSaveBeforeAuthChange('signup-handoff-step6');
+          const handoff = await window.handoffGuestDataToAccount({ email });
+          if (handoff.migrated) {
+            window.showToast('ゲストのシミュレーションをアカウントへ引き継ぎました', 'success');
+          }
+        }
+
+        localStorage.setItem('lumiful_new_user', '1');
+        await window.transitionAuthIdentity(
+          { email, isGuest: false },
+          { reason: 'signup-transition', skipFlush: wasGuest }
+        );
+        window.closeAuthModal();
+        window.showToast('LUMIFULへようこそ！', 'success');
+      } catch (transitionError) {
+        console.error('[LUMIFUL] Signup transition failed.', transitionError);
+        if (error) {
+          error.textContent = 'アカウントへの切替に失敗しました。もう一度お試しください。';
+          error.classList.remove('hidden');
+        }
+      } finally {
+        window.LUMIFUL_STEP5_HANDOFF_IN_PROGRESS = false;
+      }
+    };
+
+    window.handleAccountLogout = async function() {
+      try {
+        await window.transitionAuthIdentity({}, { logout: true, reason: 'logout' });
+        window.closeAuthModal();
+        window.showToast('ログアウトしました', 'info');
+      } catch (_) {
+        window.showToast('ログアウト処理に失敗しました', 'error');
+      }
+    };
+
+    window.LUMIFUL_PHASE7_STEP6 = Object.freeze({
+      atomicAuthTransition: true,
+      destinationRestoreBeforeUse: true,
+      emptyModelWhenNoDestinationData: true,
+      inMemoryClearOnLogout: true,
+      crossIdentityAutosaveGuard: true,
+      schemaVersion: 2,
+      firebaseConnected: false
+    });
+
+    /* ============================================================
+       PHASE 7 / STEP 7 — MOCK AUTH CREDENTIAL BOUNDARY
+       ------------------------------------------------------------
+       - Add an explicit local mock-account registry before Firebase Auth.
+       - Sign-up rejects duplicate accounts and stores no plaintext password.
+       - Login verifies the registered credential before identity transition.
+       - Legacy STEP 1-6 mock accounts can be claimed once with their first
+         STEP 7 login so existing local development data is not locked out.
+       - Guest → account handoff remains STEP 5 behavior and runs only after
+         the new account credential has been successfully registered.
+       - Phase 7B replaces this registry with Firebase Authentication while
+         keeping transitionAuthIdentity() and persistence APIs unchanged.
+       ============================================================ */
+    window.LUMIFUL_MOCK_ACCOUNT_REGISTRY_KEY = 'lumiful_mock_accounts_v1';
+    window.LUMIFUL_STEP7_AUTH_BUSY = false;
+
+    window.normalizeMockAccountEmail = function(email) {
+      return String(email || '').trim().toLowerCase();
+    };
+
+    window.readMockAccountRegistry = function() {
+      try {
+        const raw = localStorage.getItem(window.LUMIFUL_MOCK_ACCOUNT_REGISTRY_KEY);
+        const parsed = raw ? JSON.parse(raw) : {};
+        return parsed && typeof parsed === 'object' && !Array.isArray(parsed) ? parsed : {};
+      } catch (error) {
+        console.warn('[LUMIFUL] Mock account registry read failed.', error);
+        return {};
+      }
+    };
+
+    window.writeMockAccountRegistry = function(registry) {
+      localStorage.setItem(window.LUMIFUL_MOCK_ACCOUNT_REGISTRY_KEY, JSON.stringify(registry || {}));
+    };
+
+    window.hashMockPassword = async function(password) {
+      const value = String(password || '');
+      if (window.crypto?.subtle && typeof TextEncoder !== 'undefined') {
+        const encoded = new TextEncoder().encode(value);
+        const digest = await window.crypto.subtle.digest('SHA-256', encoded);
+        return Array.from(new Uint8Array(digest)).map(b => b.toString(16).padStart(2, '0')).join('');
+      }
+      // Development fallback only. Phase 7B removes local credential storage.
+      let hash = 2166136261;
+      for (let i = 0; i < value.length; i++) {
+        hash ^= value.charCodeAt(i);
+        hash = Math.imul(hash, 16777619);
+      }
+      return 'fallback-' + (hash >>> 0).toString(16).padStart(8, '0');
+    };
+
+    window.getMockAccountRecord = function(email) {
+      const normalized = window.normalizeMockAccountEmail(email);
+      if (!normalized) return null;
+      const registry = window.readMockAccountRegistry();
+      return registry[normalized] || null;
+    };
+
+    window.hasMockCloudAccountData = async function(email) {
+      const normalized = window.normalizeMockAccountEmail(email);
+      if (!normalized) return false;
+      try {
+        const envelope = await window.MockCloudStorageAdapter.load({ email: normalized, isGuest: false });
+        return !!envelope?.data;
+      } catch (_) {
+        return false;
+      }
+    };
+
+    window.registerMockAccount = async function(email, password, options = {}) {
+      const normalized = window.normalizeMockAccountEmail(email);
+      if (!normalized || String(password || '').length < 8) {
+        throw new Error('invalid-credentials');
+      }
+      const registry = window.readMockAccountRegistry();
+      if (registry[normalized] && options.overwrite !== true) {
+        throw new Error('account-exists');
+      }
+      const now = new Date().toISOString();
+      registry[normalized] = {
+        email: normalized,
+        passwordHash: await window.hashMockPassword(password),
+        createdAt: registry[normalized]?.createdAt || now,
+        updatedAt: now,
+        legacyClaimed: !!options.legacyClaimed
+      };
+      window.writeMockAccountRegistry(registry);
+      return registry[normalized];
+    };
+
+    window.verifyMockAccount = async function(email, password, options = {}) {
+      const normalized = window.normalizeMockAccountEmail(email);
+      if (!normalized || String(password || '').length < 8) {
+        return { ok: false, reason: 'invalid-credentials' };
+      }
+      const registry = window.readMockAccountRegistry();
+      const record = registry[normalized];
+      if (record) {
+        const passwordHash = await window.hashMockPassword(password);
+        return passwordHash === record.passwordHash
+          ? { ok: true, reason: 'verified', record }
+          : { ok: false, reason: 'wrong-password' };
+      }
+
+      // Compatibility bridge for accounts used before STEP 7. If account data
+      // already exists locally, the first STEP 7 login claims that mock account.
+      if (options.allowLegacyClaim !== false && await window.hasMockCloudAccountData(normalized)) {
+        const claimed = await window.registerMockAccount(normalized, password, { legacyClaimed: true });
+        return { ok: true, reason: 'legacy-account-claimed', record: claimed };
+      }
+
+      return { ok: false, reason: 'account-not-found' };
+    };
+
+    window.getMockAuthErrorMessage = function(reason, mode = 'login') {
+      if (reason === 'account-exists') return 'このメールアドレスはすでに登録されています。ログインしてください。';
+      if (reason === 'wrong-password') return 'パスワードが一致しません。';
+      if (reason === 'account-not-found') return mode === 'signup'
+        ? 'アカウントを作成できませんでした。'
+        : 'このメールアドレスのアカウントが見つかりません。';
+      return 'メールアドレスと8桁以上のパスワードを確認してください。';
+    };
+
+    window.handleWelcomeLogin = async function(event) {
+      event.preventDefault();
+      if (window.LUMIFUL_STEP7_AUTH_BUSY) return;
+      const email = document.getElementById('welcomeLoginEmail')?.value?.trim();
+      const password = document.getElementById('welcomeLoginPassword')?.value || '';
+      const error = document.getElementById('welcomeLoginError');
+      if (!email || password.length < 8) {
+        if (error) {
+          error.textContent = window.getMockAuthErrorMessage('invalid-credentials');
+          error.classList.remove('hidden');
+        }
+        return;
+      }
+      if (error) error.classList.add('hidden');
+
+      window.LUMIFUL_STEP7_AUTH_BUSY = true;
+      try {
+        const verification = await window.verifyMockAccount(email, password, { allowLegacyClaim: true });
+        if (!verification.ok) {
+          if (error) {
+            error.textContent = window.getMockAuthErrorMessage(verification.reason);
+            error.classList.remove('hidden');
+          }
+          return;
+        }
+        await window.transitionAuthIdentity(
+          { email: window.normalizeMockAccountEmail(email), isGuest: false },
+          { reason: 'step7-welcome-login' }
+        );
+        window.closeAuthModal();
+        if (verification.reason === 'legacy-account-claimed') {
+          window.showToast('既存データを確認し、アカウントを保護しました', 'success');
+        } else {
+          window.showToast('ログインしました', 'success');
+        }
+      } catch (authError) {
+        console.error('[LUMIFUL] STEP 7 welcome login failed.', authError);
+        if (error) {
+          error.textContent = 'ログイン処理に失敗しました。もう一度お試しください。';
+          error.classList.remove('hidden');
+        }
+      } finally {
+        window.LUMIFUL_STEP7_AUTH_BUSY = false;
+      }
+    };
+
+    window.handleAccountLogin = async function(event) {
+      event.preventDefault();
+      if (window.LUMIFUL_STEP7_AUTH_BUSY) return;
+      const email = document.getElementById('authEmail')?.value?.trim();
+      const password = document.getElementById('authPassword')?.value || '';
+      const error = document.getElementById('authErrorMsg');
+      if (!email || password.length < 8) {
+        if (error) {
+          error.textContent = window.getMockAuthErrorMessage('invalid-credentials');
+          error.classList.remove('hidden');
+        }
+        return;
+      }
+      if (error) error.classList.add('hidden');
+
+      window.LUMIFUL_STEP7_AUTH_BUSY = true;
+      try {
+        const verification = await window.verifyMockAccount(email, password, { allowLegacyClaim: true });
+        if (!verification.ok) {
+          if (error) {
+            error.textContent = window.getMockAuthErrorMessage(verification.reason);
+            error.classList.remove('hidden');
+          }
+          return;
+        }
+        await window.transitionAuthIdentity(
+          { email: window.normalizeMockAccountEmail(email), isGuest: false },
+          { reason: 'step7-account-login' }
+        );
+        window.closeAuthModal();
+        window.showToast(
+          verification.reason === 'legacy-account-claimed' ? '既存アカウントを保護してログインしました' : 'ログインしました',
+          'success'
+        );
+      } catch (authError) {
+        console.error('[LUMIFUL] STEP 7 account login failed.', authError);
+        if (error) {
+          error.textContent = 'ログイン処理に失敗しました。';
+          error.classList.remove('hidden');
+        }
+      } finally {
+        window.LUMIFUL_STEP7_AUTH_BUSY = false;
+      }
+    };
+
+    window.handleWelcomeSignup = async function(event) {
+      event.preventDefault();
+      if (window.LUMIFUL_STEP7_AUTH_BUSY || window.LUMIFUL_STEP5_HANDOFF_IN_PROGRESS || window.LUMIFUL_STEP6_AUTH_TRANSITION_IN_PROGRESS) return;
+
+      const email = document.getElementById('welcomeSignupEmail')?.value?.trim();
+      const password = document.getElementById('welcomeSignupPassword')?.value || '';
+      const error = document.getElementById('welcomeSignupError');
+      if (!email || password.length < 8) {
+        if (error) {
+          error.textContent = window.getMockAuthErrorMessage('invalid-credentials', 'signup');
+          error.classList.remove('hidden');
+        }
+        return;
+      }
+      if (error) error.classList.add('hidden');
+
+      const normalized = window.normalizeMockAccountEmail(email);
+      window.LUMIFUL_STEP7_AUTH_BUSY = true;
+      window.LUMIFUL_STEP5_HANDOFF_IN_PROGRESS = true;
+      try {
+        const existingRecord = window.getMockAccountRecord(normalized);
+        const existingData = await window.hasMockCloudAccountData(normalized);
+        if (existingRecord || existingData) {
+          if (error) {
+            error.textContent = window.getMockAuthErrorMessage('account-exists', 'signup');
+            error.classList.remove('hidden');
+          }
+          return;
+        }
+
+        await window.registerMockAccount(normalized, password);
+
+        const wasGuest = window.authState?.status === 'guest';
+        if (wasGuest) {
+          await window.flushPendingAutoSaveBeforeAuthChange('signup-handoff-step7');
+          const handoff = await window.handoffGuestDataToAccount({ email: normalized });
+          if (handoff.migrated) {
+            window.showToast('ゲストのシミュレーションをアカウントへ引き継ぎました', 'success');
+          }
+        }
+
+        localStorage.setItem('lumiful_new_user', '1');
+        await window.transitionAuthIdentity(
+          { email: normalized, isGuest: false },
+          { reason: 'step7-signup-transition', skipFlush: wasGuest }
+        );
+        window.closeAuthModal();
+        window.showToast('LUMIFULへようこそ！', 'success');
+      } catch (authError) {
+        console.error('[LUMIFUL] STEP 7 signup failed.', authError);
+        if (error) {
+          error.textContent = window.getMockAuthErrorMessage(authError?.message, 'signup');
+          error.classList.remove('hidden');
+        }
+      } finally {
+        window.LUMIFUL_STEP5_HANDOFF_IN_PROGRESS = false;
+        window.LUMIFUL_STEP7_AUTH_BUSY = false;
+      }
+    };
+
+    /* ============================================================
+       PHASE 7 / STEP 9 — ACCOUNT LIFECYCLE / IDENTITY MANAGEMENT
+       ------------------------------------------------------------
+       - Email changes require current-password verification.
+       - Account cloud data moves with the identity before transition.
+       - Account deletion removes only that account credential/cloud area.
+       - Guest and other-account storage remain isolated.
+       - Phase 7B replaces these local mutations with Firebase Auth/Firestore.
+       ============================================================ */
+    window.LUMIFUL_STEP9_ACCOUNT_BUSY = false;
+
+    window.setStep9Message = function(id, text, ok = false) {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.textContent = text || '';
+      el.className = text ? `text-xs font-bold leading-relaxed ${ok ? 'text-[#4F8A70]' : 'text-rose-600'}` : 'hidden text-xs font-bold leading-relaxed';
+    };
+
+    window.openAccountLifecycleModal = function() {
+      if (window.authState?.status !== 'authenticated') {
+        window.showToast('アカウントでログインしてください', 'error');
+        return;
+      }
+      const email = window.normalizeMockAccountEmail(window.authState?.user?.email);
+      const modal = document.getElementById('accountLifecycleModal');
+      const current = document.getElementById('accountLifecycleCurrentEmail');
+      if (current) current.textContent = email || '-';
+      ['accountLifecycleNewEmail','accountLifecyclePassword','accountLifecycleDeletePassword'].forEach(id => { const el=document.getElementById(id); if (el) el.value=''; });
+      const confirm = document.getElementById('accountLifecycleDeleteConfirm'); if (confirm) confirm.checked=false;
+      window.setStep9Message('accountLifecycleChangeMessage','');
+      window.setStep9Message('accountLifecycleDeleteMessage','');
+      modal?.classList.remove('hidden');
+    };
+
+    window.closeAccountLifecycleModal = function() {
+      document.getElementById('accountLifecycleModal')?.classList.add('hidden');
+    };
+
+    window.moveMockAccountIdentity = async function(oldEmail, newEmail) {
+      const oldId = window.normalizeMockAccountEmail(oldEmail);
+      const newId = window.normalizeMockAccountEmail(newEmail);
+      if (!oldId || !newId || oldId === newId) throw new Error('invalid-email-change');
+      const registry = window.readMockAccountRegistry();
+      if (!registry[oldId]) throw new Error('account-not-found');
+      if (registry[newId] || await window.hasMockCloudAccountData(newId)) throw new Error('account-exists');
+
+      await window.flushPendingAutoSaveBeforeAuthChange('step9-email-change');
+      const oldCloudKey = window.getMockCloudStorageKey({ email: oldId });
+      const newCloudKey = window.getMockCloudStorageKey({ email: newId });
+      const cloudRaw = localStorage.getItem(oldCloudKey);
+      const now = new Date().toISOString();
+      const nextRecord = { ...registry[oldId], email: newId, updatedAt: now, emailChangedAt: now };
+
+      // Write destination first, then remove source so interruption cannot orphan data.
+      if (cloudRaw !== null) localStorage.setItem(newCloudKey, cloudRaw);
+      registry[newId] = nextRecord;
+      window.writeMockAccountRegistry(registry);
+      delete registry[oldId];
+      window.writeMockAccountRegistry(registry);
+      localStorage.removeItem(oldCloudKey);
+
+      [window.LUMIFUL_STEP8_LOGIN_GUARD_KEY, window.LUMIFUL_STEP8_RECOVERY_REQUEST_KEY].forEach(key => {
+        if (!key) return;
+        const store = window.readStep8JsonStore(key);
+        if (store[oldId]) { store[newId] = store[oldId]; delete store[oldId]; window.writeStep8JsonStore(key, store); }
+      });
+      return nextRecord;
+    };
+
+    window.handleAccountEmailChange = async function(event) {
+      event.preventDefault();
+      if (window.LUMIFUL_STEP9_ACCOUNT_BUSY) return;
+      const oldEmail = window.normalizeMockAccountEmail(window.authState?.user?.email);
+      const newEmail = window.normalizeMockAccountEmail(document.getElementById('accountLifecycleNewEmail')?.value);
+      const password = document.getElementById('accountLifecyclePassword')?.value || '';
+      if (!oldEmail || !newEmail || password.length < 8) return window.setStep9Message('accountLifecycleChangeMessage','入力内容を確認してください。');
+      if (oldEmail === newEmail) return window.setStep9Message('accountLifecycleChangeMessage','現在と異なるメールアドレスを入力してください。');
+      window.LUMIFUL_STEP9_ACCOUNT_BUSY = true;
+      const btn=document.getElementById('accountLifecycleChangeBtn'); if(btn) btn.disabled=true;
+      try {
+        const verified = await window.verifyMockAccount(oldEmail, password, { allowLegacyClaim: false });
+        if (!verified.ok) throw new Error(verified.reason || 'wrong-password');
+        await window.moveMockAccountIdentity(oldEmail, newEmail);
+        await window.transitionAuthIdentity({ email: newEmail, isGuest: false }, { reason: 'step9-email-change', skipFlush: true });
+        window.clearLoginFailures?.(newEmail);
+        window.setStep9Message('accountLifecycleChangeMessage','メールアドレスを変更しました。',true);
+        const current=document.getElementById('accountLifecycleCurrentEmail'); if(current) current.textContent=newEmail;
+        window.showToast('メールアドレスを変更しました','success');
+      } catch (error) {
+        const msg = error?.message === 'account-exists' ? 'そのメールアドレスはすでに使用されています。' : (error?.message === 'too-many-attempts' ? 'ログイン試行制限中です。時間をおいてお試しください。' : '現在のパスワードまたは入力内容を確認してください。');
+        window.setStep9Message('accountLifecycleChangeMessage',msg);
+      } finally { window.LUMIFUL_STEP9_ACCOUNT_BUSY=false; if(btn) btn.disabled=false; }
+    };
+
+    window.deleteCurrentMockAccount = async function(email) {
+      const id = window.normalizeMockAccountEmail(email);
+      if (!id) throw new Error('account-not-found');
+      const registry = window.readMockAccountRegistry();
+      delete registry[id];
+      window.writeMockAccountRegistry(registry);
+      localStorage.removeItem(window.getMockCloudStorageKey({ email: id }));
+      [window.LUMIFUL_STEP8_LOGIN_GUARD_KEY, window.LUMIFUL_STEP8_RECOVERY_REQUEST_KEY].forEach(key => {
+        if (!key) return; const store=window.readStep8JsonStore(key); delete store[id]; window.writeStep8JsonStore(key,store);
+      });
+      return true;
+    };
+
+    window.handleAccountDeletion = async function(event) {
+      event.preventDefault();
+      if (window.LUMIFUL_STEP9_ACCOUNT_BUSY) return;
+      const email = window.normalizeMockAccountEmail(window.authState?.user?.email);
+      const password = document.getElementById('accountLifecycleDeletePassword')?.value || '';
+      const confirmed = !!document.getElementById('accountLifecycleDeleteConfirm')?.checked;
+      if (!confirmed || password.length < 8) return window.setStep9Message('accountLifecycleDeleteMessage','確認チェックと現在のパスワードが必要です。');
+      window.LUMIFUL_STEP9_ACCOUNT_BUSY=true;
+      const btn=document.getElementById('accountLifecycleDeleteBtn'); if(btn) btn.disabled=true;
+      try {
+        const verified = await window.verifyMockAccount(email, password, { allowLegacyClaim: false });
+        if (!verified.ok) throw new Error(verified.reason || 'wrong-password');
+        await window.flushPendingAutoSaveBeforeAuthChange('step9-account-delete');
+        await window.deleteCurrentMockAccount(email);
+        window.closeAccountLifecycleModal();
+        await window.transitionAuthIdentity({}, { logout: true, reason: 'step9-account-delete', skipFlush: true });
+        window.showToast('アカウントを削除しました','success');
+      } catch (error) {
+        window.setStep9Message('accountLifecycleDeleteMessage', error?.message === 'too-many-attempts' ? 'ログイン試行制限中です。時間をおいてお試しください。' : '現在のパスワードを確認してください。');
+      } finally { window.LUMIFUL_STEP9_ACCOUNT_BUSY=false; if(btn) btn.disabled=false; }
+    };
+
+    window.LUMIFUL_PHASE7_STEP9 = Object.freeze({
+      accountLifecycleUI: true,
+      emailChangeWithReauth: true,
+      accountDeletionWithReauth: true,
+      identityDataMigration: true,
+      crossIdentityDeletionGuard: true,
+      firebaseConnected: false
+    });
+
+    /* ============================================================
+       PHASE 7 / STEP 8 — ACCOUNT RECOVERY / AUTH GUARD
+       ------------------------------------------------------------
+       - Add a password-recovery request boundary without exposing whether
+         an account exists (prevents account-enumeration through the UI).
+       - Local mock mode records only request metadata; no password is reset
+         without a verified email channel. Phase 7B replaces the adapter with
+         Firebase sendPasswordResetEmail().
+       - Add a lightweight failed-login cooldown per email to reduce repeated
+         credential guessing while keeping local development usable.
+       ============================================================ */
+    window.LUMIFUL_STEP8_RECOVERY_REQUEST_KEY = 'lumiful_mock_recovery_requests_v1';
+    window.LUMIFUL_STEP8_LOGIN_GUARD_KEY = 'lumiful_mock_login_guard_v1';
+    window.LUMIFUL_STEP8_MAX_FAILURES = 5;
+    window.LUMIFUL_STEP8_COOLDOWN_MS = 60 * 1000;
+
+    window.readStep8JsonStore = function(key) {
+      try {
+        const raw = localStorage.getItem(key);
+        const parsed = raw ? JSON.parse(raw) : {};
+        return parsed && typeof parsed === 'object' && !Array.isArray(parsed) ? parsed : {};
+      } catch (_) {
+        return {};
+      }
+    };
+
+    window.writeStep8JsonStore = function(key, value) {
+      localStorage.setItem(key, JSON.stringify(value || {}));
+    };
+
+    window.getLoginGuardState = function(email) {
+      const normalized = window.normalizeMockAccountEmail(email);
+      const store = window.readStep8JsonStore(window.LUMIFUL_STEP8_LOGIN_GUARD_KEY);
+      const entry = store[normalized] || { failures: 0, lockedUntil: 0 };
+      if (entry.lockedUntil && Date.now() >= entry.lockedUntil) {
+        delete store[normalized];
+        window.writeStep8JsonStore(window.LUMIFUL_STEP8_LOGIN_GUARD_KEY, store);
+        return { failures: 0, lockedUntil: 0, locked: false, remainingMs: 0 };
+      }
+      return {
+        failures: Number(entry.failures || 0),
+        lockedUntil: Number(entry.lockedUntil || 0),
+        locked: Number(entry.lockedUntil || 0) > Date.now(),
+        remainingMs: Math.max(0, Number(entry.lockedUntil || 0) - Date.now())
+      };
+    };
+
+    window.recordLoginFailure = function(email) {
+      const normalized = window.normalizeMockAccountEmail(email);
+      if (!normalized) return window.getLoginGuardState(email);
+      const store = window.readStep8JsonStore(window.LUMIFUL_STEP8_LOGIN_GUARD_KEY);
+      const prev = store[normalized] || { failures: 0, lockedUntil: 0 };
+      const failures = Number(prev.failures || 0) + 1;
+      store[normalized] = {
+        failures,
+        lockedUntil: failures >= window.LUMIFUL_STEP8_MAX_FAILURES ? Date.now() + window.LUMIFUL_STEP8_COOLDOWN_MS : 0,
+        updatedAt: new Date().toISOString()
+      };
+      window.writeStep8JsonStore(window.LUMIFUL_STEP8_LOGIN_GUARD_KEY, store);
+      return window.getLoginGuardState(normalized);
+    };
+
+    window.clearLoginFailures = function(email) {
+      const normalized = window.normalizeMockAccountEmail(email);
+      const store = window.readStep8JsonStore(window.LUMIFUL_STEP8_LOGIN_GUARD_KEY);
+      if (normalized && store[normalized]) {
+        delete store[normalized];
+        window.writeStep8JsonStore(window.LUMIFUL_STEP8_LOGIN_GUARD_KEY, store);
+      }
+    };
+
+    window.getLoginCooldownMessage = function(state) {
+      const seconds = Math.max(1, Math.ceil((state?.remainingMs || 0) / 1000));
+      return `ログイン試行が続いたため一時停止しています。約${seconds}秒後にもう一度お試しください。`;
+    };
+
+    window.openPasswordRecoveryModal = function(sourceInputId) {
+      const modal = document.getElementById('passwordRecoveryModal');
+      const emailInput = document.getElementById('passwordRecoveryEmail');
+      const source = sourceInputId ? document.getElementById(sourceInputId) : null;
+      const message = document.getElementById('passwordRecoveryMessage');
+      if (emailInput) emailInput.value = source?.value?.trim() || '';
+      if (message) {
+        message.textContent = '';
+        message.className = 'hidden text-xs font-bold leading-relaxed';
+      }
+      if (modal) modal.classList.remove('hidden');
+      setTimeout(() => emailInput?.focus(), 0);
+    };
+
+    window.closePasswordRecoveryModal = function() {
+      document.getElementById('passwordRecoveryModal')?.classList.add('hidden');
+    };
+
+    window.requestPasswordReset = async function(email) {
+      const normalized = window.normalizeMockAccountEmail(email);
+      if (!normalized) throw new Error('invalid-email');
+      const store = window.readStep8JsonStore(window.LUMIFUL_STEP8_RECOVERY_REQUEST_KEY);
+      store[normalized] = {
+        requestedAt: new Date().toISOString(),
+        mockDelivered: false
+      };
+      window.writeStep8JsonStore(window.LUMIFUL_STEP8_RECOVERY_REQUEST_KEY, store);
+      // Intentionally do not disclose account existence and do not mutate credentials.
+      return { accepted: true, email: normalized, provider: 'mock' };
+    };
+
+    window.handlePasswordRecoveryRequest = async function(event) {
+      event.preventDefault();
+      const input = document.getElementById('passwordRecoveryEmail');
+      const message = document.getElementById('passwordRecoveryMessage');
+      const submit = document.getElementById('passwordRecoverySubmit');
+      const email = input?.value?.trim();
+      if (!email) return;
+      if (submit) submit.disabled = true;
+      try {
+        await window.requestPasswordReset(email);
+        if (message) {
+          message.textContent = '入力されたメールアドレスが登録済みの場合、再設定の案内を送信します。';
+          message.className = 'text-xs font-bold leading-relaxed text-[#4F8A70]';
+        }
+      } catch (_) {
+        if (message) {
+          message.textContent = 'メールアドレスを確認してください。';
+          message.className = 'text-xs font-bold leading-relaxed text-rose-600';
+        }
+      } finally {
+        if (submit) submit.disabled = false;
+      }
+    };
+
+    // Wrap STEP 7 credential verification with a per-email cooldown guard.
+    const _step8VerifyMockAccount = window.verifyMockAccount;
+    window.verifyMockAccount = async function(email, password, options = {}) {
+      const guard = window.getLoginGuardState(email);
+      if (guard.locked) return { ok: false, reason: 'too-many-attempts', guard };
+      const result = await _step8VerifyMockAccount(email, password, options);
+      if (result?.ok) {
+        window.clearLoginFailures(email);
+        return result;
+      }
+      if (['wrong-password','account-not-found'].includes(result?.reason)) {
+        const nextGuard = window.recordLoginFailure(email);
+        if (nextGuard.locked) return { ...result, reason: 'too-many-attempts', guard: nextGuard };
+      }
+      return result;
+    };
+
+    const _step8GetMockAuthErrorMessage = window.getMockAuthErrorMessage;
+    window.getMockAuthErrorMessage = function(reason, mode = 'login', detail) {
+      if (reason === 'too-many-attempts') return window.getLoginCooldownMessage(detail?.guard || detail || {});
+      return _step8GetMockAuthErrorMessage(reason, mode);
+    };
+
+    // STEP 7 handlers call getMockAuthErrorMessage(reason). Supply guard detail
+    // by normalizing cooldown failures into a stable user message through a
+    // small verifier-side field, without changing the auth transition contract.
+    const _step8WelcomeLogin = window.handleWelcomeLogin;
+    window.handleWelcomeLogin = async function(event) {
+      const email = document.getElementById('welcomeLoginEmail')?.value?.trim();
+      const guard = window.getLoginGuardState(email);
+      if (guard.locked) {
+        event.preventDefault();
+        const error = document.getElementById('welcomeLoginError');
+        if (error) {
+          error.textContent = window.getLoginCooldownMessage(guard);
+          error.classList.remove('hidden');
+        }
+        return;
+      }
+      return _step8WelcomeLogin.call(this, event);
+    };
+
+    const _step8AccountLogin = window.handleAccountLogin;
+    window.handleAccountLogin = async function(event) {
+      const email = document.getElementById('authEmail')?.value?.trim();
+      const guard = window.getLoginGuardState(email);
+      if (guard.locked) {
+        event.preventDefault();
+        const error = document.getElementById('authErrorMsg');
+        if (error) {
+          error.textContent = window.getLoginCooldownMessage(guard);
+          error.classList.remove('hidden');
+        }
+        return;
+      }
+      return _step8AccountLogin.call(this, event);
+    };
+
+    window.LUMIFUL_PHASE7_STEP8 = Object.freeze({
+      passwordRecoveryBoundary: true,
+      accountEnumerationProtection: true,
+      localCredentialMutationOnRecovery: false,
+      failedLoginCooldown: true,
+      maxFailures: window.LUMIFUL_STEP8_MAX_FAILURES,
+      cooldownMs: window.LUMIFUL_STEP8_COOLDOWN_MS,
+      firebaseConnected: false
+    });
+
+    window.LUMIFUL_PHASE7_STEP7 = Object.freeze({
+      mockAccountRegistry: true,
+      duplicateSignupGuard: true,
+      credentialVerification: true,
+      plaintextPasswordStorage: false,
+      legacyAccountClaimBridge: true,
+      atomicSessionTransition: true,
+      schemaVersion: 2,
+      firebaseConnected: false
+    });
+
+
+
+    /* ============================================================
+       PHASE 7 / STEP 10 — PHASE 7A COMPLETION AUDIT / FIREBASE READINESS
+       ------------------------------------------------------------
+       - Audit STEP 1-9 integration without mutating user data.
+       - Verify Schema v2, auth routing, persistence, autosave, handoff,
+         session isolation, credential, recovery, and lifecycle boundaries.
+       - Publish a stable runtime snapshot for Phase 7B Firebase wiring.
+       - Keep Firebase disconnected in Phase 7A; adapters remain replaceable.
+       ============================================================ */
+    window.getPhase7RuntimeSnapshot = function() {
+      return Object.freeze({
+        phase: '7A',
+        step: 10,
+        schemaVersion: Number(window.LUMIFUL_SAVE_SCHEMA_VERSION || 0),
+        authStatus: window.authState?.status || 'unknown',
+        authBackend: 'mock-local',
+        guestStorage: window.LocalStorageAdapter?.name || null,
+        accountStorage: window.MockCloudStorageAdapter?.name || null,
+        firebaseConnected: false,
+        productionEngine: window.LUMIFUL_PHASE6_COMPLETION_AUDIT?.productionEngine || null
+      });
+    };
+
+    window.runPhase7AReadinessAudit = function() {
+      const checks = [
+        ['schema-v2', window.LUMIFUL_SAVE_SCHEMA_VERSION === 2],
+        ['phase6-v2-engine-final', window.LUMIFUL_PHASE6_VERSION === '2.0-final' && window.LUMIFUL_PHASE6_COMPLETION_AUDIT?.productionEngine === 'v2-only'],
+        ['auth-state-router', typeof window.resolveAuthState === 'function' && typeof window.routeByAuthState === 'function'],
+        ['storage-adapter-selection', typeof window.getStorageAdapterForAuthState === 'function' && !!window.LocalStorageAdapter && !!window.MockCloudStorageAdapter],
+        ['autosave', typeof window.scheduleAutoSave === 'function' && typeof window.performAutoSave === 'function'],
+        ['restore', typeof window.restoreUserDataForCurrentAuth === 'function' && typeof window.loadUserData === 'function'],
+        ['guest-account-handoff', typeof window.handoffGuestDataToAccount === 'function' && !!window.LUMIFUL_PHASE7_STEP5?.guestToAccountHandoff],
+        ['session-isolation', typeof window.transitionAuthIdentity === 'function' && !!window.LUMIFUL_PHASE7_STEP6?.atomicAuthTransition],
+        ['credential-boundary', typeof window.verifyMockAccount === 'function' && !!window.LUMIFUL_PHASE7_STEP7?.credentialVerification],
+        ['password-recovery-boundary', typeof window.requestPasswordReset === 'function' && !!window.LUMIFUL_PHASE7_STEP8?.passwordRecoveryBoundary],
+        ['login-guard', typeof window.getLoginGuardState === 'function' && !!window.LUMIFUL_PHASE7_STEP8?.failedLoginCooldown],
+        ['account-email-change', typeof window.moveMockAccountIdentity === 'function' && !!window.LUMIFUL_PHASE7_STEP9?.emailChangeWithReauth],
+        ['account-delete', typeof window.deleteCurrentMockAccount === 'function' && !!window.LUMIFUL_PHASE7_STEP9?.accountDeletionWithReauth],
+        ['firebase-not-yet-connected', window.LUMIFUL_PHASE7_STEP9?.firebaseConnected === false]
+      ];
+
+      const failures = checks.filter(([, ok]) => !ok).map(([name]) => name);
+      const result = Object.freeze({
+        ok: failures.length === 0,
+        phase: '7A',
+        completedThroughStep: failures.length === 0 ? 10 : 9,
+        totalChecks: checks.length,
+        passedChecks: checks.length - failures.length,
+        failures: Object.freeze(failures),
+        checkedAt: new Date().toISOString(),
+        nextPhase: failures.length === 0 ? '7B / Firebase Authentication + Firestore connection' : 'Resolve Phase 7A audit failures',
+        snapshot: window.getPhase7RuntimeSnapshot()
+      });
+      window.LUMIFUL_PHASE7A_LAST_AUDIT = result;
+      return result;
+    };
+
+    window.LUMIFUL_PHASE7_STEP10 = Object.freeze({
+      phase7ACompletionAudit: true,
+      nonDestructiveRuntimeAudit: true,
+      firebaseReadinessSnapshot: true,
+      schemaVersion: 2,
+      firebaseConnected: false
+    });
+
+    window.LUMIFUL_PHASE7A_VERSION = '1.0-final';
+    window.LUMIFUL_PHASE7A_COMPLETION_AUDIT = null;
+
+    // Run only after all STEP declarations in this script have been evaluated.
+    setTimeout(() => {
+      try {
+        const audit = window.runPhase7AReadinessAudit();
+        window.LUMIFUL_PHASE7A_COMPLETION_AUDIT = audit;
+        if (!audit.ok) console.warn('[LUMIFUL] Phase 7A readiness audit failed:', audit.failures);
+        else console.info('[LUMIFUL] Phase 7A ready for Phase 7B.', audit);
+      } catch (error) {
+        console.warn('[LUMIFUL] Phase 7A readiness audit could not run.', error);
+      }
+    }, 0);
+
+    /* ============================================================
+       PHASE 7B / STEP 1 — FIREBASE RUNTIME BOOTSTRAP
+       ------------------------------------------------------------
+       - Introduces a replaceable Firebase runtime boundary without
+         changing the completed Phase 7A auth/persistence contracts.
+       - Loads Firebase compat SDK 12.18.0 only when a valid web config
+         is supplied through window.LUMIFUL_FIREBASE_CONFIG.
+       - Initializes App/Auth/Firestore once and exposes capability state.
+       - Falls back to the Phase 7A mock stack when config/network/SDK
+         is unavailable; no user data is mutated during bootstrap.
+       - STEP 2 will bind Authentication; STEP 3 will bind Firestore.
+       ============================================================ */
+    window.LUMIFUL_FIREBASE_SDK_VERSION = '12.18.0';
+    window.LUMIFUL_FIREBASE_CONFIG = window.LUMIFUL_FIREBASE_CONFIG || Object.freeze({
+      apiKey: 'AIzaSyDpG99OXkHLERcRDJFwqTQiA1-GLaZsjR8',
+      authDomain: 'lumiful.firebaseapp.com',
+      projectId: 'lumiful',
+      storageBucket: 'lumiful.firebasestorage.app',
+      messagingSenderId: '167769321740',
+      appId: '1:167769321740:web:68caef1a99e53d1360d929'
+    });
+    window.LUMIFUL_FIREBASE_RUNTIME = {
+      status: 'idle', // idle | unavailable | loading | ready | error
+      app: null,
+      auth: null,
+      firestore: null,
+      error: null,
+      sdkVersion: window.LUMIFUL_FIREBASE_SDK_VERSION
+    };
+
+    window.hasUsableFirebaseConfig = function(config = window.LUMIFUL_FIREBASE_CONFIG) {
+      if (!config || typeof config !== 'object') return false;
+      const required = ['apiKey', 'authDomain', 'projectId', 'appId'];
+      return required.every(key => typeof config[key] === 'string' && config[key].trim().length > 0);
+    };
+
+    window.loadExternalScriptOnce = function(src, id) {
+      return new Promise((resolve, reject) => {
+        const existing = document.getElementById(id);
+        if (existing) {
+          if (existing.dataset.loaded === 'true') return resolve(existing);
+          existing.addEventListener('load', () => resolve(existing), { once: true });
+          existing.addEventListener('error', () => reject(new Error('Failed to load ' + src)), { once: true });
+          return;
+        }
+        const script = document.createElement('script');
+        script.id = id;
+        script.src = src;
+        script.async = true;
+        script.crossOrigin = 'anonymous';
+        script.addEventListener('load', () => {
+          script.dataset.loaded = 'true';
+          resolve(script);
+        }, { once: true });
+        script.addEventListener('error', () => reject(new Error('Failed to load ' + src)), { once: true });
+        document.head.appendChild(script);
+      });
+    };
+
+    window.loadFirebaseCompatSdk = async function() {
+      if (window.firebase?.apps) return window.firebase;
+      const v = window.LUMIFUL_FIREBASE_SDK_VERSION;
+      await window.loadExternalScriptOnce(`https://www.gstatic.com/firebasejs/${v}/firebase-app-compat.js`, 'lumiful-firebase-app-sdk');
+      await Promise.all([
+        window.loadExternalScriptOnce(`https://www.gstatic.com/firebasejs/${v}/firebase-auth-compat.js`, 'lumiful-firebase-auth-sdk'),
+        window.loadExternalScriptOnce(`https://www.gstatic.com/firebasejs/${v}/firebase-firestore-compat.js`, 'lumiful-firebase-firestore-sdk')
+      ]);
+      if (!window.firebase) throw new Error('Firebase SDK loaded but global firebase object is unavailable.');
+      return window.firebase;
+    };
+
+    window.initializeFirebaseRuntime = async function(options = {}) {
+      const runtime = window.LUMIFUL_FIREBASE_RUNTIME;
+      if (runtime.status === 'ready' && runtime.app && runtime.auth && runtime.firestore) return runtime;
+
+      const config = options.config || window.LUMIFUL_FIREBASE_CONFIG;
+      if (!window.hasUsableFirebaseConfig(config)) {
+        runtime.status = 'unavailable';
+        runtime.error = null;
+        return runtime;
+      }
+
+      runtime.status = 'loading';
+      runtime.error = null;
+      try {
+        const firebase = await window.loadFirebaseCompatSdk();
+        const app = firebase.apps?.length ? firebase.app() : firebase.initializeApp(config);
+        runtime.app = app;
+        runtime.auth = firebase.auth(app);
+        runtime.firestore = firebase.firestore(app);
+        runtime.status = 'ready';
+        return runtime;
+      } catch (error) {
+        runtime.status = 'error';
+        runtime.error = error;
+        console.warn('[LUMIFUL] Firebase bootstrap failed; Phase 7A mock stack remains active.', error);
+        return runtime;
+      }
+    };
+
+    window.getFirebaseRuntimeSnapshot = function() {
+      const runtime = window.LUMIFUL_FIREBASE_RUNTIME;
+      return Object.freeze({
+        phase: '7B',
+        step: 1,
+        status: runtime.status,
+        configured: window.hasUsableFirebaseConfig(),
+        sdkVersion: runtime.sdkVersion,
+        appReady: !!runtime.app,
+        authReady: !!runtime.auth,
+        firestoreReady: !!runtime.firestore,
+        authBindingActive: false,
+        firestoreBindingActive: false,
+        phase7AFallbackAvailable: !!window.MockCloudStorageAdapter && !!window.LocalStorageAdapter
+      });
+    };
+
+    window.LUMIFUL_PHASE7B_STEP1 = Object.freeze({
+      firebaseBootstrapBoundary: true,
+      lazySdkLoading: true,
+      firebaseSdkVersion: window.LUMIFUL_FIREBASE_SDK_VERSION,
+      configRequired: true,
+      authBindingActive: false,
+      firestoreBindingActive: false,
+      mockFallbackPreserved: true,
+      schemaVersion: 2
+    });
+
+    window.LUMIFUL_PHASE7B_VERSION = '0.1-bootstrap';
+
+    // Non-destructive boot: with no config this becomes `unavailable` and
+    // the completed Phase 7A mock stack continues unchanged.
+    setTimeout(() => {
+      window.initializeFirebaseRuntime().catch(error => {
+        console.warn('[LUMIFUL] Firebase runtime bootstrap notice:', error);
+      });
+    }, 0);
+
+
+    /* ============================================================
+       PHASE 7B / STEP 2 — FIREBASE AUTHENTICATION BINDING
+       ------------------------------------------------------------
+       - Binds the completed Phase 7A auth UI to Firebase Authentication.
+       - Email/password signup, login, logout and password reset are real.
+       - onAuthStateChanged becomes the account-session source of truth.
+       - Guest mode remains local-only until a later optional anonymous-auth step.
+       - STEP 3 persistence remains the existing account adapter until Firestore
+         is bound, so Authentication can be introduced independently and safely.
+       - Account email change/delete are also redirected to Firebase Auth so the
+         Phase 7A lifecycle UI cannot mutate only the obsolete mock registry.
+       ============================================================ */
+    window.LUMIFUL_PHASE7B_STEP2_AUTH_ACTIVE = false;
+    window.LUMIFUL_PHASE7B_STEP2_AUTH_BUSY = false;
+    window.LUMIFUL_PHASE7B_STEP2_AUTH_SYNCING = false;
+    window.LUMIFUL_PHASE7B_STEP2_UNSUBSCRIBE = null;
+
+    window.getFirebaseAuthRuntime = async function() {
+      const runtime = await window.initializeFirebaseRuntime();
+      if (runtime?.status !== 'ready' || !runtime.auth) {
+        throw new Error('firebase-auth-unavailable');
+      }
+      return runtime;
+    };
+
+    window.normalizeFirebaseEmail = function(email) {
+      return String(email || '').trim().toLowerCase();
+    };
+
+    window.getFirebaseAuthErrorMessage = function(error, mode = 'login') {
+      const code = String(error?.code || error?.message || '');
+      if (code.includes('too-many-requests')) return 'ログイン試行が多すぎます。しばらく時間をおいてからお試しください。';
+      if (code.includes('network-request-failed')) return '通信できませんでした。ネットワーク接続を確認してください。';
+      if (code.includes('email-already-in-use')) return 'このメールアドレスはすでに登録されています。ログインしてください。';
+      if (code.includes('weak-password')) return 'より安全なパスワードを設定してください。';
+      if (code.includes('invalid-email')) return 'メールアドレスの形式を確認してください。';
+      if (code.includes('operation-not-allowed')) return 'メール / パスワード認証がFirebase側で有効になっていません。';
+      if (code.includes('requires-recent-login')) return '安全のため、現在のパスワードでもう一度認証してください。';
+      if (code.includes('wrong-password') || code.includes('user-not-found') || code.includes('invalid-credential') || code.includes('invalid-login-credentials')) {
+        return mode === 'signup' ? 'アカウントを作成できませんでした。' : 'メールアドレスまたはパスワードを確認してください。';
+      }
+      return mode === 'signup' ? 'アカウントを作成できませんでした。もう一度お試しください。' : 'ログインできませんでした。もう一度お試しください。';
+    };
+
+    const _phase7bStep2ResolveAuthStateFallback = window.resolveAuthState;
+    window.resolveAuthState = function() {
+      if (!window.LUMIFUL_PHASE7B_STEP2_AUTH_ACTIVE || !window.LUMIFUL_FIREBASE_RUNTIME?.auth) {
+        return _phase7bStep2ResolveAuthStateFallback.apply(this, arguments);
+      }
+
+      window.authState = { status: 'checking', user: null };
+      window.routeByAuthState();
+      const fbUser = window.LUMIFUL_FIREBASE_RUNTIME.auth.currentUser;
+      if (fbUser) {
+        window.authState = {
+          status: 'authenticated',
+          user: {
+            uid: fbUser.uid,
+            email: fbUser.email || '',
+            emailVerified: !!fbUser.emailVerified,
+            isGuest: false,
+            provider: 'firebase'
+          }
+        };
+      } else {
+        const identity = window.getStoredAuthIdentity?.();
+        if (identity?.isGuest) {
+          window.authState = {
+            status: 'guest',
+            user: { email: window.LUMIFUL_GUEST_EMAIL, isGuest: true, provider: 'local' }
+          };
+        } else {
+          window.authState = { status: 'unauthenticated', user: null };
+        }
+      }
+      window.checkAuthState();
+      window.routeByAuthState();
+      return window.authState;
+    };
+
+    window.syncSessionFromFirebaseUser = async function(user, reason = 'firebase-auth-state') {
+      if (window.LUMIFUL_PHASE7B_STEP2_AUTH_SYNCING) return null;
+      window.LUMIFUL_PHASE7B_STEP2_AUTH_SYNCING = true;
+      try {
+        if (user) {
+          const email = window.normalizeFirebaseEmail(user.email);
+          if (!email) throw new Error('firebase-user-email-missing');
+          const sameIdentity = window.authState?.status === 'authenticated'
+            && window.normalizeFirebaseEmail(window.authState?.user?.email) === email;
+          if (sameIdentity) {
+            window.resolveAuthState();
+            return { status: 'authenticated', restored: false, unchanged: true };
+          }
+          return await window.transitionAuthIdentity(
+            { email, isGuest: false },
+            { reason, skipFlush: window.authState?.status === 'unauthenticated' }
+          );
+        }
+
+        if (window.authState?.status === 'guest') {
+          window.resolveAuthState();
+          return { status: 'guest', unchanged: true };
+        }
+        if (window.authState?.status === 'authenticated' || window.getStoredAuthIdentity?.()?.isGuest === false) {
+          return await window.transitionAuthIdentity({}, { logout: true, reason, skipFlush: true });
+        }
+        window.resolveAuthState();
+        return { status: 'unauthenticated', unchanged: true };
+      } finally {
+        window.LUMIFUL_PHASE7B_STEP2_AUTH_SYNCING = false;
+      }
+    };
+
+    window.activateFirebaseAuthentication = async function() {
+      const runtime = await window.getFirebaseAuthRuntime();
+      runtime.auth.languageCode = 'ja';
+      try {
+        await runtime.auth.setPersistence(window.firebase.auth.Auth.Persistence.LOCAL);
+      } catch (error) {
+        console.warn('[LUMIFUL] Firebase auth persistence setup notice:', error);
+      }
+
+      window.LUMIFUL_PHASE7B_STEP2_AUTH_ACTIVE = true;
+      if (typeof window.LUMIFUL_PHASE7B_STEP2_UNSUBSCRIBE === 'function') {
+        window.LUMIFUL_PHASE7B_STEP2_UNSUBSCRIBE();
+      }
+      window.LUMIFUL_PHASE7B_STEP2_UNSUBSCRIBE = runtime.auth.onAuthStateChanged(user => {
+        window.syncSessionFromFirebaseUser(user, 'firebase-auth-listener').catch(error => {
+          console.error('[LUMIFUL] Firebase auth state sync failed.', error);
+        });
+      });
+      window.resolveAuthState();
+      return runtime.auth;
+    };
+
+    window.handleWelcomeLogin = async function(event) {
+      event.preventDefault();
+      if (window.LUMIFUL_PHASE7B_STEP2_AUTH_BUSY) return;
+      const email = window.normalizeFirebaseEmail(document.getElementById('welcomeLoginEmail')?.value);
+      const password = document.getElementById('welcomeLoginPassword')?.value || '';
+      const errorEl = document.getElementById('welcomeLoginError');
+      if (!email || password.length < 8) {
+        if (errorEl) { errorEl.textContent = 'メールアドレスと8桁以上のパスワードを確認してください。'; errorEl.classList.remove('hidden'); }
+        return;
+      }
+      const localGuard = window.getLoginGuardState?.(email);
+      if (localGuard?.locked) {
+        if (errorEl) { errorEl.textContent = window.getLoginCooldownMessage(localGuard); errorEl.classList.remove('hidden'); }
+        return;
+      }
+      if (errorEl) errorEl.classList.add('hidden');
+      window.LUMIFUL_PHASE7B_STEP2_AUTH_BUSY = true;
+      try {
+        const runtime = await window.getFirebaseAuthRuntime();
+        const credential = await runtime.auth.signInWithEmailAndPassword(email, password);
+        window.clearLoginFailures?.(email);
+        await window.syncSessionFromFirebaseUser(credential.user, 'firebase-welcome-login');
+        window.closeAuthModal();
+        window.showToast('ログインしました', 'success');
+      } catch (error) {
+        const guard = window.recordLoginFailure?.(email);
+        if (errorEl) {
+          errorEl.textContent = guard?.locked ? window.getLoginCooldownMessage(guard) : window.getFirebaseAuthErrorMessage(error, 'login');
+          errorEl.classList.remove('hidden');
+        }
+      } finally {
+        window.LUMIFUL_PHASE7B_STEP2_AUTH_BUSY = false;
+      }
+    };
+
+    window.handleAccountLogin = async function(event) {
+      event.preventDefault();
+      if (window.LUMIFUL_PHASE7B_STEP2_AUTH_BUSY) return;
+      const email = window.normalizeFirebaseEmail(document.getElementById('authEmail')?.value);
+      const password = document.getElementById('authPassword')?.value || '';
+      const errorEl = document.getElementById('authErrorMsg');
+      if (!email || password.length < 8) {
+        if (errorEl) { errorEl.textContent = 'メールアドレスと8桁以上のパスワードを確認してください。'; errorEl.classList.remove('hidden'); }
+        return;
+      }
+      const localGuard = window.getLoginGuardState?.(email);
+      if (localGuard?.locked) {
+        if (errorEl) { errorEl.textContent = window.getLoginCooldownMessage(localGuard); errorEl.classList.remove('hidden'); }
+        return;
+      }
+      if (errorEl) errorEl.classList.add('hidden');
+      window.LUMIFUL_PHASE7B_STEP2_AUTH_BUSY = true;
+      try {
+        const runtime = await window.getFirebaseAuthRuntime();
+        const credential = await runtime.auth.signInWithEmailAndPassword(email, password);
+        window.clearLoginFailures?.(email);
+        await window.syncSessionFromFirebaseUser(credential.user, 'firebase-account-login');
+        window.closeAuthModal();
+        window.showToast('ログインしました', 'success');
+      } catch (error) {
+        const guard = window.recordLoginFailure?.(email);
+        if (errorEl) {
+          errorEl.textContent = guard?.locked ? window.getLoginCooldownMessage(guard) : window.getFirebaseAuthErrorMessage(error, 'login');
+          errorEl.classList.remove('hidden');
+        }
+      } finally {
+        window.LUMIFUL_PHASE7B_STEP2_AUTH_BUSY = false;
+      }
+    };
+
+    window.handleWelcomeSignup = async function(event) {
+      event.preventDefault();
+      if (window.LUMIFUL_PHASE7B_STEP2_AUTH_BUSY || window.LUMIFUL_STEP5_HANDOFF_IN_PROGRESS) return;
+      const email = window.normalizeFirebaseEmail(document.getElementById('welcomeSignupEmail')?.value);
+      const password = document.getElementById('welcomeSignupPassword')?.value || '';
+      const errorEl = document.getElementById('welcomeSignupError');
+      if (!email || password.length < 8) {
+        if (errorEl) { errorEl.textContent = 'メールアドレスと8桁以上のパスワードを確認してください。'; errorEl.classList.remove('hidden'); }
+        return;
+      }
+      if (errorEl) errorEl.classList.add('hidden');
+      window.LUMIFUL_PHASE7B_STEP2_AUTH_BUSY = true;
+      window.LUMIFUL_STEP5_HANDOFF_IN_PROGRESS = true;
+      const wasGuest = window.authState?.status === 'guest';
+      try {
+        if (wasGuest) await window.flushPendingAutoSaveBeforeAuthChange('firebase-signup-guest-flush');
+        const runtime = await window.getFirebaseAuthRuntime();
+        const credential = await runtime.auth.createUserWithEmailAndPassword(email, password);
+
+        if (wasGuest) {
+          try {
+            const handoff = await window.handoffGuestDataToAccount({ email });
+            if (handoff?.migrated) window.showToast('ゲストのシミュレーションをアカウントへ引き継ぎました', 'success');
+          } catch (handoffError) {
+            console.warn('[LUMIFUL] Guest data handoff notice after Firebase signup:', handoffError);
+            window.showToast('アカウントは作成できました。ゲストデータの引継ぎは再確認してください。', 'info');
+          }
+        }
+
+        localStorage.setItem('lumiful_new_user', '1');
+        await window.syncSessionFromFirebaseUser(credential.user, 'firebase-signup');
+        window.closeAuthModal();
+        window.showToast('LUMIFULへようこそ！', 'success');
+      } catch (error) {
+        if (errorEl) {
+          errorEl.textContent = window.getFirebaseAuthErrorMessage(error, 'signup');
+          errorEl.classList.remove('hidden');
+        }
+      } finally {
+        window.LUMIFUL_STEP5_HANDOFF_IN_PROGRESS = false;
+        window.LUMIFUL_PHASE7B_STEP2_AUTH_BUSY = false;
+      }
+    };
+
+    window.handleAccountLogout = async function() {
+      if (window.LUMIFUL_PHASE7B_STEP2_AUTH_BUSY) return;
+      window.LUMIFUL_PHASE7B_STEP2_AUTH_BUSY = true;
+      try {
+        if (window.authState?.status === 'authenticated') {
+          await window.flushPendingAutoSaveBeforeAuthChange('firebase-logout');
+          const runtime = await window.getFirebaseAuthRuntime();
+          await runtime.auth.signOut();
+          await window.transitionAuthIdentity({}, { logout: true, reason: 'firebase-logout', skipFlush: true });
+        } else {
+          await window.transitionAuthIdentity({}, { logout: true, reason: 'guest-logout' });
+        }
+        window.closeAuthModal();
+        window.showToast('ログアウトしました', 'info');
+      } catch (error) {
+        console.error('[LUMIFUL] Firebase logout failed.', error);
+        window.showToast('ログアウト処理に失敗しました', 'error');
+      } finally {
+        window.LUMIFUL_PHASE7B_STEP2_AUTH_BUSY = false;
+      }
+    };
+
+    window.requestPasswordReset = async function(email) {
+      const normalized = window.normalizeFirebaseEmail(email);
+      if (!normalized) throw new Error('auth/invalid-email');
+      const runtime = await window.getFirebaseAuthRuntime();
+      try {
+        await runtime.auth.sendPasswordResetEmail(normalized);
+      } catch (error) {
+        const code = String(error?.code || '');
+        // Keep the Phase 7A account-enumeration-safe UI contract.
+        if (!code.includes('user-not-found')) throw error;
+      }
+      return { accepted: true, email: normalized, provider: 'firebase' };
+    };
+
+    window.reauthenticateFirebasePasswordUser = async function(password) {
+      const runtime = await window.getFirebaseAuthRuntime();
+      const user = runtime.auth.currentUser;
+      if (!user?.email) throw new Error('auth/user-not-found');
+      const credential = window.firebase.auth.EmailAuthProvider.credential(user.email, password);
+      await user.reauthenticateWithCredential(credential);
+      return user;
+    };
+
+    window.handleAccountEmailChange = async function(event) {
+      event.preventDefault();
+      if (window.LUMIFUL_STEP9_ACCOUNT_BUSY) return;
+      const runtime = await window.getFirebaseAuthRuntime().catch(() => null);
+      const user = runtime?.auth?.currentUser;
+      const oldEmail = window.normalizeFirebaseEmail(user?.email);
+      const newEmail = window.normalizeFirebaseEmail(document.getElementById('accountLifecycleNewEmail')?.value);
+      const password = document.getElementById('accountLifecyclePassword')?.value || '';
+      if (!oldEmail || !newEmail || password.length < 8) return window.setStep9Message('accountLifecycleChangeMessage','入力内容を確認してください。');
+      if (oldEmail === newEmail) return window.setStep9Message('accountLifecycleChangeMessage','現在と異なるメールアドレスを入力してください。');
+      window.LUMIFUL_STEP9_ACCOUNT_BUSY = true;
+      const btn = document.getElementById('accountLifecycleChangeBtn'); if (btn) btn.disabled = true;
+      try {
+        await window.reauthenticateFirebasePasswordUser(password);
+        await window.flushPendingAutoSaveBeforeAuthChange('firebase-email-change');
+        const oldKey = window.getMockCloudStorageKey({ email: oldEmail });
+        const newKey = window.getMockCloudStorageKey({ email: newEmail });
+        if (localStorage.getItem(newKey) !== null) throw new Error('auth/email-already-in-use');
+        const oldCloudRaw = localStorage.getItem(oldKey);
+
+        await user.updateEmail(newEmail);
+        if (oldCloudRaw !== null) localStorage.setItem(newKey, oldCloudRaw);
+        localStorage.removeItem(oldKey);
+        window.clearLoginFailures?.(oldEmail);
+        window.clearLoginFailures?.(newEmail);
+        await window.transitionAuthIdentity({ email: newEmail, isGuest: false }, { reason: 'firebase-email-change', skipFlush: true });
+        window.setStep9Message('accountLifecycleChangeMessage','メールアドレスを変更しました。', true);
+        const current = document.getElementById('accountLifecycleCurrentEmail'); if (current) current.textContent = newEmail;
+        window.showToast('メールアドレスを変更しました', 'success');
+      } catch (error) {
+        window.setStep9Message('accountLifecycleChangeMessage', window.getFirebaseAuthErrorMessage(error, 'login'));
+      } finally {
+        window.LUMIFUL_STEP9_ACCOUNT_BUSY = false;
+        if (btn) btn.disabled = false;
+      }
+    };
+
+    window.handleAccountDeletion = async function(event) {
+      event.preventDefault();
+      if (window.LUMIFUL_STEP9_ACCOUNT_BUSY) return;
+      const runtime = await window.getFirebaseAuthRuntime().catch(() => null);
+      const user = runtime?.auth?.currentUser;
+      const email = window.normalizeFirebaseEmail(user?.email);
+      const password = document.getElementById('accountLifecycleDeletePassword')?.value || '';
+      const confirmed = !!document.getElementById('accountLifecycleDeleteConfirm')?.checked;
+      if (!confirmed || password.length < 8) return window.setStep9Message('accountLifecycleDeleteMessage','確認チェックと現在のパスワードが必要です。');
+      window.LUMIFUL_STEP9_ACCOUNT_BUSY = true;
+      const btn = document.getElementById('accountLifecycleDeleteBtn'); if (btn) btn.disabled = true;
+      try {
+        await window.reauthenticateFirebasePasswordUser(password);
+        await window.flushPendingAutoSaveBeforeAuthChange('firebase-account-delete');
+        const cloudKey = email ? window.getMockCloudStorageKey({ email }) : null;
+        await user.delete();
+        if (cloudKey) localStorage.removeItem(cloudKey);
+        window.clearLoginFailures?.(email);
+        window.closeAccountLifecycleModal();
+        await window.transitionAuthIdentity({}, { logout: true, reason: 'firebase-account-delete', skipFlush: true });
+        window.showToast('アカウントを削除しました', 'success');
+      } catch (error) {
+        window.setStep9Message('accountLifecycleDeleteMessage', window.getFirebaseAuthErrorMessage(error, 'login'));
+      } finally {
+        window.LUMIFUL_STEP9_ACCOUNT_BUSY = false;
+        if (btn) btn.disabled = false;
+      }
+    };
+
+    window.getFirebaseAuthBindingSnapshot = function() {
+      const runtime = window.LUMIFUL_FIREBASE_RUNTIME;
+      const user = runtime?.auth?.currentUser;
+      return Object.freeze({
+        phase: '7B',
+        step: 2,
+        active: !!window.LUMIFUL_PHASE7B_STEP2_AUTH_ACTIVE,
+        runtimeStatus: runtime?.status || 'idle',
+        signedIn: !!user,
+        uid: user?.uid || null,
+        email: user?.email || null,
+        emailVerified: !!user?.emailVerified,
+        persistence: 'LOCAL',
+        guestMode: 'local-only',
+        accountStorage: 'MockCloudStorageAdapter (STEP 3 replaces with Firestore)'
+      });
+    };
+
+    window.LUMIFUL_PHASE7B_STEP2 = Object.freeze({
+      firebaseAuthenticationActive: true,
+      emailPasswordSignup: true,
+      emailPasswordLogin: true,
+      persistentSession: true,
+      authStateListener: true,
+      passwordResetEmail: true,
+      logout: true,
+      accountEmailChangeWithReauth: true,
+      accountDeletionWithReauth: true,
+      guestMode: 'local-only',
+      firestoreBindingActive: false,
+      mockAuthCredentialRegistryRetiredFromProductionPath: true,
+      phase7AFallbackPreserved: true,
+      schemaVersion: 2
+    });
+
+    window.LUMIFUL_PHASE7B_VERSION = '0.2-firebase-auth';
+
+    // Activate only after STEP 1 bootstrap succeeds. If Firebase cannot load,
+    // Phase 7A remains available exactly as before.
+    setTimeout(async () => {
+      try {
+        const runtime = await window.initializeFirebaseRuntime();
+        if (runtime?.status === 'ready') {
+          await window.activateFirebaseAuthentication();
+          console.info('[LUMIFUL] Firebase Authentication binding active.', window.getFirebaseAuthBindingSnapshot());
+        } else {
+          console.warn('[LUMIFUL] Firebase Authentication unavailable; using Phase 7A fallback.', runtime?.status);
+        }
+      } catch (error) {
+        window.LUMIFUL_PHASE7B_STEP2_AUTH_ACTIVE = false;
+        console.warn('[LUMIFUL] Firebase Authentication activation failed; Phase 7A fallback remains active.', error);
+      }
+    }, 0);
+
+
+
+    /* ============================================================
+       PHASE 7B / STEP 3 — FIRESTORE PERSISTENCE BINDING
+       ------------------------------------------------------------
+       - Authenticated account data is stored at users/{firebaseUid}.
+       - Guest mode remains LocalStorageAdapter and never touches Firestore.
+       - Schema v2 persistence envelopes are preserved unchanged.
+       - Existing Phase 7A MockCloud data is migrated once only when the
+         Firestore document is empty, preventing accidental overwrite.
+       - Guest → new account handoff now writes directly to Firestore.
+       - Email changes no longer move storage because UID is the stable key.
+       - Account deletion removes the Firestore document before Auth deletion.
+       ============================================================ */
+    window.LUMIFUL_PHASE7B_STEP3_FIRESTORE_ACTIVE = false;
+    window.LUMIFUL_PHASE7B_STEP3_MIGRATING = false;
+
+    window.getFirestoreAccountContext = async function(user) {
+      const runtime = await window.initializeFirebaseRuntime();
+      if (runtime?.status !== 'ready' || !runtime.firestore || !runtime.auth) {
+        throw new Error('firestore-unavailable');
+      }
+      const fbUser = runtime.auth.currentUser;
+      const uid = String(user?.uid || fbUser?.uid || '').trim();
+      if (!fbUser?.uid || !uid || fbUser.uid !== uid) {
+        throw new Error('firestore-auth-user-mismatch');
+      }
+      return {
+        runtime,
+        fbUser,
+        uid,
+        ref: runtime.firestore.collection('users').doc(uid)
+      };
+    };
+
+    window.FirestoreStorageAdapter = Object.freeze({
+      name: 'firestore',
+      async load(user) {
+        const { ref } = await window.getFirestoreAccountContext(user);
+        const snapshot = await ref.get();
+        if (!snapshot.exists) return null;
+        return window.parsePersistenceEnvelopeV2(snapshot.data());
+      },
+      async save(model, user) {
+        const { ref, fbUser } = await window.getFirestoreAccountContext(user);
+        const previous = await this.load({ uid: fbUser.uid });
+        const envelope = window.createPersistenceEnvelopeV2(model, previous);
+        await ref.set(envelope, { merge: false });
+        return envelope;
+      },
+      async clear(user) {
+        const { ref } = await window.getFirestoreAccountContext(user);
+        await ref.delete();
+      }
+    });
+
+    const _phase7bStep3GetStorageAdapterForAuthState = window.getStorageAdapterForAuthState;
+    window.getStorageAdapterForAuthState = function(state = window.authState) {
+      if (state?.status === 'guest') return window.LocalStorageAdapter;
+      if (state?.status === 'authenticated' && window.LUMIFUL_PHASE7B_STEP3_FIRESTORE_ACTIVE) {
+        return window.FirestoreStorageAdapter;
+      }
+      return _phase7bStep3GetStorageAdapterForAuthState.call(this, state);
+    };
+
+    window.migrateMockCloudToFirestoreIfNeeded = async function() {
+      if (window.LUMIFUL_PHASE7B_STEP3_MIGRATING) return { migrated: false, reason: 'busy' };
+      const runtime = window.LUMIFUL_FIREBASE_RUNTIME;
+      const fbUser = runtime?.auth?.currentUser;
+      if (!fbUser?.uid || !fbUser?.email) return { migrated: false, reason: 'no-auth-user' };
+
+      window.LUMIFUL_PHASE7B_STEP3_MIGRATING = true;
+      try {
+        const existing = await window.FirestoreStorageAdapter.load({ uid: fbUser.uid });
+        if (existing?.data) return { migrated: false, reason: 'firestore-data-exists', envelope: existing };
+
+        const legacy = await window.MockCloudStorageAdapter.load({ email: fbUser.email, isGuest: false });
+        if (!legacy?.data) return { migrated: false, reason: 'no-mock-data' };
+
+        const envelope = await window.FirestoreStorageAdapter.save(legacy.data, { uid: fbUser.uid });
+        return { migrated: true, reason: 'mock-cloud-to-firestore', envelope };
+      } finally {
+        window.LUMIFUL_PHASE7B_STEP3_MIGRATING = false;
+      }
+    };
+
+    // Replace STEP 5's storage target while preserving its non-destructive contract.
+    window.handoffGuestDataToAccount = async function(user, options = {}) {
+      const runtime = await window.initializeFirebaseRuntime();
+      const fbUser = runtime?.auth?.currentUser;
+      if (!fbUser?.uid) throw new Error('Firebase account is required for guest handoff.');
+
+      const existingAccountEnvelope = await window.FirestoreStorageAdapter.load({ uid: fbUser.uid });
+      if (existingAccountEnvelope?.data && options.overwrite !== true) {
+        return { migrated: false, reason: 'account-data-exists', envelope: existingAccountEnvelope };
+      }
+
+      const guestEnvelope = await window.LocalStorageAdapter.load();
+      const sourceModel = guestEnvelope?.data || window.getCurrentDataModelV2ForPersistence();
+      const envelope = await window.FirestoreStorageAdapter.save(sourceModel, { uid: fbUser.uid });
+      return { migrated: true, reason: 'guest-data-copied-to-firestore', envelope };
+    };
+
+    // UID is the persistence identity, so changing email does not move Firestore data.
+    window.handleAccountEmailChange = async function(event) {
+      event.preventDefault();
+      if (window.LUMIFUL_STEP9_ACCOUNT_BUSY) return;
+      const runtime = await window.getFirebaseAuthRuntime().catch(() => null);
+      const user = runtime?.auth?.currentUser;
+      const oldEmail = window.normalizeFirebaseEmail(user?.email);
+      const newEmail = window.normalizeFirebaseEmail(document.getElementById('accountLifecycleNewEmail')?.value);
+      const password = document.getElementById('accountLifecyclePassword')?.value || '';
+      if (!oldEmail || !newEmail || password.length < 8) return window.setStep9Message('accountLifecycleChangeMessage','入力内容を確認してください。');
+      if (oldEmail === newEmail) return window.setStep9Message('accountLifecycleChangeMessage','現在と異なるメールアドレスを入力してください。');
+
+      window.LUMIFUL_STEP9_ACCOUNT_BUSY = true;
+      const btn = document.getElementById('accountLifecycleChangeBtn');
+      if (btn) btn.disabled = true;
+      try {
+        await window.reauthenticateFirebasePasswordUser(password);
+        await window.flushPendingAutoSaveBeforeAuthChange('firebase-email-change');
+        await user.updateEmail(newEmail);
+        window.clearLoginFailures?.(oldEmail);
+        window.clearLoginFailures?.(newEmail);
+        await window.syncSessionFromFirebaseUser(user, 'firebase-email-change');
+        window.setStep9Message('accountLifecycleChangeMessage','メールアドレスを変更しました。', true);
+        const current = document.getElementById('accountLifecycleCurrentEmail');
+        if (current) current.textContent = newEmail;
+        window.showToast('メールアドレスを変更しました', 'success');
+      } catch (error) {
+        window.setStep9Message('accountLifecycleChangeMessage', window.getFirebaseAuthErrorMessage(error, 'login'));
+      } finally {
+        window.LUMIFUL_STEP9_ACCOUNT_BUSY = false;
+        if (btn) btn.disabled = false;
+      }
+    };
+
+    window.handleAccountDeletion = async function(event) {
+      event.preventDefault();
+      if (window.LUMIFUL_STEP9_ACCOUNT_BUSY) return;
+      const runtime = await window.getFirebaseAuthRuntime().catch(() => null);
+      const user = runtime?.auth?.currentUser;
+      const email = window.normalizeFirebaseEmail(user?.email);
+      const password = document.getElementById('accountLifecycleDeletePassword')?.value || '';
+      const confirmed = !!document.getElementById('accountLifecycleDeleteConfirm')?.checked;
+      if (!confirmed || password.length < 8) return window.setStep9Message('accountLifecycleDeleteMessage','確認チェックと現在のパスワードが必要です。');
+
+      window.LUMIFUL_STEP9_ACCOUNT_BUSY = true;
+      const btn = document.getElementById('accountLifecycleDeleteBtn');
+      if (btn) btn.disabled = true;
+      try {
+        await window.reauthenticateFirebasePasswordUser(password);
+        await window.flushPendingAutoSaveBeforeAuthChange('firebase-account-delete');
+        // Delete protected Firestore data while the authenticated UID still exists.
+        await window.FirestoreStorageAdapter.clear({ uid: user.uid });
+        await user.delete();
+        // Remove only obsolete local mock data for the same historical identity.
+        if (email) {
+          try { await window.MockCloudStorageAdapter.clear({ email, isGuest: false }); } catch (_) {}
+        }
+        window.clearLoginFailures?.(email);
+        window.closeAccountLifecycleModal();
+        await window.transitionAuthIdentity({}, { logout: true, reason: 'firebase-account-delete', skipFlush: true });
+        window.showToast('アカウントを削除しました', 'success');
+      } catch (error) {
+        window.setStep9Message('accountLifecycleDeleteMessage', window.getFirebaseAuthErrorMessage(error, 'login'));
+      } finally {
+        window.LUMIFUL_STEP9_ACCOUNT_BUSY = false;
+        if (btn) btn.disabled = false;
+      }
+    };
+
+    window.getFirestoreBindingSnapshot = function() {
+      const runtime = window.LUMIFUL_FIREBASE_RUNTIME;
+      const user = runtime?.auth?.currentUser;
+      return Object.freeze({
+        phase: '7B',
+        step: 3,
+        active: !!window.LUMIFUL_PHASE7B_STEP3_FIRESTORE_ACTIVE,
+        runtimeStatus: runtime?.status || 'idle',
+        firestoreReady: !!runtime?.firestore,
+        signedIn: !!user,
+        uid: user?.uid || null,
+        documentPath: user?.uid ? `users/${user.uid}` : null,
+        guestStorage: 'LocalStorageAdapter',
+        accountStorage: 'FirestoreStorageAdapter',
+        schemaVersion: 2
+      });
+    };
+
+    window.LUMIFUL_PHASE7B_STEP3 = Object.freeze({
+      firestorePersistenceActive: true,
+      accountDocumentPath: 'users/{firebaseUid}',
+      authenticatedAccountAdapter: 'FirestoreStorageAdapter',
+      guestAdapter: 'LocalStorageAdapter',
+      autoSaveToFirestore: true,
+      automaticRestoreFromFirestore: true,
+      mockCloudOneTimeMigration: true,
+      guestAccountHandoffToFirestore: true,
+      uidStableAcrossEmailChange: true,
+      deleteFirestoreBeforeAuthAccount: true,
+      securityRuleContract: 'request.auth.uid == userId',
+      schemaVersion: 2
+    });
+
+    window.LUMIFUL_PHASE7B_VERSION = '0.3-firestore';
+
+    setTimeout(async () => {
+      try {
+        const runtime = await window.initializeFirebaseRuntime();
+        if (runtime?.status !== 'ready' || !runtime.firestore) {
+          console.warn('[LUMIFUL] Firestore unavailable; account storage remains on Phase 7A fallback.');
+          return;
+        }
+
+        window.LUMIFUL_PHASE7B_STEP3_FIRESTORE_ACTIVE = true;
+
+        if (runtime.auth?.currentUser) {
+          const migration = await window.migrateMockCloudToFirestoreIfNeeded();
+          const envelope = await window.loadUserData({ restore: true, silent: true });
+          if (!envelope?.data) window.resetInMemorySimulationV2();
+          window.updateSaveStatus(envelope?.data ? 'saved' : 'idle');
+          if (migration?.migrated) {
+            console.info('[LUMIFUL] Existing account data migrated to Firestore.');
+          }
+        }
+
+        console.info('[LUMIFUL] Firestore persistence binding active.', window.getFirestoreBindingSnapshot());
+      } catch (error) {
+        window.LUMIFUL_PHASE7B_STEP3_FIRESTORE_ACTIVE = false;
+        console.error('[LUMIFUL] Firestore binding activation failed; Phase 7A fallback remains available.', error);
+      }
+    }, 0);
+
+    window.LUMIFUL_PHASE7_STEP3 = Object.freeze({
+      storageAdapter: true,
+      guestAdapter: 'LocalStorageAdapter',
+      accountAdapter: 'MockCloudStorageAdapter',
+      envelopeSchemaVersion: 2,
+      autoSaveEnabled: true,
+      automaticRestoreEnabled: true,
+      firebaseConnected: false
+    });
+
+    window.LUMIFUL_PHASE7_STEP2 = Object.freeze({
+      authStates: ['checking', 'unauthenticated', 'guest', 'authenticated'],
+      router: 'auth-state-driven',
+      firebaseConnected: false,
+      guestStorage: 'localStorage'
+    });
 
     window.LUMIFUL_PHASE6_COMPLETION_AUDIT = Object.freeze({
       productionEngine: 'v2-only',
