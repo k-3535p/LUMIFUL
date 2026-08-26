@@ -285,76 +285,76 @@
 
       <!-- VIEW 1: DASHBOARD VIEW -->
       <div id="dashboardView" class="space-y-6">
-        
-        <div class="space-y-1 mb-1">
-          <h1 class="text-2xl sm:text-3xl font-extrabold text-[#253047] tracking-tight">あなたの未来</h1>
-          <p class="text-xs sm:text-sm text-[#6F7785]">現在の条件から、これからの人生設計を見てみましょう。</p>
-        </div>
 
         <!-- DASHBOARD HERO & KPI SECTION -->
         <section id="hero-section" class="space-y-4">
           
-          <!-- 4 KPI GRID (2 Columns on Mobile, 4 Columns on Desktop) -->
+          <!-- 4 KPI EQUAL GRID -->
           <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
             
             <!-- KPI 1: LUMIFUL SCORE CARD -->
-            <div class="bg-[#FFFDF8] rounded-[20px] sm:rounded-[24px] p-3.5 sm:p-5 border border-[#ECEBE6] flex flex-col justify-between relative overflow-hidden transition shadow-sm">
+            <div class="bg-[#FFFDF8] rounded-[24px] p-3.5 sm:p-5 border border-[#ECEBE6] flex flex-col justify-between relative overflow-hidden transition shadow-sm">
               
               <!-- Hero-Wide Organic Light Field Background Canvas -->
               <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_85%_35%,rgba(255,200,61,0.22)_0%,rgba(255,200,61,0.08)_45%,rgba(255,253,248,0)_75%)] pointer-events-none -z-0"></div>
 
               <div class="relative z-10 space-y-2 sm:space-y-3">
-                <!-- Header: Title & Dynamic Badge -->
-                <div class="flex items-center justify-between gap-1.5">
-                  <div class="flex items-center gap-1 text-[10px] sm:text-xs font-bold tracking-wider uppercase">
+                <!-- Header: Title (Top Left) & Dynamic Badge (Top Right) -->
+                <div class="flex items-center justify-between gap-1 sm:gap-2">
+                  <div class="flex items-center gap-1 text-[10px] sm:text-xs font-bold tracking-wider uppercase truncate">
                     <span class="text-[#253047]">LUMIFUL</span>
                     <span class="text-[#FFC83D]">SCORE</span>
                   </div>
-                  <span id="kpi-score-badge" class="px-2 py-0.5 sm:px-2.5 sm:py-0.5 rounded-full text-[9px] sm:text-[10px] font-bold bg-[#FAFAF7] text-[#6F7785] border border-[#ECEBE6] shrink-0 whitespace-nowrap">
-                    ⚪ 未設定
-                  </span>
-                </div>
-
-                <!-- Main Content Row: Score Number & Right Character Area -->
-                <div class="relative flex items-center justify-between gap-2 pt-0.5 min-h-[56px] sm:min-h-[72px]">
-                  <!-- Left: Score Number -->
-                  <div class="flex items-baseline gap-1 z-10">
-                    <div id="kpi-score" class="text-2xl sm:text-4xl lg:text-5xl font-extrabold text-[#253047] tracking-tight leading-none">0</div>
-                    <span class="text-[10px] sm:text-xs font-bold text-[#6F7785]">/ 100</span>
-                  </div>
-
-                  <!-- Right: Official LUMI Character Area -->
-                  <div class="absolute right-0 top-1/2 -translate-y-1/2 shrink-0 pointer-events-none z-0">
-                    <img src="./assets/lumi-spark.png" alt="LUMI" class="w-14 h-14 sm:w-20 sm:h-20 lg:w-22 lg:h-22 object-contain" />
+                  <div>
+                    <span id="kpi-score-badge" class="px-2 py-0.5 rounded-full text-[9px] sm:text-[10px] font-semibold bg-[#FAFAF7] text-[#6F7785] border border-[#ECEBE6] shrink-0 inline-block truncate max-w-full">
+                      ⚪ 未設定
+                    </span>
                   </div>
                 </div>
 
-                <!-- Mini Metrics: Base Score & LUMI AI with Concept-Matched Icons -->
-                <div id="kpi-score-breakdown" class="bg-white/90 p-1.5 sm:p-2 rounded-[12px] sm:rounded-[14px] border border-[#ECEBE6] shadow-2xs inline-flex items-center gap-1 sm:gap-3 w-full justify-around relative z-10">
-                  <!-- Base Score -->
-                  <div class="flex items-center gap-1 sm:gap-1.5">
-                    <div class="w-4 h-4 sm:w-5 sm:h-5 rounded-md bg-slate-100 text-[#253047] flex items-center justify-center text-[9px] sm:text-[10px] shrink-0">
-                      <i class="fa-solid fa-chart-simple"></i>
+                <!-- Main Body: Score Left, Official LUMI Right -->
+                <div class="flex items-center justify-between gap-2">
+                  <div class="space-y-2 min-w-0 flex-1">
+                    <!-- Main Content Row: Score Number -->
+                    <div class="pt-0.5 flex items-baseline gap-1">
+                      <div id="kpi-score" class="text-2xl sm:text-4xl lg:text-5xl font-extrabold text-[#253047] tracking-tight leading-none whitespace-nowrap">0</div>
+                      <span class="text-[10px] sm:text-xs font-bold text-[#6F7785] whitespace-nowrap">/ 100</span>
                     </div>
-                    <span class="text-[8px] sm:text-[9px] font-bold text-[#6F7785] uppercase tracking-wider">BASE</span>
-                    <span class="text-xs sm:text-sm font-extrabold text-[#253047]" id="kpi-base-score">0</span>
+
+                    <!-- Mini Metrics: Base Score & LUMI with Concept-Matched Icons -->
+                    <div id="kpi-score-breakdown" class="bg-white/90 p-1.5 sm:p-2 rounded-[14px] border border-[#ECEBE6] shadow-2xs inline-flex items-center gap-2 sm:gap-3 w-full justify-around whitespace-nowrap">
+                      <!-- Base Score: Financial Data Chart Icon -->
+                      <div class="flex items-center gap-1 sm:gap-1.5">
+                        <div class="w-4 h-4 sm:w-5 sm:h-5 rounded-md bg-slate-100 text-[#253047] flex items-center justify-center text-[9px] sm:text-[10px] shrink-0">
+                          <i class="fa-solid fa-chart-simple"></i>
+                        </div>
+                        <span class="text-[8px] sm:text-[9px] font-bold text-[#6F7785] uppercase tracking-wider">BASE</span>
+                        <span class="text-xs sm:text-sm font-extrabold text-[#253047]" id="kpi-base-score">0</span>
+                      </div>
+                      <div class="w-px h-3 sm:h-4 bg-[#ECEBE6]"></div>
+                      <!-- LUMI: Intelligence Sparkle Icon -->
+                      <div class="flex items-center gap-1 sm:gap-1.5">
+                        <div class="w-4 h-4 sm:w-5 sm:h-5 rounded-md bg-[#FFF9E6] text-[#8C5800] flex items-center justify-center text-[9px] sm:text-[10px] shrink-0">
+                          <i class="fa-solid fa-wand-magic-sparkles"></i>
+                        </div>
+                        <span class="text-[8px] sm:text-[9px] font-bold text-[#8C5800] uppercase tracking-wider">LUMI</span>
+                        <span class="text-xs sm:text-sm font-extrabold text-[#8C5800]" id="kpi-ai-adj">0</span>
+                      </div>
+                    </div>
                   </div>
-                  <div class="w-px h-3.5 sm:h-4 bg-[#ECEBE6]"></div>
-                  <!-- LUMI AI -->
-                  <div class="flex items-center gap-1 sm:gap-1.5">
-                    <div class="w-4 h-4 sm:w-5 sm:h-5 rounded-md bg-[#FFF9E6] text-[#8C5800] flex items-center justify-center text-[9px] sm:text-[10px] shrink-0">
-                      <i class="fa-solid fa-wand-magic-sparkles"></i>
-                    </div>
-                    <span class="text-[8px] sm:text-[9px] font-bold text-[#8C5800] uppercase tracking-wider">LUMI AI</span>
-                    <span class="text-xs sm:text-sm font-extrabold text-[#8C5800]" id="kpi-ai-adj">0</span>
+
+                  <!-- Right Side Official LUMI Character Area -->
+                  <div class="shrink-0 flex items-center justify-center pl-1">
+                    <img src="./assets/lumi-spark.png" alt="LUMI" class="w-12 h-12 sm:w-20 sm:h-20 lg:w-24 lg:h-24 object-contain pointer-events-none" />
                   </div>
                 </div>
               </div>
 
               <!-- Bottom Row: Dynamic Status Text & CTA -->
-              <div class="pt-2.5 sm:pt-3 border-t border-[#ECEBE6] mt-2.5 sm:mt-3 flex items-center justify-between relative z-10 gap-1.5">
+              <div class="pt-2 sm:pt-3 border-t border-[#ECEBE6] mt-2 sm:mt-3 flex items-center justify-between relative z-10 gap-1.5 sm:gap-2">
                 <div id="kpi-score-status-text" class="text-[10px] sm:text-[11px] font-bold text-[#253047] leading-snug truncate flex-1 min-w-0">
-                  条件を入力してください
+                  <span class="sm:hidden">条件を入力</span>
+                  <span class="hidden sm:inline">条件を入力してください</span>
                 </div>
                 <button onclick="openScoreDetailModal()" class="text-[10px] sm:text-xs font-bold text-[#253047] hover:text-[#8C5800] transition flex items-center gap-1 group cursor-pointer bg-transparent border-0 p-0 shrink-0 whitespace-nowrap">
                   <span>詳しく見る</span>
@@ -365,62 +365,62 @@
             </div>
 
             <!-- KPI 2: 年間運用益 -->
-            <div class="bg-white rounded-[20px] sm:rounded-[24px] p-3.5 sm:p-5 lg:p-6 border border-[#ECEBE6] flex flex-col justify-between relative overflow-hidden transition">
+            <div class="bg-white rounded-[24px] p-3.5 sm:p-6 border border-[#ECEBE6] flex flex-col justify-between relative overflow-hidden transition">
               <div>
-                <div class="flex items-start justify-between gap-1 mb-1">
-                  <span class="text-[10px] sm:text-xs font-bold text-[#6F7785] leading-tight">資産が生活を支える力</span>
-                  <img src="./assets/kpi-annual-yield.png" alt="" class="w-9 h-9 sm:w-12 sm:h-12 lg:w-14 lg:h-14 object-contain shrink-0 pointer-events-none" />
+                <div class="flex items-center justify-between gap-1 sm:gap-2 mb-1">
+                  <span class="text-[10px] sm:text-xs font-bold text-[#6F7785] line-clamp-2 sm:line-clamp-1">資産が生活を支える力</span>
+                  <img src="./assets/kpi-annual-yield.png" alt="" class="w-10 h-10 sm:w-14 sm:h-14 object-contain shrink-0 pointer-events-none" />
                 </div>
-                <div class="text-[9px] sm:text-[11px] font-bold text-[#8C5800] mb-1.5 truncate">平均年間運用益 (生涯)</div>
-                <div id="kpi-annual-yield" class="text-lg sm:text-2xl lg:text-3xl font-extrabold text-[#253047] tracking-tight whitespace-nowrap">
+                <div class="text-[10px] sm:text-[11px] font-bold text-[#8C5800] mb-1 sm:mb-2 truncate">平均年間運用益 (生涯)</div>
+                <div id="kpi-annual-yield" class="text-lg sm:text-3xl font-extrabold text-[#253047] tracking-tight whitespace-nowrap">
                   0 万円<span class="text-[10px] sm:text-xs font-normal text-[#6F7785]"> /年</span>
                 </div>
               </div>
 
-              <div class="flex items-center justify-between pt-2.5 sm:pt-3 border-t border-[#ECEBE6] mt-2.5 sm:mt-3 gap-1">
-                <span class="text-[9px] sm:text-[11px] text-[#6F7785] truncate">生涯累計運用益</span>
-                <span id="kpi-phase-badge" class="px-2 py-0.5 sm:px-2.5 sm:py-0.5 rounded-full text-[9px] sm:text-[10px] font-bold bg-[#FAFAF7] text-[#6F7785] border border-[#ECEBE6] shrink-0 whitespace-nowrap">
+              <div class="flex items-center justify-between pt-2 sm:pt-3 border-t border-[#ECEBE6] mt-2 sm:mt-3">
+                <span id="kpi-phase-badge" class="px-2 sm:px-2.5 py-0.5 rounded-full text-[9px] sm:text-[10px] font-bold bg-[#FAFAF7] text-[#6F7785] border border-[#ECEBE6] truncate max-w-full">
                   ⚪ 未設定
                 </span>
               </div>
             </div>
 
             <!-- KPI 3: 生涯収支カバー率 -->
-            <div class="bg-white rounded-[20px] sm:rounded-[24px] p-3.5 sm:p-5 lg:p-6 border border-[#ECEBE6] flex flex-col justify-between relative overflow-hidden transition">
+            <div class="bg-white rounded-[24px] p-3.5 sm:p-6 border border-[#ECEBE6] flex flex-col justify-between relative overflow-hidden transition">
               <div>
-                <div class="flex items-start justify-between gap-1 mb-1">
-                  <span class="text-[10px] sm:text-xs font-bold text-[#6F7785] leading-tight flex items-center gap-1">
+                <div class="flex items-center justify-between gap-1 sm:gap-2 mb-1">
+                  <span class="text-[10px] sm:text-xs font-bold text-[#6F7785] flex items-center gap-1 line-clamp-2 sm:line-clamp-1">
                     生涯収支カバー率
-                    <i class="fa-solid fa-circle-info text-[#6F7785]/60 text-[9px] sm:text-[10px] cursor-help" title="目標年齢までの生涯を通じ、生活費の不足額を運用益と安全資産でどれだけ安全にカバーし切れたかを表します。"></i>
+                    <i class="fa-solid fa-circle-info text-[#6F7785]/60 text-[10px] cursor-help hidden sm:inline" title="目標年齢までの生涯を通じ、生活費の不足額を運用益と安全資産でどれだけ安全にカバーし切れたかを表します。"></i>
                   </span>
-                  <img src="./assets/kpi-cover-rate.png" alt="" class="w-9 h-9 sm:w-12 sm:h-12 lg:w-14 lg:h-14 object-contain shrink-0 pointer-events-none" />
+                  <img src="./assets/kpi-cover-rate.png" alt="" class="w-10 h-10 sm:w-14 sm:h-14 object-contain shrink-0 pointer-events-none" />
                 </div>
-                <div class="text-[9px] sm:text-[11px] font-bold text-[#65B9E8] mb-1.5 truncate">生涯の資金維持達成率</div>
-                <div id="kpi-cover-rate" class="text-base sm:text-xl lg:text-2xl font-extrabold text-[#6F7785] tracking-tight whitespace-nowrap">
+                <div class="text-[10px] sm:text-[11px] font-bold text-[#65B9E8] mb-1 sm:mb-2 truncate">生涯の資金維持達成率</div>
+                <div id="kpi-cover-rate" class="text-base sm:text-2xl font-extrabold text-[#6F7785] tracking-tight whitespace-nowrap">
                   -
                 </div>
               </div>
 
-              <div id="kpi-cover-subtext" class="text-[9px] sm:text-[11px] text-[#6F7785] pt-2.5 sm:pt-3 border-t border-[#ECEBE6] mt-2.5 sm:mt-3 truncate">
-                目標年齢まで資金を維持し切るカバー力
+              <div id="kpi-cover-subtext" class="text-[10px] sm:text-[11px] text-[#6F7785] pt-2 sm:pt-3 border-t border-[#ECEBE6] mt-2 sm:mt-3 truncate">
+                <span class="sm:hidden">目標年齢までの資金維持力</span>
+                <span class="hidden sm:inline">目標年齢まで資金を維持し切るカバー力</span>
               </div>
             </div>
 
             <!-- KPI 4: 目標年齢時点の想定資産 -->
-            <div class="bg-white rounded-[20px] sm:rounded-[24px] p-3.5 sm:p-5 lg:p-6 border border-[#ECEBE6] flex flex-col justify-between relative overflow-hidden transition">
+            <div class="bg-white rounded-[24px] p-3.5 sm:p-6 border border-[#ECEBE6] flex flex-col justify-between relative overflow-hidden transition">
               <div>
-                <div class="flex items-start justify-between gap-1 mb-1">
-                  <span class="text-[10px] sm:text-xs font-bold text-[#6F7785] leading-tight">
+                <div class="flex items-center justify-between gap-1 sm:gap-2 mb-1">
+                  <span class="text-[10px] sm:text-xs font-bold text-[#6F7785] line-clamp-2 sm:line-clamp-1">
                     <span id="kpi-final-age-label">80</span>歳時点の想定資産
                   </span>
-                  <img src="./assets/kpi-future-assets.png" alt="" class="w-9 h-9 sm:w-12 sm:h-12 lg:w-14 lg:h-14 object-contain shrink-0 pointer-events-none" />
+                  <img src="./assets/kpi-future-assets.png" alt="" class="w-10 h-10 sm:w-14 sm:h-14 object-contain shrink-0 pointer-events-none" />
                 </div>
-                <div id="kpi-final-assets" class="text-lg sm:text-2xl lg:text-3xl font-extrabold text-[#253047] tracking-tight mt-2 sm:mt-3 whitespace-nowrap">
+                <div id="kpi-final-assets" class="text-lg sm:text-3xl font-extrabold text-[#253047] tracking-tight mt-1 sm:mt-3 whitespace-nowrap">
                   0 万円
                 </div>
               </div>
 
-              <div id="kpi-final-status" class="text-[9px] sm:text-[11px] text-[#6F7785] pt-2.5 sm:pt-3 border-t border-[#ECEBE6] mt-2.5 sm:mt-3 truncate">
+              <div id="kpi-final-status" class="text-[10px] sm:text-[11px] text-[#6F7785] pt-2 sm:pt-3 border-t border-[#ECEBE6] mt-2 sm:mt-3 truncate">
                 純資産: <span id="kpi-final-networth" class="font-bold text-[#253047]">0</span> 万円
               </div>
             </div>
@@ -433,10 +433,7 @@
             <div class="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-[#F0E2B7]/80">
               <div class="flex items-center gap-2.5 min-w-0">
                 <img src="./assets/lumi-spark.png" alt="LUMI" class="w-7 h-7 object-contain shrink-0" />
-                <h3 class="text-sm font-bold text-[#253047] truncate">LUMI リアルタイムAIアドバイザー</h3>
-                <span id="ai-status-tag" class="px-2 py-0.5 rounded-full text-[10px] font-semibold text-[#8C5800] bg-white/80 border border-[#F0E2B7] shrink-0">
-                  Gemini 3 Flash AI連携
-                </span>
+                <h3 class="text-sm font-bold text-[#253047] truncate">LUMI AIアドバイザー</h3>
               </div>
 
               <div class="flex items-center gap-2 flex-wrap sm:flex-nowrap shrink-0">
@@ -779,7 +776,10 @@
       <div id="simulationResultsView" class="hidden space-y-6">
         
         <div class="space-y-1 mb-1">
-          <h1 class="text-2xl sm:text-3xl font-extrabold text-[#253047] tracking-tight">シミュレーション結果</h1>
+          <h1 class="text-2xl sm:text-3xl font-extrabold text-[#253047] tracking-tight flex items-center gap-2">
+            <i class="fa-solid fa-chart-line text-[#65B9E8]"></i>
+            <span>シミュレーション結果</span>
+          </h1>
           <p class="text-xs sm:text-sm text-[#6F7785]">現在の条件から、あなたの未来を整理しました。</p>
         </div>
 
@@ -920,7 +920,10 @@
       <div id="annualProjectionView" class="hidden space-y-6">
         
         <div class="space-y-1 mb-1">
-          <h1 class="text-2xl sm:text-3xl font-extrabold text-[#253047] tracking-tight">年間推移グラフ</h1>
+          <h1 class="text-2xl sm:text-3xl font-extrabold text-[#253047] tracking-tight flex items-center gap-2">
+            <i class="fa-solid fa-arrow-trend-up text-[#65B9E8]"></i>
+            <span>年間推移グラフ</span>
+          </h1>
           <p class="text-xs sm:text-sm text-[#6F7785]">資産と年間収支が、これからどのように変化していくかを確認できます。</p>
         </div>
 
@@ -990,7 +993,10 @@
       <div id="assetDetailsView" class="hidden space-y-6">
         
         <div class="space-y-1 mb-1">
-          <h1 class="text-2xl sm:text-3xl font-extrabold text-[#253047] tracking-tight">資産詳細</h1>
+          <h1 class="text-2xl sm:text-3xl font-extrabold text-[#253047] tracking-tight flex items-center gap-2">
+            <i class="fa-solid fa-wallet text-[#72D6B5]"></i>
+            <span>資産詳細</span>
+          </h1>
           <p class="text-xs sm:text-sm text-[#6F7785]">年ごとの収入・支出・資産の変化を詳しく確認できます。</p>
         </div>
 
@@ -1056,7 +1062,10 @@
       <div id="lifeEventsView" class="hidden space-y-6">
         
         <div class="space-y-1 mb-1">
-          <h1 class="text-2xl sm:text-3xl font-extrabold text-[#253047] tracking-tight">ライフイベント</h1>
+          <h1 class="text-2xl sm:text-3xl font-extrabold text-[#253047] tracking-tight flex items-center gap-2">
+            <i class="fa-solid fa-calendar-days text-[#FFC83D]"></i>
+            <span>ライフイベント</span>
+          </h1>
           <p class="text-xs sm:text-sm text-[#6F7785]">住宅購入、旅行、教育、退職金など、これからの予定を未来予測に反映できます。</p>
         </div>
 
@@ -1074,15 +1083,15 @@
         </div>
 
         <div class="bg-white rounded-[24px] p-5 sm:p-6 border border-[#ECEBE6] space-y-4">
-          <div class="flex items-center justify-between pb-3 border-b border-[#ECEBE6]">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-[#ECEBE6]">
             <h3 class="text-base font-bold text-[#253047] flex items-center gap-2">
               <i class="fa-solid fa-calendar-plus text-[#FFC83D]"></i>
-              <span>これからのライフプラン</span>
+              <span>これからのライフイベント</span>
             </h3>
 
-            <button onclick="openAddEventModal()" class="px-4 py-2 btn-lumi-primary text-xs font-bold flex items-center gap-1.5 whitespace-nowrap shrink-0">
+            <button onclick="openAddEventModal()" class="w-full sm:w-auto px-4 py-2 btn-lumi-primary text-xs font-bold flex items-center justify-center gap-1.5 whitespace-nowrap shrink-0">
               <i class="fa-solid fa-plus"></i>
-              <span>ライフプランを追加</span>
+              <span>ライフイベントを追加</span>
             </button>
           </div>
 
@@ -1111,7 +1120,7 @@
         <div class="space-y-1 mb-1">
           <h1 class="text-2xl sm:text-3xl font-extrabold text-[#253047] tracking-tight flex items-center gap-2">
             <i class="fa-solid fa-heart text-[#FF8FA3]"></i>
-            <span>LUMI Advisor</span>
+            <span>LUMI AIアドバイザー</span>
           </h1>
           <p class="text-xs sm:text-sm text-[#6F7785]">数字だけでは見えない、あなたの未来を一緒に考えます。</p>
         </div>
@@ -1155,7 +1164,10 @@
         
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-1">
           <div class="space-y-1">
-            <h1 class="text-2xl sm:text-3xl font-extrabold text-[#253047] tracking-tight">設定 / プラン管理</h1>
+            <h1 class="text-2xl sm:text-3xl font-extrabold text-[#253047] tracking-tight flex items-center gap-2">
+              <i class="fa-solid fa-gear text-[#6F7785]"></i>
+              <span>設定 / プラン管理</span>
+            </h1>
             <p class="text-xs sm:text-sm text-[#6F7785]">アカウントや保存したプラン、データの管理ができます。</p>
           </div>
           <span class="px-3 py-1 rounded-[12px] text-xs font-bold bg-[#FEFBF0] text-[#8C5800] border border-[#F0E2B7] self-start sm:self-auto">
@@ -1539,7 +1551,7 @@
     <div class="bg-white rounded-[24px] max-w-md w-full p-5 sm:p-6 shadow-xl border border-[#ECEBE6]">
       <div class="flex items-center justify-between mb-4">
         <h3 class="text-base font-bold text-[#253047] flex items-center gap-2">
-          <i class="fa-solid fa-calendar-plus text-[#FFC83D]"></i> ライフプランを追加
+          <i class="fa-solid fa-calendar-plus text-[#FFC83D]"></i> ライフイベントを追加
         </h3>
         <button onclick="closeAddEventModal()" class="text-[#6F7785] hover:text-[#253047] w-8 h-8 rounded-full flex items-center justify-center">
           <i class="fa-solid fa-xmark text-lg"></i>
@@ -2296,22 +2308,22 @@
         
         const scoreBadgeElem = document.getElementById('kpi-score-badge');
         if (scoreBadgeElem) {
-          scoreBadgeElem.className = 'px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#FAFAF7] text-[#6F7785] border border-[#ECEBE6] shrink-0 inline-block';
+          scoreBadgeElem.className = 'px-2 py-0.5 rounded-full text-[9px] sm:text-[10px] font-semibold bg-[#FAFAF7] text-[#6F7785] border border-[#ECEBE6] shrink-0 inline-block truncate max-w-full';
           scoreBadgeElem.innerText = '⚪ 未設定';
         }
-        document.getElementById('kpi-score-status-text').innerText = '条件を入力してください';
-        document.getElementById('kpi-annual-yield').innerHTML = `0 万円<span class="text-xs font-normal text-[#6F7785]"> /年</span>`;
+        document.getElementById('kpi-score-status-text').innerHTML = '<span class="sm:hidden">条件を入力</span><span class="hidden sm:inline">条件を入力してください</span>';
+        document.getElementById('kpi-annual-yield').innerHTML = `0 万円<span class="text-[10px] sm:text-xs font-normal text-[#6F7785]"> /年</span>`;
         
         const badgeElem = document.getElementById('kpi-phase-badge');
         if (badgeElem) {
           badgeElem.innerText = '⚪ 未設定';
-          badgeElem.className = 'px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#FAFAF7] text-[#6F7785] border border-[#ECEBE6]';
+          badgeElem.className = 'px-2 sm:px-2.5 py-0.5 rounded-full text-[9px] sm:text-[10px] font-bold bg-[#FAFAF7] text-[#6F7785] border border-[#ECEBE6] truncate max-w-full';
         }
 
         const kpiCoverElem = document.getElementById('kpi-cover-rate');
         if (kpiCoverElem) {
           kpiCoverElem.innerText = '-';
-          kpiCoverElem.className = 'text-xl sm:text-2xl font-extrabold text-[#6F7785] tracking-tight whitespace-nowrap';
+          kpiCoverElem.className = 'text-base sm:text-2xl font-extrabold text-[#6F7785] tracking-tight whitespace-nowrap';
         }
 
         document.getElementById('kpi-final-age-label').innerText = '80';
@@ -2466,12 +2478,12 @@
       const totalYield = tableRows.reduce((acc, r) => acc + r.annualYield, 0);
       const avgYield = Math.round(totalYield / tableRows.length);
 
-      document.getElementById('kpi-annual-yield').innerHTML = `${avgYield.toLocaleString()} 万円<span class="text-xs font-normal text-[#6F7785]"> /年 (平均)</span>`;
+      document.getElementById('kpi-annual-yield').innerHTML = `${avgYield.toLocaleString()} 万円<span class="text-[10px] sm:text-xs font-normal text-[#6F7785]"> /年</span>`;
       
       const phaseBadge = document.getElementById('kpi-phase-badge');
       if (phaseBadge) {
-        phaseBadge.innerText = `累計 ${totalYield.toLocaleString()} 万円`;
-        phaseBadge.className = 'px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#EAF8F3] text-[#253047] border border-[#72D6B5]/30';
+        phaseBadge.innerText = `累計運用益 ${totalYield.toLocaleString()} 万円`;
+        phaseBadge.className = 'px-2 sm:px-2.5 py-0.5 rounded-full text-[9px] sm:text-[10px] font-bold bg-[#EAF8F3] text-[#253047] border border-[#72D6B5]/30 truncate max-w-full';
       }
 
       const coverRateElem = document.getElementById('kpi-cover-rate');
@@ -2494,36 +2506,36 @@
         if (insolvencyAge !== null) {
           const rate = totalDeficit > 0 ? Math.min(99, Math.round((totalCovered / totalDeficit) * 100)) : 0;
           coverRateElem.innerText = `${rate}% カバー`;
-          coverRateElem.className = 'text-xl sm:text-2xl font-extrabold text-[#FF8FA3] tracking-tight whitespace-nowrap';
+          coverRateElem.className = 'text-base sm:text-2xl font-extrabold text-[#FF8FA3] tracking-tight whitespace-nowrap';
           if (coverSubtextElem) {
-            coverSubtextElem.innerText = `🚨 ${insolvencyAge}歳頃に資金不足。インフレ・運用下振れに要警戒`;
-            coverSubtextElem.className = 'text-[11px] text-[#FF8FA3] font-bold pt-3 border-t border-[#ECEBE6] mt-3 truncate';
+            coverSubtextElem.innerHTML = `<span class="sm:hidden">🚨 ${insolvencyAge}歳頃に資金不足</span><span class="hidden sm:inline">🚨 ${insolvencyAge}歳頃に資金不足。インフレ・運用下振れに要警戒</span>`;
+            coverSubtextElem.className = 'text-[10px] sm:text-[11px] text-[#FF8FA3] font-bold pt-2 sm:pt-3 border-t border-[#ECEBE6] mt-2 sm:mt-3 truncate';
           }
         } else if (totalDeficit === 0) {
           coverRateElem.innerText = '全期間 100% カバー';
-          coverRateElem.className = 'text-xl sm:text-2xl font-extrabold text-[#72D6B5] tracking-tight whitespace-nowrap';
+          coverRateElem.className = 'text-base sm:text-2xl font-extrabold text-[#72D6B5] tracking-tight whitespace-nowrap';
           if (coverSubtextElem) {
             if (minFinAsset >= yearlyExpenseAvg * 3) {
-              coverSubtextElem.innerText = `✨ 収支黒字で極めて健全。インフレ・波乱にも強い十分な余力あり`;
-              coverSubtextElem.className = 'text-[11px] text-[#253047] font-bold pt-3 border-t border-[#ECEBE6] mt-3 truncate';
+              coverSubtextElem.innerHTML = `<span class="sm:hidden">✨ 収支黒字で極めて健全</span><span class="hidden sm:inline">✨ 収支黒字で極めて健全。インフレ・波乱にも強い十分な余力あり</span>`;
+              coverSubtextElem.className = 'text-[10px] sm:text-[11px] text-[#253047] font-bold pt-2 sm:pt-3 border-t border-[#ECEBE6] mt-2 sm:mt-3 truncate';
             } else {
-              coverSubtextElem.innerText = `🟢 目標${effectiveTargetAge}歳まで収入内で生活維持（黒字傾向）`;
-              coverSubtextElem.className = 'text-[11px] text-[#253047] font-semibold pt-3 border-t border-[#ECEBE6] mt-3 truncate';
+              coverSubtextElem.innerHTML = `<span class="sm:hidden">🟢 目標${effectiveTargetAge}歳まで黒字</span><span class="hidden sm:inline">🟢 目標${effectiveTargetAge}歳まで収入内で生活維持（黒字傾向）</span>`;
+              coverSubtextElem.className = 'text-[10px] sm:text-[11px] text-[#253047] font-semibold pt-2 sm:pt-3 border-t border-[#ECEBE6] mt-2 sm:mt-3 truncate';
             }
           }
         } else {
           coverRateElem.innerText = '全期間 100% カバー';
-          coverRateElem.className = 'text-xl sm:text-2xl font-extrabold text-[#72D6B5] tracking-tight whitespace-nowrap';
+          coverRateElem.className = 'text-base sm:text-2xl font-extrabold text-[#72D6B5] tracking-tight whitespace-nowrap';
           if (coverSubtextElem) {
             if (minFinAsset >= yearlyExpenseAvg * 3 && finalFinAsset >= yearlyExpenseAvg * 2) {
-              coverSubtextElem.innerText = `✨ 十分な余力あり。インフレや運用変動を吸収し取り崩しも安心`;
-              coverSubtextElem.className = 'text-[11px] text-[#253047] font-bold pt-3 border-t border-[#ECEBE6] mt-3 truncate';
+              coverSubtextElem.innerHTML = `<span class="sm:hidden">✨ 十分な余力あり</span><span class="hidden sm:inline">✨ 十分な余力あり。インフレや運用変動を吸収し取り崩しも安心</span>`;
+              coverSubtextElem.className = 'text-[10px] sm:text-[11px] text-[#253047] font-bold pt-2 sm:pt-3 border-t border-[#ECEBE6] mt-2 sm:mt-3 truncate';
             } else if (minFinAsset >= yearlyExpenseAvg * 1.5) {
-              coverSubtextElem.innerText = `🟢 計画的に取り崩し目標${effectiveTargetAge}歳まで到達。安定した余力`;
-              coverSubtextElem.className = 'text-[11px] text-[#253047] font-semibold pt-3 border-t border-[#ECEBE6] mt-3 truncate';
+              coverSubtextElem.innerHTML = `<span class="sm:hidden">🟢 安定した資金維持力</span><span class="hidden sm:inline">🟢 計画的に取り崩し目標${effectiveTargetAge}歳まで到達。安定した余力</span>`;
+              coverSubtextElem.className = 'text-[10px] sm:text-[11px] text-[#253047] font-semibold pt-2 sm:pt-3 border-t border-[#ECEBE6] mt-2 sm:mt-3 truncate';
             } else {
-              coverSubtextElem.innerText = `⚠️ 達成予定も余力僅少。インフレ加速や運用下振れで危険水域の恐れ`;
-              coverSubtextElem.className = 'text-[11px] text-[#8C5800] font-bold pt-3 border-t border-[#ECEBE6] mt-3 truncate';
+              coverSubtextElem.innerHTML = `<span class="sm:hidden">⚠️ 達成予定も余力僅少</span><span class="hidden sm:inline">⚠️ 達成予定も余力僅少。インフレ加速や運用下振れで危険水域の恐れ</span>`;
+              coverSubtextElem.className = 'text-[10px] sm:text-[11px] text-[#8C5800] font-bold pt-2 sm:pt-3 border-t border-[#ECEBE6] mt-2 sm:mt-3 truncate';
             }
           }
         }
@@ -2558,19 +2570,19 @@
 
       if (finalScore >= 80) {
         if (scoreBadgeElem) {
-          scoreBadgeElem.className = 'px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#EAF8F3] text-[#253047] border border-[#72D6B5]/40 shrink-0 inline-block';
+          scoreBadgeElem.className = 'px-2 py-0.5 rounded-full text-[9px] sm:text-[10px] font-semibold bg-[#EAF8F3] text-[#253047] border border-[#72D6B5]/40 shrink-0 inline-block truncate max-w-full';
           scoreBadgeElem.innerText = '🟢 健全・安定';
         }
         if (statusTextElem) statusTextElem.innerText = '目標年齢まで非常に安定した資金計画です';
       } else if (finalScore >= 60) {
         if (scoreBadgeElem) {
-          scoreBadgeElem.className = 'px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#FFF9E6] text-[#8C5800] border border-[#FFC83D]/40 shrink-0 inline-block';
+          scoreBadgeElem.className = 'px-2 py-0.5 rounded-full text-[9px] sm:text-[10px] font-semibold bg-[#FFF9E6] text-[#8C5800] border border-[#FFC83D]/40 shrink-0 inline-block truncate max-w-full';
           scoreBadgeElem.innerText = '🟡 概ね安定';
         }
         if (statusTextElem) statusTextElem.innerText = '概ね問題ありませんが、取崩し・インフレに留意';
       } else {
         if (scoreBadgeElem) {
-          scoreBadgeElem.className = 'px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#FFF0F3] text-[#FF8FA3] border border-[#FF8FA3]/40 shrink-0 inline-block';
+          scoreBadgeElem.className = 'px-2 py-0.5 rounded-full text-[9px] sm:text-[10px] font-semibold bg-[#FFF0F3] text-[#FF8FA3] border border-[#FF8FA3]/40 shrink-0 inline-block truncate max-w-full';
           scoreBadgeElem.innerText = '🔴 要見直し';
         }
         if (statusTextElem) statusTextElem.innerText = '途中で資金不足が発生するリスクがあります';
