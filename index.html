@@ -749,6 +749,13 @@
                   <div class="mt-2 rounded-[12px] bg-[#F7FBFE] border border-[#DCEEF8] px-3 py-2 text-[10px] text-[#536274] leading-relaxed">
                     <strong class="text-[#253047]">入力基準：手取り</strong>　税金・社会保険料を差し引いた後に実際に使える金額を入力します。
                   </div>
+                  <div class="mt-3 max-w-[240px]">
+                    <label class="text-[10px] font-bold text-[#6F7785]">この収入は何歳まで？</label>
+                    <div class="mt-1 flex items-center gap-2">
+                      <input id="ob-income-end-age" type="number" min="18" max="110" placeholder="例：65" class="w-full border border-[#E1E4E8] rounded-[10px] px-3 py-2.5 text-sm text-right">
+                      <span class="text-xs text-[#6F7785]">歳</span>
+                    </div>
+                  </div>
                   <button type="button" onclick="addOnboardingIncomeRow()" class="mt-3 px-3 py-2 btn-lumi-secondary text-xs font-bold"><i class="fa-solid fa-plus mr-1"></i>追加</button>
                   <div id="ob-extra-income-list" class="mt-3 space-y-2"></div>
                 </div>
@@ -8990,6 +8997,365 @@ window.LUMIFUL_PHASE7B_STEP3_LOCK_V8_2 = Object.freeze({
     firestoreWrites:false,
     engineCalls:false,
     onboardingScreens:['entry','1','2','3','4','5','complete'],
+    phase7Base:'FINAL LOCK v9.2'
+  });
+})();
+</script>
+
+
+<script>
+/* ============================================================
+   PHASE 8 / STEP 4 — GUEST + SCHEMA v2 CONNECTION
+   ------------------------------------------------------------
+   Scope:
+   - Guest start opens onboarding
+   - Onboarding values map into existing locked Schema v2
+   - Existing Phase 7 Engine renders/calculates the model
+   - Guest data saves through LocalStorageAdapter
+   Not in this step:
+   - Firebase user's first-time onboarding decision
+   - onboarding completion persistence/routing policy
+   ============================================================ */
+(function () {
+  const S4 = window.LUMIFUL_PHASE8_STEP4_STATE = {
+    committing: false,
+    guestOnboardingEnabled: true
+  };
+
+  const num = (id) => {
+    const value = Number(document.getElementById(id)?.value || 0);
+    return Number.isFinite(value) ? Math.max(0, value) : 0;
+  };
+
+  const makeId = (prefix, index) =>
+    `onboarding_${prefix}_${Date.now()}_${String(index + 1).padStart(2,'0')}`;
+
+  function selectedPartner() {
+    return window.LUMIFUL_ONBOARDING_UI_STATE?.partner === true;
+  }
+
+  function readExtraIncomes(currentAge, targetAge) {
+    const rows = [...document.querySelectorAll('#ob-extra-income-list > div')];
+    const incomes = [];
+
+    rows.forEach((row, index) => {
+      const inputs = [...row.querySelectorAll('input')];
+      const name = String(inputs[0]?.value || '').trim() || 'その他収入';
+      const amount = Math.max(0, Number(inputs[1]?.value || 0));
+      const startAge = Math.max(currentAge, Number(inputs[2]?.value || currentAge));
+      const endAgeRaw = Number(inputs[3]?.value || 0);
+      const endAge = endAgeRaw > 0 ? Math.max(startAge, endAgeRaw) : targetAge;
+
+      if (amount <= 0) return;
+
+      incomes.push({
+        id: makeId('income_extra', index),
+        category: 'other',
+        name,
+        owner: 'self',
+        amount,
+        frequency: 'yearly',
+        startAge,
+        endAge
+      });
+    });
+
+    return incomes;
+  }
+
+  function readAssets() {
+    const state = window.LUMIFUL_ONBOARDING_UI_STATE;
+    const result = [];
+    const keys = [...(state?.selectedAssets || [])];
+
+    const categoryMap = {
+      cash: 'cash',
+      fund: 'investment_fund',
+      bond: 'bond',
+      stock: 'stock'
+    };
+    const nameMap = {
+      cash: '現金・預金',
+      fund: '投資信託',
+      bond: '債券',
+      stock: '株式',
+      other: 'その他資産'
+    };
+
+    keys.forEach((key, index) => {
+      const row = document.querySelector(`[data-ob-asset-input="${key}"]`);
+      if (!row) return;
+      const inputs = [...row.querySelectorAll('input')];
+      const value = Math.max(0, Number(inputs[0]?.value || 0));
+      const expectedReturn = Math.max(0, Number(inputs[1]?.value || 0));
+
+      if (value <= 0) return;
+
+      if (key === 'other') {
+        // "Other" is valuation-only in onboarding, so it must not silently
+        // enter the withdrawal engine.
+        result.push({
+          id: makeId('asset_other', index),
+          assetClass: 'potential',
+          category: 'real_estate',
+          name: nameMap[key],
+          owner: 'self',
+          value
+        });
+        return;
+      }
+
+      const category = categoryMap[key];
+      const hasReturn = key === 'fund' || key === 'bond';
+
+      result.push({
+        id: makeId('asset', index),
+        assetClass: 'simulation',
+        category,
+        name: nameMap[key],
+        owner: 'self',
+        value,
+        expectedReturn: hasReturn ? expectedReturn : 0,
+        withdrawalSetting: 'auto',
+        withdrawalPriority: null
+      });
+    });
+
+    return result;
+  }
+
+  function readLifeEvents() {
+    const events = Array.isArray(window.LUMIFUL_ONBOARDING_UI_STATE?.events)
+      ? window.LUMIFUL_ONBOARDING_UI_STATE.events
+      : [];
+
+    return events.map((event, index) => ({
+      id: makeId('event', index),
+      kind: 'simple',
+      category: 'other',
+      title: event.kind || 'ライフイベント',
+      age: Math.max(0, Number(event.age || 0)),
+      direction: event.type === 'income' ? 'income' : 'expense',
+      amount: Math.max(0, Number(event.amount || 0)),
+      icon: event.type === 'income' ? 'fa-coins' : 'fa-calendar-check'
+    }));
+  }
+
+  window.buildSchemaV2FromOnboarding = function() {
+    const model = window.createEmptyDataModelV2();
+
+    const currentAge = num('ob-age');
+    const targetAge = 90;
+    const hasSpouse = selectedPartner();
+    const spouseAge = hasSpouse ? num('ob-partner-age') || null : null;
+
+    model.profile = {
+      currentAge,
+      hasSpouse,
+      spouseAge,
+      targetAge
+    };
+
+    const mainIncome = num('ob-income');
+    const mainIncomeEnd = num('ob-income-end-age');
+
+    model.incomes = [];
+    if (mainIncome > 0) {
+      model.incomes.push({
+        id: makeId('income_main', 0),
+        category: 'salary',
+        name: '本人収入',
+        owner: 'self',
+        amount: mainIncome,
+        frequency: 'yearly',
+        startAge: currentAge,
+        endAge: mainIncomeEnd > 0 ? Math.max(currentAge, mainIncomeEnd) : targetAge
+      });
+    }
+    model.incomes.push(...readExtraIncomes(currentAge, targetAge));
+
+    // Onboarding intentionally keeps living cost simple.
+    // Its annual living-cost input is the complete recurring household cost;
+    // therefore housing remains zero here to avoid double counting.
+    model.living.expense = {
+      amount: num('ob-expense'),
+      frequency: 'yearly'
+    };
+    model.living.housing = {
+      type: 'other',
+      monthlyAmount: 0,
+      endAge: null
+    };
+
+    model.assets = readAssets();
+    model.payments = [];
+    model.lifeEvents = readLifeEvents();
+
+    const surplusMode =
+      window.LUMIFUL_ONBOARDING_UI_STATE?.surplus || 'cash';
+    const investPct =
+      surplusMode === 'investment' ? 100 :
+      surplusMode === 'both'
+        ? Math.max(0, Math.min(100, Number(document.getElementById('ob-invest-range')?.value || 50)))
+        : 0;
+
+    model.settings = {
+      ...(model.settings || {}),
+      inflationRate: 1.5,
+      surplusAllocationMode: surplusMode,
+      surplusInvestmentPct: investPct,
+      onboardingLivingExpenseIncludesHousing: true
+    };
+
+    return window.normalizeDataModelV2(model);
+  };
+
+  window.validateOnboardingForSchemaV2 = function() {
+    const age = num('ob-age');
+    if (age <= 0) return { ok:false, message:'本人年齢を入力してください。', step:1 };
+
+    const mainIncome = num('ob-income');
+    const endAge = num('ob-income-end-age');
+    if (mainIncome > 0 && endAge <= 0) {
+      return { ok:false, message:'現在の収入が何歳まで続くか入力してください。', step:2 };
+    }
+
+    if (endAge > 0 && endAge < age) {
+      return { ok:false, message:'収入の終了年齢は現在年齢以上にしてください。', step:2 };
+    }
+
+    return { ok:true };
+  };
+
+  window.commitOnboardingToGuestSchemaV2 = async function() {
+    if (S4.committing) return false;
+    S4.committing = true;
+
+    try {
+      const validation = window.validateOnboardingForSchemaV2();
+      if (!validation.ok) {
+        window.goToOnboardingStep?.(validation.step);
+        window.showToast?.(validation.message, 'error');
+        return false;
+      }
+
+      const model = window.buildSchemaV2FromOnboarding();
+
+      // Ensure guest identity; STEP4 intentionally does not write Firestore.
+      localStorage.setItem('lumiful_user_email', window.LUMIFUL_GUEST_EMAIL);
+      localStorage.removeItem('lc_user_email');
+      window.authState = {
+        status:'guest',
+        user:{
+          email:window.LUMIFUL_GUEST_EMAIL,
+          isGuest:true,
+          provider:'local'
+        }
+      };
+
+      // Enter the exact locked Phase 7 runtime path.
+      window.restorePersistedStateV2(model);
+
+      // Save the same normalized Schema v2 model into guest storage.
+      const envelope = await window.LocalStorageAdapter.save(
+        window.cloneDataModelV2(window.normalizeDataModelV2(model))
+      );
+
+      window.updateSaveStatus?.('saved');
+
+      console.info('[LUMIFUL] Phase8 STEP4 guest onboarding commit OK', {
+        schemaVersion: envelope?.schemaVersion,
+        currentAge: model.profile.currentAge,
+        incomes: model.incomes.length,
+        assets: model.assets.length,
+        lifeEvents: model.lifeEvents.length,
+        surplusAllocationMode: model.settings.surplusAllocationMode
+      });
+
+      return true;
+    } catch (error) {
+      console.error('[LUMIFUL] Phase8 STEP4 onboarding commit failed', error);
+      window.showToast?.('オンボーディング内容を反映できませんでした。', 'error');
+      return false;
+    } finally {
+      S4.committing = false;
+    }
+  };
+
+  // Finish now performs the first real Schema connection.
+  window.finishOnboardingUiOnly = async function() {
+    const ok = await window.commitOnboardingToGuestSchemaV2();
+    if (!ok) return;
+
+    document.getElementById('onboardingView')?.classList.add('hidden');
+    window.switchView?.('dashboard');
+    window.recalculateAllFast?.();
+    window.showToast?.('未来のシミュレーションを作成しました', 'success');
+  };
+
+  // Guest is the test route for Phase 8 STEP4.
+  // Firebase login flow remains exactly as Phase 7 LOCK.
+  window.handleWelcomeGuestStart = async function() {
+    try {
+      await window.handleAnonymousAuth?.();
+
+      const welcome = document.getElementById('welcomeAuthView');
+      if (welcome) welcome.classList.add('hidden');
+      document.body.classList.remove('overflow-hidden');
+
+      window.openOnboardingUi?.();
+      window.showToast?.('ゲストでオンボーディングを開始します', 'info');
+    } catch (error) {
+      console.error('[LUMIFUL] Phase8 STEP4 guest start failed', error);
+      window.showToast?.('ゲストとして開始できませんでした', 'error');
+    }
+  };
+
+  // Manual-input and skip routes remain non-destructive.
+  // They do not overwrite Schema v2 from onboarding draft values.
+  const originalManualS4 = window.onboardingUseManualInput;
+  window.onboardingUseManualInput = function() {
+    return originalManualS4?.();
+  };
+
+  const originalSkipS4 = window.skipOnboardingToHome;
+  window.skipOnboardingToHome = function() {
+    return originalSkipS4?.();
+  };
+
+  window.runPhase8Step4SchemaAudit = function() {
+    const requiredFns = [
+      'createEmptyDataModelV2',
+      'normalizeDataModelV2',
+      'restorePersistedStateV2',
+      'LocalStorageAdapter',
+      'recalculateAllFast'
+    ];
+
+    const available = {
+      createEmptyDataModelV2: typeof window.createEmptyDataModelV2 === 'function',
+      normalizeDataModelV2: typeof window.normalizeDataModelV2 === 'function',
+      restorePersistedStateV2: typeof window.restorePersistedStateV2 === 'function',
+      LocalStorageAdapter: !!window.LocalStorageAdapter,
+      recalculateAllFast: typeof window.recalculateAllFast === 'function'
+    };
+
+    return {
+      ok: Object.values(available).every(Boolean),
+      available,
+      guestOnlyConnection: true,
+      firebaseOnboardingConnection: false
+    };
+  };
+
+  window.LUMIFUL_PHASE8_STEP4 = Object.freeze({
+    status:'GUEST_SCHEMA_CONNECTED',
+    guestStartOpensOnboarding:true,
+    onboardingWritesSchemaV2:true,
+    guestLocalStorageSave:true,
+    phase7EngineReused:true,
+    firestoreOnboardingWrite:false,
+    firebaseFirstTimeRouting:false,
     phase7Base:'FINAL LOCK v9.2'
   });
 })();
