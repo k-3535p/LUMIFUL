@@ -6645,5 +6645,545 @@ window.LUMIFUL_PHASE7B_STEP3_FINAL_V4 = Object.freeze({
 });
 </script>
 
+
+<script>
+/* ============================================================
+   PHASE 7B / STEP 3 FINAL v5
+   SIMULATION LOGIC / SCORE / PORTFOLIO METRICS AUDIT
+   ------------------------------------------------------------
+   One portfolio metric source now drives:
+   - expected-return labels
+   - asset-detail return rate
+   - SCORE yield coverage
+   - regression integrity checks
+   ============================================================ */
+(function () {
+  window.calculatePortfolioMetricsV2 = function(model) {
+    const normalized = window.normalizeDataModelV2(model || window.ensureV2InputModel());
+    const assets = (normalized.assets || []).filter(a => a.assetClass === 'simulation');
+
+    const totalAssets = assets.reduce((sum, a) => sum + Math.max(0, Number(a.value || 0)), 0);
+    const annualExpectedYield = assets.reduce((sum, a) => {
+      const value = Math.max(0, Number(a.value || 0));
+      const rate = (a.category === 'cash' || a.category === 'stock') ? 0 : Math.max(0, Number(a.expectedReturn || 0));
+      return sum + value * rate / 100;
+    }, 0);
+
+    const weightedReturn = totalAssets > 0
+      ? annualExpectedYield / totalAssets * 100
+      : 0;
+
+    const investedAssets = assets
+      .filter(a => a.category !== 'cash' && a.category !== 'stock')
+      .reduce((sum, a) => sum + Math.max(0, Number(a.value || 0)), 0);
+
+    const cashAssets = assets
+      .filter(a => a.category === 'cash')
+      .reduce((sum, a) => sum + Math.max(0, Number(a.value || 0)), 0);
+
+    return {
+      totalAssets,
+      investedAssets,
+      cashAssets,
+      annualExpectedYield,
+      weightedReturn,
+      simulationAssetCount: assets.length
+    };
+  };
+
+  window.syncPortfolioMetricsUIV2 = function(model) {
+    const metrics = window.calculatePortfolioMetricsV2(model);
+    const rateText = `${metrics.weightedReturn.toFixed(1)}%`;
+
+    const chartRate = document.getElementById('chart-slider-yield-val');
+    if (chartRate) chartRate.textContent = rateText;
+
+    const assetRate = document.getElementById('asset-return-rate');
+    if (assetRate) assetRate.textContent = rateText;
+
+    const inflation = Number(window.normalizeDataModelV2(model || window.ensureV2InputModel()).settings?.inflationRate || 0);
+    const inflationLabel = document.getElementById('chart-slider-inflation-val');
+    if (inflationLabel) inflationLabel.textContent = `${inflation.toFixed(1)}%`;
+
+    return metrics;
+  };
+
+  // Retire the legacy single-slider return-rate display.
+  // Expected return is now a weighted result of every Schema-v2 simulation asset.
+  window.updateSliders = function() {
+    window.syncPortfolioMetricsUIV2(window.ensureV2InputModel());
+    window.recalculateAllFast?.();
+  };
+
+  // SCORE v2.1 — same 100-point envelope, but long-term portfolio behavior
+  // replaces the previous first-year-only yield test.
+  calculateBaseScoreV2 = function(model, tableRows, firstYearYield, firstYearNetCash) {
+    if (!Array.isArray(tableRows) || tableRows.length === 0) {
+      return { totalScore: 0, factors: {} };
+    }
+
+    const normalized = window.normalizeDataModelV2(model);
+    const currentAge = Number(normalized.profile?.currentAge) || Number(tableRows[0]?.age) || 40;
+    const targetAge = Number(normalized.profile?.targetAge) || Number(tableRows[tableRows.length - 1]?.age) || 90;
+    const finalRow = tableRows[tableRows.length - 1];
+    const shortageRow = tableRows.find(r => Number(r.shortage || 0) > 0);
+    const insolvencyAge = shortageRow?.age ?? null;
+
+    const available = tableRows.map(r => Math.max(0, Number(r.availableAssets ?? r.financialAsset ?? 0)));
+    const minAvailable = available.length ? Math.min(...available) : 0;
+    const finalAvailable = Math.max(0, Number(finalRow.availableAssets ?? finalRow.financialAsset ?? 0));
+
+    const avgCoreExpense = tableRows.reduce((sum, r) =>
+      sum +
+      Math.max(0, Number(r.livingExpense || 0)) +
+      Math.max(0, Number(r.housingExpense || 0)) +
+      Math.max(0, Number(r.payments || 0)),
+      0
+    ) / Math.max(1, tableRows.length);
+
+    const expenseBase = Math.max(1, avgCoreExpense);
+
+    // 1) Longevity / 35 — primary LUMIFUL principle.
+    let longevityPts;
+    if (insolvencyAge === null) {
+      longevityPts = 35;
+    } else {
+      const plannedYears = Math.max(1, targetAge - currentAge + 1);
+      const sustainedYears = Math.max(0, insolvencyAge - currentAge);
+      longevityPts = Math.max(0, Math.min(35, Math.round(35 * sustainedYears / plannedYears)));
+    }
+
+    // 2) Final optionality / 20 — measured in years of normal spending,
+    // not arbitrary absolute yen thresholds.
+    const finalCoverageYears = finalAvailable / expenseBase;
+    let finalAssetPts = 0;
+    if (finalCoverageYears >= 5) finalAssetPts = 20;
+    else if (finalCoverageYears >= 3) finalAssetPts = 17;
+    else if (finalCoverageYears >= 2) finalAssetPts = 14;
+    else if (finalCoverageYears >= 1) finalAssetPts = 10;
+    else if (finalAvailable > 0) finalAssetPts = 7;
+    else if (insolvencyAge === null) finalAssetPts = 5;
+
+    // 3) Minimum cushion / 10.
+    const minCoverageYears = minAvailable / expenseBase;
+    let minCushionPts = 0;
+    if (minCoverageYears >= 3) minCushionPts = 10;
+    else if (minCoverageYears >= 2) minCushionPts = 8;
+    else if (minCoverageYears >= 1) minCushionPts = 6;
+    else if (minCoverageYears >= 0.5) minCushionPts = 4;
+    else if (minAvailable > 0) minCushionPts = 2;
+
+    // 4) Yield / principal dependency / 20.
+    // Evaluate the whole simulation, not only year one.
+    const deficitRows = tableRows.filter(r => Number(r.netCashflow || 0) < 0);
+    const totalDeficit = deficitRows.reduce((sum, r) => sum + Math.abs(Number(r.netCashflow || 0)), 0);
+    const totalYieldUsed = deficitRows.reduce((sum, r) => sum + Math.max(0, Number(r.yieldUsed || 0)), 0);
+    const totalPrincipalUsed = tableRows.reduce((sum, r) =>
+      sum +
+      Math.max(0, Number(r.withdrawalHigh || 0)) +
+      Math.max(0, Number(r.withdrawalMedium || 0)) +
+      Math.max(0, Number(r.withdrawalLow || 0)),
+      0
+    );
+
+    const principalStartRow = tableRows.find(r =>
+      Number(r.withdrawalHigh || 0) +
+      Number(r.withdrawalMedium || 0) +
+      Number(r.withdrawalLow || 0) > 0
+    );
+    const capitalWithdrawalStartAge = principalStartRow?.age ?? null;
+
+    let yieldCoverPts = 0;
+    if (totalDeficit <= 0) {
+      yieldCoverPts = 20;
+    } else {
+      const yieldCoverageRatio = Math.max(0, Math.min(1, totalYieldUsed / totalDeficit));
+      yieldCoverPts = Math.round(yieldCoverageRatio * 14);
+
+      if (capitalWithdrawalStartAge === null) yieldCoverPts += 6;
+      else if (capitalWithdrawalStartAge >= targetAge - 10) yieldCoverPts += 5;
+      else if (capitalWithdrawalStartAge >= 70) yieldCoverPts += 4;
+      else if (capitalWithdrawalStartAge >= 65) yieldCoverPts += 3;
+      else yieldCoverPts += 1;
+    }
+    yieldCoverPts = Math.max(0, Math.min(20, yieldCoverPts));
+
+    // 5) Stability / 15 — combines late-life cashflow and absence of shortage.
+    const lateLifeRows = tableRows.filter(r => Number(r.age) >= Math.min(65, targetAge));
+    const avgLateLifeNet = lateLifeRows.length
+      ? lateLifeRows.reduce((sum, r) => sum + Number(r.netCashflow || 0), 0) / lateLifeRows.length
+      : Number(firstYearNetCash || 0);
+
+    let stabilityPts = 0;
+    if (insolvencyAge === null) stabilityPts += 8;
+    else if (insolvencyAge >= targetAge - 5) stabilityPts += 5;
+    else if (insolvencyAge >= 80) stabilityPts += 3;
+
+    if (avgLateLifeNet >= 0) stabilityPts += 7;
+    else if (avgLateLifeNet >= -expenseBase * 0.25) stabilityPts += 5;
+    else if (avgLateLifeNet >= -expenseBase * 0.5) stabilityPts += 3;
+    else stabilityPts += 1;
+    stabilityPts = Math.max(0, Math.min(15, stabilityPts));
+
+    const portfolio = window.calculatePortfolioMetricsV2(normalized);
+    const totalBaseScore = Math.max(0, Math.min(100,
+      longevityPts + finalAssetPts + minCushionPts + yieldCoverPts + stabilityPts
+    ));
+
+    return {
+      totalScore: totalBaseScore,
+      factors: {
+        longevityPts: `${longevityPts} / 35点`,
+        finalAssetPts: `${finalAssetPts} / 20点`,
+        minCushionPts: `${minCushionPts} / 10点`,
+        yieldCoverPts: `${yieldCoverPts} / 20点`,
+        stabilityPts: `${stabilityPts} / 15点`,
+        insolvencyAge,
+        minFinAsset: Math.round(minAvailable),
+        minAvailableAssets: Math.round(minAvailable),
+        finalAvailableAssets: Math.round(finalAvailable),
+        finalCoverageYears: Number(finalCoverageYears.toFixed(2)),
+        minCoverageYears: Number(minCoverageYears.toFixed(2)),
+        capitalWithdrawalStartAge,
+        totalDeficit: Math.round(totalDeficit),
+        totalYieldUsed: Math.round(totalYieldUsed),
+        totalPrincipalUsed: Math.round(totalPrincipalUsed),
+        portfolioWeightedReturn: Number(portfolio.weightedReturn.toFixed(3)),
+        annualExpectedYield: Math.round(portfolio.annualExpectedYield),
+        scoreAssetBasis: 'availableAssets'
+      }
+    };
+  };
+
+  // Rebind Dashboard recalc so portfolio labels and Asset Detail KPIs
+  // always use the exact model the engine just calculated.
+  const _v5DashboardRecalc = window.recalculateAllV2Dashboard;
+  window.recalculateAllV2Dashboard = function(...args) {
+    const result = _v5DashboardRecalc.apply(this, args);
+    const model = window.ensureV2InputModel();
+    const metrics = window.syncPortfolioMetricsUIV2(model);
+
+    const rows = Array.isArray(window.currentTableRows) ? window.currentTableRows : [];
+    if (rows.length) {
+      const last = rows[rows.length - 1];
+
+      const assetFinal = document.getElementById('asset-final-assets');
+      if (assetFinal) assetFinal.textContent =
+        `${Math.round(Number(last.availableAssets ?? last.financialAsset ?? 0)).toLocaleString()} 万円`;
+
+      const period = document.getElementById('assetPeriodBadge');
+      if (period) period.textContent =
+        `${rows[0].age}歳 → ${rows[rows.length - 1].age}歳`;
+    }
+
+    return result;
+  };
+
+  // Also sync when only input UI is rendered.
+  const _v5RenderInput = window.renderV2InputUI;
+  window.renderV2InputUI = function(...args) {
+    const result = _v5RenderInput.apply(this, args);
+    window.syncPortfolioMetricsUIV2(window.ensureV2InputModel());
+    return result;
+  };
+
+  // Regression audit for the concrete portfolio used during review:
+  // ¥55m fund @4% + ¥10m cash => ¥2.2m annual yield and ~3.3846% weighted return.
+  window.runSimulationIntegrityAuditV2 = function() {
+    const sample = window.createEmptyDataModelV2();
+    sample.assets = [
+      {
+        id: 'audit_fund',
+        assetClass: 'simulation',
+        category: 'investment_fund',
+        name: '監査用投資信託',
+        owner: 'self',
+        value: 5500,
+        expectedReturn: 4,
+        withdrawalSetting: 'auto',
+        withdrawalPriority: null
+      },
+      {
+        id: 'audit_cash',
+        assetClass: 'simulation',
+        category: 'cash',
+        name: '監査用現金',
+        owner: 'self',
+        value: 1000,
+        expectedReturn: 0,
+        withdrawalSetting: 'auto',
+        withdrawalPriority: null
+      }
+    ];
+
+    const metrics = window.calculatePortfolioMetricsV2(sample);
+    const balances = sample.assets.map(a => ({ ...a, balance: a.value }));
+    const engineReturns = window.calculateAssetReturnsV2(balances);
+
+    const checks = {
+      totalAssets6500: Math.round(metrics.totalAssets) === 6500,
+      annualYield220: Math.round(metrics.annualExpectedYield) === 220,
+      weightedReturn338: Math.abs(metrics.weightedReturn - (220 / 6500 * 100)) < 0.001,
+      engineAnnualYield220: Math.round(engineReturns.totalReturn) === 220
+    };
+
+    return {
+      ok: Object.values(checks).every(Boolean),
+      checks,
+      expected: {
+        totalAssets: 6500,
+        annualExpectedYield: 220,
+        weightedReturn: Number((220 / 6500 * 100).toFixed(4))
+      },
+      actual: {
+        totalAssets: metrics.totalAssets,
+        annualExpectedYield: metrics.annualExpectedYield,
+        weightedReturn: Number(metrics.weightedReturn.toFixed(4)),
+        engineAnnualYield: engineReturns.totalReturn
+      }
+    };
+  };
+
+  window.LUMIFUL_SIMULATION_LOGIC_AUDIT_V5 = Object.freeze({
+    portfolioMetricsSingleSource: true,
+    chartExpectedReturnBoundToPortfolio: true,
+    assetDetailReturnBoundToPortfolio: true,
+    stockReturnNoLongerForcedToZero: true,
+    scoreUsesWholeHorizonYieldCoverage: true,
+    scoreUsesExpenseRelativeAssetCushion: true,
+    regressionPortfolio: '5500@4% fund + 1000 cash',
+    expectedWeightedReturn: 3.3846,
+    expectedAnnualYield: 220
+  });
+
+  setTimeout(function () {
+    try {
+      const audit = window.runSimulationIntegrityAuditV2();
+      console.info('[LUMIFUL] Simulation integrity audit v5', audit);
+    } catch (error) {
+      console.error('[LUMIFUL] Simulation integrity audit v5 failed', error);
+    }
+  }, 0);
+})();
+</script>
+
+
+<script>
+/* ============================================================
+   PHASE 7B / STEP 3 FINAL v6
+   ASSET RETURN INPUT POLICY
+   ============================================================ */
+(function () {
+  window.ASSET_RETURN_POLICY_V2 = Object.freeze({
+    cash: Object.freeze({
+      label: '現金・預金',
+      returnInput: false,
+      engineReturn: 0
+    }),
+    investment_fund: Object.freeze({
+      label: '投資信託',
+      returnInput: true
+    }),
+    bond: Object.freeze({
+      label: '債券',
+      returnInput: true
+    }),
+    stock: Object.freeze({
+      label: '株式',
+      returnInput: false,
+      engineReturn: 0
+    })
+  });
+
+  window.assetCategoryHasReturnInputV2 = function(category) {
+    const policy = window.ASSET_RETURN_POLICY_V2?.[category];
+    return policy ? policy.returnInput !== false : true;
+  };
+
+  window.normalizeAssetReturnPolicyV2 = function(asset) {
+    if (!asset || typeof asset !== 'object') return asset;
+    if (!window.assetCategoryHasReturnInputV2(asset.category)) {
+      asset.expectedReturn = 0;
+    }
+    return asset;
+  };
+
+  // Ensure all current and restored Schema-v2 assets obey the policy.
+  const _v6NormalizeModel = window.normalizeDataModelV2;
+  window.normalizeDataModelV2 = function(model) {
+    const normalized = _v6NormalizeModel(model);
+    (normalized.assets || []).forEach(window.normalizeAssetReturnPolicyV2);
+    return normalized;
+  };
+
+  // Rebind portfolio metric definition with the formal policy.
+  window.calculatePortfolioMetricsV2 = function(model) {
+    const normalized = window.normalizeDataModelV2(model || window.ensureV2InputModel());
+    const assets = (normalized.assets || []).filter(a => a.assetClass === 'simulation');
+
+    const totalAssets = assets.reduce((sum, a) => sum + Math.max(0, Number(a.value || 0)), 0);
+
+    const yieldBearingAssets = assets.filter(a => window.assetCategoryHasReturnInputV2(a.category));
+
+    const yieldBearingValue = yieldBearingAssets.reduce(
+      (sum, a) => sum + Math.max(0, Number(a.value || 0)),
+      0
+    );
+
+    const annualExpectedYield = yieldBearingAssets.reduce((sum, a) => {
+      const value = Math.max(0, Number(a.value || 0));
+      const rate = Math.max(0, Number(a.expectedReturn || 0));
+      return sum + value * rate / 100;
+    }, 0);
+
+    // User-facing expected return represents the rate of assets that actually
+    // have an expected-return assumption, not cash/stock valuation-only assets.
+    const configuredReturn = yieldBearingValue > 0
+      ? annualExpectedYield / yieldBearingValue * 100
+      : 0;
+
+    const effectivePortfolioReturn = totalAssets > 0
+      ? annualExpectedYield / totalAssets * 100
+      : 0;
+
+    const cashAssets = assets
+      .filter(a => a.category === 'cash')
+      .reduce((sum, a) => sum + Math.max(0, Number(a.value || 0)), 0);
+
+    const stockAssets = assets
+      .filter(a => a.category === 'stock')
+      .reduce((sum, a) => sum + Math.max(0, Number(a.value || 0)), 0);
+
+    return {
+      totalAssets,
+      yieldBearingValue,
+      cashAssets,
+      stockAssets,
+      annualExpectedYield,
+      configuredReturn,
+      effectivePortfolioReturn,
+      weightedReturn: configuredReturn,
+      simulationAssetCount: assets.length
+    };
+  };
+
+  window.syncPortfolioMetricsUIV2 = function(model) {
+    const metrics = window.calculatePortfolioMetricsV2(model);
+
+    // "想定利回り" shows the configured return assumption of return-bearing
+    // assets. Example: fund 4% + cash => 4.0%, not diluted by cash.
+    const rateText = `${metrics.configuredReturn.toFixed(1)}%`;
+
+    const chartRate = document.getElementById('chart-slider-yield-val');
+    if (chartRate) chartRate.textContent = rateText;
+
+    const assetRate = document.getElementById('asset-return-rate');
+    if (assetRate) assetRate.textContent = rateText;
+
+    const inflation = Number(
+      window.normalizeDataModelV2(model || window.ensureV2InputModel()).settings?.inflationRate || 0
+    );
+    const inflationLabel = document.getElementById('chart-slider-inflation-val');
+    if (inflationLabel) inflationLabel.textContent = `${inflation.toFixed(1)}%`;
+
+    return metrics;
+  };
+
+  // Asset-row UI policy: hide/disable rate entry for cash and stock.
+  const _v6RenderInputUI = window.renderV2InputUI;
+  window.renderV2InputUI = function(...args) {
+    const result = _v6RenderInputUI.apply(this, args);
+
+    document.querySelectorAll('[data-asset-id]').forEach(row => {
+      const assetId = row.getAttribute('data-asset-id');
+      if (!assetId) return;
+
+      const model = window.ensureV2InputModel();
+      const asset = (model.assets || []).find(a => a.id === assetId);
+      if (!asset) return;
+
+      const returnInput = row.querySelector(
+        'input[data-field="expectedReturn"], input[name*="expectedReturn"], input[id*="expectedReturn"]'
+      );
+      if (!returnInput) return;
+
+      const allow = window.assetCategoryHasReturnInputV2(asset.category);
+      returnInput.disabled = !allow;
+      returnInput.value = allow ? Number(asset.expectedReturn || 0) : 0;
+
+      const wrapper = returnInput.closest('.space-y-1, .space-y-2, .flex, .grid') || returnInput.parentElement;
+      if (wrapper) wrapper.classList.toggle('hidden', !allow);
+    });
+
+    window.syncPortfolioMetricsUIV2(window.ensureV2InputModel());
+    return result;
+  };
+
+  // Regression audit:
+  // fund 5500 @ 4% + cash 1000 + stock 500 => displayed assumption stays 4%.
+  window.runAssetReturnPolicyAuditV2 = function() {
+    const sample = window.createEmptyDataModelV2();
+    sample.assets = [
+      {
+        id: 'fund',
+        assetClass: 'simulation',
+        category: 'investment_fund',
+        value: 5500,
+        expectedReturn: 4
+      },
+      {
+        id: 'cash',
+        assetClass: 'simulation',
+        category: 'cash',
+        value: 1000,
+        expectedReturn: 99
+      },
+      {
+        id: 'stock',
+        assetClass: 'simulation',
+        category: 'stock',
+        value: 500,
+        expectedReturn: 99
+      }
+    ];
+
+    const normalized = window.normalizeDataModelV2(sample);
+    const metrics = window.calculatePortfolioMetricsV2(normalized);
+    const cash = normalized.assets.find(a => a.category === 'cash');
+    const stock = normalized.assets.find(a => a.category === 'stock');
+
+    const checks = {
+      cashReturnForcedZero: Number(cash?.expectedReturn || 0) === 0,
+      stockReturnForcedZero: Number(stock?.expectedReturn || 0) === 0,
+      annualYield220: Math.round(metrics.annualExpectedYield) === 220,
+      configuredReturn4: Math.abs(metrics.configuredReturn - 4) < 0.001
+    };
+
+    return {
+      ok: Object.values(checks).every(Boolean),
+      checks,
+      actual: metrics
+    };
+  };
+
+  window.LUMIFUL_ASSET_RETURN_RULES_V6 = Object.freeze({
+    cash: 'valuation-only / no return input',
+    investmentFund: 'valuation + expected return',
+    bond: 'valuation + expected return',
+    stock: 'valuation-only / no return input',
+    realEstate: 'separate asset-specific design',
+    displayedExpectedReturn: 'yield-bearing assets only'
+  });
+
+  setTimeout(function () {
+    try {
+      console.info('[LUMIFUL] Asset return policy audit v6', window.runAssetReturnPolicyAuditV2());
+    } catch (error) {
+      console.error('[LUMIFUL] Asset return policy audit v6 failed', error);
+    }
+  }, 0);
+})();
+</script>
+
 </body>
 </html>
