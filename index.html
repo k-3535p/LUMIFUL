@@ -151,19 +151,6 @@
       box-shadow: 0 0 0 3px rgba(101, 185, 232, 0.15);
     }
   </style>
-
-<style>
-@media (max-width: 640px) {
-  #homeView .grid.grid-cols-2 > div { padding-left:14px!important; padding-right:14px!important; }
-  #homeView .grid.grid-cols-2 > div h3,
-  #homeView .grid.grid-cols-2 > div .kpi-title,
-  #homeView .grid.grid-cols-2 > div [data-kpi-title] {
-    font-size:12px!important; line-height:1.35!important;
-    letter-spacing:-0.04em!important; white-space:nowrap!important;
-  }
-}
-</style>
-
 </head>
 <body class="bg-[#FAFAF7] text-[#253047] min-h-screen font-sans antialiased relative overflow-x-hidden">
 
@@ -514,9 +501,9 @@
             <!-- KPI 2: 年間運用益 (専用画像アセットを絶対保護・維持) -->
             <div class="bg-white rounded-[24px] p-3.5 sm:p-5 border border-[#ECEBE6] flex flex-col justify-between relative overflow-hidden transition">
               <div>
-                <div class="flex items-center justify-between gap-2 mb-1">
-                  <span class="text-xs font-bold text-[#6F7785]">資産が生活を支える力</span>
-                  <img src="./assets/kpi-annual-yield.png" alt="" class="w-9 h-9 sm:w-10 sm:h-10 object-contain shrink-0 pointer-events-none" />
+                <div class="flex items-center justify-between gap-1 sm:gap-2 mb-1">
+                  <span class="text-[10px] sm:text-xs font-bold text-[#6F7785] whitespace-nowrap tracking-[-0.02em]">資産が生活を支える力</span>
+                  <img src="./assets/kpi-annual-yield.png" alt="" class="w-8 h-8 sm:w-10 sm:h-10 object-contain shrink-0 pointer-events-none" />
                 </div>
                 <div class="text-[11px] font-bold text-[#8C5800] mb-2">平均年間運用益 (生涯)</div>
                 <div id="kpi-annual-yield" class="text-2xl sm:text-3xl font-extrabold text-[#253047] tracking-tight">
@@ -535,11 +522,11 @@
             <div class="bg-white rounded-[24px] p-3.5 sm:p-5 border border-[#ECEBE6] flex flex-col justify-between relative overflow-hidden transition">
               <div>
                 <div class="flex items-center justify-between gap-2 mb-1">
-                  <span class="text-xs font-bold text-[#6F7785] flex items-center gap-1">
+                  <span class="text-[10px] sm:text-xs font-bold text-[#6F7785] flex items-center gap-0.5 sm:gap-1 whitespace-nowrap tracking-[-0.02em]">
                     生涯収支カバー率
                     <i class="fa-solid fa-circle-info text-[#6F7785]/60 text-[10px] cursor-help" title="目標年齢までの生涯を通じ、生活費の不足額を運用益と安全資産でどれだけ安全にカバーし切れたかを表します。"></i>
                   </span>
-                  <img src="./assets/kpi-cover-rate.png" alt="" class="w-9 h-9 sm:w-10 sm:h-10 object-contain shrink-0 pointer-events-none" />
+                  <img src="./assets/kpi-cover-rate.png" alt="" class="w-8 h-8 sm:w-10 sm:h-10 object-contain shrink-0 pointer-events-none" />
                 </div>
                 <div class="text-[11px] font-bold text-[#65B9E8] mb-2">生涯の資金維持達成率</div>
                 <div id="kpi-cover-rate" class="text-xl sm:text-2xl font-extrabold text-[#6F7785] tracking-tight whitespace-nowrap">
@@ -556,10 +543,10 @@
             <div class="bg-white rounded-[24px] p-3.5 sm:p-5 border border-[#ECEBE6] flex flex-col justify-between relative overflow-hidden transition">
               <div>
                 <div class="flex items-center justify-between gap-2 mb-1">
-                  <span class="text-xs font-bold text-[#6F7785]">
+                  <span class="text-[10px] sm:text-xs font-bold text-[#6F7785] whitespace-nowrap tracking-[-0.02em]">
                     <span id="kpi-final-age-label">90</span>歳時点の想定資産
                   </span>
-                  <img src="./assets/kpi-future-assets.png" alt="" class="w-9 h-9 sm:w-10 sm:h-10 object-contain shrink-0 pointer-events-none" />
+                  <img src="./assets/kpi-future-assets.png" alt="" class="w-8 h-8 sm:w-10 sm:h-10 object-contain shrink-0 pointer-events-none" />
                 </div>
                 <div id="kpi-final-assets" class="text-2xl sm:text-3xl font-extrabold text-[#253047] tracking-tight mt-3">
                   0 万円
@@ -2703,7 +2690,7 @@
       let csvContent = '\uFEFF年齢,通常収入,年間支出,生活収支,年間運用益,運用益活用,元本売却額,活用フェーズ,臨時収入,年末現金,利用可能資産,売却可能資産\n';
 
       window.currentTableRows.forEach(r => {
-        csvContent += `${r.age}歳,${r.normalIncome},${r.totalExpense},${r.netCashflow},${r.annualYield},${r.yieldUsed},${r.principalSold},"${r.phase}",${r.eventIncomeTotal},${r.currentCash},${r.financialAsset},${Number(r.potentialAssets ?? 0)}\n`;
+        csvContent += `${r.age}歳,${r.normalIncome},${r.totalExpense},${r.netCashflow},${r.annualYield},${r.yieldUsed},${r.principalSold},"${window.getUtilizationPhaseLabelJa ? window.getUtilizationPhaseLabelJa(r.phase) : r.phase}",${r.eventIncomeTotal},${r.currentCash},${r.financialAsset},${Number(r.potentialAssets ?? 0)}\n`;
       });
 
       const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
@@ -3473,6 +3460,19 @@ m.profile.targetAge=_targetRaw?Math.max(m.profile.currentAge||18,Math.round(Numb
       }
     };
 
+    window.getUtilizationPhaseLabelJa = function(phase) {
+      const key = String(phase || '').trim().toLowerCase();
+      const map = {
+        income: '収入内で生活',
+        yield: '運用益を活用',
+        high: '優先資産を活用',
+        medium: '中優先資産を活用',
+        low: '長期資産を活用',
+        shortage: '資金不足'
+      };
+      return map[key] || phase || '-';
+    };
+
     window.renderTable = function(rows) {
       const tbody = document.getElementById('cashflowTableBody');
       if (!tbody) return;
@@ -3487,9 +3487,13 @@ m.profile.targetAge=_targetRaw?Math.max(m.profile.currentAge||18,Math.round(Numb
         const tr = document.createElement('tr');
         tr.className = 'hover:bg-[#FAFAF7] border-b border-[#ECEBE6]';
 
-        const phaseColor = r.phase.includes('🔴') ? 'text-[#FF8FA3] font-bold'
-                         : r.phase.includes('🟠') ? 'text-[#8C5800] font-bold'
-                         : r.phase.includes('🟡') ? 'text-[#8C5800]'
+        const phaseKey = String(r.phase || '').trim().toLowerCase();
+        const phaseLabel = window.getUtilizationPhaseLabelJa(phaseKey);
+        const phaseColor = phaseKey === 'shortage' ? 'text-[#FF8FA3] font-bold'
+                         : phaseKey === 'low' ? 'text-[#8C5800] font-bold'
+                         : phaseKey === 'medium' ? 'text-[#8C5800]'
+                         : phaseKey === 'high' ? 'text-[#8C5800]'
+                         : phaseKey === 'yield' ? 'text-[#65B9E8] font-semibold'
                          : 'text-[#72D6B5] font-semibold';
 
         tr.innerHTML = `
@@ -3500,7 +3504,7 @@ m.profile.targetAge=_targetRaw?Math.max(m.profile.currentAge||18,Math.round(Numb
           <td class="p-2.5 text-right font-semibold text-[#8C5800]">${r.annualYield.toLocaleString()}</td>
           <td class="p-2.5 text-right text-[#6F7785]">${r.yieldUsed.toLocaleString()}</td>
           <td class="p-2.5 text-right font-bold ${r.principalSold > 0 ? 'text-[#8C5800]' : 'text-[#6F7785]'}">${r.principalSold.toLocaleString()}</td>
-          <td class="p-2.5 text-center text-[11px] ${phaseColor}">${r.phase}</td>
+          <td class="p-2.5 text-center text-[11px] ${phaseColor} whitespace-nowrap">${phaseLabel}</td>
           <td class="p-2.5 text-right text-[#72D6B5] font-medium">${r.eventIncomeTotal > 0 ? '+' + r.eventIncomeTotal.toLocaleString() : '-'}</td>
           <td class="p-2.5 text-right font-semibold text-[#253047]">${r.currentCash.toLocaleString()}</td>
           <td class="p-2.5 text-right font-bold text-[#8C5800]">${r.financialAsset.toLocaleString()}</td>
@@ -7836,41 +7840,13 @@ window.LUMIFUL_PHASE7B_STEP3_FINAL_V4 = Object.freeze({
 
 
 <script>
-(function(){
- const JP=Object.freeze({
-   income:'収入内で生活',
-   high:'優先して活用',
-   medium:'次に活用',
-   low:'最後に活用',
-   excluded:'取り崩し対象外'
- });
- window.LUMIFUL_UTILIZATION_PHASE_LABELS_JA=JP;
- function localize(root){
-   root=root||document.getElementById('assetDetailView')||document;
-   root.querySelectorAll('td,th,span,div,p').forEach(el=>{
-     if(el.children.length)return;
-     const raw=(el.textContent||'').trim().toLowerCase();
-     if(JP[raw])el.textContent=JP[raw];
-   });
- }
- const sw=window.switchView;
- if(typeof sw==='function'){
-   window.switchView=function(viewName,...args){
-     const r=sw.call(this,viewName,...args);
-     if(viewName==='assetDetail')requestAnimationFrame(()=>localize());
-     return r;
-   };
- }
- document.addEventListener('DOMContentLoaded',()=>{
-   localize();
-   const v=document.getElementById('assetDetailView');
-   if(v)new MutationObserver(()=>localize(v)).observe(v,{subtree:true,childList:true,characterData:true});
- });
- window.LUMIFUL_PHASE7B_STEP3_LOCK=Object.freeze({
-   version:'8.2',status:'LOCKED',
-   mobileKpiTitleWrapFixed:true,assetUtilizationPhaseJapanese:true
- });
-})();
+window.LUMIFUL_PHASE7B_STEP3_LOCK_V8_2 = Object.freeze({
+  status: 'LOCKED',
+  base: 'v8.1 clean auth',
+  mobileKpiTitlesPatchedAtMarkupSource: true,
+  utilizationPhasePatchedAtRenderSource: true,
+  simulationInputAuthUiRemoved: true
+});
 </script>
 
 </body>
