@@ -1370,7 +1370,7 @@
   </div>
 
   <!-- Legacy secondary Auth Modal removed.
-       Registered-account authentication uses welcomeAuthView only. -->
+       welcomeAuthView is the only authentication surface. -->
 
   <!-- MODAL 3: Plans Modal -->
   <div id="plansModal" class="fixed inset-0 bg-[#253047]/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
@@ -5724,26 +5724,10 @@ JSON Schema:
 
     window.LUMIFUL_PHASE7B_VERSION = '0.2-firebase-auth';
 
-    // Activate only after STEP 1 bootstrap succeeds. If Firebase cannot load,
-    // Phase 7A remains available exactly as before.
-    setTimeout(async () => {
-      try {
-        const runtime = await window.initializeFirebaseRuntime();
-        if (runtime?.status === 'ready') {
-          await window.activateFirebaseAuthentication();
-          console.info('[LUMIFUL] Firebase Authentication binding active.', window.getFirebaseAuthBindingSnapshot());
-        } else {
-          console.warn('[LUMIFUL] Firebase Authentication unavailable; using Phase 7A fallback.', runtime?.status);
-        }
-      } catch (error) {
-        window.LUMIFUL_PHASE7B_STEP2_AUTH_ACTIVE = false;
-        console.warn('[LUMIFUL] Firebase Authentication activation failed; Phase 7A fallback remains active.', error);
-      }
-    }, 0);
+    // STEP 3 FINAL v2: legacy STEP2 automatic auth activation retired.
+    // The canonical controller below is the only Firebase auth-session owner.
 
-
-
-    /* ============================================================
+/* ============================================================
        PHASE 7B / STEP 3 — FIRESTORE PERSISTENCE BINDING
        ------------------------------------------------------------
        - Authenticated account data is stored at users/{firebaseUid}.
@@ -6048,140 +6032,93 @@ JSON Schema:
 
 <script>
 /* ============================================================
-   PHASE 7B / STEP 3 — FINAL INTEGRATED PRODUCTION CONTROLLER
-   ------------------------------------------------------------
-   Single owner for:
-   - Firebase Authentication session
-   - logged-in / logged-out / guest routing
-   - account UI state
-   - Firestore persistence
-   - per-UID local recovery mirror
-   - autosave / reload restore
+   PHASE 7B / STEP 3 FINAL v2
+   SESSION PERSISTENCE + RUNTIME HYDRATION
    ============================================================ */
 (function () {
-  const P = window.LUMIFUL_STEP3_FINAL = {
-    listenerAttached: false,
-    authReady: false,
-    authReadyPromise: null,
-    authReadyResolve: null,
-    restoredUid: null,
+  const P = window.LUMIFUL_STEP3_FINAL_V2 = {
+    authListenerAttached: false,
+    authResolved: false,
+    authPromise: null,
+    authResolve: null,
+    booted: false,
     booting: false,
     saving: false,
     restoring: false,
     timer: null,
     debounceMs: 650,
+    restoredUid: null,
     draftPrefix: 'lumiful_account_draft_v2:'
   };
 
-  function normalizeEmail(value) {
-    return String(value || '').trim().toLowerCase();
-  }
+  const emailNorm = v => String(v || '').trim().toLowerCase();
+  const runtimeNow = () => window.LUMIFUL_FIREBASE_RUNTIME || null;
+  const authUser = () => runtimeNow()?.auth?.currentUser || null;
+  const keyFor = uid => P.draftPrefix + String(uid || '');
 
-  function firebaseRuntime() {
-    return window.LUMIFUL_FIREBASE_RUNTIME || null;
-  }
-
-  function firebaseUser() {
-    return firebaseRuntime()?.auth?.currentUser || null;
-  }
-
-  function explicitGuest() {
-    const stored = localStorage.getItem('lumiful_user_email') || localStorage.getItem('lc_user_email');
-    return !!stored && String(stored).includes('@lumiful.local');
-  }
-
-  function draftKey(uid) {
-    return P.draftPrefix + uid;
-  }
-
-  function envelopeTime(envelope) {
-    const t = Date.parse(envelope?.updatedAt || envelope?.createdAt || '');
+  function envelopeTime(e) {
+    const t = Date.parse(e?.updatedAt || e?.createdAt || '');
     return Number.isFinite(t) ? t : 0;
   }
 
-  function setStateFromFirebase(user) {
+  function isExplicitGuest() {
+    const v = localStorage.getItem('lumiful_user_email') || localStorage.getItem('lc_user_email');
+    return !!v && String(v).includes('@lumiful.local');
+  }
+
+  function applyAuthState(user) {
     if (user) {
-      localStorage.setItem('lumiful_user_email', normalizeEmail(user.email));
+      localStorage.setItem('lumiful_user_email', emailNorm(user.email));
       localStorage.removeItem('lc_user_email');
       window.authState = {
         status: 'authenticated',
         user: {
           uid: user.uid,
-          email: normalizeEmail(user.email),
+          email: emailNorm(user.email),
           emailVerified: !!user.emailVerified,
           isGuest: false,
           provider: 'firebase'
         }
       };
-      return;
-    }
-
-    if (explicitGuest()) {
+    } else if (isExplicitGuest()) {
       window.authState = {
         status: 'guest',
-        user: {
-          email: window.LUMIFUL_GUEST_EMAIL,
-          isGuest: true,
-          provider: 'local'
-        }
+        user: { email: window.LUMIFUL_GUEST_EMAIL, isGuest: true, provider: 'local' }
       };
-      return;
+    } else {
+      // Never treat a pre-Firebase mock account identity as authenticated.
+      localStorage.removeItem('lumiful_user_email');
+      localStorage.removeItem('lc_user_email');
+      window.authState = { status: 'unauthenticated', user: null };
     }
-
-    localStorage.removeItem('lumiful_user_email');
-    localStorage.removeItem('lc_user_email');
-    window.authState = { status: 'unauthenticated', user: null };
   }
 
   function syncAccountUI() {
     const state = window.authState || { status: 'unauthenticated', user: null };
-    const signedIn = state.status === 'authenticated';
+    const signed = state.status === 'authenticated';
     const guest = state.status === 'guest';
-    const active = signedIn || guest;
+    const active = signed || guest;
+    const label = signed ? 'ログアウト' : (guest ? 'ゲスト終了' : 'ログイン');
 
-    const actionText = signedIn ? 'ログアウト' : (guest ? 'ゲスト終了' : 'ログイン');
+    const setTxt = (id, value) => {
+      const el = document.getElementById(id);
+      if (el) el.textContent = value;
+    };
 
-    const desktopText = document.getElementById('authBtnText');
+    setTxt('authBtnText', label);
+    setTxt('authBtnTextMobile', label);
+    setTxt('settingsAccountActionBtn', label);
+    setTxt('settingsUserEmail', signed ? (state.user?.email || 'ログイン中') : (guest ? 'ゲスト利用中' : 'ログインしていません'));
+    setTxt('settingsAccountStatusTag', signed ? 'ログイン中' : (guest ? 'ゲスト' : '未ログイン'));
+    setTxt('userEmailDisplay', signed ? (state.user?.email || '') : (guest ? 'ゲスト利用中' : ''));
+
     const desktopIcon = document.getElementById('authBtnIcon');
-    const mobileText = document.getElementById('authBtnTextMobile');
+    if (desktopIcon) desktopIcon.className = active ? 'fa-solid fa-right-from-bracket' : 'fa-solid fa-user-circle';
     const mobileIcon = document.getElementById('authBtnIconMobile');
-    const settingsBtn = document.getElementById('settingsAccountActionBtn');
-    const settingsEmail = document.getElementById('settingsUserEmail');
-    const settingsTag = document.getElementById('settingsAccountStatusTag');
-    const userEmailDisplay = document.getElementById('userEmailDisplay');
-    const lockOverlay = document.getElementById('authLockOverlay');
+    if (mobileIcon) mobileIcon.className = active ? 'fa-solid fa-right-from-bracket' : 'fa-solid fa-user-circle';
 
-    if (desktopText) desktopText.textContent = actionText;
-    if (mobileText) mobileText.textContent = actionText;
-    if (settingsBtn) settingsBtn.textContent = actionText;
-
-    if (desktopIcon) desktopIcon.className = active
-      ? 'fa-solid fa-right-from-bracket'
-      : 'fa-solid fa-user-circle';
-    if (mobileIcon) mobileIcon.className = active
-      ? 'fa-solid fa-right-from-bracket'
-      : 'fa-solid fa-user-circle';
-
-    if (settingsEmail) {
-      settingsEmail.textContent = signedIn
-        ? (state.user?.email || 'ログイン中')
-        : (guest ? 'ゲスト利用中' : 'ログインしていません');
-    }
-
-    if (settingsTag) {
-      settingsTag.textContent = signedIn ? 'ログイン中' : (guest ? 'ゲスト' : '未ログイン');
-      settingsTag.className = signedIn
-        ? 'px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#ECFDF5] text-[#4F8A70] border border-[#B7E4D2]'
-        : 'px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#FAFAF7] text-[#6F7785] border border-[#ECEBE6]';
-    }
-
-    if (userEmailDisplay) {
-      userEmailDisplay.textContent = signedIn
-        ? (state.user?.email || '')
-        : (guest ? 'ゲスト利用中' : '');
-    }
-
-    if (lockOverlay) lockOverlay.classList.toggle('hidden', active);
+    const overlay = document.getElementById('authLockOverlay');
+    if (overlay) overlay.classList.toggle('hidden', active);
     window.setInputsDisabled?.(!active);
   }
 
@@ -6202,72 +6139,78 @@ JSON Schema:
       if (welcome) welcome.classList.add('hidden');
       document.body.classList.remove('overflow-hidden');
     }
-
     syncAccountUI();
   }
 
-  // Final public compatibility API.
   window.checkAuthState = syncAccountUI;
   window.routeByAuthState = route;
 
-  function readDraft(uid) {
+  function readMirror(uid) {
     if (!uid) return null;
     try {
-      const raw = localStorage.getItem(draftKey(uid));
+      const raw = localStorage.getItem(keyFor(uid));
       return raw ? window.parsePersistenceEnvelopeV2(JSON.parse(raw)) : null;
-    } catch (error) {
-      console.warn('[LUMIFUL] Draft read notice:', error);
+    } catch (e) {
+      console.warn('[LUMIFUL] mirror read notice', e);
       return null;
     }
   }
 
-  function writeDraft(model, uid, previous) {
+  function currentModel() {
+    return window.cloneDataModelV2(window.normalizeDataModelV2(window.ensureV2InputModel()));
+  }
+
+  function writeMirror(model, uid, previous) {
     if (!uid || !model) return null;
-    const envelope = window.createPersistenceEnvelopeV2(
-      window.cloneDataModelV2(window.normalizeDataModelV2(model)),
-      previous || readDraft(uid)
-    );
-    localStorage.setItem(draftKey(uid), JSON.stringify(envelope));
+    const envelope = window.createPersistenceEnvelopeV2(model, previous || readMirror(uid));
+    localStorage.setItem(keyFor(uid), JSON.stringify(envelope));
     return envelope;
   }
 
-  function currentModel() {
-    return window.cloneDataModelV2(
-      window.normalizeDataModelV2(window.ensureV2InputModel())
-    );
+  async function getCloudRef(uid) {
+    const runtime = await window.initializeFirebaseRuntime();
+    if (!runtime?.firestore || !runtime?.auth) throw new Error('firestore-unavailable');
+    if (!runtime.auth.currentUser?.uid || runtime.auth.currentUser.uid !== uid) {
+      throw new Error('firestore-auth-user-mismatch');
+    }
+    return runtime.firestore.collection('users').doc(uid);
   }
 
-  async function cloudLoad(uid) {
-    const user = firebaseUser();
-    if (!user?.uid || user.uid !== uid) throw new Error('firestore-auth-user-mismatch');
-    const runtime = await window.initializeFirebaseRuntime();
-    if (!runtime?.firestore) throw new Error('firestore-unavailable');
-    const ref = runtime.firestore.collection('users').doc(uid);
+  async function readCloud(uid) {
+    const ref = await getCloudRef(uid);
     const snap = await ref.get();
     return snap.exists ? window.parsePersistenceEnvelopeV2(snap.data()) : null;
   }
 
-  async function cloudSave(model, uid, previous) {
-    const user = firebaseUser();
-    if (!user?.uid || user.uid !== uid) throw new Error('firestore-auth-user-mismatch');
-    const runtime = await window.initializeFirebaseRuntime();
-    if (!runtime?.firestore) throw new Error('firestore-unavailable');
-
+  async function writeCloud(model, uid, previous) {
+    const ref = await getCloudRef(uid);
     const envelope = window.createPersistenceEnvelopeV2(model, previous);
     const safe = window.toFirestoreSafeValue
       ? window.toFirestoreSafeValue(envelope)
       : JSON.parse(JSON.stringify(envelope));
-
-    await runtime.firestore.collection('users').doc(uid).set(safe, { merge: false });
-
-    console.info('[LUMIFUL] FINAL Firestore save OK', {
-      uid,
-      updatedAt: safe.updatedAt
-    });
+    await ref.set(safe, { merge: false });
+    console.info('[LUMIFUL] FINAL v2 Firestore save OK', { uid, updatedAt: safe.updatedAt });
     return safe;
   }
 
-  // Completely bypass Phase 7A MockCloud for registered accounts.
+  // Full runtime hydration: model -> inputs -> calculation -> result widgets.
+  window.hydrateSimulationRuntimeV2 = function(rawModel) {
+    const model = window.cloneDataModelV2(window.normalizeDataModelV2(rawModel));
+    window.activeDataModelV2 = model;
+    window.v2InputInitialized = true;
+    window.LUMIFUL_LAST_SIMULATION_ERROR = null;
+
+    window.renderV2InputUI?.();
+
+    // Recalculate from the restored v2 model without depending on stale form state.
+    const result = window.recalculateAllFast?.();
+    window.syncSimulationResultsViewV2?.();
+    window.updateScoreDashboardUI?.();
+    window.syncLumiAdvisorUI?.();
+
+    return { model: window.activeDataModelV2, result };
+  };
+
   window.getStorageAdapterForAuthState = function(state = window.authState) {
     if (state?.status === 'guest') return window.LocalStorageAdapter;
     if (state?.status === 'authenticated') return window.FirestoreStorageAdapter;
@@ -6275,102 +6218,66 @@ JSON Schema:
   };
 
   window.saveUserData = async function() {
-    const state = window.authState || {};
-    const model = currentModel();
-
-    if (state.status === 'guest') {
-      return window.LocalStorageAdapter.save(model);
+    if (window.authState?.status === 'guest') {
+      return window.LocalStorageAdapter.save(currentModel());
     }
+    if (window.authState?.status !== 'authenticated') return null;
 
-    if (state.status !== 'authenticated') return null;
-
-    const uid = firebaseUser()?.uid;
+    const uid = authUser()?.uid;
     if (!uid) throw new Error('firebase-auth-user-missing');
 
-    // Local recovery point is synchronous and always first.
-    const mirror = writeDraft(model, uid);
+    const model = currentModel();
+    const mirror = writeMirror(model, uid);
+    let cloud = null;
+    try { cloud = await readCloud(uid); } catch (e) { console.warn('[LUMIFUL] previous cloud read notice', e); }
 
-    let previousCloud = null;
-    try {
-      previousCloud = await cloudLoad(uid);
-    } catch (error) {
-      console.warn('[LUMIFUL] Previous Firestore read skipped:', error);
-    }
-
-    const previous = envelopeTime(mirror) >= envelopeTime(previousCloud)
-      ? mirror
-      : previousCloud;
-
-    const saved = await cloudSave(model, uid, previous);
-    localStorage.setItem(draftKey(uid), JSON.stringify(saved));
+    const previous = envelopeTime(mirror) >= envelopeTime(cloud) ? mirror : cloud;
+    const saved = await writeCloud(model, uid, previous);
+    localStorage.setItem(keyFor(uid), JSON.stringify(saved));
     return saved;
   };
 
   window.loadUserData = async function(options = {}) {
-    const state = window.authState || {};
-
-    if (state.status === 'guest') {
-      const envelope = await window.LocalStorageAdapter.load();
-      if (envelope?.data && options.restore !== false) {
-        window.restorePersistedStateV2(envelope.data);
-      }
-      return envelope;
+    if (window.authState?.status === 'guest') {
+      const e = await window.LocalStorageAdapter.load();
+      if (e?.data && options.restore !== false) window.hydrateSimulationRuntimeV2(e.data);
+      return e;
     }
+    if (window.authState?.status !== 'authenticated') return null;
 
-    if (state.status !== 'authenticated') return null;
-
-    const uid = firebaseUser()?.uid;
+    const uid = authUser()?.uid;
     if (!uid) return null;
 
-    const mirror = readDraft(uid);
+    const mirror = readMirror(uid);
     let cloud = null;
-    let cloudError = null;
+    let cloudErr = null;
+    try { cloud = await readCloud(uid); } catch (e) { cloudErr = e; console.warn('[LUMIFUL] cloud load notice', e); }
 
-    try {
-      cloud = await cloudLoad(uid);
-    } catch (error) {
-      cloudError = error;
-      console.warn('[LUMIFUL] Firestore load notice:', error);
-    }
-
-    if (!cloud && !mirror) {
-      if (cloudError) throw cloudError;
+    if (!mirror && !cloud) {
+      if (cloudErr) throw cloudErr;
       return null;
     }
 
-    const useMirror = !!mirror && (!cloud || envelopeTime(mirror) > envelopeTime(cloud));
-    const selected = useMirror ? mirror : cloud;
-
+    const selected = mirror && (!cloud || envelopeTime(mirror) > envelopeTime(cloud)) ? mirror : cloud;
     if (selected?.data && options.restore !== false) {
-      window.restorePersistedStateV2(selected.data);
+      window.hydrateSimulationRuntimeV2(selected.data);
     }
+    if (selected) localStorage.setItem(keyFor(uid), JSON.stringify(selected));
 
-    if (selected) {
-      localStorage.setItem(draftKey(uid), JSON.stringify(selected));
+    if (selected === mirror && mirror) {
+      try { await writeCloud(mirror.data, uid, cloud || mirror); }
+      catch (e) { console.warn('[LUMIFUL] cloud heal deferred', e); }
     }
-
-    // Heal cloud after a reload that happened before the prior cloud write completed.
-    if (useMirror) {
-      try {
-        await cloudSave(selected.data, uid, cloud || mirror);
-      } catch (error) {
-        console.warn('[LUMIFUL] Draft recovered locally; cloud heal deferred:', error);
-      }
-    }
-
     return selected;
   };
-
-  window.updateSaveStatus = window.updateSaveStatus || function() {};
 
   window.scheduleAutoSave = function(reason) {
     if (P.booting || P.saving || P.restoring) return;
     if (!['authenticated', 'guest'].includes(window.authState?.status)) return;
 
-    // Immediate durable local recovery for registered users.
     if (window.authState.status === 'authenticated') {
-      const uid = firebaseUser()?.uid;
-      if (uid) writeDraft(currentModel(), uid);
+      const uid = authUser()?.uid;
+      if (uid) writeMirror(currentModel(), uid);
     }
 
     clearTimeout(P.timer);
@@ -6381,17 +6288,15 @@ JSON Schema:
   window.performAutoSave = async function(reason) {
     if (P.saving || P.restoring) return null;
     if (!['authenticated', 'guest'].includes(window.authState?.status)) return null;
-
     P.saving = true;
     window.updateSaveStatus?.('saving');
     try {
-      const envelope = await window.saveUserData();
-      if (!envelope) throw new Error('save-returned-null');
-      window.LUMIFUL_STEP4_LAST_SAVED_AT = envelope.updatedAt || new Date().toISOString();
+      const e = await window.saveUserData();
+      if (!e) throw new Error('save-returned-null');
       window.updateSaveStatus?.('saved');
-      return envelope;
-    } catch (error) {
-      console.error('[LUMIFUL] FINAL autosave failed:', error);
+      return e;
+    } catch (e) {
+      console.error('[LUMIFUL] FINAL v2 autosave failed', e);
       window.updateSaveStatus?.('error', '保存エラー');
       return null;
     } finally {
@@ -6399,120 +6304,121 @@ JSON Schema:
     }
   };
 
-  // Rebind recalculation -> autosave exactly once.
-  const calcCore = window.recalculateAllFast;
+  // Attach one autosave wrapper to the Step3.6 calculation function.
+  const coreCalc = window.recalculateAllFast;
   window.recalculateAllFast = function(...args) {
-    const result = calcCore.apply(this, args);
+    const result = coreCalc.apply(this, args);
     window.scheduleAutoSave('recalculate');
     return result;
   };
 
-  // Input sync already updates activeDataModelV2. Mirror immediately after it.
-  const inputCore = window.syncV2InputAndRecalculate;
+  const coreInputSync = window.syncV2InputAndRecalculate;
   window.syncV2InputAndRecalculate = function(...args) {
-    const result = inputCore.apply(this, args);
+    const result = coreInputSync.apply(this, args);
     if (window.authState?.status === 'authenticated') {
-      const uid = firebaseUser()?.uid;
-      if (uid) writeDraft(currentModel(), uid);
+      const uid = authUser()?.uid;
+      if (uid) writeMirror(currentModel(), uid);
     }
     return result;
   };
 
-  // Confirm CTA flushes cloud save before considering the action complete.
-  const confirmCore = window.confirmV2Simulation;
+  const coreConfirm = window.confirmV2Simulation;
   window.confirmV2Simulation = async function(...args) {
-    const result = confirmCore.apply(this, args);
+    const result = coreConfirm.apply(this, args);
     clearTimeout(P.timer);
     P.timer = null;
-    await window.performAutoSave('confirm-simulation');
+    await window.performAutoSave('confirm');
     return result;
   };
 
-  async function restoreForCurrentSession(force = false) {
-    const state = window.authState || {};
-    if (!['authenticated', 'guest'].includes(state.status)) return null;
-
-    const uid = firebaseUser()?.uid || 'guest';
-    if (!force && P.restoredUid === uid) return null;
+  async function restoreCurrent(force = false) {
+    if (!['authenticated', 'guest'].includes(window.authState?.status)) return null;
+    const id = authUser()?.uid || 'guest';
+    if (!force && P.restoredUid === id) return null;
 
     P.restoring = true;
     try {
-      const envelope = await window.loadUserData({ restore: true, silent: true });
-      P.restoredUid = uid;
-
-      if (!envelope?.data) {
+      const e = await window.loadUserData({ restore: true, silent: true });
+      P.restoredUid = id;
+      if (!e?.data) {
         window.ensureV2InputModel?.();
         window.renderV2InputUI?.();
+        window.LUMIFUL_LAST_SIMULATION_ERROR = null;
         window.recalculateAllFast?.();
+        window.syncSimulationResultsViewV2?.();
         window.updateSaveStatus?.('idle');
       } else {
         window.updateSaveStatus?.('saved');
       }
-      return envelope;
+      return e;
     } finally {
       P.restoring = false;
     }
   }
 
-  async function attachAuth() {
+  async function prepareAuthPersistence(auth) {
+    // Explicitly set LOCAL both at boot and immediately before credentials.
+    await auth.setPersistence(window.firebase.auth.Auth.Persistence.LOCAL);
+    return auth;
+  }
+
+  async function attachAuthListener() {
     const runtime = await window.initializeFirebaseRuntime();
-    if (runtime?.status !== 'ready' || !runtime.auth) {
-      throw new Error('firebase-auth-unavailable');
+    if (runtime?.status !== 'ready' || !runtime.auth) throw new Error('firebase-auth-unavailable');
+    await prepareAuthPersistence(runtime.auth);
+
+    if (!P.authPromise) {
+      P.authPromise = new Promise(resolve => { P.authResolve = resolve; });
     }
 
-    try {
-      await runtime.auth.setPersistence(window.firebase.auth.Auth.Persistence.LOCAL);
-    } catch (error) {
-      console.warn('[LUMIFUL] Auth persistence notice:', error);
-    }
+    // Ensure old STEP2 listener cannot own routing.
+    try { window.LUMIFUL_PHASE7B_STEP2_UNSUBSCRIBE?.(); } catch (_) {}
+    window.LUMIFUL_PHASE7B_STEP2_UNSUBSCRIBE = null;
+    window.LUMIFUL_PHASE7B_STEP2_AUTH_ACTIVE = false;
 
-    if (!P.authReadyPromise) {
-      P.authReadyPromise = new Promise(resolve => { P.authReadyResolve = resolve; });
-    }
-
-    if (!P.listenerAttached) {
-      // Unsubscribe the old Phase 7B listener if it was ever attached.
-      try { window.LUMIFUL_PHASE7B_STEP2_UNSUBSCRIBE?.(); } catch (_) {}
-      window.LUMIFUL_PHASE7B_STEP2_UNSUBSCRIBE = null;
-
-      P.listenerAttached = true;
+    if (!P.authListenerAttached) {
+      P.authListenerAttached = true;
       runtime.auth.onAuthStateChanged(async user => {
-        setStateFromFirebase(user);
+        applyAuthState(user);
         route();
 
-        if (!P.authReady) {
-          P.authReady = true;
-          P.authReadyResolve?.(user || null);
-          P.authReadyResolve = null;
+        if (!P.authResolved) {
+          P.authResolved = true;
+          P.authResolve?.(user || null);
+          P.authResolve = null;
         } else if (user) {
-          await restoreForCurrentSession(true);
+          await restoreCurrent(true);
         }
       }, error => {
-        console.error('[LUMIFUL] FINAL auth listener failed:', error);
-        setStateFromFirebase(null);
+        console.error('[LUMIFUL] FINAL v2 auth listener error', error);
+        applyAuthState(null);
         route();
-        if (!P.authReady) {
-          P.authReady = true;
-          P.authReadyResolve?.(null);
-          P.authReadyResolve = null;
+        if (!P.authResolved) {
+          P.authResolved = true;
+          P.authResolve?.(null);
+          P.authResolve = null;
         }
       });
     }
 
-    await P.authReadyPromise;
+    await P.authPromise;
     return runtime.auth;
   }
 
   window.resolveAuthState = function() {
-    setStateFromFirebase(firebaseUser());
+    // During boot never force logged-out before Firebase has resolved persistence.
+    if (!P.authResolved) {
+      window.authState = { status: 'checking', user: null };
+    } else {
+      applyAuthState(authUser());
+    }
     route();
     return window.authState;
   };
 
   window.handleWelcomeLogin = async function(event) {
     event.preventDefault();
-
-    const email = normalizeEmail(document.getElementById('welcomeLoginEmail')?.value);
+    const email = emailNorm(document.getElementById('welcomeLoginEmail')?.value);
     const password = document.getElementById('welcomeLoginPassword')?.value || '';
     const errorEl = document.getElementById('welcomeLoginError');
 
@@ -6524,21 +6430,20 @@ JSON Schema:
       return;
     }
 
-    if (errorEl) errorEl.classList.add('hidden');
-
     try {
+      if (errorEl) errorEl.classList.add('hidden');
       const runtime = await window.initializeFirebaseRuntime();
+      await prepareAuthPersistence(runtime.auth);
       const credential = await runtime.auth.signInWithEmailAndPassword(email, password);
 
-      setStateFromFirebase(credential.user);
+      applyAuthState(credential.user);
       route();
-      await restoreForCurrentSession(true);
-
+      await restoreCurrent(true);
       window.showToast?.('ログインしました', 'success');
-    } catch (error) {
-      console.error('[LUMIFUL] FINAL login failed:', error?.code, error);
+    } catch (e) {
+      console.error('[LUMIFUL] FINAL v2 login failed', e?.code, e);
       if (errorEl) {
-        errorEl.textContent = window.getFirebaseAuthErrorMessage?.(error, 'login') || 'ログインできませんでした。';
+        errorEl.textContent = window.getFirebaseAuthErrorMessage?.(e, 'login') || 'ログインできませんでした。';
         errorEl.classList.remove('hidden');
       }
     }
@@ -6546,8 +6451,7 @@ JSON Schema:
 
   window.handleWelcomeSignup = async function(event) {
     event.preventDefault();
-
-    const email = normalizeEmail(document.getElementById('welcomeSignupEmail')?.value);
+    const email = emailNorm(document.getElementById('welcomeSignupEmail')?.value);
     const password = document.getElementById('welcomeSignupPassword')?.value || '';
     const errorEl = document.getElementById('welcomeSignupError');
 
@@ -6559,51 +6463,36 @@ JSON Schema:
       return;
     }
 
-    if (errorEl) errorEl.classList.add('hidden');
-
     try {
-      const wasGuest = window.authState?.status === 'guest';
-      const guestEnvelope = wasGuest ? await window.LocalStorageAdapter.load() : null;
-
+      if (errorEl) errorEl.classList.add('hidden');
       const runtime = await window.initializeFirebaseRuntime();
+      await prepareAuthPersistence(runtime.auth);
       const credential = await runtime.auth.createUserWithEmailAndPassword(email, password);
 
-      setStateFromFirebase(credential.user);
+      applyAuthState(credential.user);
       route();
-
-      if (guestEnvelope?.data) {
-        window.restorePersistedStateV2(guestEnvelope.data);
-      }
-
       await window.saveUserData();
       P.restoredUid = credential.user.uid;
       window.updateSaveStatus?.('saved');
-      window.showToast?.(wasGuest ? 'ゲストデータを引き継ぎました' : 'LUMIFULへようこそ！', 'success');
-    } catch (error) {
-      console.error('[LUMIFUL] FINAL signup failed:', error?.code, error);
+      window.showToast?.('LUMIFULへようこそ！', 'success');
+    } catch (e) {
+      console.error('[LUMIFUL] FINAL v2 signup failed', e?.code, e);
       if (errorEl) {
-        errorEl.textContent = window.getFirebaseAuthErrorMessage?.(error, 'signup') || 'アカウントを作成できませんでした。';
+        errorEl.textContent = window.getFirebaseAuthErrorMessage?.(e, 'signup') || 'アカウントを作成できませんでした。';
         errorEl.classList.remove('hidden');
       }
     }
   };
 
   window.handleAnonymousAuth = async function() {
-    try {
-      const runtime = await window.initializeFirebaseRuntime();
-      if (runtime.auth.currentUser) await runtime.auth.signOut();
-
-      localStorage.setItem('lumiful_user_email', window.LUMIFUL_GUEST_EMAIL);
-      localStorage.removeItem('lc_user_email');
-      setStateFromFirebase(null);
-      route();
-      await restoreForCurrentSession(true);
-      window.showToast?.('ゲストとして開始しました', 'info');
-    } catch (error) {
-      console.error('[LUMIFUL] FINAL guest start failed:', error);
-    }
+    const runtime = await window.initializeFirebaseRuntime();
+    if (runtime.auth.currentUser) await runtime.auth.signOut();
+    localStorage.setItem('lumiful_user_email', window.LUMIFUL_GUEST_EMAIL);
+    localStorage.removeItem('lc_user_email');
+    applyAuthState(null);
+    route();
+    await restoreCurrent(true);
   };
-
   window.handleWelcomeGuestStart = window.handleAnonymousAuth;
 
   window.handleLogout = async function() {
@@ -6613,55 +6502,42 @@ JSON Schema:
         P.timer = null;
         await window.performAutoSave('logout');
       }
-
       const runtime = await window.initializeFirebaseRuntime();
       if (runtime.auth.currentUser) await runtime.auth.signOut();
 
       localStorage.removeItem('lumiful_user_email');
       localStorage.removeItem('lc_user_email');
-
       P.restoredUid = null;
       window.authState = { status: 'unauthenticated', user: null };
       route();
       window.updateSaveStatus?.('idle');
-      window.showToast?.('ログアウトしました', 'info');
-    } catch (error) {
-      console.error('[LUMIFUL] FINAL logout failed:', error);
-      window.showToast?.('ログアウトできませんでした', 'error');
+    } catch (e) {
+      console.error('[LUMIFUL] FINAL v2 logout failed', e);
     }
   };
-
   window.handleAccountLogout = window.handleLogout;
 
   window.handleCanonicalAccountAction = function() {
-    const user = firebaseUser();
-    if (user || window.authState?.status === 'guest') {
-      return window.handleLogout();
-    }
+    if (authUser() || window.authState?.status === 'guest') return window.handleLogout();
     window.showWelcomeAuthPanel?.('choice');
     document.getElementById('welcomeAuthView')?.classList.remove('hidden');
     document.body.classList.add('overflow-hidden');
   };
-
   window.openAuthModal = window.handleCanonicalAccountAction;
   window.closeAuthModal = function() {};
 
-  // pagehide gives a synchronous recovery point even if Firestore cannot finish.
   window.addEventListener('pagehide', function() {
-    const user = firebaseUser();
-    if (user?.uid && window.activeDataModelV2) {
-      try {
-        writeDraft(currentModel(), user.uid);
-      } catch (_) {}
+    const uid = authUser()?.uid;
+    if (uid && window.activeDataModelV2) {
+      try { writeMirror(currentModel(), uid); } catch (_) {}
     }
   });
 
-  // ONE deterministic application boot.
   window.onload = async function() {
-    if (P.booting) return;
+    if (P.booted) return;
+    P.booted = true;
     P.booting = true;
     window.LUMIFUL_STEP4_BOOTING = true;
-
     window.authState = { status: 'checking', user: null };
     route();
 
@@ -6669,37 +6545,24 @@ JSON Schema:
       window.setupAgeSelects?.();
       window.loadSavedPlansFromStorageV2?.();
 
-      let sharedModel = null;
-      const dataParam = new URLSearchParams(window.location.search).get('data');
-      if (dataParam && typeof LZString !== 'undefined') {
-        try {
-          const decoded = LZString.decompressFromEncodedURIComponent(dataParam);
-          if (decoded) sharedModel = JSON.parse(decoded);
-        } catch (error) {
-          console.error('[LUMIFUL] Shared URL restore failed:', error);
-        }
-      }
+      await attachAuthListener();
 
-      await attachAuth();
-      setStateFromFirebase(firebaseUser());
+      // Only after Firebase persistence has resolved may we route to login/home.
+      applyAuthState(authUser());
       route();
 
-      if (sharedModel) {
-        window.restorePersistedStateV2(sharedModel);
-        if (['authenticated', 'guest'].includes(window.authState?.status)) {
-          await window.saveUserData();
-          window.updateSaveStatus?.('saved');
-        }
-      } else if (['authenticated', 'guest'].includes(window.authState?.status)) {
-        await restoreForCurrentSession(true);
+      if (['authenticated', 'guest'].includes(window.authState?.status)) {
+        await restoreCurrent(true);
       } else {
         window.ensureV2InputModel?.();
         window.renderV2InputUI?.();
+        window.LUMIFUL_LAST_SIMULATION_ERROR = null;
         window.recalculateAllFast?.();
+        window.syncSimulationResultsViewV2?.();
       }
-    } catch (error) {
-      console.error('[LUMIFUL] FINAL application boot failed:', error);
-      setStateFromFirebase(null);
+    } catch (e) {
+      console.error('[LUMIFUL] FINAL v2 boot failed', e);
+      applyAuthState(null);
       route();
     } finally {
       window.LUMIFUL_STEP4_BOOTING = false;
@@ -6708,16 +6571,15 @@ JSON Schema:
     }
   };
 
-  window.LUMIFUL_PHASE7B_STEP3_FINAL = Object.freeze({
-    status: 'final-candidate',
-    authSource: 'Firebase Authentication only',
-    accountUiSource: 'single canonical auth state',
+  window.LUMIFUL_PHASE7B_STEP3_FINAL_V2 = Object.freeze({
+    oldStep2AutoActivationRetired: true,
+    firebasePersistenceSetBeforeCredential: true,
+    authRouteWaitsForFirebaseResolution: true,
+    runtimeHydrationAfterRestore: true,
     accountStorage: 'Firestore users/{uid}',
-    recoveryStorage: 'per-uid local mirror',
-    guestStorage: 'LocalStorageAdapter',
+    localRecoveryMirror: true,
+    logoutVisible: true,
     secondaryAuthModal: false,
-    visibleLogout: true,
-    reloadRecovery: true,
     simulationRuntime: 'Schema v2'
   });
 })();
