@@ -319,6 +319,18 @@
   }
 </style>
 
+
+<style id="phase8-step4c-center-axis">
+#onboardingView{--ob-answer-width:320px}
+#onboardingView .onboarding-screen .bg-\[\#FFF9E6\].border-\[\#F0E2B7\]{justify-content:center;text-align:center!important}
+#onboardingView .onboarding-screen .bg-\[\#FFF9E6\].border-\[\#F0E2B7\]>div:last-child{text-align:center!important}
+#onboardingView .ob-center-field{position:relative;width:min(100%,var(--ob-answer-width));margin-left:auto;margin-right:auto}
+#onboardingView .ob-center-field input{width:100%!important;max-width:none!important;text-align:center!important;padding-left:76px!important;padding-right:76px!important}
+#onboardingView .ob-center-unit{position:absolute;right:16px;top:50%;transform:translateY(-50%);font-size:12px;font-weight:700;color:#6F7785;pointer-events:none;white-space:nowrap}
+#onboardingScreen-1 .mt-6.space-y-6>div>.grid.grid-cols-2{width:min(100%,var(--ob-answer-width))!important}
+@media(max-width:640px){#onboardingView{--ob-answer-width:100%}#onboardingView .ob-center-field,#onboardingScreen-1 .mt-6.space-y-6>div>.grid.grid-cols-2{max-width:320px!important}}
+</style>
+
 </head>
 <body class="bg-[#FAFAF7] text-[#253047] min-h-screen font-sans antialiased relative overflow-x-hidden">
 
@@ -9571,6 +9583,53 @@ window.LUMIFUL_PHASE8_STEP4B = Object.freeze({
   phase7EngineChanged: false,
   base: 'PHASE8 STEP4A UI_POLISH'
 });
+</script>
+
+
+<script>
+/* PHASE 8 / STEP 4-C — CENTER AXIS UI ONLY */
+(function(){
+ const fieldUnits={
+  'ob-age':'歳',
+  'ob-partner-age':'歳',
+  'ob-income':'万円 / 年',
+  'ob-income-end-age':'歳',
+  'ob-expense':'万円 / 年'
+ };
+ function centerOnboardingFields(){
+   Object.entries(fieldUnits).forEach(([id,unit])=>{
+     const input=document.getElementById(id);
+     if(!input || input.closest('.ob-center-field')) return;
+     const oldParent=input.parentElement;
+     const wrap=document.createElement('div');
+     wrap.className='ob-center-field';
+     oldParent.parentNode.insertBefore(wrap,oldParent);
+     wrap.appendChild(input);
+     const unitEl=document.createElement('span');
+     unitEl.className='ob-center-unit';
+     unitEl.textContent=unit;
+     wrap.appendChild(unitEl);
+     // Remove old standalone unit and empty wrapper.
+     [...oldParent.children].forEach(el=>{
+       if(el!==input && (el.textContent||'').trim()===unit) el.remove();
+     });
+     if(!oldParent.children.length) oldParent.remove();
+   });
+ }
+ if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',centerOnboardingFields);
+ else centerOnboardingFields();
+ window.centerOnboardingFields=centerOnboardingFields;
+ window.LUMIFUL_PHASE8_STEP4C=Object.freeze({
+   status:'CENTER_AXIS_UI',
+   sharedAnswerWidth:true,
+   unitsInsideFields:true,
+   lumiCommentAlignment:'center',
+   schemaLogicChanged:false,
+   guestFlowChanged:false,
+   phase7EngineChanged:false,
+   base:'PHASE8 STEP4B SYMMETRIC_UI'
+ });
+})();
 </script>
 
 </body>
