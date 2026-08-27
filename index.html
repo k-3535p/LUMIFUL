@@ -307,9 +307,9 @@
     />
     <div class="flex items-center gap-2">
       <span id="saveStatusMobile" class="inline-flex items-center gap-1 text-[9px] font-bold text-[#8A909C] whitespace-nowrap" aria-live="polite"><i class="fa-solid fa-cloud"></i><span>保存待機</span></span>
-      <button onclick="window.authState?.status === 'unauthenticated' ? window.openAuthModal() : window.showToast?.('ログイン済みです', 'success')" class="px-3.5 py-1.5 btn-lumi-primary text-xs flex items-center gap-1.5 whitespace-nowrap">
-      <i class="fa-solid fa-user-circle"></i>
-      <span>ログイン</span>
+      <button id="authAccountBtnMobile" onclick="handleCanonicalAccountAction()" class="px-3.5 py-1.5 btn-lumi-primary text-xs flex items-center gap-1.5 whitespace-nowrap">
+      <i class="fa-solid fa-user-circle" id="authBtnIconMobile"></i>
+      <span id="authBtnTextMobile">ログイン</span>
       </button>
     </div>
   </div>
@@ -396,7 +396,7 @@
 
         <div class="flex items-center gap-2 flex-wrap sm:flex-nowrap">
           <span id="saveStatusDesktop" class="hidden sm:inline-flex items-center gap-1 text-[10px] font-bold text-[#8A909C] whitespace-nowrap" aria-live="polite"><i class="fa-solid fa-cloud"></i><span>保存待機</span></span>
-          <button id="authAccountBtn" onclick="window.authState?.status === 'unauthenticated' ? window.openAuthModal() : window.showToast?.('ログイン済みです', 'success')" class="px-3.5 py-2 btn-lumi-primary text-xs flex items-center gap-1.5 whitespace-nowrap shrink-0">
+          <button id="authAccountBtn" onclick="handleCanonicalAccountAction()" class="px-3.5 py-2 btn-lumi-primary text-xs flex items-center gap-1.5 whitespace-nowrap shrink-0">
             <i class="fa-solid fa-user-circle" id="authBtnIcon"></i>
             <span id="authBtnText" class="whitespace-nowrap">アカウント作成 / ログイン</span>
           </button>
@@ -1137,8 +1137,8 @@
               <p class="text-xs text-[#6F7785]">ログインするとシミュレーション結果が安全に同期保存されます。</p>
             </div>
 
-            <button onclick="window.authState?.status === 'unauthenticated' ? window.openAuthModal() : window.showToast?.('ログイン済みです', 'success')" class="px-4 py-2 btn-lumi-primary text-xs font-bold whitespace-nowrap shrink-0">
-              ログイン状態を確認
+            <button id="settingsAccountActionBtn" onclick="handleCanonicalAccountAction()" class="px-4 py-2 btn-lumi-primary text-xs font-bold whitespace-nowrap shrink-0">
+              ログイン
             </button>
           </div>
         </div>
@@ -6209,14 +6209,7 @@ JSON Schema:
 </script>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-  // Run after legacy DOM-ready handlers, then let Firebase decide the real route.
-  setTimeout(function() {
-    window.bootstrapAuthoritativeAuth?.();
-  }, 0);
-});
-
-    /* STEP 3.8 — single authentication surface */
+/* STEP 3.8 — single authentication surface */
     window.openAuthModal = function() {
       if (window.authState?.status !== 'unauthenticated') return;
       window.showWelcomeAuthPanel?.('choice');
@@ -6757,6 +6750,308 @@ window.LUMIFUL_PHASE7B_STEP3_9 = Object.freeze({
     legacyMockAccountAuthInProductionPath: false,
     secondaryAuthModal: false
   });
+})();
+</script>
+
+
+<script>
+/* ============================================================
+   PHASE 7B / STEP 3 COMPLETION v2
+   PERSISTENCE RESILIENCE + VISIBLE LOGOUT
+   ------------------------------------------------------------
+   - Firebase Auth remains the sole registered-account identity.
+   - Authenticated storage is always Firestore (never MockCloud).
+   - Every form edit is synchronously mirrored per Firebase UID.
+   - Firestore remains the cloud source of truth; newer local draft
+     is recovered and re-synced after reload/network interruption.
+   - Explicit logout UI is available on desktop, mobile and Settings.
+   ============================================================ */
+(function () {
+  const S = window.LUMIFUL_PERSISTENCE_V2 = {
+    draftPrefix: 'lumiful_account_draft_v2:',
+    cloudDebounceMs: 700
+  };
+
+  function accountUid() {
+    return String(
+      window.LUMIFUL_FIREBASE_RUNTIME?.auth?.currentUser?.uid ||
+      window.authState?.user?.uid ||
+      ''
+    ).trim();
+  }
+
+  function draftKey(uid) {
+    return S.draftPrefix + String(uid || '').trim();
+  }
+
+  function timeOf(envelope) {
+    const t = Date.parse(envelope?.updatedAt || envelope?.createdAt || '');
+    return Number.isFinite(t) ? t : 0;
+  }
+
+  window.readAccountDraftMirror = function(uid = accountUid()) {
+    if (!uid) return null;
+    try {
+      const raw = localStorage.getItem(draftKey(uid));
+      if (!raw) return null;
+      return window.parsePersistenceEnvelopeV2(JSON.parse(raw));
+    } catch (error) {
+      console.warn('[LUMIFUL] Account draft mirror read notice:', error);
+      return null;
+    }
+  };
+
+  window.writeAccountDraftMirror = function(model, uid = accountUid(), existingEnvelope) {
+    if (!uid || !model) return null;
+    try {
+      const previous = existingEnvelope || window.readAccountDraftMirror(uid);
+      const envelope = window.createPersistenceEnvelopeV2(
+        window.cloneDataModelV2(window.normalizeDataModelV2(model)),
+        previous
+      );
+      localStorage.setItem(draftKey(uid), JSON.stringify(envelope));
+      return envelope;
+    } catch (error) {
+      console.warn('[LUMIFUL] Account draft mirror write notice:', error);
+      return null;
+    }
+  };
+
+  window.persistActiveModelToDraftMirror = function() {
+    if (window.authState?.status !== 'authenticated') return null;
+    const uid = accountUid();
+    if (!uid || !window.activeDataModelV2) return null;
+    return window.writeAccountDraftMirror(window.activeDataModelV2, uid);
+  };
+
+  // Account storage routing is deterministic: account => Firestore, guest => local.
+  window.getStorageAdapterForAuthState = function(state = window.authState) {
+    if (state?.status === 'guest') return window.LocalStorageAdapter;
+    if (state?.status === 'authenticated') return window.FirestoreStorageAdapter;
+    return null;
+  };
+
+  // Firestore + local recovery mirror.
+  window.FirestoreStorageAdapter = Object.freeze({
+    name: 'firestore',
+    async load(user) {
+      const { ref, uid } = await window.getFirestoreAccountContext(user);
+      const mirror = window.readAccountDraftMirror(uid);
+      let cloud = null;
+      let cloudError = null;
+
+      try {
+        const snapshot = await ref.get();
+        if (snapshot.exists) cloud = window.parsePersistenceEnvelopeV2(snapshot.data());
+      } catch (error) {
+        cloudError = error;
+        console.warn('[LUMIFUL] Firestore load notice; checking local account mirror.', error);
+      }
+
+      if (!cloud && !mirror) {
+        if (cloudError) throw cloudError;
+        return null;
+      }
+
+      const useMirror = !!mirror && (!cloud || timeOf(mirror) > timeOf(cloud));
+      const selected = useMirror ? mirror : cloud;
+
+      if (selected) {
+        localStorage.setItem(draftKey(uid), JSON.stringify(selected));
+      }
+
+      // A newer local draft means the user reloaded before the cloud write
+      // finished or Firestore was temporarily unavailable. Recover it and
+      // immediately converge the cloud copy.
+      if (useMirror) {
+        try {
+          await ref.set(window.toFirestoreSafeValue(mirror), { merge: false });
+          console.info('[LUMIFUL] Recovered newer local draft to Firestore.', {
+            uid,
+            updatedAt: mirror.updatedAt
+          });
+        } catch (error) {
+          console.warn('[LUMIFUL] Local draft restored; cloud re-sync deferred.', error);
+        }
+      }
+
+      return selected;
+    },
+
+    async save(model, user) {
+      const { ref, uid, fbUser } = await window.getFirestoreAccountContext(user);
+
+      let previousCloud = null;
+      try {
+        const snapshot = await ref.get();
+        previousCloud = snapshot.exists
+          ? window.parsePersistenceEnvelopeV2(snapshot.data())
+          : null;
+      } catch (error) {
+        console.warn('[LUMIFUL] Previous cloud envelope unavailable; saving from local state.', error);
+      }
+
+      const previousMirror = window.readAccountDraftMirror(uid);
+      const previous = timeOf(previousMirror) > timeOf(previousCloud)
+        ? previousMirror
+        : previousCloud;
+
+      const envelope = window.createPersistenceEnvelopeV2(model, previous);
+      const safe = window.toFirestoreSafeValue(envelope);
+
+      // Synchronous recovery point FIRST.
+      localStorage.setItem(draftKey(uid), JSON.stringify(safe));
+
+      // Then cloud persistence.
+      await ref.set(safe, { merge: false });
+
+      console.info('[LUMIFUL] Firestore save OK.', {
+        uid: fbUser.uid,
+        path: `users/${fbUser.uid}`,
+        updatedAt: safe.updatedAt
+      });
+      return safe;
+    },
+
+    async clear(user) {
+      const { ref, uid } = await window.getFirestoreAccountContext(user);
+      await ref.delete();
+      localStorage.removeItem(draftKey(uid));
+    }
+  });
+
+  // Persist the visible edit synchronously even if calculation/chart/cloud later fails.
+  const _completionSyncInput = window.syncV2InputAndRecalculate;
+  window.syncV2InputAndRecalculate = function(...args) {
+    try {
+      return _completionSyncInput.apply(this, args);
+    } finally {
+      window.persistActiveModelToDraftMirror();
+    }
+  };
+
+  // Rebuild autosave around deterministic account routing.
+  window.scheduleAutoSave = function(reason) {
+    if (
+      window.LUMIFUL_STEP4_BOOTING ||
+      window.LUMIFUL_STEP4_RESTORING ||
+      window.LUMIFUL_STEP4_SAVING ||
+      window.LUMIFUL_STEP4_SUPPRESS_AUTOSAVE
+    ) return;
+    if (!['guest', 'authenticated'].includes(window.authState?.status)) return;
+
+    // Registered account gets an immediate synchronous recovery mirror.
+    if (window.authState?.status === 'authenticated') {
+      window.persistActiveModelToDraftMirror();
+    }
+
+    clearTimeout(window.LUMIFUL_STEP4_AUTOSAVE_TIMER);
+    window.updateSaveStatus?.('dirty');
+    window.LUMIFUL_STEP4_AUTOSAVE_TIMER = setTimeout(
+      () => window.performAutoSave(reason),
+      S.cloudDebounceMs
+    );
+  };
+
+  // Confirm button means "calculate + make the current state durable now".
+  const _completionConfirm = window.confirmV2Simulation;
+  window.confirmV2Simulation = async function(...args) {
+    const result = _completionConfirm.apply(this, args);
+    window.persistActiveModelToDraftMirror();
+
+    if (['guest', 'authenticated'].includes(window.authState?.status)) {
+      if (window.LUMIFUL_STEP4_AUTOSAVE_TIMER) {
+        clearTimeout(window.LUMIFUL_STEP4_AUTOSAVE_TIMER);
+        window.LUMIFUL_STEP4_AUTOSAVE_TIMER = null;
+      }
+      await window.performAutoSave?.('confirm-simulation');
+    }
+    return result;
+  };
+
+  // A reload cannot await Firestore, but it can always capture the current
+  // account model synchronously to the per-UID recovery mirror.
+  window.addEventListener('pagehide', function() {
+    window.persistActiveModelToDraftMirror();
+  });
+
+  window.handleCanonicalAccountAction = async function() {
+    const status = window.authState?.status;
+    if (status === 'authenticated' || status === 'guest') {
+      return window.handleLogout();
+    }
+    window.openAuthModal?.();
+  };
+
+  window.syncCanonicalAccountUI = function() {
+    const state = window.authState || { status: 'unauthenticated', user: null };
+    const signedIn = state.status === 'authenticated';
+    const guest = state.status === 'guest';
+
+    const desktopText = document.getElementById('authBtnText');
+    const desktopIcon = document.getElementById('authBtnIcon');
+    const mobileText = document.getElementById('authBtnTextMobile');
+    const mobileIcon = document.getElementById('authBtnIconMobile');
+    const settingsBtn = document.getElementById('settingsAccountActionBtn');
+    const settingsEmail = document.getElementById('settingsUserEmail');
+    const settingsTag = document.getElementById('settingsAccountStatusTag');
+
+    const actionText = signedIn ? 'ログアウト' : (guest ? 'ゲスト終了' : 'ログイン');
+
+    if (desktopText) desktopText.textContent = actionText;
+    if (mobileText) mobileText.textContent = actionText;
+    if (settingsBtn) settingsBtn.textContent = actionText;
+
+    if (desktopIcon) desktopIcon.className =
+      signedIn || guest ? 'fa-solid fa-right-from-bracket' : 'fa-solid fa-user-circle';
+    if (mobileIcon) mobileIcon.className =
+      signedIn || guest ? 'fa-solid fa-right-from-bracket' : 'fa-solid fa-user-circle';
+
+    if (settingsEmail) {
+      settingsEmail.textContent = signedIn
+        ? (state.user?.email || 'ログイン中')
+        : (guest ? 'ゲスト利用中' : 'ログインしていません');
+    }
+    if (settingsTag) {
+      settingsTag.textContent = signedIn ? 'ログイン中' : (guest ? 'ゲスト' : '未ログイン');
+    }
+  };
+
+  // Preserve canonical route while always syncing visible account actions.
+  const _completionRoute = window.routeByAuthState;
+  window.routeByAuthState = function(...args) {
+    const result = _completionRoute.apply(this, args);
+    window.syncCanonicalAccountUI();
+    return result;
+  };
+
+  // Ensure save/restore status never claims success for a null account save.
+  const _completionPerformAutoSave = window.performAutoSave;
+  window.performAutoSave = async function(reason) {
+    if (!['guest', 'authenticated'].includes(window.authState?.status)) return null;
+    const result = await _completionPerformAutoSave.call(this, reason);
+    if (!result && window.authState?.status === 'authenticated') {
+      window.updateSaveStatus?.('error', '保存未完了');
+    }
+    return result;
+  };
+
+  window.LUMIFUL_PHASE7B_STEP3_COMPLETION_V2 = Object.freeze({
+    accountAuth: 'Firebase Authentication',
+    accountCloudStorage: 'Firestore users/{uid}',
+    accountRecoveryMirror: 'per-uid localStorage',
+    newestEnvelopeWinsOnReload: true,
+    immediateDraftMirrorOnEdit: true,
+    cloudDebounceMs: S.cloudDebounceMs,
+    confirmButtonFlushesCloudSave: true,
+    visibleLogoutDesktop: true,
+    visibleLogoutMobile: true,
+    visibleLogoutSettings: true,
+    mockAccountStorageInProductionPath: false
+  });
+
+  // Initial visible state.
+  setTimeout(() => window.syncCanonicalAccountUI(), 0);
 })();
 </script>
 
