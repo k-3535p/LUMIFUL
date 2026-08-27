@@ -152,43 +152,35 @@
     }
   </style>
 
-<style id="phase8-step4-final-rebuilt-ui">
+<style id="phase8-onboarding-final-unified-ui">
   #onboardingView{
     --ob-card-width:610px;
     --ob-answer-width:320px;
     --ob-choice-width:460px;
   }
 
-  #onboardingView .ob-card{
+  #onboardingSharedHeader,
+  #onboardingView .ob-card,
+  #onboardingView .ob-bottom-nav{
     width:100%;
     max-width:var(--ob-card-width);
-    margin:0 auto;
+    margin-left:auto;
+    margin-right:auto;
+  }
+
+  #onboardingView .ob-card{
     padding:30px 32px 28px;
-    background:#fff;
     border:1px solid #ECEBE6;
     border-radius:26px;
+    background:#fff;
     text-align:center;
   }
 
   #onboardingView .ob-title-row{
     display:flex;
-    justify-content:center;
     align-items:center;
+    justify-content:center;
     gap:10px;
-  }
-
-  #onboardingView .ob-step-badge{
-    width:30px;
-    height:30px;
-    border-radius:999px;
-    background:#EAF6FC;
-    color:#65B9E8;
-    font-size:11px;
-    font-weight:800;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    flex:0 0 30px;
   }
 
   #onboardingView .ob-title-row h2{
@@ -197,413 +189,280 @@
     font-size:24px;
     line-height:1.2;
     font-weight:800;
-    letter-spacing:-0.02em;
+    letter-spacing:-.02em;
   }
 
+  #onboardingView .ob-step-badge{
+    width:30px;height:30px;border-radius:999px;
+    display:flex;align-items:center;justify-content:center;
+    flex:0 0 30px;background:#EAF6FC;color:#65B9E8;
+    font-size:11px;font-weight:800;
+  }
+  #onboardingView .ob-step-badge-green{background:#EAF8F3;color:#4FAE8E}
+  #onboardingView .ob-step-badge-pink{background:#FFF0F3;color:#D46A7C}
+  #onboardingView .ob-step-badge-yellow{background:#FFF9E6;color:#D97706}
+
   #onboardingView .ob-lumi-guide{
-    width:min(100%,540px);
-    min-height:84px;
-    margin:20px auto 0;
-    padding:16px 20px;
-    border:1px solid #F0E2B7;
-    border-radius:16px;
-    background:#FFF9E6;
-    display:grid;
-    grid-template-columns:48px minmax(0,1fr);
-    align-items:center;
-    gap:14px;
-    text-align:left;
+    width:min(100%,540px);min-height:84px;margin:20px auto 0;padding:16px 20px;
+    border:1px solid #F0E2B7;border-radius:16px;background:#FFF9E6;
+    display:grid;grid-template-columns:48px minmax(0,1fr);align-items:center;gap:14px;text-align:left;
   }
 
   #onboardingView .ob-lumi-avatar{
-    width:48px;
-    height:48px;
-    border-radius:14px;
-    border:1px solid #F0E2B7;
-    background:#fff;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    overflow:hidden;
+    width:48px;height:48px;border-radius:14px;border:1px solid #F0E2B7;background:#fff;
+    display:flex;align-items:center;justify-content:center;overflow:hidden;
   }
+  #onboardingView .ob-lumi-avatar img{width:38px;height:38px;object-fit:contain}
+  #onboardingView .ob-lumi-fallback{display:none;align-items:center;justify-content:center;color:#D97706}
+  #onboardingView .ob-lumi-name{color:#8C5800;font-size:11px;font-weight:800;margin-bottom:5px}
+  #onboardingView .ob-lumi-copy p{margin:0;color:#253047;font-size:14px;line-height:1.6}
 
-  #onboardingView .ob-lumi-avatar img{
-    width:38px;
-    height:38px;
-    object-fit:contain;
-  }
-
-  #onboardingView .ob-lumi-fallback{
-    display:none;
-    align-items:center;
-    justify-content:center;
-    color:#D97706;
-  }
-
-  #onboardingView .ob-lumi-name{
-    color:#8C5800;
-    font-size:11px;
-    font-weight:800;
-    margin-bottom:5px;
-  }
-
-  #onboardingView .ob-lumi-copy p{
-    margin:0;
-    color:#253047;
-    font-size:14px;
-    line-height:1.6;
-  }
-
-  #onboardingView .ob-question-stack{
-    margin-top:26px;
-  }
-
+  #onboardingView .ob-question-stack{margin-top:26px}
   #onboardingView .ob-question{
-    width:100%;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    margin:0 0 22px;
+    width:100%;display:flex;flex-direction:column;align-items:center;margin:0 0 24px;
   }
-
   #onboardingView .ob-label{
-    width:100%;
-    color:#253047;
-    font-size:12px;
-    line-height:1.4;
-    font-weight:800;
-    text-align:center;
+    width:100%;color:#253047;font-size:12px;line-height:1.4;font-weight:800;text-align:center;
   }
-
-  #onboardingView .ob-required{
-    color:#D46A7C;
-  }
+  #onboardingView .ob-required{color:#D46A7C}
 
   #onboardingView .ob-answer-field{
-    width:var(--ob-answer-width);
-    max-width:100%;
-    height:74px;
-    margin:8px auto 0;
-    position:relative;
+    width:var(--ob-answer-width);max-width:100%;height:74px;margin:8px auto 0;position:relative;
   }
-
   #onboardingView .ob-answer-field input{
-    box-sizing:border-box;
-    display:block;
-    width:100%;
-    height:74px;
-    margin:0;
-    padding:0 64px;
-    border:1px solid #D9DDE5;
-    border-radius:14px;
-    background:#fff;
-    color:#253047;
-    -webkit-text-fill-color:#253047;
-    caret-color:#253047;
+    box-sizing:border-box;width:100%;height:74px;margin:0;padding:0 72px;
+    border:1px solid #D9DDE5;border-radius:14px;background:#fff;
+    color:#253047;-webkit-text-fill-color:#253047;caret-color:#253047;
     font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Hiragino Sans","Noto Sans JP",sans-serif;
-    font-size:30px;
-    line-height:74px;
-    font-weight:800;
-    text-align:center;
-    font-variant-numeric:tabular-nums;
-    letter-spacing:0;
-    appearance:none;
-    -webkit-appearance:none;
-    outline:none;
+    font-size:30px;line-height:74px;font-weight:800;text-align:center;font-variant-numeric:tabular-nums;
+    appearance:none;-webkit-appearance:none;outline:none;
   }
-
   #onboardingView .ob-answer-field input:focus{
-    border-color:#65B9E8;
-    box-shadow:0 0 0 3px rgba(101,185,232,.18);
+    border-color:#65B9E8;box-shadow:0 0 0 3px rgba(101,185,232,.18)
   }
-
   #onboardingView .ob-unit{
-    position:absolute;
-    right:18px;
-    top:50%;
-    transform:translateY(-50%);
-    color:#6F7785;
-    font-size:13px;
-    line-height:1;
-    font-weight:700;
-    pointer-events:none;
-    white-space:nowrap;
+    position:absolute;right:18px;top:50%;transform:translateY(-50%);
+    color:#6F7785;font-size:13px;font-weight:700;pointer-events:none;white-space:nowrap;
   }
 
   #onboardingView .ob-choice-pair{
-    width:var(--ob-choice-width);
-    max-width:100%;
-    margin:10px auto 0;
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:14px;
+    width:var(--ob-choice-width);max-width:100%;margin:10px auto 0;
+    display:grid;grid-template-columns:1fr 1fr;gap:14px;
   }
-
   #onboardingView .ob-choice{
-    min-height:58px;
-    padding:0 16px;
-    border:1px solid #ECEBE6;
-    border-radius:14px;
-    background:#fff;
-    color:#253047;
-    font-size:14px;
-    font-weight:800;
+    min-height:58px;padding:0 16px;border:1px solid #ECEBE6;border-radius:14px;
+    background:#fff;color:#253047;font-size:14px;font-weight:800;
   }
-
-  #onboardingView .ob-choice.border-\[\#65B9E8\]{
-    border-color:#65B9E8 !important;
-    background:#EAF6FC !important;
-  }
-
-  #onboardingSharedHeader,
-  #onboardingBottomNav{
-    max-width:var(--ob-card-width);
-    margin-left:auto;
-    margin-right:auto;
-  }
-
-  #onboardingBottomNav{
-    margin-top:16px !important;
-  }
-
-  #onboardingBottomNav > div{
-    padding:10px !important;
-    border-radius:18px !important;
-  }
-
-  #onboardingBottomNav button:first-child{
-    min-width:70px;
-    height:52px;
-    border-radius:14px !important;
-  }
-
-  #onboardingNextBtn{
-    height:52px;
-    border-radius:14px !important;
-    font-size:15px !important;
-  }
-
-  /* STEP2 main numeric fields: same visual axis, without changing IDs/data logic */
-  #onboardingScreen-2 #ob-income,
-  #onboardingScreen-2 #ob-income-end-age,
-  #onboardingScreen-2 #ob-expense{
-    text-align:center !important;
-    -webkit-text-fill-color:#253047 !important;
-    color:#253047 !important;
-    appearance:none !important;
-    -webkit-appearance:none !important;
-  }
-
-  @media(max-width:640px){
-    #onboardingView{
-      --ob-card-width:100%;
-      --ob-answer-width:min(100%,320px);
-      --ob-choice-width:100%;
-    }
-
-    #onboardingView .ob-card{
-      padding:24px 18px 22px;
-      border-radius:22px;
-    }
-
-    #onboardingView .ob-title-row h2{
-      font-size:23px;
-    }
-
-    #onboardingView .ob-lumi-guide{
-      min-height:154px;
-      padding:18px 16px;
-      display:flex;
-      flex-direction:column;
-      justify-content:center;
-      align-items:center;
-      gap:7px;
-      text-align:center;
-    }
-
-    #onboardingView .ob-lumi-avatar{
-      width:52px;
-      height:52px;
-      border-radius:16px;
-    }
-
-    #onboardingView .ob-lumi-avatar img{
-      width:42px;
-      height:42px;
-    }
-
-    #onboardingView .ob-lumi-copy,
-    #onboardingView .ob-lumi-name,
-    #onboardingView .ob-lumi-copy p{
-      text-align:center;
-    }
-
-    #onboardingView .ob-lumi-name{
-      font-size:13px;
-    }
-
-    #onboardingView .ob-lumi-copy p{
-      max-width:290px;
-      font-size:14px;
-      line-height:1.65;
-    }
-
-    #onboardingView .ob-answer-field{
-      height:68px;
-    }
-
-    #onboardingView .ob-answer-field input{
-      height:68px;
-      line-height:68px;
-      padding:0 58px;
-      font-size:30px;
-    }
-
-    #onboardingView .ob-unit{
-      right:16px;
-      font-size:13px;
-    }
-
-    #onboardingView .ob-choice-pair{
-      gap:12px;
-    }
-
-    #onboardingView .ob-choice{
-      min-height:60px;
-    }
-  }
-</style>
-
-
-<style id="phase8-step4-step1-partner-final-fix">
-  /* STEP1: partner age must exist only when "いる" is selected */
-  #onboardingView #ob-partner-age-wrap.hidden{
-    display:none !important;
-  }
-
-  #onboardingView #ob-partner-age-wrap:not(.hidden){
-    display:flex !important;
-    flex-direction:column !important;
-    align-items:center !important;
-  }
-</style>
-
-
-<style id="phase8-step4-step2-rebuilt-ui">
-  #onboardingView .ob-step2-card .ob-question-stack{
-    margin-top:26px;
-  }
-
-  #onboardingView .ob-step2-card .ob-question{
-    margin-bottom:28px;
-  }
-
-  #onboardingView .ob-step2-card .ob-question-last{
-    margin-bottom:0;
-  }
+  #onboardingView .ob-choice.border-\[\#65B9E8\]{border-color:#65B9E8!important;background:#EAF6FC!important}
 
   #onboardingView .ob-info-note{
-    width:min(100%,500px);
-    margin:10px auto 0;
-    padding:9px 12px;
-    border:1px solid #DCEEF8;
-    border-radius:12px;
-    background:#F7FBFE;
-    color:#536274;
-    font-size:10px;
-    line-height:1.6;
-    text-align:center;
+    width:min(100%,500px);margin:10px auto 0;padding:9px 12px;border:1px solid #DCEEF8;
+    border-radius:12px;background:#F7FBFE;color:#536274;font-size:10px;line-height:1.6;text-align:center;
   }
-
-  #onboardingView .ob-info-note strong{
-    color:#253047;
-    font-weight:800;
-    margin-right:6px;
-  }
-
+  #onboardingView .ob-info-note strong{color:#253047;font-weight:800;margin-right:6px}
   #onboardingView .ob-help-text{
-    width:min(100%,500px);
-    margin:10px auto 0;
-    color:#8A909C;
-    font-size:10px;
-    line-height:1.6;
-    text-align:center;
+    width:min(100%,500px);margin:10px auto 0;color:#8A909C;font-size:10px;line-height:1.6;text-align:center;
   }
-
   #onboardingView .ob-add-button{
-    min-width:94px;
-    height:40px;
-    margin:12px auto 0;
-    padding:0 16px;
-    border:1px solid #E1E4E8;
-    border-radius:12px;
-    background:#fff;
-    color:#253047;
-    font-size:12px;
-    font-weight:800;
-    display:inline-flex;
-    align-items:center;
-    justify-content:center;
-    gap:6px;
+    min-width:94px;height:40px;margin:12px auto 0;padding:0 16px;border:1px solid #E1E4E8;
+    border-radius:12px;background:#fff;color:#253047;font-size:12px;font-weight:800;
+    display:inline-flex;align-items:center;justify-content:center;gap:6px;
   }
 
-  #onboardingView .ob-add-button:hover{
-    background:#FAFAF7;
+  #onboardingView .ob-extra-income-list,
+  #onboardingView .ob-asset-inputs,
+  #onboardingView .ob-events-list{
+    width:min(100%,520px);margin:14px auto 0;display:flex;flex-direction:column;gap:10px;
   }
-
-  #onboardingView .ob-extra-income-list{
-    width:min(100%,520px);
-    margin:12px auto 0;
-    display:flex;
-    flex-direction:column;
-    gap:10px;
+  #onboardingView .ob-extra-income-list>div{
+    width:100%;padding:12px!important;border:1px solid #ECEBE6!important;border-radius:14px!important;background:#FAFAF7!important;
   }
-
-  /* Dynamic extra income rows from the existing STEP4 function */
-  #onboardingView .ob-extra-income-list > div{
-    width:100%;
-    margin:0 auto;
-    padding:12px !important;
-    border:1px solid #ECEBE6 !important;
-    border-radius:14px !important;
-    background:#FAFAF7 !important;
-  }
-
   #onboardingView .ob-extra-income-list input{
-    min-height:40px;
-    border:1px solid #E1E4E8 !important;
-    border-radius:10px !important;
-    background:#fff;
-    color:#253047;
-    font-size:12px;
-    text-align:center;
+    min-height:40px;border:1px solid #E1E4E8!important;border-radius:10px!important;background:#fff;color:#253047;font-size:12px;text-align:center;
   }
 
-  #onboardingView .ob-extra-income-list input[type="number"]{
-    appearance:none;
-    -webkit-appearance:none;
+  /* STEP3 */
+  #onboardingView .ob-asset-grid{
+    width:min(100%,540px);margin:26px auto 0;
+    display:grid;grid-template-columns:repeat(3,1fr);gap:12px;
   }
+  #onboardingView .ob-asset-card{
+    min-height:126px;padding:16px 10px;border:1px solid #ECEBE6;border-radius:18px;background:#fff;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;
+    color:#253047;transition:transform .15s ease,border-color .15s ease,background .15s ease;
+  }
+  #onboardingView .ob-asset-card:hover{transform:translateY(-2px)}
+  #onboardingView .ob-asset-card.border-\[\#72D6B5\]{border-color:#72D6B5!important;background:#F0FCF8!important}
+  #onboardingView .ob-asset-icon{
+    width:58px;height:58px;border-radius:18px;display:flex;align-items:center;justify-content:center;
+    font-size:30px;line-height:1;box-shadow:0 5px 14px rgba(37,48,71,.06);
+  }
+  #onboardingView .ob-asset-icon-yellow{background:#FFF5CF}
+  #onboardingView .ob-asset-icon-blue{background:#EAF6FC}
+  #onboardingView .ob-asset-icon-mint{background:#EAF8F3}
+  #onboardingView .ob-asset-icon-pink{background:#FFF0F3}
+  #onboardingView .ob-asset-icon-lavender{background:#F2EEFF}
+  #onboardingView .ob-asset-name{font-size:13px;font-weight:800}
+  #onboardingView .ob-asset-detail{
+    padding:16px;border:1px solid #ECEBE6;border-radius:16px;background:#FAFAF7;
+  }
+  #onboardingView .ob-asset-detail-title{color:#253047;font-size:13px;font-weight:800;text-align:center}
+  #onboardingView .ob-asset-detail-grid{
+    margin-top:12px;display:grid;grid-template-columns:1fr;gap:12px;
+  }
+  #onboardingView .ob-asset-detail-grid.has-return{grid-template-columns:1fr 1fr}
+
+  /* shared compact numeric input for STEP3/4 */
+  #onboardingView .ob-mini-question{display:flex;flex-direction:column;align-items:center}
+  #onboardingView .ob-small-field{
+    width:100%;height:52px;margin-top:6px;position:relative;
+  }
+  #onboardingView .ob-small-field input{
+    box-sizing:border-box;width:100%;height:52px;padding:0 56px;
+    border:1px solid #D9DDE5;border-radius:12px;background:#fff;color:#253047;
+    -webkit-text-fill-color:#253047;font-size:17px;font-weight:800;text-align:center;
+    appearance:none;-webkit-appearance:none;outline:none;
+  }
+  #onboardingView .ob-small-field input:focus{border-color:#65B9E8;box-shadow:0 0 0 3px rgba(101,185,232,.14)}
+  #onboardingView .ob-small-field span{
+    position:absolute;right:13px;top:50%;transform:translateY(-50%);
+    color:#6F7785;font-size:11px;font-weight:700;pointer-events:none;
+  }
+
+  /* STEP4 */
+  #onboardingView .ob-event-type-grid{
+    width:min(100%,460px);margin:26px auto 0;display:grid;grid-template-columns:1fr 1fr;gap:14px;
+  }
+  #onboardingView .ob-event-type-card{
+    min-height:74px;padding:10px 14px;border:1px solid #ECEBE6;border-radius:16px;background:#fff;
+    color:#253047;font-size:13px;font-weight:800;display:flex;align-items:center;justify-content:center;gap:10px;
+  }
+  #onboardingView .ob-event-type-card.is-selected{border-color:#FFC83D;background:#FFF9E6}
+  #onboardingView .ob-event-type-icon{
+    width:36px;height:36px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:14px;
+  }
+  #onboardingView .ob-event-expense{background:#FFF0F3;color:#D46A7C}
+  #onboardingView .ob-event-income{background:#EAF8F3;color:#4FAE8E}
+  #onboardingView .ob-event-editor{
+    width:min(100%,520px);margin:16px auto 0;padding:16px;
+    border:1px solid #ECEBE6;border-radius:16px;background:#FAFAF7;text-align:center;
+  }
+  #onboardingView .ob-event-editor.hidden{display:none!important}
+  #onboardingView .ob-event-select{
+    width:min(100%,320px);height:46px;padding:0 14px;border:1px solid #D9DDE5;border-radius:12px;background:#fff;
+    color:#253047;font-size:12px;font-weight:700;text-align:center;
+  }
+  #onboardingView .ob-event-input-grid{
+    margin-top:14px;display:grid;grid-template-columns:1fr 1fr;gap:12px;
+  }
+  #onboardingView .ob-event-item{
+    width:100%;padding:12px 14px;border:1px solid #ECEBE6;border-radius:14px;background:#fff;
+    display:flex;align-items:center;justify-content:space-between;gap:12px;text-align:left;
+  }
+  #onboardingView .ob-event-item-title{color:#253047;font-size:12px;font-weight:800}
+  #onboardingView .ob-event-item-meta{margin-top:2px;color:#8A909C;font-size:10px}
+  #onboardingView .ob-event-item button{color:#D46A7C;padding:5px}
+  #onboardingView .ob-none-button{
+    min-width:190px;height:46px;margin:18px auto 0;padding:0 16px;border:1px solid #E1E4E8;border-radius:14px;
+    background:#fff;color:#6F7785;font-size:12px;font-weight:800;
+    display:inline-flex;align-items:center;justify-content:center;gap:7px;
+  }
+  #onboardingView .ob-none-button.is-selected{border-color:#72D6B5;background:#EAF8F3;color:#32836A}
+
+  /* STEP5 */
+  #onboardingView .ob-surplus-grid{
+    width:min(100%,540px);margin:26px auto 0;display:grid;grid-template-columns:repeat(3,1fr);gap:12px;
+  }
+  #onboardingView .ob-surplus-card{
+    min-height:160px;padding:18px 12px;border:1px solid #ECEBE6;border-radius:18px;background:#fff;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;color:#253047;
+  }
+  #onboardingView .ob-surplus-card.is-selected{border-color:#FFC83D;background:#FFF9E6}
+  #onboardingView .ob-surplus-icon{
+    width:60px;height:60px;border-radius:20px;background:#FFF8DD;
+    display:flex;align-items:center;justify-content:center;font-size:31px;margin-bottom:10px;
+  }
+  #onboardingView .ob-surplus-card strong{font-size:14px;font-weight:800}
+  #onboardingView .ob-surplus-card>span:last-child{margin-top:5px;color:#8A909C;font-size:10px;line-height:1.4}
+  #onboardingView .ob-surplus-split{
+    width:min(100%,480px);margin:18px auto 0;padding:16px;border:1px solid #ECEBE6;border-radius:16px;background:#FAFAF7;
+  }
+  #onboardingView .ob-surplus-split.hidden{display:none!important}
+  #onboardingView .ob-split-labels{
+    display:flex;align-items:center;justify-content:space-between;color:#253047;font-size:12px;font-weight:700;
+  }
+  #onboardingView #ob-invest-range{width:100%;margin-top:14px;accent-color:#FFC83D}
+
+  /* identical CTA container for STEP1-5 */
+  #onboardingView .ob-bottom-nav{margin-top:16px}
+  #onboardingView .ob-bottom-nav-inner{
+    width:100%;padding:10px;border:1px solid #ECEBE6;border-radius:18px;background:rgba(255,255,255,.96);
+    box-shadow:0 8px 20px rgba(37,48,71,.10);display:flex;align-items:center;gap:10px;backdrop-filter:blur(8px);
+  }
+  #onboardingView .ob-back-button{
+    width:70px;height:52px;border:1px solid #ECEBE6;border-radius:14px;background:#fff;
+    color:#253047;font-size:12px;font-weight:800;flex:0 0 70px;
+  }
+  #onboardingView .ob-next-button{
+    height:52px;flex:1;border:0;border-radius:14px;background:#FFC83D;color:#253047;font-size:15px;font-weight:800;
+  }
+
+  /* Complete screen width follows same system */
+  #onboardingScreen-complete>div{max-width:var(--ob-card-width);margin-left:auto;margin-right:auto}
 
   @media(max-width:640px){
-    #onboardingView .ob-info-note,
-    #onboardingView .ob-help-text,
-    #onboardingView .ob-extra-income-list{
-      width:100%;
-      max-width:320px;
-    }
+    #onboardingView{--ob-card-width:100%;--ob-answer-width:min(100%,320px);--ob-choice-width:100%}
 
-    #onboardingView .ob-info-note{
-      padding:10px 12px;
-    }
+    #onboardingView .ob-card{padding:24px 18px 22px;border-radius:22px}
+    #onboardingView .ob-title-row h2{font-size:23px}
 
-    #onboardingView .ob-info-note strong,
-    #onboardingView .ob-info-note span{
-      display:block;
+    #onboardingView .ob-lumi-guide{
+      min-height:154px;padding:18px 16px;display:flex;flex-direction:column;align-items:center;justify-content:center;
+      gap:7px;text-align:center;
     }
+    #onboardingView .ob-lumi-avatar{width:52px;height:52px;border-radius:16px}
+    #onboardingView .ob-lumi-avatar img{width:42px;height:42px}
+    #onboardingView .ob-lumi-copy,#onboardingView .ob-lumi-name,#onboardingView .ob-lumi-copy p{text-align:center}
+    #onboardingView .ob-lumi-name{font-size:13px}
+    #onboardingView .ob-lumi-copy p{max-width:290px;font-size:14px;line-height:1.65}
 
-    #onboardingView .ob-info-note strong{
-      margin:0 0 2px;
+    #onboardingView .ob-answer-field{height:68px}
+    #onboardingView .ob-answer-field input{height:68px;line-height:68px;padding:0 64px;font-size:30px}
+    #onboardingView .ob-unit{right:16px}
+
+    #onboardingView .ob-info-note,#onboardingView .ob-help-text,
+    #onboardingView .ob-extra-income-list,#onboardingView .ob-asset-inputs,
+    #onboardingView .ob-events-list{width:100%;max-width:320px}
+
+    #onboardingView .ob-info-note strong,#onboardingView .ob-info-note span{display:block}
+    #onboardingView .ob-info-note strong{margin:0 0 2px}
+
+    #onboardingView .ob-asset-grid{
+      width:100%;max-width:360px;grid-template-columns:1fr 1fr;gap:10px;
     }
+    #onboardingView .ob-asset-card{min-height:118px}
+    #onboardingView .ob-asset-icon{width:54px;height:54px;font-size:28px}
+    #onboardingView .ob-asset-detail-grid.has-return{grid-template-columns:1fr}
+
+    #onboardingView .ob-event-type-grid{width:100%;max-width:320px;gap:10px}
+    #onboardingView .ob-event-input-grid{grid-template-columns:1fr}
+    #onboardingView .ob-event-editor{width:100%;max-width:320px}
+
+    #onboardingView .ob-surplus-grid{
+      width:100%;max-width:320px;grid-template-columns:1fr;gap:10px;
+    }
+    #onboardingView .ob-surplus-card{
+      min-height:112px;display:grid;grid-template-columns:54px minmax(0,1fr);grid-template-rows:auto auto;
+      column-gap:12px;text-align:left;justify-items:start;
+    }
+    #onboardingView .ob-surplus-icon{
+      width:54px;height:54px;margin:0;grid-row:1 / span 2;font-size:27px;
+    }
+    #onboardingView .ob-surplus-card strong{align-self:end}
+    #onboardingView .ob-surplus-card>span:last-child{align-self:start;margin-top:2px}
+    #onboardingView .ob-surplus-split{width:100%;max-width:320px}
+
+    #onboardingView .ob-bottom-nav{width:100%;max-width:var(--ob-card-width)}
   }
 </style>
 
@@ -1239,13 +1098,13 @@
                 </div>
 
                 <div class="ob-question ob-question-last">
-                  <div class="ob-label">年間生活費</div>
+                  <div class="ob-label">毎月の生活費</div>
                   <div class="ob-answer-field">
                     <input id="ob-expense" type="text" inputmode="numeric" pattern="[0-9]*" autocomplete="off" aria-label="年間生活費">
-                    <span class="ob-unit">万円 / 年</span>
+                    <span class="ob-unit">万円 / 月</span>
                   </div>
 
-                  <p class="ob-help-text">住居費・保険・趣味など、普段の支出をまとめた金額でOKです。</p>
+                  <p class="ob-help-text">住居費・保険・趣味など、普段の支出をまとめた月額でOKです。</p>
                 </div>
               </div>
             </div>
@@ -1253,82 +1112,159 @@
 
           <!-- STEP 3 -->
           <section id="onboardingScreen-3" class="onboarding-screen hidden">
-            <div class="bg-white rounded-[26px] border border-[#ECEBE6] p-5 sm:p-8">
-              <div class="flex items-center gap-2">
-                <span class="w-8 h-8 rounded-full bg-[#EAF8F3] text-[#4FAE8E] font-extrabold text-xs flex items-center justify-center">03</span>
-                <h2 class="text-xl sm:text-2xl font-extrabold text-[#253047]">資産</h2>
-              </div>
-              <div class="mt-5 rounded-[16px] bg-[#FFF9E6] border border-[#F0E2B7] px-4 py-3 flex gap-3">
-                <div class="w-9 h-9 rounded-[12px] bg-white flex items-center justify-center shrink-0"><i class="fa-solid fa-sparkles text-[#D97706]"></i></div>
-                <div><div class="text-[10px] font-extrabold text-[#8C5800]">LUMI</div><p class="text-sm text-[#253047] mt-0.5">今持っている資産を教えてください。</p></div>
+            <div class="ob-card">
+              <div class="ob-title-row">
+                <span class="ob-step-badge ob-step-badge-green">03</span>
+                <h2>資産</h2>
               </div>
 
-              <div class="mt-6 grid grid-cols-2 sm:grid-cols-3 gap-3">
-                <button type="button" onclick="toggleOnboardingAsset('cash')" data-ob-asset="cash" class="ob-asset-choice p-4 rounded-[16px] border border-[#ECEBE6] text-left"><div class="text-lg">💰</div><div class="text-xs font-bold mt-2">現金・預金</div></button>
-                <button type="button" onclick="toggleOnboardingAsset('fund')" data-ob-asset="fund" class="ob-asset-choice p-4 rounded-[16px] border border-[#ECEBE6] text-left"><div class="text-lg">📈</div><div class="text-xs font-bold mt-2">投資信託</div></button>
-                <button type="button" onclick="toggleOnboardingAsset('bond')" data-ob-asset="bond" class="ob-asset-choice p-4 rounded-[16px] border border-[#ECEBE6] text-left"><div class="text-lg">📃</div><div class="text-xs font-bold mt-2">債券</div></button>
-                <button type="button" onclick="toggleOnboardingAsset('stock')" data-ob-asset="stock" class="ob-asset-choice p-4 rounded-[16px] border border-[#ECEBE6] text-left"><div class="text-lg">📊</div><div class="text-xs font-bold mt-2">株式</div></button>
-                <button type="button" onclick="toggleOnboardingAsset('other')" data-ob-asset="other" class="ob-asset-choice p-4 rounded-[16px] border border-[#ECEBE6] text-left"><div class="text-lg">🏠</div><div class="text-xs font-bold mt-2">その他</div></button>
+              <div class="ob-lumi-guide">
+                <div class="ob-lumi-avatar" aria-hidden="true">
+                  <img src="./assets/lumi-spark.png" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='inline-flex'">
+                  <i class="fa-solid fa-sparkles ob-lumi-fallback"></i>
+                </div>
+                <div class="ob-lumi-copy">
+                  <div class="ob-lumi-name">LUMI</div>
+                  <p>今持っている資産を教えてください。</p>
+                </div>
               </div>
 
-              <div id="ob-asset-inputs" class="mt-5 space-y-3"></div>
+              <div class="ob-asset-grid">
+                <button type="button" onclick="toggleOnboardingAsset('cash')" data-ob-asset="cash" class="ob-asset-card">
+                  <span class="ob-asset-icon ob-asset-icon-yellow">💰</span>
+                  <span class="ob-asset-name">現金・預金</span>
+                </button>
+                <button type="button" onclick="toggleOnboardingAsset('fund')" data-ob-asset="fund" class="ob-asset-card">
+                  <span class="ob-asset-icon ob-asset-icon-blue">📈</span>
+                  <span class="ob-asset-name">投資信託</span>
+                </button>
+                <button type="button" onclick="toggleOnboardingAsset('bond')" data-ob-asset="bond" class="ob-asset-card">
+                  <span class="ob-asset-icon ob-asset-icon-mint">📃</span>
+                  <span class="ob-asset-name">債券</span>
+                </button>
+                <button type="button" onclick="toggleOnboardingAsset('stock')" data-ob-asset="stock" class="ob-asset-card">
+                  <span class="ob-asset-icon ob-asset-icon-pink">📊</span>
+                  <span class="ob-asset-name">株式</span>
+                </button>
+                <button type="button" onclick="toggleOnboardingAsset('other')" data-ob-asset="other" class="ob-asset-card">
+                  <span class="ob-asset-icon ob-asset-icon-lavender">🏠</span>
+                  <span class="ob-asset-name">その他</span>
+                </button>
+              </div>
+
+              <div id="ob-asset-inputs" class="ob-asset-inputs"></div>
             </div>
           </section>
 
           <!-- STEP 4 -->
           <section id="onboardingScreen-4" class="onboarding-screen hidden">
-            <div class="bg-white rounded-[26px] border border-[#ECEBE6] p-5 sm:p-8">
-              <div class="flex items-center gap-2">
-                <span class="w-8 h-8 rounded-full bg-[#FFF0F3] text-[#D46A7C] font-extrabold text-xs flex items-center justify-center">04</span>
-                <h2 class="text-xl sm:text-2xl font-extrabold text-[#253047]">これから</h2>
-              </div>
-              <div class="mt-5 rounded-[16px] bg-[#FFF9E6] border border-[#F0E2B7] px-4 py-3 flex gap-3">
-                <div class="w-9 h-9 rounded-[12px] bg-white flex items-center justify-center shrink-0"><i class="fa-solid fa-sparkles text-[#D97706]"></i></div>
-                <div><div class="text-[10px] font-extrabold text-[#8C5800]">LUMI</div><p class="text-sm text-[#253047] mt-0.5">これから予定している、大きなお金の動きはありますか？</p></div>
+            <div class="ob-card">
+              <div class="ob-title-row">
+                <span class="ob-step-badge ob-step-badge-pink">04</span>
+                <h2>これから</h2>
               </div>
 
-              <div class="mt-6 grid grid-cols-2 gap-3">
-                <button type="button" onclick="setOnboardingEventType('expense')" data-ob-event-type="expense" class="ob-choice px-4 py-4 rounded-[16px] border border-[#ECEBE6] text-sm font-bold"><i class="fa-solid fa-arrow-up-from-bracket mr-2 text-[#FF8FA3]"></i>支出予定</button>
-                <button type="button" onclick="setOnboardingEventType('income')" data-ob-event-type="income" class="ob-choice px-4 py-4 rounded-[16px] border border-[#ECEBE6] text-sm font-bold"><i class="fa-solid fa-arrow-down-long mr-2 text-[#72D6B5]"></i>受取予定</button>
+              <div class="ob-lumi-guide">
+                <div class="ob-lumi-avatar" aria-hidden="true">
+                  <img src="./assets/lumi-spark.png" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='inline-flex'">
+                  <i class="fa-solid fa-sparkles ob-lumi-fallback"></i>
+                </div>
+                <div class="ob-lumi-copy">
+                  <div class="ob-lumi-name">LUMI</div>
+                  <p>これから予定している、大きなお金の動きはありますか？</p>
+                </div>
               </div>
 
-              <div id="ob-event-editor" class="hidden mt-4 rounded-[16px] border border-[#ECEBE6] bg-[#FAFAF7] p-4 space-y-3">
-                <select id="ob-event-kind" class="w-full border border-[#E1E4E8] bg-white rounded-[11px] px-3 py-2.5 text-xs">
+              <div class="ob-event-type-grid">
+                <button type="button" onclick="setOnboardingEventType('expense')" data-ob-event-type="expense" class="ob-event-type-card">
+                  <span class="ob-event-type-icon ob-event-expense"><i class="fa-solid fa-arrow-up-from-bracket"></i></span>
+                  <span>支出予定</span>
+                </button>
+                <button type="button" onclick="setOnboardingEventType('income')" data-ob-event-type="income" class="ob-event-type-card">
+                  <span class="ob-event-type-icon ob-event-income"><i class="fa-solid fa-arrow-down-long"></i></span>
+                  <span>受取予定</span>
+                </button>
+              </div>
+
+              <div id="ob-event-editor" class="ob-event-editor hidden">
+                <select id="ob-event-kind" class="ob-event-select" aria-label="予定の種類">
                   <option value="other">その他</option>
                 </select>
-                <div class="grid grid-cols-2 gap-3">
-                  <div><label class="text-[10px] text-[#6F7785]">何歳？</label><input id="ob-event-age" type="number" min="18" max="100" class="mt-1 w-full border border-[#E1E4E8] rounded-[11px] px-3 py-2.5 text-sm"></div>
-                  <div><label class="text-[10px] text-[#6F7785]">いくら？</label><input id="ob-event-amount" type="number" min="0" class="mt-1 w-full border border-[#E1E4E8] rounded-[11px] px-3 py-2.5 text-sm text-right" placeholder="500"></div>
+
+                <div class="ob-event-input-grid">
+                  <div class="ob-mini-question">
+                    <div class="ob-label">何歳？</div>
+                    <div class="ob-small-field">
+                      <input id="ob-event-age" type="text" inputmode="numeric" pattern="[0-9]*" autocomplete="off" aria-label="予定年齢">
+                      <span>歳</span>
+                    </div>
+                  </div>
+                  <div class="ob-mini-question">
+                    <div class="ob-label">いくら？</div>
+                    <div class="ob-small-field">
+                      <input id="ob-event-amount" type="text" inputmode="numeric" pattern="[0-9]*" autocomplete="off" aria-label="予定金額">
+                      <span>万円</span>
+                    </div>
+                  </div>
                 </div>
-                <button type="button" onclick="addOnboardingEvent()" class="px-3 py-2 btn-lumi-secondary text-xs font-bold"><i class="fa-solid fa-plus mr-1"></i>予定を追加</button>
+
+                <button type="button" onclick="addOnboardingEvent()" class="ob-add-button">
+                  <i class="fa-solid fa-plus"></i><span>予定を追加</span>
+                </button>
               </div>
 
-              <div id="ob-events-list" class="mt-4 space-y-2"></div>
-              <button type="button" onclick="clearOnboardingEvents()" class="mt-5 text-xs font-bold text-[#8A909C] hover:text-[#253047]">特に予定はない</button>
+              <div id="ob-events-list" class="ob-events-list"></div>
+
+              <button id="ob-no-events-btn" type="button" onclick="clearOnboardingEvents()" class="ob-none-button">
+                <i class="fa-regular fa-circle-check"></i>
+                <span>特に予定はない</span>
+              </button>
             </div>
           </section>
 
           <!-- STEP 5 -->
           <section id="onboardingScreen-5" class="onboarding-screen hidden">
-            <div class="bg-white rounded-[26px] border border-[#ECEBE6] p-5 sm:p-8">
-              <div class="flex items-center gap-2">
-                <span class="w-8 h-8 rounded-full bg-[#FFF9E6] text-[#D97706] font-extrabold text-xs flex items-center justify-center">05</span>
-                <h2 class="text-xl sm:text-2xl font-extrabold text-[#253047]">お金の残し方</h2>
-              </div>
-              <div class="mt-5 rounded-[16px] bg-[#FFF9E6] border border-[#F0E2B7] px-4 py-3 flex gap-3">
-                <div class="w-9 h-9 rounded-[12px] bg-white flex items-center justify-center shrink-0"><i class="fa-solid fa-sparkles text-[#D97706]"></i></div>
-                <div><div class="text-[10px] font-extrabold text-[#8C5800]">LUMI</div><p class="text-sm text-[#253047] mt-0.5">毎年お金が余ったら、どうしたいですか？</p></div>
+            <div class="ob-card">
+              <div class="ob-title-row">
+                <span class="ob-step-badge ob-step-badge-yellow">05</span>
+                <h2>お金の残し方</h2>
               </div>
 
-              <div class="mt-6 grid grid-cols-1 sm:grid-cols-3 gap-3">
-                <button type="button" onclick="selectOnboardingSurplus('cash')" data-ob-surplus="cash" class="ob-choice p-5 rounded-[18px] border border-[#ECEBE6] text-left"><div class="text-2xl">💰</div><div class="mt-2 text-sm font-extrabold">貯金する</div><p class="mt-1 text-[10px] text-[#8A909C]">現金・預金として残す</p></button>
-                <button type="button" onclick="selectOnboardingSurplus('investment')" data-ob-surplus="investment" class="ob-choice p-5 rounded-[18px] border border-[#ECEBE6] text-left"><div class="text-2xl">📈</div><div class="mt-2 text-sm font-extrabold">投資する</div><p class="mt-1 text-[10px] text-[#8A909C]">投資資産へ回す</p></button>
-                <button type="button" onclick="selectOnboardingSurplus('both')" data-ob-surplus="both" class="ob-choice p-5 rounded-[18px] border border-[#ECEBE6] text-left"><div class="text-2xl">⚖️</div><div class="mt-2 text-sm font-extrabold">両方</div><p class="mt-1 text-[10px] text-[#8A909C]">貯金と投資に分ける</p></button>
+              <div class="ob-lumi-guide">
+                <div class="ob-lumi-avatar" aria-hidden="true">
+                  <img src="./assets/lumi-spark.png" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='inline-flex'">
+                  <i class="fa-solid fa-sparkles ob-lumi-fallback"></i>
+                </div>
+                <div class="ob-lumi-copy">
+                  <div class="ob-lumi-name">LUMI</div>
+                  <p>毎年お金が余ったら、どうしたいですか？</p>
+                </div>
               </div>
 
-              <div id="ob-surplus-split" class="hidden mt-5 rounded-[16px] border border-[#ECEBE6] bg-[#FAFAF7] p-4">
-                <div class="flex justify-between text-xs font-bold"><span>貯金 <span id="ob-cash-pct">50</span>%</span><span>投資 <span id="ob-invest-pct">50</span>%</span></div>
-                <input id="ob-invest-range" type="range" min="0" max="100" value="50" oninput="updateOnboardingSplit()" class="w-full mt-3">
+              <div class="ob-surplus-grid">
+                <button type="button" onclick="selectOnboardingSurplus('cash')" data-ob-surplus="cash" class="ob-surplus-card">
+                  <span class="ob-surplus-icon">💰</span>
+                  <strong>貯金する</strong>
+                  <span>現金・預金として残す</span>
+                </button>
+                <button type="button" onclick="selectOnboardingSurplus('investment')" data-ob-surplus="investment" class="ob-surplus-card">
+                  <span class="ob-surplus-icon">📈</span>
+                  <strong>投資する</strong>
+                  <span>投資資産へ回す</span>
+                </button>
+                <button type="button" onclick="selectOnboardingSurplus('both')" data-ob-surplus="both" class="ob-surplus-card">
+                  <span class="ob-surplus-icon">⚖️</span>
+                  <strong>両方</strong>
+                  <span>貯金と投資に分ける</span>
+                </button>
+              </div>
+
+              <div id="ob-surplus-split" class="ob-surplus-split hidden">
+                <div class="ob-split-labels">
+                  <span>貯金 <strong id="ob-cash-pct">50</strong>%</span>
+                  <span>投資 <strong id="ob-invest-pct">50</strong>%</span>
+                </div>
+                <input id="ob-invest-range" type="range" min="0" max="100" value="50" oninput="updateOnboardingSplit()" aria-label="投資配分">
               </div>
             </div>
           </section>
@@ -1353,10 +1289,10 @@
           </section>
 
           <!-- Shared bottom nav for steps only -->
-          <div id="onboardingBottomNav" class="hidden mt-5 sticky bottom-3 z-20">
-            <div class="bg-white/95 backdrop-blur border border-[#ECEBE6] rounded-[18px] shadow-lg p-3 flex items-center gap-3">
-              <button type="button" onclick="onboardingBack()" class="px-4 py-3 btn-lumi-secondary text-xs font-bold">戻る</button>
-              <button id="onboardingNextBtn" type="button" onclick="onboardingNext()" class="flex-1 px-5 py-3 btn-lumi-primary text-sm font-extrabold">次へ</button>
+          <div id="onboardingBottomNav" class="ob-bottom-nav hidden sticky bottom-3 z-20">
+            <div class="ob-bottom-nav-inner">
+              <button type="button" onclick="onboardingBack()" class="ob-back-button">戻る</button>
+              <button id="onboardingNextBtn" type="button" onclick="onboardingNext()" class="ob-next-button">次へ</button>
             </div>
           </div>
 
@@ -9344,13 +9280,26 @@ window.LUMIFUL_PHASE7B_STEP3_LOCK_V8_2 = Object.freeze({
     [...window.LUMIFUL_ONBOARDING_UI_STATE.selectedAssets].forEach(key => {
       const meta = assetMeta[key];
       const row = document.createElement('div');
-      row.className = 'rounded-[14px] border border-[#ECEBE6] bg-[#FAFAF7] p-3';
+      row.className = 'ob-asset-detail';
       row.dataset.obAssetInput = key;
       row.innerHTML = `
-        <div class="text-xs font-extrabold text-[#253047]">${meta.label}</div>
-        <div class="mt-2 grid ${meta.return?'grid-cols-2':'grid-cols-1'} gap-2">
-          <div><label class="text-[10px] text-[#6F7785]">評価額</label><div class="flex items-center gap-1"><input type="number" placeholder="0" class="w-full border border-[#E1E4E8] bg-white rounded-[9px] px-2.5 py-2 text-xs text-right"><span class="text-[10px] text-[#6F7785]">万円</span></div></div>
-          ${meta.return?'<div><label class="text-[10px] text-[#6F7785]">想定利回り</label><div class="flex items-center gap-1"><input type="number" step="0.1" placeholder="4.0" class="w-full border border-[#E1E4E8] bg-white rounded-[9px] px-2.5 py-2 text-xs text-right"><span class="text-[10px] text-[#6F7785]">%</span></div></div>':''}
+        <div class="ob-asset-detail-title">${meta.label}</div>
+        <div class="ob-asset-detail-grid ${meta.return ? 'has-return' : ''}">
+          <div class="ob-mini-question">
+            <div class="ob-label">評価額</div>
+            <div class="ob-small-field">
+              <input type="text" inputmode="numeric" pattern="[0-9]*" autocomplete="off" aria-label="${meta.label}の評価額">
+              <span>万円</span>
+            </div>
+          </div>
+          ${meta.return ? `
+          <div class="ob-mini-question">
+            <div class="ob-label">想定利回り</div>
+            <div class="ob-small-field">
+              <input type="text" inputmode="decimal" autocomplete="off" data-ob-decimal="true" aria-label="${meta.label}の想定利回り">
+              <span>%</span>
+            </div>
+          </div>` : ''}
         </div>`;
       box.appendChild(row);
     });
@@ -9364,12 +9313,16 @@ window.LUMIFUL_PHASE7B_STEP3_LOCK_V8_2 = Object.freeze({
   window.setOnboardingEventType = function(type) {
     const state = window.LUMIFUL_ONBOARDING_UI_STATE;
     state.eventType = type;
-    document.getElementById('ob-event-editor')?.classList.remove('hidden');
+    state.noEvents = false;
+
+    const editor = document.getElementById('ob-event-editor');
+    if (editor) editor.classList.remove('hidden');
+
+    const noneBtn = document.getElementById('ob-no-events-btn');
+    if (noneBtn) noneBtn.classList.remove('is-selected');
 
     document.querySelectorAll('[data-ob-event-type]').forEach(btn => {
-      const active = btn.dataset.obEventType === type;
-      btn.classList.toggle('border-[#FFC83D]', active);
-      btn.classList.toggle('bg-[#FFF9E6]', active);
+      btn.classList.toggle('is-selected', btn.dataset.obEventType === type);
     });
 
     const select = document.getElementById('ob-event-kind');
@@ -9394,9 +9347,14 @@ window.LUMIFUL_PHASE7B_STEP3_LOCK_V8_2 = Object.freeze({
     const box = document.getElementById('ob-events-list');
     if (!box) return;
     box.innerHTML = window.LUMIFUL_ONBOARDING_UI_STATE.events.map((e,i)=>`
-      <div class="flex items-center justify-between gap-3 rounded-[12px] border border-[#ECEBE6] bg-white px-3 py-2.5">
-        <div><div class="text-xs font-bold text-[#253047]">${e.kind}</div><div class="text-[10px] text-[#8A909C]">${e.age}歳 / ${e.amount.toLocaleString()}万円</div></div>
-        <button type="button" onclick="removeOnboardingEvent(${i})" class="text-[#D46A7C]"><i class="fa-solid fa-xmark"></i></button>
+      <div class="ob-event-item">
+        <div>
+          <div class="ob-event-item-title">${e.kind}</div>
+          <div class="ob-event-item-meta">${e.age}歳 / ${e.amount.toLocaleString()}万円</div>
+        </div>
+        <button type="button" onclick="removeOnboardingEvent(${i})" aria-label="予定を削除">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
       </div>`).join('');
   };
 
@@ -9406,17 +9364,33 @@ window.LUMIFUL_PHASE7B_STEP3_LOCK_V8_2 = Object.freeze({
   };
 
   window.clearOnboardingEvents = function() {
-    window.LUMIFUL_ONBOARDING_UI_STATE.events = [];
+    const state = window.LUMIFUL_ONBOARDING_UI_STATE;
+    state.events = [];
+    state.eventType = null;
+    state.noEvents = true;
+
     window.renderOnboardingEvents();
-    document.getElementById('ob-event-editor')?.classList.add('hidden');
+
+    const editor = document.getElementById('ob-event-editor');
+    if (editor) editor.classList.add('hidden');
+
+    document.querySelectorAll('[data-ob-event-type]').forEach(btn => btn.classList.remove('is-selected'));
+
+    const noneBtn = document.getElementById('ob-no-events-btn');
+    if (noneBtn) noneBtn.classList.add('is-selected');
+
+    const age = document.getElementById('ob-event-age');
+    const amount = document.getElementById('ob-event-amount');
+    if (age) age.value = '';
+    if (amount) amount.value = '';
+
+    window.showToast?.('「特に予定はない」を選択しました', 'info');
   };
 
   window.selectOnboardingSurplus = function(mode) {
     window.LUMIFUL_ONBOARDING_UI_STATE.surplus = mode;
     document.querySelectorAll('[data-ob-surplus]').forEach(btn => {
-      const active = btn.dataset.obSurplus === mode;
-      btn.classList.toggle('border-[#FFC83D]', active);
-      btn.classList.toggle('bg-[#FFF9E6]', active);
+      btn.classList.toggle('is-selected', btn.dataset.obSurplus === mode);
     });
     document.getElementById('ob-surplus-split')?.classList.toggle('hidden', mode !== 'both');
   };
@@ -9443,9 +9417,9 @@ window.LUMIFUL_PHASE7B_STEP3_LOCK_V8_2 = Object.freeze({
     const cards = [
       ['本人年齢',`${age}歳`],
       ['年間手取り',income==='-'?'-':`${Number(income).toLocaleString()}万円`],
-      ['年間生活費',expense==='-'?'-':`${Number(expense).toLocaleString()}万円`],
+      ['毎月の生活費',expense==='-'?'-':`${Number(expense).toLocaleString()}万円`],
       ['資産種類',`${assets}種類`],
-      ['将来予定',`${events}件`],
+      ['将来予定',window.LUMIFUL_ONBOARDING_UI_STATE.noEvents ? '特になし' : `${events}件`],
       ['余剰資金',surplus]
     ];
     box.innerHTML = cards.map(([k,v])=>`
@@ -9654,11 +9628,11 @@ window.LUMIFUL_PHASE7B_STEP3_LOCK_V8_2 = Object.freeze({
     model.incomes.push(...readExtraIncomes(currentAge, targetAge));
 
     // Onboarding intentionally keeps living cost simple.
-    // Its annual living-cost input is the complete recurring household cost;
+    // Its monthly living-cost input is the complete recurring household cost;
     // therefore housing remains zero here to avoid double counting.
     model.living.expense = {
       amount: num('ob-expense'),
-      frequency: 'yearly'
+      frequency: 'monthly'
     };
     model.living.housing = {
       type: 'other',
@@ -9840,170 +9814,70 @@ window.LUMIFUL_PHASE7B_STEP3_LOCK_V8_2 = Object.freeze({
 })();
 </script>
 
-
 <script>
-/* PHASE 8 / STEP 4 FINAL REBUILT UI */
+/* PHASE 8 / STEP 4 — ONBOARDING FINAL UNIFIED UI */
 (function(){
-  const numericIds=['ob-age','ob-partner-age','ob-income','ob-income-end-age','ob-expense'];
+  const numericIntegerIds=[
+    'ob-age','ob-partner-age','ob-income','ob-income-end-age','ob-expense',
+    'ob-event-age','ob-event-amount'
+  ];
 
-  function bindNumericFields(){
-    numericIds.forEach(id=>{
+  function sanitizeInput(el, decimal){
+    const raw=String(el.value||'');
+    let cleaned;
+    if(decimal){
+      cleaned=raw.replace(/[^\d.]/g,'');
+      const parts=cleaned.split('.');
+      cleaned=parts.shift() + (parts.length ? '.' + parts.join('') : '');
+    }else{
+      cleaned=raw.replace(/[^\d]/g,'');
+    }
+    if(raw!==cleaned) el.value=cleaned;
+  }
+
+  function bindOnboardingNumeric(){
+    numericIntegerIds.forEach(id=>{
       const el=document.getElementById(id);
       if(!el || el.dataset.finalNumericBound==='1') return;
       el.dataset.finalNumericBound='1';
-      el.addEventListener('input',()=>{
-        const cleaned=String(el.value||'').replace(/[^\d]/g,'');
-        if(el.value!==cleaned) el.value=cleaned;
-      });
+      el.addEventListener('input',()=>sanitizeInput(el,false));
+    });
+
+    document.querySelectorAll('#onboardingView [data-ob-asset-input] input').forEach(el=>{
+      if(el.dataset.finalNumericBound==='1') return;
+      el.dataset.finalNumericBound='1';
+      const decimal=el.dataset.obDecimal==='true';
+      el.addEventListener('input',()=>sanitizeInput(el,decimal));
     });
   }
 
-  function setPartnerAgeVisibility(hasPartner){
-    const wrap=document.getElementById('ob-partner-age-wrap');
-    const input=document.getElementById('ob-partner-age');
-    if(!wrap) return;
-
-    if(hasPartner===true){
-      wrap.classList.remove('hidden');
-      wrap.setAttribute('aria-hidden','false');
-    }else{
-      wrap.classList.add('hidden');
-      wrap.setAttribute('aria-hidden','true');
-      if(input) input.value='';
-    }
-  }
-
-  const oldPartner=window.selectOnboardingPartner;
-  window.selectOnboardingPartner=function(hasPartner){
-    const result=typeof oldPartner==='function' ? oldPartner.call(this,hasPartner) : undefined;
-    setPartnerAgeVisibility(hasPartner===true);
+  const prevAssetRender=window.renderOnboardingAssetInputs;
+  window.renderOnboardingAssetInputs=function(...args){
+    const result=prevAssetRender.apply(this,args);
+    bindOnboardingNumeric();
     return result;
   };
-
-  const oldScreen=window.goToOnboardingScreen;
-  if(typeof oldScreen==='function'){
-    window.goToOnboardingScreen=function(id){
-      const result=oldScreen.call(this,id);
-      requestAnimationFrame(bindNumericFields);
-      return result;
-    };
-  }
-
-  if(document.readyState==='loading'){
-    document.addEventListener('DOMContentLoaded',bindNumericFields);
-  }else{
-    bindNumericFields();
-  }
-
-  window.LUMIFUL_PHASE8_STEP4_FINAL_REBUILT_UI=Object.freeze({
-    status:'READY_FOR_FINAL_VISUAL_CHECK',
-    rebuiltFrom:'PHASE8 STEP4 GUEST_SCHEMA_CONNECTED',
-    uiPatchChainRemoved:true,
-    desktopCenterAxis:true,
-    mobileCenterAxis:true,
-    ageUnitInsideField:true,
-    examplePlaceholdersRemoved:true,
-    partnerAgeConditional:true,
-    schemaLogicChanged:false,
-    guestFlowChanged:false,
-    phase7EngineChanged:false
-  });
-})();
-</script>
-
-
-<script>
-/* PHASE 8 / STEP 4 — STEP1 FINAL PARTNER VISIBILITY FIX */
-(function(){
-  function applyPartnerVisibilityFinal(hasPartner){
-    const wrap=document.getElementById('ob-partner-age-wrap');
-    const input=document.getElementById('ob-partner-age');
-    if(!wrap) return;
-
-    if(hasPartner===true){
-      wrap.classList.remove('hidden');
-      wrap.setAttribute('aria-hidden','false');
-    }else{
-      wrap.classList.add('hidden');
-      wrap.setAttribute('aria-hidden','true');
-      if(input) input.value='';
-    }
-  }
-
-  const previousSelect=window.selectOnboardingPartner;
-  window.selectOnboardingPartner=function(hasPartner){
-    const result=typeof previousSelect==='function'
-      ? previousSelect.call(this,hasPartner)
-      : undefined;
-
-    applyPartnerVisibilityFinal(hasPartner===true);
-    return result;
-  };
-
-  // Initial state: no partner choice yet, so partner age is hidden.
-  if(document.readyState==='loading'){
-    document.addEventListener('DOMContentLoaded',()=>applyPartnerVisibilityFinal(false));
-  }else{
-    applyPartnerVisibilityFinal(false);
-  }
-
-  window.LUMIFUL_PHASE8_STEP4_STEP1_FINAL=Object.freeze({
-    status:'STEP1_UI_LOCK_CANDIDATE',
-    partnerAgeInitial:'hidden',
-    partnerYes:'show',
-    partnerNo:'hide-and-clear',
-    schemaLogicChanged:false,
-    guestFlowChanged:false,
-    phase7EngineChanged:false,
-    base:'PHASE8 STEP4 FINAL REBUILT UI'
-  });
-})();
-</script>
-
-
-<script>
-/* PHASE 8 / STEP 4 — STEP2 REBUILT UI */
-(function(){
-  const ids=['ob-income','ob-income-end-age','ob-expense'];
-
-  function bindStep2Numeric(){
-    ids.forEach(id=>{
-      const el=document.getElementById(id);
-      if(!el || el.dataset.step2NumericBound==='1') return;
-      el.dataset.step2NumericBound='1';
-
-      el.addEventListener('input',()=>{
-        const cleaned=String(el.value||'').replace(/[^\d]/g,'');
-        if(el.value!==cleaned) el.value=cleaned;
-      });
-    });
-  }
 
   const prevScreen=window.goToOnboardingScreen;
-  if(typeof prevScreen==='function'){
-    window.goToOnboardingScreen=function(id){
-      const result=prevScreen.call(this,id);
-      if(String(id)==='2') requestAnimationFrame(bindStep2Numeric);
-      return result;
-    };
-  }
+  window.goToOnboardingScreen=function(id){
+    const result=prevScreen.call(this,id);
+    requestAnimationFrame(bindOnboardingNumeric);
+    return result;
+  };
 
-  if(document.readyState==='loading'){
-    document.addEventListener('DOMContentLoaded',bindStep2Numeric);
-  }else{
-    bindStep2Numeric();
-  }
+  document.addEventListener('DOMContentLoaded',bindOnboardingNumeric);
 
-  window.LUMIFUL_PHASE8_STEP4_STEP2_REBUILT=Object.freeze({
-    status:'STEP2_UI_LOCK_CANDIDATE',
-    designLanguage:'STEP1_CENTER_AXIS',
-    primaryInputWidth:'320px',
-    unitsInsideField:true,
-    examplePlaceholdersRemoved:true,
-    schemaLogicChanged:false,
-    guestFlowChanged:false,
-    phase7EngineChanged:false,
-    base:'PHASE8 STEP4 STEP1 FINAL'
+  window.LUMIFUL_PHASE8_STEP4_ONBOARDING_FINAL=Object.freeze({
+    status:'FINAL_UI_AUDIT_READY',
+    designBase:'STEP1_CENTER_AXIS',
+    step2LivingExpense:'monthly',
+    step3PopAssetCards:true,
+    step4NoEventAction:true,
+    step1to5BottomNavWidth:'unified',
+    pcSpUnified:true,
+    schemaLogic:'v2 preserved except monthly living frequency',
+    guestFlowPreserved:true,
+    phase7EnginePreserved:true
   });
 })();
 </script>
