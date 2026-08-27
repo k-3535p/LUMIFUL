@@ -217,6 +217,108 @@
   }
 </style>
 
+
+<style id="phase8-step4b-symmetric-ui">
+  /* Onboarding: one centered axis, symmetrical controls */
+  #onboardingView .onboarding-screen > div {
+    text-align: center;
+  }
+
+  /* Section title */
+  #onboardingView .onboarding-screen > div > .flex.items-center.gap-2:first-child {
+    justify-content: center;
+  }
+
+  /* LUMI conversation card */
+  #onboardingView .onboarding-screen .bg-\[\#FFF9E6\].border-\[\#F0E2B7\] {
+    text-align: left;
+  }
+
+  /* STEP 1 question groups */
+  #onboardingScreen-1 .mt-6.space-y-6 > div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  #onboardingScreen-1 .mt-6.space-y-6 > div > label,
+  #onboardingScreen-1 .mt-6.space-y-6 > div > .text-xs.font-bold {
+    width: 100%;
+    text-align: center;
+  }
+  #onboardingScreen-1 .mt-6.space-y-6 > div > .grid.grid-cols-2 {
+    width: min(100%, 440px);
+  }
+  #onboardingScreen-1 #ob-partner-age-wrap {
+    width: 100%;
+  }
+
+  /* Main age fields: centered as one number + unit component */
+  #onboardingScreen-1 #ob-age,
+  #onboardingScreen-1 #ob-partner-age {
+    width: 150px !important;
+  }
+  #onboardingScreen-1 #ob-age + span,
+  #onboardingScreen-1 #ob-partner-age + span {
+    min-width: 22px;
+    text-align: left;
+  }
+
+  /* STEP 2 primary money questions */
+  #onboardingScreen-2 .mt-6.space-y-6 > div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  #onboardingScreen-2 .mt-6.space-y-6 > div > label {
+    width: 100%;
+    text-align: center;
+  }
+  #onboardingScreen-2 #ob-income,
+  #onboardingScreen-2 #ob-expense {
+    width: 230px;
+    flex: none;
+  }
+  #onboardingScreen-2 #ob-income-end-age {
+    width: 150px;
+  }
+
+  /* Keep explanatory text centered beneath the answer */
+  #onboardingScreen-2 .bg-\[\#F7FBFE\] {
+    width: min(100%, 500px);
+    text-align: center;
+  }
+
+  /* STEP 3-5 headings / primary choice blocks share center axis */
+  #onboardingScreen-3 > div > .mt-6,
+  #onboardingScreen-4 > div > .mt-6,
+  #onboardingScreen-5 > div > .mt-6 {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* Partner yes/no and other paired choices: equal dimensions */
+  #onboardingView .ob-choice {
+    min-height: 48px;
+  }
+
+  @media (min-width: 641px) {
+    #onboardingView .onboarding-screen > div {
+      padding-left: 42px;
+      padding-right: 42px;
+    }
+  }
+
+  @media (max-width: 640px) {
+    #onboardingScreen-1 .mt-6.space-y-6 > div > .grid.grid-cols-2 {
+      width: 100%;
+    }
+    #onboardingScreen-2 #ob-income,
+    #onboardingScreen-2 #ob-expense {
+      width: min(62vw, 230px);
+    }
+  }
+</style>
+
 </head>
 <body class="bg-[#FAFAF7] text-[#253047] min-h-screen font-sans antialiased relative overflow-x-hidden">
 
@@ -772,7 +874,7 @@
               <div class="mt-6 space-y-6">
                 <div>
                   <label class="text-xs font-bold text-[#253047]">本人年齢 <span class="text-[#D46A7C]">必須</span></label>
-                  <div class="mt-2 grid grid-cols-[1fr_auto] items-center gap-2 max-w-[220px]">
+                  <div class="mt-2 inline-grid grid-cols-[150px_auto] items-center justify-center gap-2">
                     <input id="ob-age" type="number" min="18" max="100" placeholder="例：40" class="w-full border border-[#E1E4E8] rounded-[12px] px-3.5 py-3 text-lg font-bold text-right">
                     <span class="text-sm text-[#6F7785]">歳</span>
                   </div>
@@ -788,7 +890,7 @@
 
                 <div id="ob-partner-age-wrap" class="hidden">
                   <label class="text-xs font-bold text-[#253047]">パートナー年齢</label>
-                  <div class="mt-2 grid grid-cols-[1fr_auto] items-center gap-2 max-w-[220px]">
+                  <div class="mt-2 inline-grid grid-cols-[150px_auto] items-center justify-center gap-2">
                     <input id="ob-partner-age" type="number" min="18" max="100" placeholder="例：38" class="w-full border border-[#E1E4E8] rounded-[12px] px-3.5 py-3 text-lg font-bold text-right">
                     <span class="text-sm text-[#6F7785]">歳</span>
                   </div>
@@ -815,7 +917,7 @@
               <div class="mt-6 space-y-6">
                 <div>
                   <label class="text-xs font-bold text-[#253047]">年間手取り収入</label>
-                  <div class="mt-2 grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3">
+                  <div class="mt-2 flex items-center justify-center gap-3 w-full">
                     <input id="ob-income" type="number" min="0" placeholder="500" class="flex-1 border border-[#E1E4E8] rounded-[12px] px-3.5 py-3 text-lg font-bold text-right">
                     <span class="text-sm text-[#6F7785]">万円 / 年</span>
                   </div>
@@ -835,7 +937,7 @@
 
                 <div>
                   <label class="text-xs font-bold text-[#253047]">年間生活費</label>
-                  <div class="mt-2 grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3">
+                  <div class="mt-2 flex items-center justify-center gap-3 w-full">
                     <input id="ob-expense" type="number" min="0" placeholder="450" class="flex-1 border border-[#E1E4E8] rounded-[12px] px-3.5 py-3 text-lg font-bold text-right">
                     <span class="text-sm text-[#6F7785]">万円 / 年</span>
                   </div>
@@ -9454,6 +9556,20 @@ window.LUMIFUL_PHASE8_STEP4A = Object.freeze({
   guestFlowChanged: false,
   phase7EngineChanged: false,
   base: 'PHASE8 STEP4 GUEST_SCHEMA_CONNECTED'
+});
+</script>
+
+
+<script>
+/* PHASE 8 / STEP 4-B — SYMMETRIC ONBOARDING UI ONLY */
+window.LUMIFUL_PHASE8_STEP4B = Object.freeze({
+  status: 'SYMMETRIC_UI',
+  layoutAxis: 'center',
+  pairedChoices: 'equal',
+  schemaLogicChanged: false,
+  guestFlowChanged: false,
+  phase7EngineChanged: false,
+  base: 'PHASE8 STEP4A UI_POLISH'
 });
 </script>
 
