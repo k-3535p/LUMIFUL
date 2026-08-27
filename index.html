@@ -6253,5 +6253,512 @@ window.LUMIFUL_PHASE7B_STEP3_9 = Object.freeze({
 });
 </script>
 
+
+<script>
+/* ============================================================
+   PHASE 7B / STEP 3 COMPLETION
+   CANONICAL AUTH + FIRESTORE SESSION CONTROLLER
+   ------------------------------------------------------------
+   Production invariants:
+   1. Firebase Authentication is the sole account-auth source.
+   2. Exactly one Firebase auth-state listener owns account routing.
+   3. Guest mode is explicit local-only state.
+   4. Firestore restore happens only after auth has resolved.
+   5. The application boot path is single-owner and deterministic.
+   ============================================================ */
+(function () {
+  const C = window.LUMIFUL_CANONICAL_SESSION = {
+    listenerAttached: false,
+    unsubscribe: null,
+    authInitialResolved: false,
+    initialPromise: null,
+    initialResolve: null,
+    applying: false,
+    lastRestoredUid: null,
+    restorePromise: null,
+    booted: false
+  };
+
+  function normalizeEmail(email) {
+    return String(email || '').trim().toLowerCase();
+  }
+
+  function getExplicitGuestIdentity() {
+    const email = localStorage.getItem('lumiful_user_email') || localStorage.getItem('lc_user_email');
+    if (!email) return null;
+    const isGuest = email === window.LUMIFUL_GUEST_EMAIL || email.includes('@lumiful.local');
+    return isGuest ? { email: window.LUMIFUL_GUEST_EMAIL, isGuest: true } : null;
+  }
+
+  function clearStaleMockAccountIdentity() {
+    const email = localStorage.getItem('lumiful_user_email') || localStorage.getItem('lc_user_email');
+    if (email && !String(email).includes('@lumiful.local')) {
+      localStorage.removeItem('lumiful_user_email');
+      localStorage.removeItem('lc_user_email');
+    }
+  }
+
+  function renderCanonicalRoute() {
+    const welcome = document.getElementById('welcomeAuthView');
+    const status = window.authState?.status || 'checking';
+
+    if (status === 'checking') {
+      if (welcome) welcome.classList.add('hidden');
+      document.body.classList.add('overflow-hidden');
+    } else if (status === 'unauthenticated') {
+      if (welcome) {
+        window.showWelcomeAuthPanel?.('choice');
+        welcome.classList.remove('hidden');
+      }
+      document.body.classList.add('overflow-hidden');
+    } else {
+      if (welcome) welcome.classList.add('hidden');
+      document.body.classList.remove('overflow-hidden');
+    }
+
+    window.checkAuthState?.();
+  }
+
+  window.routeByAuthState = renderCanonicalRoute;
+
+  async function restoreAuthenticatedUser(user, force = false) {
+    if (!user?.uid) return null;
+    if (!window.LUMIFUL_PHASE7B_STEP3_FIRESTORE_ACTIVE) return null;
+
+    if (!force && C.lastRestoredUid === user.uid) return null;
+    if (C.restorePromise) return C.restorePromise;
+
+    C.restorePromise = (async () => {
+      try {
+        try {
+          await window.migrateMockCloudToFirestoreIfNeeded?.();
+        } catch (migrationError) {
+          console.warn('[LUMIFUL] Legacy cloud migration skipped:', migrationError);
+        }
+
+        const envelope = await window.loadUserData({ restore: true, silent: true });
+        C.lastRestoredUid = user.uid;
+
+        if (!envelope?.data) {
+          window.resetInMemorySimulationV2?.();
+          window.ensureV2InputModel?.();
+          window.renderV2InputUI?.();
+          window.recalculateAllFast?.();
+          window.updateSaveStatus?.('idle');
+        } else {
+          window.updateSaveStatus?.('saved');
+        }
+        return envelope;
+      } catch (error) {
+        console.error('[LUMIFUL] Canonical Firestore restore failed.', error);
+        window.updateSaveStatus?.('error', '復元エラー');
+        return null;
+      } finally {
+        C.restorePromise = null;
+      }
+    })();
+
+    return C.restorePromise;
+  }
+
+  async function applyFirebaseUser(user, options = {}) {
+    if (C.applying) {
+      // A concurrent listener/login callback can occur for the same credential.
+      // Let the active application finish; routing will already converge.
+      return window.authState;
+    }
+    C.applying = true;
+    try {
+      if (user) {
+        // Firebase account always supersedes any old mock/local account identity.
+        localStorage.setItem('lumiful_user_email', normalizeEmail(user.email));
+        localStorage.removeItem('lc_user_email');
+        window.authState = {
+          status: 'authenticated',
+          user: {
+            uid: user.uid,
+            email: normalizeEmail(user.email),
+            emailVerified: !!user.emailVerified,
+            isGuest: false,
+            provider: 'firebase'
+          }
+        };
+      } else {
+        const guest = getExplicitGuestIdentity();
+        if (guest) {
+          window.authState = {
+            status: 'guest',
+            user: { email: guest.email, isGuest: true, provider: 'local' }
+          };
+        } else {
+          clearStaleMockAccountIdentity();
+          window.authState = { status: 'unauthenticated', user: null };
+          C.lastRestoredUid = null;
+        }
+      }
+
+      renderCanonicalRoute();
+
+      if (user && options.restore !== false) {
+        await restoreAuthenticatedUser(user, !!options.forceRestore);
+      }
+      return window.authState;
+    } finally {
+      C.applying = false;
+    }
+  }
+
+  window.applyCanonicalFirebaseUser = applyFirebaseUser;
+
+  window.activateFirebaseAuthentication = async function() {
+    const runtime = await window.initializeFirebaseRuntime();
+    if (runtime?.status !== 'ready' || !runtime.auth) {
+      throw new Error('firebase-auth-unavailable');
+    }
+
+    try {
+      await runtime.auth.setPersistence(window.firebase.auth.Auth.Persistence.LOCAL);
+    } catch (error) {
+      console.warn('[LUMIFUL] Firebase persistence setup notice:', error);
+    }
+
+    if (runtime.firestore) {
+      window.LUMIFUL_PHASE7B_STEP3_FIRESTORE_ACTIVE = true;
+    }
+
+    // Remove any listener created by earlier Phase 7B layers.
+    try {
+      if (typeof window.LUMIFUL_PHASE7B_STEP2_UNSUBSCRIBE === 'function') {
+        window.LUMIFUL_PHASE7B_STEP2_UNSUBSCRIBE();
+      }
+    } catch (_) {}
+    window.LUMIFUL_PHASE7B_STEP2_UNSUBSCRIBE = null;
+
+    if (!C.initialPromise) {
+      C.initialPromise = new Promise(resolve => { C.initialResolve = resolve; });
+    }
+
+    if (!C.listenerAttached) {
+      C.listenerAttached = true;
+      C.unsubscribe = runtime.auth.onAuthStateChanged(
+        async user => {
+          const isInitial = !C.authInitialResolved;
+          await applyFirebaseUser(user, { restore: !isInitial });
+
+          if (isInitial) {
+            C.authInitialResolved = true;
+            C.initialResolve?.(user || null);
+            C.initialResolve = null;
+          }
+        },
+        error => {
+          console.error('[LUMIFUL] Canonical auth listener failed.', error);
+          C.authInitialResolved = true;
+          C.initialResolve?.(null);
+          C.initialResolve = null;
+          clearStaleMockAccountIdentity();
+          window.authState = { status: 'unauthenticated', user: null };
+          renderCanonicalRoute();
+        }
+      );
+    }
+
+    await C.initialPromise;
+    return runtime.auth;
+  };
+
+  // Compatibility entry point: never consult an old mock account identity.
+  window.resolveAuthState = function() {
+    const runtime = window.LUMIFUL_FIREBASE_RUNTIME;
+    const fbUser = runtime?.auth?.currentUser;
+
+    if (fbUser) {
+      window.authState = {
+        status: 'authenticated',
+        user: {
+          uid: fbUser.uid,
+          email: normalizeEmail(fbUser.email),
+          emailVerified: !!fbUser.emailVerified,
+          isGuest: false,
+          provider: 'firebase'
+        }
+      };
+    } else if (C.authInitialResolved) {
+      const guest = getExplicitGuestIdentity();
+      window.authState = guest
+        ? { status: 'guest', user: { email: guest.email, isGuest: true, provider: 'local' } }
+        : { status: 'unauthenticated', user: null };
+    } else {
+      window.authState = { status: 'checking', user: null };
+    }
+
+    renderCanonicalRoute();
+    return window.authState;
+  };
+
+  window.bootstrapAuthoritativeAuth = window.activateFirebaseAuthentication;
+
+  // Registered-account login: Firebase credential -> canonical state -> Firestore restore.
+  window.handleWelcomeLogin = async function(event) {
+    event.preventDefault();
+    if (window.LUMIFUL_PHASE7B_STEP2_AUTH_BUSY) return;
+
+    const email = normalizeEmail(document.getElementById('welcomeLoginEmail')?.value);
+    const password = document.getElementById('welcomeLoginPassword')?.value || '';
+    const errorEl = document.getElementById('welcomeLoginError');
+
+    if (!email || password.length < 8) {
+      if (errorEl) {
+        errorEl.textContent = 'メールアドレスと8桁以上のパスワードを確認してください。';
+        errorEl.classList.remove('hidden');
+      }
+      return;
+    }
+
+    if (errorEl) errorEl.classList.add('hidden');
+    window.LUMIFUL_PHASE7B_STEP2_AUTH_BUSY = true;
+
+    try {
+      const runtime = await window.initializeFirebaseRuntime();
+      if (runtime?.status !== 'ready' || !runtime.auth) throw new Error('firebase-auth-unavailable');
+
+      const credential = await runtime.auth.signInWithEmailAndPassword(email, password);
+      window.clearLoginFailures?.(email);
+      await applyFirebaseUser(credential.user, { restore: true, forceRestore: true });
+      window.showToast?.('ログインしました', 'success');
+    } catch (error) {
+      console.error('[LUMIFUL] Canonical login failed:', error?.code, error);
+      const guard = window.recordLoginFailure?.(email);
+      if (errorEl) {
+        errorEl.textContent = guard?.locked
+          ? window.getLoginCooldownMessage?.(guard)
+          : window.getFirebaseAuthErrorMessage?.(error, 'login') || 'ログインできませんでした。';
+        errorEl.classList.remove('hidden');
+      }
+    } finally {
+      window.LUMIFUL_PHASE7B_STEP2_AUTH_BUSY = false;
+    }
+  };
+
+  window.handleWelcomeSignup = async function(event) {
+    event.preventDefault();
+    if (window.LUMIFUL_PHASE7B_STEP2_AUTH_BUSY) return;
+
+    const email = normalizeEmail(document.getElementById('welcomeSignupEmail')?.value);
+    const password = document.getElementById('welcomeSignupPassword')?.value || '';
+    const errorEl = document.getElementById('welcomeSignupError');
+
+    if (!email || password.length < 8) {
+      if (errorEl) {
+        errorEl.textContent = 'メールアドレスと8桁以上のパスワードを確認してください。';
+        errorEl.classList.remove('hidden');
+      }
+      return;
+    }
+
+    if (errorEl) errorEl.classList.add('hidden');
+    window.LUMIFUL_PHASE7B_STEP2_AUTH_BUSY = true;
+
+    const wasGuest = window.authState?.status === 'guest';
+    let guestEnvelope = null;
+
+    try {
+      if (wasGuest) {
+        await window.flushPendingAutoSaveBeforeAuthChange?.('canonical-signup-guest');
+        guestEnvelope = await window.LocalStorageAdapter?.load();
+      }
+
+      const runtime = await window.initializeFirebaseRuntime();
+      if (runtime?.status !== 'ready' || !runtime.auth) throw new Error('firebase-auth-unavailable');
+
+      const credential = await runtime.auth.createUserWithEmailAndPassword(email, password);
+      await applyFirebaseUser(credential.user, { restore: false });
+
+      // New Firebase UID gets an initial Firestore document immediately.
+      const sourceModel = wasGuest && guestEnvelope?.data
+        ? guestEnvelope.data
+        : window.getCurrentDataModelV2ForPersistence();
+
+      await window.FirestoreStorageAdapter.save(sourceModel, { uid: credential.user.uid });
+      C.lastRestoredUid = credential.user.uid;
+      window.updateSaveStatus?.('saved');
+
+      if (wasGuest) {
+        window.restorePersistedStateV2?.(sourceModel);
+      } else {
+        window.renderV2InputUI?.();
+        window.recalculateAllFast?.();
+      }
+
+      renderCanonicalRoute();
+      window.showToast?.(wasGuest ? 'ゲストデータを引き継いで登録しました' : 'LUMIFULへようこそ！', 'success');
+    } catch (error) {
+      console.error('[LUMIFUL] Canonical signup failed:', error?.code, error);
+      if (errorEl) {
+        errorEl.textContent = window.getFirebaseAuthErrorMessage?.(error, 'signup') || 'アカウントを作成できませんでした。';
+        errorEl.classList.remove('hidden');
+      }
+    } finally {
+      window.LUMIFUL_PHASE7B_STEP2_AUTH_BUSY = false;
+    }
+  };
+
+  window.handleAnonymousAuth = async function() {
+    try {
+      const runtime = await window.initializeFirebaseRuntime();
+      if (runtime?.auth?.currentUser) await runtime.auth.signOut();
+
+      localStorage.setItem('lumiful_user_email', window.LUMIFUL_GUEST_EMAIL);
+      localStorage.removeItem('lc_user_email');
+      window.authState = {
+        status: 'guest',
+        user: { email: window.LUMIFUL_GUEST_EMAIL, isGuest: true, provider: 'local' }
+      };
+      C.lastRestoredUid = null;
+      renderCanonicalRoute();
+
+      const envelope = await window.LocalStorageAdapter?.load();
+      if (envelope?.data) {
+        window.restorePersistedStateV2?.(envelope.data);
+        window.updateSaveStatus?.('saved');
+      } else {
+        window.ensureV2InputModel?.();
+        window.renderV2InputUI?.();
+        window.recalculateAllFast?.();
+        window.updateSaveStatus?.('idle');
+      }
+
+      window.showToast?.('ゲストとして開始しました', 'info');
+    } catch (error) {
+      console.error('[LUMIFUL] Guest start failed.', error);
+      window.showToast?.('ゲストとして開始できませんでした', 'error');
+    }
+  };
+
+  window.handleWelcomeGuestStart = function() {
+    return window.handleAnonymousAuth();
+  };
+
+  window.handleLogout = async function() {
+    if (window.LUMIFUL_PHASE7B_STEP2_AUTH_BUSY) return;
+    window.LUMIFUL_PHASE7B_STEP2_AUTH_BUSY = true;
+
+    try {
+      if (window.authState?.status === 'authenticated') {
+        await window.flushPendingAutoSaveBeforeAuthChange?.('canonical-logout');
+      }
+
+      const runtime = await window.initializeFirebaseRuntime();
+      if (runtime?.auth?.currentUser) await runtime.auth.signOut();
+
+      localStorage.removeItem('lumiful_user_email');
+      localStorage.removeItem('lc_user_email');
+      C.lastRestoredUid = null;
+      window.authState = { status: 'unauthenticated', user: null };
+      window.resetInMemorySimulationV2?.();
+      renderCanonicalRoute();
+      window.updateSaveStatus?.('idle');
+      window.showToast?.('ログアウトしました', 'info');
+    } catch (error) {
+      console.error('[LUMIFUL] Canonical logout failed.', error);
+      window.showToast?.('ログアウト処理に失敗しました', 'error');
+    } finally {
+      window.LUMIFUL_PHASE7B_STEP2_AUTH_BUSY = false;
+    }
+  };
+
+  window.handleAccountLogout = window.handleLogout;
+
+  // Old secondary auth UI is permanently retired.
+  window.openAuthModal = function() {
+    if (window.authState?.status === 'unauthenticated') {
+      window.showWelcomeAuthPanel?.('choice');
+      document.getElementById('welcomeAuthView')?.classList.remove('hidden');
+      document.body.classList.add('overflow-hidden');
+    }
+  };
+  window.closeAuthModal = function() {};
+
+  // Single deterministic application boot.
+  window.onload = async function() {
+    if (C.booted) return;
+    C.booted = true;
+
+    window.LUMIFUL_STEP4_BOOTING = true;
+    window.authState = { status: 'checking', user: null };
+    renderCanonicalRoute();
+
+    try {
+      window.setupAgeSelects?.();
+      window.loadSavedPlansFromStorageV2?.();
+
+      // Shared URL is parsed first but account storage is restored only after auth resolves.
+      let sharedModel = null;
+      const urlParams = new URLSearchParams(window.location.search);
+      const dataParam = urlParams.get('data');
+      if (dataParam && typeof LZString !== 'undefined') {
+        try {
+          const decompressed = LZString.decompressFromEncodedURIComponent(dataParam);
+          if (decompressed) sharedModel = JSON.parse(decompressed);
+        } catch (error) {
+          console.error('[LUMIFUL] Shared URL restore failed.', error);
+        }
+      }
+
+      await window.activateFirebaseAuthentication();
+
+      if (sharedModel) {
+        window.restorePersistedStateV2?.(sharedModel);
+        if (['authenticated', 'guest'].includes(window.authState?.status)) {
+          await window.saveUserData?.();
+          window.updateSaveStatus?.('saved');
+        }
+        window.showToast?.('URLからシミュレーションデータを復元しました', 'success');
+      } else if (window.authState?.status === 'authenticated') {
+        await restoreAuthenticatedUser(window.LUMIFUL_FIREBASE_RUNTIME?.auth?.currentUser, true);
+      } else if (window.authState?.status === 'guest') {
+        const envelope = await window.LocalStorageAdapter?.load();
+        if (envelope?.data) {
+          window.restorePersistedStateV2?.(envelope.data);
+          window.updateSaveStatus?.('saved');
+        } else {
+          window.ensureV2InputModel?.();
+          window.renderV2InputUI?.();
+          window.recalculateAllFast?.();
+        }
+      } else {
+        // Keep a valid empty model behind the login surface without treating it as signed in.
+        window.ensureV2InputModel?.();
+        window.renderV2InputUI?.();
+        window.recalculateAllFast?.();
+      }
+    } catch (error) {
+      console.error('[LUMIFUL] Canonical application boot failed.', error);
+      clearStaleMockAccountIdentity();
+      window.authState = { status: 'unauthenticated', user: null };
+      renderCanonicalRoute();
+    } finally {
+      window.LUMIFUL_STEP4_BOOTING = false;
+      renderCanonicalRoute();
+    }
+  };
+
+  window.LUMIFUL_PHASE7B_STEP3_COMPLETION = Object.freeze({
+    status: 'completion-candidate',
+    singleAccountAuthSource: 'Firebase Authentication',
+    authListenerCount: 1,
+    registeredAccountRouter: 'canonical',
+    guestAuthSource: 'LocalStorage explicit only',
+    accountStorage: 'Firestore users/{uid}',
+    guestStorage: 'LocalStorageAdapter',
+    autoSave: true,
+    autoRestore: true,
+    simulationRuntime: 'Schema v2',
+    legacyMockAccountAuthInProductionPath: false,
+    secondaryAuthModal: false
+  });
+})();
+</script>
+
 </body>
 </html>
