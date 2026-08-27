@@ -307,9 +307,9 @@
     />
     <div class="flex items-center gap-2">
       <span id="saveStatusMobile" class="inline-flex items-center gap-1 text-[9px] font-bold text-[#8A909C] whitespace-nowrap" aria-live="polite"><i class="fa-solid fa-cloud"></i><span>保存待機</span></span>
-      <button onclick="handleCanonicalAccountAction()" class="px-3.5 py-1.5 btn-lumi-primary text-xs flex items-center gap-1.5 whitespace-nowrap">
-      <i class="fa-solid fa-user-circle"></i>
-      <span>ログイン</span>
+      <button id="authAccountBtnMobile" onclick="handleCanonicalAccountAction()" class="hidden px-3.5 py-1.5 btn-lumi-primary text-xs flex items-center gap-1.5 whitespace-nowrap">
+      <i id="authBtnIconMobile" class="fa-solid fa-right-from-bracket"></i>
+      <span id="authBtnTextMobile"></span>
       </button>
     </div>
   </div>
@@ -524,7 +524,7 @@
                 <div class="flex items-center justify-between gap-2 mb-1">
                   <span class="text-[10px] sm:text-xs font-bold text-[#6F7785] flex items-center gap-0.5 sm:gap-1 whitespace-nowrap tracking-[-0.02em]">
                     生涯収支カバー率
-                    <i class="fa-solid fa-circle-info text-[#6F7785]/60 text-[10px] cursor-help" title="目標年齢までの生涯を通じ、生活費の不足額を運用益と安全資産でどれだけ安全にカバーし切れたかを表します。"></i>
+                    
                   </span>
                   <img src="./assets/kpi-cover-rate.png" alt="" class="w-8 h-8 sm:w-10 sm:h-10 object-contain shrink-0 pointer-events-none" />
                 </div>
@@ -676,8 +676,31 @@
                 <div id="v2SpouseAgeWrap" class="hidden"><label class="block text-xs font-semibold text-[#4F586A] mb-1">配偶者の年齢</label><input id="v2SpouseAge" type="number" min="18" max="100" class="w-full px-3 lumi-input text-xs font-bold" oninput="syncV2InputAndRecalculate()"></div>
               </section>
               <section class="bg-white rounded-[20px] p-5 border border-[#ECEBE6] space-y-4 lg:row-span-2">
-                <div class="flex items-center justify-between pb-3 border-b border-[#ECEBE6]"><div class="flex items-center gap-2"><span class="w-6 h-6 rounded-full bg-[#EAF6FC] text-[#65B9E8] font-bold text-xs flex items-center justify-center">02</span><div><h3 class="font-bold text-[#253047] text-sm">収入（手取り）</h3><p class="text-[10px] text-[#8A909C] mt-0.5">税金・社会保険料などを差し引いた、実際に使える金額を入力します。</p></div></div><button type="button" onclick="addV2Income()" class="px-3 py-1.5 btn-lumi-secondary text-xs font-bold"><i class="fa-solid fa-plus mr-1"></i>収入を追加</button></div>
+                <div class="flex items-center justify-between gap-3 pb-3 border-b border-[#ECEBE6]"><div class="flex items-center gap-2 min-w-0"><span class="w-6 h-6 rounded-full bg-[#EAF6FC] text-[#65B9E8] font-bold text-xs flex items-center justify-center shrink-0">02</span><h3 class="font-bold text-[#253047] text-sm">収入（手取り）</h3></div><button type="button" onclick="addV2Income()" class="px-3 py-1.5 btn-lumi-secondary text-xs font-bold whitespace-nowrap shrink-0"><i class="fa-solid fa-plus mr-1"></i>追加</button></div>
                 <div id="v2IncomeList" class="space-y-3"></div>
+<div id="v2SurplusAllocationBox" class="mt-3 rounded-[14px] border border-[#ECEBE6] bg-[#FAFAF7] px-3.5 py-3">
+  <div class="flex items-center justify-between gap-3 flex-wrap">
+    <div>
+      <div class="text-xs font-bold text-[#253047]">余ったお金の積立先</div>
+      <div class="text-[10px] text-[#8A909C] mt-0.5">年間収支がプラスになった場合の積立先を選びます。</div>
+    </div>
+    <select id="v2SurplusAllocationMode" onchange="syncV2InputAndRecalculate()" class="border border-[#E1E4E8] rounded-[10px] bg-white px-3 py-2 text-xs text-[#253047] outline-none">
+      <option value="cash">現金・預金へ積立</option>
+      <option value="investment">投資資産へ積立</option>
+      <option value="both">現金・投資へ配分</option>
+    </select>
+  </div>
+  <div id="v2SurplusAllocationSplitRow" class="hidden mt-3 pt-3 border-t border-[#ECEBE6]">
+    <div class="flex items-center justify-between gap-3">
+      <label class="text-[11px] text-[#6F7785]">投資へ回す割合</label>
+      <div class="flex items-center gap-2">
+        <input id="v2SurplusInvestmentPct" type="number" min="0" max="100" step="5" value="50" onchange="syncV2InputAndRecalculate()" class="w-20 border border-[#E1E4E8] rounded-[9px] bg-white px-2.5 py-1.5 text-xs text-right">
+        <span class="text-xs text-[#6F7785]">%</span>
+      </div>
+    </div>
+    <div class="text-[10px] text-[#8A909C] mt-1">残りは現金・預金へ積み立てます。</div>
+  </div>
+</div>
               </section>
               <section class="bg-white rounded-[20px] p-5 border border-[#ECEBE6] space-y-4">
                 <div class="flex items-center gap-2 pb-3 border-b border-[#ECEBE6]"><span class="w-6 h-6 rounded-full bg-[#FFF0F3] text-[#FF8FA3] font-bold text-xs flex items-center justify-center">03</span><h3 class="font-bold text-[#253047] text-sm">毎月の暮らし</h3></div>
@@ -686,7 +709,7 @@
                 <div id="v2HousingFields"></div>
               </section>
               <section class="bg-white rounded-[20px] p-5 border border-[#ECEBE6] space-y-4 lg:col-span-2">
-                <div class="flex items-center gap-2 pb-3 border-b border-[#ECEBE6]"><span class="w-6 h-6 rounded-full bg-[#EAF8F3] text-[#4FAE8E] font-bold text-xs flex items-center justify-center">04</span><div><h3 class="font-bold text-[#253047] text-sm">資産</h3><p class="text-[10px] text-[#8A909C] mt-0.5">普段の生活や運用に使う資金と、必要に応じて売却を検討できる資産を登録します。</p></div></div>
+                <div class="flex items-center gap-2 pb-3 border-b border-[#ECEBE6]"><span class="w-6 h-6 rounded-full bg-[#EAF8F3] text-[#4FAE8E] font-bold text-xs flex items-center justify-center shrink-0">04</span><h3 class="font-bold text-[#253047] text-sm">資産</h3></div>
                 <div class="grid grid-cols-1 xl:grid-cols-2 gap-4">
                   <div class="rounded-[18px] border border-[#D8EEE5] bg-[#FCFFFD] p-4 space-y-3">
                     <div class="flex items-center justify-between gap-2"><div class="min-w-0"><div class="flex items-center gap-2"><i class="fa-solid fa-wallet text-[#4FAE8E]"></i><h4 class="text-xs font-bold text-[#253047]">運用・生活資金</h4></div><p class="text-[10px] text-[#6F7785] mt-1">現金・預金・投資など、将来の生活に使える資金</p></div><button type="button" onclick="addV2Asset()" class="px-2.5 py-1.5 btn-lumi-secondary text-[11px] font-bold whitespace-nowrap shrink-0"><i class="fa-solid fa-plus mr-1"></i>追加</button></div>
@@ -7847,6 +7870,295 @@ window.LUMIFUL_PHASE7B_STEP3_LOCK_V8_2 = Object.freeze({
   utilizationPhasePatchedAtRenderSource: true,
   simulationInputAuthUiRemoved: true
 });
+</script>
+
+
+<script>
+(function(){
+  window.getCanonicalAccountActionLabel=function(state){
+    if(state?.status==='authenticated')return 'ログアウト';
+    if(state?.status==='guest')return 'ゲスト終了';
+    return '';
+  };
+
+  window.syncCanonicalAccountActionUI=function(){
+    const state=window.authState||{status:'checking',user:null};
+    const authenticated=state.status==='authenticated';
+    const guest=state.status==='guest';
+    const inApp=authenticated||guest;
+    const label=authenticated?'ログアウト':(guest?'ゲスト終了':'');
+
+    const desktopBtn=document.getElementById('authAccountBtn');
+    const mobileBtn=document.getElementById('authAccountBtnMobile');
+    const settingsBtn=document.getElementById('settingsAccountActionBtn');
+
+    [desktopBtn,mobileBtn,settingsBtn].forEach(btn=>{
+      if(!btn)return;
+      btn.classList.toggle('hidden',!inApp);
+      if(inApp)btn.setAttribute('aria-label',label);
+      else btn.removeAttribute('aria-label');
+    });
+
+    const set=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v;};
+    set('authBtnText',label);
+    set('authBtnTextMobile',label);
+    if(settingsBtn)settingsBtn.textContent=label;
+
+    const dIcon=document.getElementById('authBtnIcon');
+    if(dIcon)dIcon.className='fa-solid fa-right-from-bracket';
+    const mIcon=document.getElementById('authBtnIconMobile');
+    if(mIcon)mIcon.className='fa-solid fa-right-from-bracket';
+
+    set('settingsUserEmail',authenticated?(state.user?.email||'ログイン中'):(guest?'ゲスト利用中':''));
+    set('settingsAccountStatusTag',authenticated?'ログイン中':(guest?'ゲスト':''));
+  };
+
+  window.handleCanonicalAccountAction=function(){
+    const status=window.authState?.status;
+    if(status==='authenticated'||status==='guest')return window.handleLogout();
+    window.routeByAuthState?.();
+  };
+
+  const prevCheck=window.checkAuthState;
+  window.checkAuthState=function(...args){
+    const r=typeof prevCheck==='function'?prevCheck.apply(this,args):undefined;
+    window.syncCanonicalAccountActionUI();
+    return r;
+  };
+
+  const prevRoute=window.routeByAuthState;
+  if(typeof prevRoute==='function'){
+    window.routeByAuthState=function(...args){
+      const r=prevRoute.apply(this,args);
+      window.syncCanonicalAccountActionUI();
+      return r;
+    };
+  }
+
+  document.addEventListener('DOMContentLoaded',window.syncCanonicalAccountActionUI);
+  setTimeout(window.syncCanonicalAccountActionUI,0);
+
+  window.LUMIFUL_PHASE7B_STEP3_LOCK_V8_4=Object.freeze({
+    status:'LOCKED',
+    appShellAuthStates:['authenticated','guest'],
+    authenticatedAction:'ログアウト',
+    guestAction:'ゲスト終了',
+    unauthenticatedSurface:'welcomeAuthView',
+    simulationIncomeHeaderCommentRemoved:true,
+    simulationAssetHeaderCommentRemoved:true,
+    incomeAddButton:'追加',
+    sectionHeaderAlignment:'01/02/03/04 unified'
+  });
+})();
+</script>
+
+
+<script>
+/* ============================================================
+   LUMIFUL PHASE 7B / STEP 3 — FINAL LOCK v9
+   SURPLUS ALLOCATION + REGRESSION GUARDS
+   ============================================================ */
+(function () {
+  const clamp = (n, min, max) => Math.max(min, Math.min(max, Number(n) || 0));
+
+  window.normalizeSurplusAllocationV9 = function(model) {
+    if (!model || typeof model !== 'object') return model;
+    model.settings = model.settings || {};
+    const valid = ['cash', 'investment', 'both'];
+    if (!valid.includes(model.settings.surplusAllocationMode)) {
+      // Backward-compatible default: historical behavior stays cash-like.
+      model.settings.surplusAllocationMode = 'cash';
+    }
+    model.settings.surplusInvestmentPct =
+      model.settings.surplusAllocationMode === 'investment'
+        ? 100
+        : model.settings.surplusAllocationMode === 'cash'
+          ? 0
+          : clamp(model.settings.surplusInvestmentPct ?? 50, 0, 100);
+    return model;
+  };
+
+  const prevNormalizeV9 = window.normalizeDataModelV2;
+  window.normalizeDataModelV2 = function(model) {
+    const normalized = prevNormalizeV9(model);
+    return window.normalizeSurplusAllocationV9(normalized);
+  };
+
+  window.syncSurplusAllocationUIV9 = function(modelArg) {
+    const model = window.normalizeSurplusAllocationV9(
+      modelArg || window.ensureV2InputModel()
+    );
+    const mode = model.settings.surplusAllocationMode;
+    const pct = model.settings.surplusInvestmentPct;
+
+    const modeEl = document.getElementById('v2SurplusAllocationMode');
+    const pctEl = document.getElementById('v2SurplusInvestmentPct');
+    const splitRow = document.getElementById('v2SurplusAllocationSplitRow');
+
+    if (modeEl) modeEl.value = mode;
+    if (pctEl) pctEl.value = String(pct);
+    if (splitRow) splitRow.classList.toggle('hidden', mode !== 'both');
+  };
+
+  window.readSurplusAllocationUIV9 = function(modelArg) {
+    const model = modelArg || window.ensureV2InputModel();
+    model.settings = model.settings || {};
+
+    const modeEl = document.getElementById('v2SurplusAllocationMode');
+    const pctEl = document.getElementById('v2SurplusInvestmentPct');
+    const mode = ['cash','investment','both'].includes(modeEl?.value)
+      ? modeEl.value
+      : (model.settings.surplusAllocationMode || 'cash');
+
+    model.settings.surplusAllocationMode = mode;
+    model.settings.surplusInvestmentPct =
+      mode === 'investment' ? 100 :
+      mode === 'cash' ? 0 :
+      clamp(pctEl?.value ?? model.settings.surplusInvestmentPct ?? 50, 0, 100);
+
+    window.syncSurplusAllocationUIV9(model);
+    return model;
+  };
+
+  // Render/sync hooks: keep the setting visible after restore/reload.
+  const prevRenderInputV9 = window.renderV2InputUI;
+  window.renderV2InputUI = function(...args) {
+    const result = prevRenderInputV9.apply(this, args);
+    window.syncSurplusAllocationUIV9(window.ensureV2InputModel());
+    return result;
+  };
+
+  const prevSyncInputV9 = window.syncV2InputAndRecalculate;
+  window.syncV2InputAndRecalculate = function(...args) {
+    window.readSurplusAllocationUIV9(window.ensureV2InputModel());
+    return prevSyncInputV9.apply(this, args);
+  };
+
+  // Allocation helper used by the yearly engine/result layer.
+  // "Investment" means the user's existing yield-bearing simulation assets.
+  // We do not invent an investment asset if none exists; in that case surplus
+  // falls back to cash so money never disappears from the simulation.
+  window.allocateAnnualSurplusV9 = function(modelArg, annualSurplus) {
+    const model = window.normalizeDataModelV2(modelArg);
+    const surplus = Math.max(0, Number(annualSurplus || 0));
+    if (!surplus) return { cash: 0, investment: 0, total: 0 };
+
+    const assets = (model.assets || []).filter(a => a.assetClass === 'simulation');
+    const investmentAssets = assets.filter(a =>
+      window.assetCategoryHasReturnInputV2?.(a.category) === true
+    );
+
+    let investmentPct = model.settings.surplusInvestmentPct || 0;
+    if (!investmentAssets.length) investmentPct = 0;
+
+    const investment = surplus * investmentPct / 100;
+    const cash = surplus - investment;
+    return { cash, investment, total: surplus };
+  };
+
+  // Apply allocation to annual rows after the existing engine calculates them.
+  // This is additive only: existing income/expense/withdrawal logic remains locked.
+  window.applySurplusAllocationToRowsV9 = function(modelArg, rowsArg) {
+    const model = window.normalizeDataModelV2(modelArg);
+    const rows = Array.isArray(rowsArg) ? rowsArg : [];
+    if (!rows.length) return rows;
+
+    let cumulativeCash = 0;
+    let cumulativeInvestment = 0;
+
+    rows.forEach(row => {
+      const positiveSurplus = Math.max(0, Number(row.netCashflow || 0));
+      const allocation = window.allocateAnnualSurplusV9(model, positiveSurplus);
+
+      cumulativeCash += allocation.cash;
+      cumulativeInvestment += allocation.investment;
+
+      row.surplusToCash = allocation.cash;
+      row.surplusToInvestment = allocation.investment;
+      row.cumulativeSurplusCash = cumulativeCash;
+      row.cumulativeSurplusInvestment = cumulativeInvestment;
+    });
+    return rows;
+  };
+
+  // Hook only the published table rows, leaving the core engine untouched.
+  const prevRecalcV9 = window.recalculateAllV2Dashboard;
+  window.recalculateAllV2Dashboard = function(...args) {
+    const result = prevRecalcV9.apply(this, args);
+    const model = window.ensureV2InputModel();
+    if (Array.isArray(window.currentTableRows)) {
+      window.applySurplusAllocationToRowsV9(model, window.currentTableRows);
+    }
+    window.syncSurplusAllocationUIV9(model);
+    return result;
+  };
+
+  // Defensive auth contract: the app shell never displays a login action.
+  const prevAuthSyncV9 = window.syncCanonicalAccountActionUI;
+  window.syncCanonicalAccountActionUI = function() {
+    if (typeof prevAuthSyncV9 === 'function') prevAuthSyncV9();
+
+    const state = window.authState || {};
+    const valid = state.status === 'authenticated' || state.status === 'guest';
+    const label = state.status === 'authenticated'
+      ? 'ログアウト'
+      : state.status === 'guest'
+        ? 'ゲスト終了'
+        : '';
+
+    ['authAccountBtn','authAccountBtnMobile','settingsAccountActionBtn'].forEach(id => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.classList.toggle('hidden', !valid);
+      if (valid) el.setAttribute('aria-label', label);
+    });
+    const d = document.getElementById('authBtnText');
+    const m = document.getElementById('authBtnTextMobile');
+    if (d) d.textContent = label;
+    if (m) m.textContent = label;
+  };
+
+  window.runFinalLockRegressionV9 = function() {
+    const sample = window.createEmptyDataModelV2();
+    sample.settings = sample.settings || {};
+    sample.settings.surplusAllocationMode = 'both';
+    sample.settings.surplusInvestmentPct = 40;
+    sample.assets = [
+      {id:'cash',assetClass:'simulation',category:'cash',value:1000,expectedReturn:0},
+      {id:'fund',assetClass:'simulation',category:'investment_fund',value:5500,expectedReturn:4}
+    ];
+    const normalized = window.normalizeDataModelV2(sample);
+    const a = window.allocateAnnualSurplusV9(normalized, 100);
+    return {
+      ok:
+        normalized.settings.surplusAllocationMode === 'both' &&
+        normalized.settings.surplusInvestmentPct === 40 &&
+        Math.abs(a.cash - 60) < 0.001 &&
+        Math.abs(a.investment - 40) < 0.001 &&
+        document.getElementById('authLockOverlay') === null,
+      allocation: a
+    };
+  };
+
+  document.addEventListener('DOMContentLoaded', function() {
+    try {
+      window.syncSurplusAllocationUIV9(window.ensureV2InputModel());
+      window.syncCanonicalAccountActionUI();
+    } catch (_) {}
+  });
+
+  window.LUMIFUL_PHASE7B_STEP3_FINAL_LOCK = Object.freeze({
+    version: '9.0',
+    status: 'LOCKED',
+    base: 'v8.4',
+    auth: 'Firebase=logout / guest=guest-end / unauthenticated=welcome-only',
+    surplusAllocation: ['cash','investment','both'],
+    recurringExpenses: 'living-expense simulation only',
+    oneTimeFutureReceipts: 'life-event income',
+    assetReturnRules: 'cash+stock=no return input; fund+bond=return input',
+    obsoleteInputAuthOverlay: false
+  });
+})();
 </script>
 
 </body>
