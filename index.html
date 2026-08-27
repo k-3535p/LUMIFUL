@@ -664,26 +664,8 @@
 
         <div class="bg-white rounded-[24px] border border-[#ECEBE6] overflow-hidden relative" id="inputTabsContainer">
           
-          <div id="authLockOverlay" class="absolute inset-0 bg-[#FAFAF7]/92 backdrop-blur-sm z-40 flex flex-col items-center justify-center p-6 text-center transition-all duration-300 min-h-[360px]">
-            <div class="w-12 h-12 rounded-[16px] bg-white text-[#8C5800] flex items-center justify-center text-xl shadow-sm mb-3 border border-[#F0E2B7] shrink-0">
-              <i class="fa-solid fa-lock"></i>
-            </div>
-            <h2 class="text-base sm:text-lg font-bold text-[#253047] mb-1">シミュレーションのご利用にはログインが必要です</h2>
-            <p class="text-xs text-[#6F7785] mb-6 max-w-md leading-relaxed">
-              アカウント作成・ログイン、またはワンクリック簡易ログイン（ゲスト）を行うと、プロファイル入力や数値変更・保存機能をご利用いただけます。
-            </p>
-
-            <div class="flex flex-col sm:flex-row items-center justify-center gap-3 w-full max-w-md px-2">
-              <button onclick="handleCanonicalAccountAction()" class="w-full sm:w-auto px-5 py-2.5 btn-lumi-primary text-xs sm:text-sm font-bold flex items-center justify-center gap-2 whitespace-nowrap shrink-0">
-                <i class="fa-solid fa-user-plus"></i>
-                <span>アカウント作成 / ログイン</span>
-              </button>
-              <button onclick="handleAnonymousAuth()" class="w-full sm:w-auto px-5 py-2.5 btn-lumi-secondary text-xs sm:text-sm font-bold flex items-center justify-center gap-2 whitespace-nowrap shrink-0">
-                <i class="fa-solid fa-bolt text-[#65B9E8]"></i>
-                <span>ゲストとして今すぐ始める</span>
-              </button>
-            </div>
-          </div>
+          <!-- STEP3 v8.1: redundant in-input authentication overlay removed.
+               Authentication is completed before entering the app. -->
 
           <div id="tabContent-profile" class="p-5 sm:p-7 space-y-5">
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-5">
@@ -694,7 +676,7 @@
                 <div id="v2SpouseAgeWrap" class="hidden"><label class="block text-xs font-semibold text-[#4F586A] mb-1">配偶者の年齢</label><input id="v2SpouseAge" type="number" min="18" max="100" class="w-full px-3 lumi-input text-xs font-bold" oninput="syncV2InputAndRecalculate()"></div>
               </section>
               <section class="bg-white rounded-[20px] p-5 border border-[#ECEBE6] space-y-4 lg:row-span-2">
-                <div class="flex items-center justify-between pb-3 border-b border-[#ECEBE6]"><div class="flex items-center gap-2"><span class="w-6 h-6 rounded-full bg-[#EAF6FC] text-[#65B9E8] font-bold text-xs flex items-center justify-center">02</span><h3 class="font-bold text-[#253047] text-sm">収入</h3></div><button type="button" onclick="addV2Income()" class="px-3 py-1.5 btn-lumi-secondary text-xs font-bold"><i class="fa-solid fa-plus mr-1"></i>収入を追加</button></div>
+                <div class="flex items-center justify-between pb-3 border-b border-[#ECEBE6]"><div class="flex items-center gap-2"><span class="w-6 h-6 rounded-full bg-[#EAF6FC] text-[#65B9E8] font-bold text-xs flex items-center justify-center">02</span><div><h3 class="font-bold text-[#253047] text-sm">収入（手取り）</h3><p class="text-[10px] text-[#8A909C] mt-0.5">税金・社会保険料などを差し引いた、実際に使える金額を入力します。</p></div></div><button type="button" onclick="addV2Income()" class="px-3 py-1.5 btn-lumi-secondary text-xs font-bold"><i class="fa-solid fa-plus mr-1"></i>収入を追加</button></div>
                 <div id="v2IncomeList" class="space-y-3"></div>
               </section>
               <section class="bg-white rounded-[20px] p-5 border border-[#ECEBE6] space-y-4">
@@ -782,6 +764,7 @@
             <i class="fa-solid fa-chart-pie text-[#65B9E8]"></i>
             <span>未来の重要な3つの数字</span>
           </h3>
+          <p class="text-xs text-[#6F7785]">人生を3つの時期に分け、各期間の「収支」と「資産の増減」を比較します。どの時期から資産を使い始めるかを確認できます。</p>
 
           <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
             
@@ -824,7 +807,7 @@
         <div class="space-y-3">
           <h3 class="text-sm font-bold text-[#253047] flex items-center gap-2">
             <i class="fa-solid fa-timeline text-[#8C5800]"></i>
-            <span>未来を3つの期間で見る</span>
+            <span>未来の3フェーズを比較する</span>
           </h3>
 
           <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -833,18 +816,33 @@
               <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#FAFAF7] text-[#6F7785] border border-[#ECEBE6]">Period 01</span>
               <div class="text-sm font-bold text-[#253047]">現在 → 退職</div>
               <div id="period-1-range" class="text-xs font-extrabold text-[#8C5800] pt-1">--歳 〜 --歳</div>
+              <div class="pt-3 mt-2 border-t border-[#ECEBE6] space-y-2">
+                <div class="flex justify-between gap-3 text-[11px]"><span class="text-[#8A909C]">期間収支</span><span id="period-1-cashflow" class="font-extrabold text-[#253047]">-</span></div>
+                <div class="flex justify-between gap-3 text-[11px]"><span class="text-[#8A909C]">資産変化</span><span id="period-1-assets" class="font-extrabold text-[#253047]">-</span></div>
+                <div id="period-1-status" class="text-[11px] leading-relaxed text-[#6F7785] bg-[#FAFAF7] rounded-[10px] px-2.5 py-2">-</div>
+              </div>
             </div>
 
             <div class="bg-white rounded-[20px] p-5 border border-[#ECEBE6] space-y-2 relative">
               <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#FAFAF7] text-[#6F7785] border border-[#ECEBE6]">Period 02</span>
               <div class="text-sm font-bold text-[#253047]">退職 → 年金開始</div>
               <div id="period-2-range" class="text-xs font-extrabold text-[#8C5800] pt-1">--歳 〜 --歳</div>
+              <div class="pt-3 mt-2 border-t border-[#ECEBE6] space-y-2">
+                <div class="flex justify-between gap-3 text-[11px]"><span class="text-[#8A909C]">期間収支</span><span id="period-2-cashflow" class="font-extrabold text-[#253047]">-</span></div>
+                <div class="flex justify-between gap-3 text-[11px]"><span class="text-[#8A909C]">資産変化</span><span id="period-2-assets" class="font-extrabold text-[#253047]">-</span></div>
+                <div id="period-2-status" class="text-[11px] leading-relaxed text-[#6F7785] bg-[#FAFAF7] rounded-[10px] px-2.5 py-2">-</div>
+              </div>
             </div>
 
             <div class="bg-white rounded-[20px] p-5 border border-[#ECEBE6] space-y-2 relative">
               <span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-[#FAFAF7] text-[#6F7785] border border-[#ECEBE6]">Period 03</span>
               <div class="text-sm font-bold text-[#253047]">年金開始 → シミュレーション終了</div>
               <div id="period-3-range" class="text-xs font-extrabold text-[#8C5800] pt-1">--歳 〜 --歳</div>
+              <div class="pt-3 mt-2 border-t border-[#ECEBE6] space-y-2">
+                <div class="flex justify-between gap-3 text-[11px]"><span class="text-[#8A909C]">期間収支</span><span id="period-3-cashflow" class="font-extrabold text-[#253047]">-</span></div>
+                <div class="flex justify-between gap-3 text-[11px]"><span class="text-[#8A909C]">資産変化</span><span id="period-3-assets" class="font-extrabold text-[#253047]">-</span></div>
+                <div id="period-3-status" class="text-[11px] leading-relaxed text-[#6F7785] bg-[#FAFAF7] rounded-[10px] px-2.5 py-2">-</div>
+              </div>
             </div>
 
           </div>
@@ -909,11 +907,11 @@
             <div id="proj-final-assets" class="text-2xl font-extrabold text-[#253047]">0 万円</div>
           </div>
           <div class="bg-white rounded-[20px] p-5 border border-[#ECEBE6] space-y-1">
-            <span class="text-xs font-bold text-[#6F7785]">売却可能資産</span>
-            <div id="proj-final-networth" class="text-2xl font-extrabold text-[#253047]">0 万円</div>
+            <span class="text-xs font-bold text-[#6F7785]">資産ピーク</span>
+            <div id="proj-final-networth" class="text-2xl font-extrabold text-[#253047]">-</div>
           </div>
           <div class="bg-white rounded-[20px] p-5 border border-[#ECEBE6] space-y-1">
-            <span class="text-xs font-bold text-[#6F7785]">生涯収支カバー率</span>
+            <span class="text-xs font-bold text-[#6F7785]">資金不足開始</span>
             <div id="proj-cover-rate" class="text-2xl font-extrabold text-[#253047]">-</div>
           </div>
         </div>
@@ -3127,11 +3125,14 @@
     window.renderV2PotentialAssetList = function(){const m=window.ensureV2InputModel(),box=document.getElementById('v2PotentialAssetList');if(!box)return;const arr=m.assets.filter(a=>a.assetClass==='potential');if(!arr.length){box.innerHTML='<p class="text-xs text-[#8A909C] py-2">売却できる資産はまだ登録されていません。</p>';return;}box.innerHTML=arr.map(x=>{const i=m.assets.indexOf(x);return `<div class="rounded-[14px] border border-[#F0E2B7] bg-white p-3 space-y-2"><div class="grid grid-cols-2 gap-2"><select data-v2-asset="category" data-i="${i}" class="px-2 lumi-input text-xs font-bold bg-white"><option value="real_estate" ${x.category==='real_estate'?'selected':''}>不動産</option><option value="private_stock" ${x.category==='private_stock'?'selected':''}>非上場株式</option><option value="business_equity" ${x.category==='business_equity'?'selected':''}>事業持分</option><option value="other" ${x.category==='other'?'selected':''}>その他</option></select><input data-v2-asset="name" data-i="${i}" value="${v2Esc(x.name)}" placeholder="資産名" class="px-2 lumi-input text-xs font-bold"><div class="col-span-2 flex items-center gap-1"><input data-v2-asset="value" data-i="${i}" type="number" min="0" value="${Number(x.value||0)||''}" placeholder="評価額" class="w-full px-2 lumi-input text-xs font-bold"><span class="text-[10px] text-[#6F7785]">万円</span></div></div><div class="flex justify-between items-center"><span class="text-[10px] text-[#8A909C]">シミュレーションには自動反映されません</span><button type="button" onclick="removeV2PotentialAsset(${i})" class="text-[11px] font-bold text-[#A65B67]">削除</button></div></div>`}).join('');box.querySelectorAll('[data-v2-asset]').forEach(el=>el.addEventListener('input',window.syncV2InputAndRecalculate));box.querySelectorAll('select[data-v2-asset]').forEach(el=>el.addEventListener('change',window.syncV2InputAndRecalculate));};
     window.renderV2LifestyleAssetList = function(){const m=window.ensureV2InputModel(),box=document.getElementById('v2LifestyleAssetList');if(!box)return;const arr=m.assets.filter(a=>a.assetClass==='lifestyle');if(!arr.length){box.innerHTML='<p class="text-xs text-[#8A909C] py-2">生活資産はまだ登録されていません。</p>';return;}box.innerHTML=arr.map(x=>{const i=m.assets.indexOf(x);return `<div class="rounded-[14px] border border-[#E8E7F7] bg-white p-3 space-y-2"><div class="grid grid-cols-2 gap-2"><select data-v2-asset="category" data-i="${i}" class="px-2 lumi-input text-xs font-bold bg-white"><option value="home" ${x.category==='home'?'selected':''}>自宅</option><option value="car" ${x.category==='car'?'selected':''}>自家用車</option><option value="other" ${x.category==='other'?'selected':''}>その他</option></select><input data-v2-asset="name" data-i="${i}" value="${v2Esc(x.name)}" placeholder="資産名" class="px-2 lumi-input text-xs font-bold"><div class="col-span-2 flex items-center gap-1"><input data-v2-asset="value" data-i="${i}" type="number" min="0" value="${Number(x.value||0)}" class="w-full px-2 lumi-input text-xs font-bold"><span class="text-[10px] text-[#6F7785]">万円</span></div></div><div class="flex justify-between items-center"><span class="text-[10px] text-[#8A909C]">保有状況として表示のみ</span><button type="button" onclick="removeV2LifestyleAsset(${i})" class="text-[11px] font-bold text-[#A65B67]">削除</button></div></div>`}).join('');box.querySelectorAll('[data-v2-asset]').forEach(el=>el.addEventListener('input',window.syncV2InputAndRecalculate));box.querySelectorAll('select[data-v2-asset]').forEach(el=>el.addEventListener('change',window.syncV2InputAndRecalculate));};
     window.renderV2PaymentList=function(){const m=window.ensureV2InputModel(),box=document.getElementById('v2PaymentList');if(!box)return;if(!m.payments.length){box.innerHTML='<p class="text-xs text-[#8A909C] py-2">その他の返済はありません。</p>';return;}box.innerHTML=m.payments.map((x,i)=>`<div class="rounded-[16px] border border-[#ECEBE6] bg-[#FAFAF7] p-3"><div class="grid grid-cols-2 sm:grid-cols-6 gap-2"><select data-v2-payment="category" data-i="${i}" class="px-2 lumi-input text-xs font-bold bg-white"><option value="car" ${x.category==='car'?'selected':''}>自動車</option><option value="education" ${x.category==='education'?'selected':''}>教育</option><option value="business" ${x.category==='business'?'selected':''}>事業</option><option value="other" ${x.category==='other'?'selected':''}>その他</option></select><input data-v2-payment="name" data-i="${i}" value="${v2Esc(x.name)}" placeholder="名称" class="px-2 lumi-input text-xs font-bold"><input data-v2-payment="amount" data-i="${i}" type="number" min="0" value="${Number(x.amount||0)}" class="px-2 lumi-input text-xs font-bold"><select data-v2-payment="frequency" data-i="${i}" class="px-2 lumi-input text-xs font-bold bg-white"><option value="monthly" ${x.frequency==='monthly'?'selected':''}>万円/月</option><option value="yearly" ${x.frequency==='yearly'?'selected':''}>万円/年</option></select><input data-v2-payment="endAge" data-i="${i}" type="number" min="18" max="110" value="${Number(x.endAge||0)||''}" placeholder="終了年齢" class="px-2 lumi-input text-xs font-bold"><button type="button" onclick="removeV2Payment(${i})" class="text-xs font-bold text-[#A65B67]">削除</button></div></div>`).join('');box.querySelectorAll('[data-v2-payment]').forEach(el=>el.addEventListener('input',window.syncV2InputAndRecalculate));box.querySelectorAll('select[data-v2-payment]').forEach(el=>el.addEventListener('change',window.syncV2InputAndRecalculate));};
-    window.renderV2InputUI=function(){const m=window.ensureV2InputModel();const set=(id,v)=>{const e=document.getElementById(id);if(e)e.value=v??''};set('v2CurrentAge',m.profile.currentAge||40);set('v2TargetAge',m.profile.targetAge||90);const sp=document.getElementById('v2HasSpouse');if(sp)sp.checked=!!m.profile.hasSpouse;set('v2SpouseAge',m.profile.spouseAge||'');set('v2LivingMonthly',Number(m.living?.expense?.amount||0)/12);set('v2HousingType',m.living?.housing?.type||'rent');set('v2InflationRate',m.settings?.inflationRate??1.5);window.toggleV2Spouse();window.renderV2HousingFields();window.renderV2IncomeList();window.renderV2AssetList();window.renderV2PotentialAssetList();window.renderV2PaymentList();window.v2InputInitialized=true;};
-    window.syncV2InputAndRecalculate=function(){const m=window.ensureV2InputModel();m.profile.currentAge=Math.max(18,Math.round(v2Num('v2CurrentAge',40)));m.profile.targetAge=Math.max(m.profile.currentAge,Math.round(v2Num('v2TargetAge',90)));m.profile.hasSpouse=!!document.getElementById('v2HasSpouse')?.checked;m.profile.spouseAge=m.profile.hasSpouse?Math.max(18,Math.round(v2Num('v2SpouseAge',m.profile.currentAge))):null;m.living.expense={amount:v2Num('v2LivingMonthly')*12,frequency:'yearly'};const ht=document.getElementById('v2HousingType')?.value||'rent';m.living.housing={type:ht,monthlyAmount:v2Num('v2HousingMonthly'),endAge:ht==='owned_with_loan'?Math.round(v2Num('v2HousingEndAge')):null};m.settings.inflationRate=v2Num('v2InflationRate',1.5);document.querySelectorAll('[data-v2-income]').forEach(el=>{const x=m.incomes[Number(el.dataset.i)];if(!x)return;const k=el.dataset.v2Income;x[k]=(k==='amount'||k==='endAge')?Number(el.value||0):el.value;x.startAge=m.profile.currentAge;});document.querySelectorAll('[data-v2-asset]').forEach(el=>{const x=m.assets[Number(el.dataset.i)];if(!x)return;const k=el.dataset.v2Asset;x[k]=(k==='value'||k==='expectedReturn')?Number(el.value||0):el.value;});m.assets.filter(a=>a.assetClass==='simulation'&&(a.category==='cash'||a.category==='stock')).forEach(a=>{a.expectedReturn=0;});document.querySelectorAll('[data-v2-withdrawal]').forEach(el=>{const x=m.assets[Number(el.dataset.i)];if(!x)return;const v=el.value;if(v==='auto'){x.withdrawalSetting='auto';x.withdrawalPriority=null;}else if(v==='excluded'){x.withdrawalSetting='excluded';x.withdrawalPriority='excluded';}else{x.withdrawalSetting='manual';x.withdrawalPriority=v;}});document.querySelectorAll('[data-v2-payment]').forEach(el=>{const x=m.payments[Number(el.dataset.i)];if(!x)return;const k=el.dataset.v2Payment;x[k]=(k==='amount'||k==='endAge')?Number(el.value||0):el.value;x.startAge=m.profile.currentAge;});if(typeof window.recalculateAllFast==='function')window.recalculateAllFast();};
-    window.addV2Income=function(){const m=window.ensureV2InputModel();m.incomes.push({id:v2Id('income'),category:'salary',name:'給与',owner:'self',amount:0,frequency:'yearly',startAge:m.profile.currentAge||40,endAge:0});window.renderV2IncomeList();};window.removeV2Income=function(i){window.ensureV2InputModel().incomes.splice(i,1);window.renderV2IncomeList();window.recalculateAllFast();};
+    window.renderV2InputUI=function(){const m=window.ensureV2InputModel();const set=(id,v)=>{const e=document.getElementById(id);if(e)e.value=v??''};set('v2CurrentAge',Number(m.profile.currentAge)>0?m.profile.currentAge:'');set('v2TargetAge',m.profile.targetAge||90);const sp=document.getElementById('v2HasSpouse');if(sp)sp.checked=!!m.profile.hasSpouse;set('v2SpouseAge',m.profile.spouseAge||'');set('v2LivingMonthly',Number(m.living?.expense?.amount||0)/12);set('v2HousingType',m.living?.housing?.type||'rent');set('v2InflationRate',m.settings?.inflationRate??1.5);window.toggleV2Spouse();window.renderV2HousingFields();window.renderV2IncomeList();window.renderV2AssetList();window.renderV2PotentialAssetList();window.renderV2PaymentList();window.v2InputInitialized=true;};
+    window.syncV2InputAndRecalculate=function(){const m=window.ensureV2InputModel();const _ageRaw=(document.getElementById('v2CurrentAge')?.value||'').trim();
+m.profile.currentAge=_ageRaw?Math.max(18,Math.round(Number(_ageRaw)||0)):0;
+const _targetRaw=(document.getElementById('v2TargetAge')?.value||'').trim();
+m.profile.targetAge=_targetRaw?Math.max(m.profile.currentAge||18,Math.round(Number(_targetRaw)||90)):90;m.profile.hasSpouse=!!document.getElementById('v2HasSpouse')?.checked;m.profile.spouseAge=m.profile.hasSpouse?Math.max(18,Math.round(v2Num('v2SpouseAge',m.profile.currentAge))):null;m.living.expense={amount:v2Num('v2LivingMonthly')*12,frequency:'yearly'};const ht=document.getElementById('v2HousingType')?.value||'rent';m.living.housing={type:ht,monthlyAmount:v2Num('v2HousingMonthly'),endAge:ht==='owned_with_loan'?Math.round(v2Num('v2HousingEndAge')):null};m.settings.inflationRate=v2Num('v2InflationRate',1.5);document.querySelectorAll('[data-v2-income]').forEach(el=>{const x=m.incomes[Number(el.dataset.i)];if(!x)return;const k=el.dataset.v2Income;x[k]=(k==='amount'||k==='endAge')?Number(el.value||0):el.value;x.startAge=m.profile.currentAge;});document.querySelectorAll('[data-v2-asset]').forEach(el=>{const x=m.assets[Number(el.dataset.i)];if(!x)return;const k=el.dataset.v2Asset;x[k]=(k==='value'||k==='expectedReturn')?Number(el.value||0):el.value;});m.assets.filter(a=>a.assetClass==='simulation'&&(a.category==='cash'||a.category==='stock')).forEach(a=>{a.expectedReturn=0;});document.querySelectorAll('[data-v2-withdrawal]').forEach(el=>{const x=m.assets[Number(el.dataset.i)];if(!x)return;const v=el.value;if(v==='auto'){x.withdrawalSetting='auto';x.withdrawalPriority=null;}else if(v==='excluded'){x.withdrawalSetting='excluded';x.withdrawalPriority='excluded';}else{x.withdrawalSetting='manual';x.withdrawalPriority=v;}});document.querySelectorAll('[data-v2-payment]').forEach(el=>{const x=m.payments[Number(el.dataset.i)];if(!x)return;const k=el.dataset.v2Payment;x[k]=(k==='amount'||k==='endAge')?Number(el.value||0):el.value;x.startAge=m.profile.currentAge;});if(m.profile.currentAge>0&&typeof window.recalculateAllFast==='function')window.recalculateAllFast();else window.renderV2EmptyDashboard?.();};
+    window.addV2Income=function(){const m=window.ensureV2InputModel();m.incomes.push({id:v2Id('income'),category:'salary',name:'給与',owner:'self',amount:0,frequency:'yearly',startAge:m.profile.currentAge||0,endAge:0});window.renderV2IncomeList();};window.removeV2Income=function(i){window.ensureV2InputModel().incomes.splice(i,1);window.renderV2IncomeList();window.recalculateAllFast();};
     window.addV2Asset=function(){const m=window.ensureV2InputModel();m.assets.push({id:v2Id('asset'),assetClass:'simulation',category:'cash',name:'現金・預金',owner:'self',value:0,expectedReturn:0,withdrawalSetting:'auto',withdrawalPriority:null});window.renderV2AssetList();};window.removeV2Asset=function(i){window.ensureV2InputModel().assets.splice(i,1);window.renderV2AssetList();window.recalculateAllFast();};window.addV2PotentialAsset=function(){const m=window.ensureV2InputModel();m.assets.push({id:v2Id('potential'),assetClass:'potential',category:'real_estate',name:'売却できる資産',owner:'self',value:0});window.renderV2PotentialAssetList();};window.removeV2PotentialAsset=function(i){window.ensureV2InputModel().assets.splice(i,1);window.renderV2PotentialAssetList();window.recalculateAllFast();};window.addV2LifestyleAsset=function(){const m=window.ensureV2InputModel();m.assets.push({id:v2Id('lifestyle'),assetClass:'lifestyle',category:'home',name:'自宅',owner:'self',value:0});window.renderV2LifestyleAssetList();};window.removeV2LifestyleAsset=function(i){window.ensureV2InputModel().assets.splice(i,1);window.renderV2LifestyleAssetList();window.recalculateAllFast();};
-    window.addV2Payment=function(){const m=window.ensureV2InputModel();m.payments.push({id:v2Id('payment'),category:'other',name:'返済',amount:0,frequency:'monthly',startAge:m.profile.currentAge||40,endAge:50});window.renderV2PaymentList();};window.removeV2Payment=function(i){window.ensureV2InputModel().payments.splice(i,1);window.renderV2PaymentList();window.recalculateAllFast();};
+    window.addV2Payment=function(){const m=window.ensureV2InputModel();m.payments.push({id:v2Id('payment'),category:'other',name:'返済',amount:0,frequency:'monthly',startAge:m.profile.currentAge||0,endAge:50});window.renderV2PaymentList();};window.removeV2Payment=function(i){window.ensureV2InputModel().payments.splice(i,1);window.renderV2PaymentList();window.recalculateAllFast();};
 
     /* ============================================================
        PHASE 6 / FINAL — PRODUCTION ARCHITECTURE LOCK
@@ -6138,9 +6139,9 @@ JSON Schema:
     const mIcon = document.getElementById('authBtnIconMobile');
     if (mIcon) mIcon.className = active ? 'fa-solid fa-right-from-bracket' : 'fa-solid fa-user-circle';
 
-    const overlay = document.getElementById('authLockOverlay');
-    if (overlay) overlay.classList.toggle('hidden', active);
-    window.setInputsDisabled?.(!active);
+    // Authentication is handled by welcomeAuthView before app entry.
+    // Simulation input has no secondary auth gate.
+    window.setInputsDisabled?.(false);
   }
 
   function route() {
@@ -7487,6 +7488,336 @@ window.LUMIFUL_PHASE7B_STEP3_FINAL_V4 = Object.freeze({
     ageDefault: 'blank unless restored',
     noFixedPeriodAges: true
   });
+})();
+</script>
+
+
+<script>
+/* ============================================================
+   PHASE 7B / STEP 3 FINAL v8
+   INFORMATION DESIGN / DECISION-SUPPORT VIEW
+   ============================================================ */
+(function () {
+  const fmtMoney = n => `${Math.round(Number(n || 0)).toLocaleString()} 万円`;
+  const signedMoney = n => `${Number(n)>=0?'+':''}${Math.round(Number(n||0)).toLocaleString()} 万円`;
+
+  function rows() {
+    return Array.isArray(window.currentTableRows) ? window.currentTableRows : [];
+  }
+
+  function model() {
+    return window.normalizeDataModelV2(window.ensureV2InputModel());
+  }
+
+  // ---- Income: explicit take-home meaning inside the list itself ----
+  const incomeCore = window.renderV2IncomeList;
+  window.renderV2IncomeList = function(...args) {
+    const result = incomeCore.apply(this, args);
+    const box = document.getElementById('v2IncomeList');
+    if (!box) return result;
+
+    if (!box.querySelector('[data-income-basis-note]')) {
+      const note = document.createElement('div');
+      note.dataset.incomeBasisNote = 'true';
+      note.className = 'rounded-[12px] bg-[#F7FBFE] border border-[#DCEEF8] px-3 py-2 text-[10px] text-[#536274] leading-relaxed';
+      note.innerHTML = '<strong class="text-[#253047]">入力基準：手取り</strong>　給与・事業収入・年金など、税金や社会保険料を差し引いた後に実際に使える金額を入力してください。';
+      box.prepend(note);
+    }
+
+    box.querySelectorAll('input[data-v2-income="amount"]').forEach(input => {
+      input.placeholder = '手取り額';
+      input.title = '税金・社会保険料控除後の手取り額';
+    });
+    return result;
+  };
+
+  // ---- No fake age default ----
+  const inputRenderCore = window.renderV2InputUI;
+  window.renderV2InputUI = function(...args) {
+    const result = inputRenderCore.apply(this, args);
+    const age = document.getElementById('v2CurrentAge');
+    if (age && !(Number(model()?.profile?.currentAge) > 0)) {
+      age.value = '';
+      age.placeholder = '例：40';
+    }
+    return result;
+  };
+
+  // ---- 3 phases: convert from age labels into decision-support summaries ----
+  window.updateThreeLifePeriodsV2 = function(rowsArg) {
+    const rs = Array.isArray(rowsArg) && rowsArg.length ? rowsArg : rows();
+    if (!rs.length) return;
+
+    const start = Number(rs[0].age);
+    const end = Number(rs[rs.length-1].age);
+    if (!Number.isFinite(start) || !Number.isFinite(end)) return;
+
+    const totalYears = Math.max(1, end-start+1);
+    const cut1 = Math.min(end, start + Math.floor(totalYears/3) - 1);
+    const cut2 = Math.min(end, start + Math.floor(totalYears*2/3) - 1);
+    const ranges = [
+      [start, Math.max(start,cut1)],
+      [Math.min(end,cut1+1), Math.max(Math.min(end,cut1+1),cut2)],
+      [Math.min(end,cut2+1), end]
+    ];
+
+    const titles = ['前半｜資産をつくる時期','中盤｜資産を守る・使い始める時期','後半｜資産を使い切らないか見る時期'];
+
+    ranges.forEach((rg, idx) => {
+      const phase = rs.filter(r => Number(r.age)>=rg[0] && Number(r.age)<=rg[1]);
+      if (!phase.length) return;
+
+      const first = phase[0], last = phase[phase.length-1];
+      const startAssets = Number(first.availableAssets ?? first.financialAsset ?? 0);
+      const endAssets = Number(last.availableAssets ?? last.financialAsset ?? 0);
+      const assetDelta = endAssets - startAssets;
+      const periodCash = phase.reduce((s,r)=>s+Number(r.netCashflow||0),0);
+      const deficitYears = phase.filter(r=>Number(r.netCashflow||0)<0).length;
+      const withdrawalYears = phase.filter(r=>
+        Number(r.withdrawalHigh||0)+Number(r.withdrawalMedium||0)+Number(r.withdrawalLow||0)>0
+      ).length;
+      const shortage = phase.find(r=>Number(r.shortage||0)>0);
+
+      const rangeEl = document.getElementById(`period-${idx+1}-range`);
+      if (rangeEl) rangeEl.textContent = `${rg[0]}歳 ～ ${rg[1]}歳`;
+
+      const card = rangeEl?.closest('.bg-white');
+      const titleEl = card ? [...card.querySelectorAll('.text-sm.font-bold')][0] : null;
+      if (titleEl) titleEl.textContent = titles[idx];
+
+      const cf = document.getElementById(`period-${idx+1}-cashflow`);
+      if (cf) {
+        cf.textContent = signedMoney(periodCash);
+        cf.className = `font-extrabold ${periodCash>=0?'text-[#4FAE8E]':'text-[#D46A7C]'}`;
+      }
+
+      const av = document.getElementById(`period-${idx+1}-assets`);
+      if (av) {
+        av.textContent = `${fmtMoney(startAssets)} → ${fmtMoney(endAssets)}`;
+        av.className = `font-extrabold ${assetDelta>=0?'text-[#4FAE8E]':'text-[#D46A7C]'}`;
+      }
+
+      let status;
+      if (shortage) status = `${shortage.age}歳で資金不足が発生。ここが最優先の見直しポイントです。`;
+      else if (withdrawalYears > 0) status = `${withdrawalYears}年間で元本を取り崩します。資産を使うフェーズです。`;
+      else if (deficitYears > phase.length/2) status = `年間収支は赤字中心ですが、資産余力で維持できています。`;
+      else if (assetDelta > 0) status = `資産が増える期間です。将来の選択肢をつくるフェーズです。`;
+      else status = `資産を大きく減らさず維持する期間です。`;
+
+      const st = document.getElementById(`period-${idx+1}-status`);
+      if (st) st.textContent = status;
+    });
+  };
+
+  // ---- Annual projection: home-style dual-axis Chart.js ----
+  window.renderAnnualProjectionV2 = function(rowsArg) {
+    const rs = Array.isArray(rowsArg) && rowsArg.length ? rowsArg : rows();
+    const canvas = document.getElementById('annualProjectionChart');
+    if (!canvas || !rs.length || typeof window.Chart === 'undefined') return false;
+
+    const labels = rs.map(r=>`${r.age}歳`);
+    const assets = rs.map(r=>Number(r.availableAssets ?? r.financialAsset ?? 0));
+    const cashflow = rs.map(r=>Number(r.netCashflow||0));
+
+    if (window.annualProjectionChartInstance) {
+      try { window.annualProjectionChartInstance.destroy(); } catch (_) {}
+    }
+
+    window.annualProjectionChartInstance = new Chart(canvas, {
+      data: {
+        labels,
+        datasets: [
+          {
+            type:'line',
+            label:'利用可能資産',
+            data:assets,
+            borderColor:'#65B9E8',
+            backgroundColor:'rgba(101,185,232,.08)',
+            borderWidth:3,
+            pointRadius:0,
+            tension:.25,
+            fill:true,
+            yAxisID:'assets'
+          },
+          {
+            type:'bar',
+            label:'年間純収支',
+            data:cashflow,
+            backgroundColor:cashflow.map(v=>v>=0?'rgba(114,214,181,.72)':'rgba(255,143,163,.72)'),
+            borderRadius:3,
+            maxBarThickness:12,
+            yAxisID:'cashflow'
+          }
+        ]
+      },
+      options: {
+        responsive:true,
+        maintainAspectRatio:false,
+        interaction:{mode:'index',intersect:false},
+        scales:{
+          assets:{
+            position:'left',
+            grid:{color:'#ECEBE6'},
+            title:{display:true,text:'利用可能資産（万円）',font:{size:10}},
+            ticks:{font:{size:10}}
+          },
+          cashflow:{
+            position:'right',
+            grid:{drawOnChartArea:false},
+            title:{display:true,text:'年間純収支（万円）',font:{size:10}},
+            ticks:{font:{size:10}}
+          },
+          x:{
+            grid:{display:false},
+            ticks:{maxTicksLimit:10,font:{size:10}}
+          }
+        },
+        plugins:{
+          legend:{position:'top',align:'start',labels:{boxWidth:12,font:{size:11}}},
+          tooltip:{
+            padding:10,
+            callbacks:{
+              label(ctx){
+                const v=Number(ctx.raw||0);
+                return `${ctx.dataset.label}: ${v.toLocaleString()} 万円`;
+              }
+            }
+          }
+        }
+      }
+    });
+
+    // Decision KPIs
+    const last = rs[rs.length-1];
+    const finalAssets = Number(last.availableAssets ?? last.financialAsset ?? 0);
+    let peak = {age:rs[0].age,value:Number(rs[0].availableAssets ?? rs[0].financialAsset ?? 0)};
+    rs.forEach(r=>{
+      const v=Number(r.availableAssets ?? r.financialAsset ?? 0);
+      if(v>peak.value) peak={age:r.age,value:v};
+    });
+    const shortage = rs.find(r=>Number(r.shortage||0)>0);
+
+    const set = (id,value)=>{const el=document.getElementById(id);if(el)el.textContent=value;};
+    set('proj-final-assets',fmtMoney(finalAssets));
+    set('proj-final-networth',`${peak.age}歳 / ${fmtMoney(peak.value)}`);
+    set('proj-cover-rate',shortage?`${shortage.age}歳`:'期間内なし');
+
+    window.renderAnnualMilestonesV2(rs, peak, shortage);
+    return true;
+  };
+
+  window.renderAnnualMilestonesV2 = function(rs, peakArg, shortageArg) {
+    const box = document.getElementById('annualTimelineContainer');
+    if (!box || !rs.length) return;
+
+    const peak = peakArg || rs.reduce((best,r)=>{
+      const v=Number(r.availableAssets ?? r.financialAsset ?? 0);
+      return v>best.value?{age:r.age,value:v}:best;
+    },{age:rs[0].age,value:Number(rs[0].availableAssets ?? rs[0].financialAsset ?? 0)});
+
+    const shortage = shortageArg || rs.find(r=>Number(r.shortage||0)>0);
+    const firstDeficit = rs.find(r=>Number(r.netCashflow||0)<0);
+    const firstWithdrawal = rs.find(r=>
+      Number(r.withdrawalHigh||0)+Number(r.withdrawalMedium||0)+Number(r.withdrawalLow||0)>0
+    );
+
+    const milestones = [
+      {age:peak.age,title:'資産ピーク',detail:`利用可能資産が ${fmtMoney(peak.value)} で最大になります。`,icon:'fa-arrow-trend-up'},
+      firstDeficit && {age:firstDeficit.age,title:'年間収支が赤字へ',detail:`この頃から毎年の支出が収入を上回り始めます。`,icon:'fa-arrow-trend-down'},
+      firstWithdrawal && {age:firstWithdrawal.age,title:'元本の取り崩し開始',detail:'運用益だけでなく、金融資産の元本を生活に使い始めます。',icon:'fa-wallet'},
+      shortage && {age:shortage.age,title:'資金不足開始',detail:'利用可能資産だけでは支出をカバーできなくなる試算です。',icon:'fa-triangle-exclamation'}
+    ].filter(Boolean).sort((a,b)=>a.age-b.age);
+
+    const unique = milestones.filter((m,i,a)=>i===0||m.title!==a[i-1].title||m.age!==a[i-1].age);
+
+    box.innerHTML = unique.length ? unique.map(m=>`
+      <div class="flex items-start gap-3 rounded-[14px] border border-[#ECEBE6] bg-[#FAFAF7] px-4 py-3">
+        <div class="w-8 h-8 rounded-[10px] bg-white border border-[#ECEBE6] flex items-center justify-center text-[#8C5800] shrink-0">
+          <i class="fa-solid ${m.icon}"></i>
+        </div>
+        <div class="min-w-0">
+          <div class="flex items-center gap-2 flex-wrap"><span class="text-xs font-extrabold text-[#253047]">${m.title}</span><span class="text-[10px] font-bold text-[#8C5800]">${m.age}歳</span></div>
+          <p class="text-[11px] text-[#6F7785] mt-0.5 leading-relaxed">${m.detail}</p>
+        </div>
+      </div>`).join('') :
+      '<div class="text-xs text-[#8A909C] py-2">大きな資産転換点はありません。</div>';
+  };
+
+  function refreshDecisionViews() {
+    const rs = rows();
+    if (!rs.length) return;
+    window.updateThreeLifePeriodsV2(rs);
+    const annual = document.getElementById('annualProjectionView');
+    if (annual && !annual.classList.contains('hidden')) {
+      window.renderAnnualProjectionV2(rs);
+    }
+  }
+
+  const recalcCore = window.recalculateAllV2Dashboard;
+  if (typeof recalcCore === 'function') {
+    window.recalculateAllV2Dashboard = function(...args) {
+      const result = recalcCore.apply(this,args);
+      setTimeout(refreshDecisionViews,0);
+      return result;
+    };
+  }
+
+  const switchCore = window.switchView;
+  if (typeof switchCore === 'function') {
+    window.switchView = function(viewName,...args) {
+      const result=switchCore.call(this,viewName,...args);
+      if(viewName==='simulationResults'){
+        requestAnimationFrame(()=>window.updateThreeLifePeriodsV2(rows()));
+      }
+      if(viewName==='annualProjection'){
+        requestAnimationFrame(()=>requestAnimationFrame(()=>window.renderAnnualProjectionV2(rows())));
+      }
+      return result;
+    };
+  }
+
+  window.LUMIFUL_STEP3_V8_INFORMATION_DESIGN = Object.freeze({
+    incomeExplicitlyNetTakeHome:true,
+    ageBlankUntilEntered:true,
+    threePeriodsPurpose:'compare cashflow and asset change by life phase',
+    annualChart:'dual-axis assets + annual cashflow',
+    annualKpis:['final assets','asset peak','shortage start'],
+    milestones:['asset peak','deficit start','principal withdrawal start','shortage']
+  });
+})();
+</script>
+
+
+<script>
+/* STEP 3 FINAL v8.1 — AUTH UI PLACEMENT CONTRACT */
+(function () {
+  window.LUMIFUL_AUTH_UI_CONTRACT_V8_1 = Object.freeze({
+    entryAuthSurface: 'welcomeAuthView',
+    globalAccountAction: 'header/settings',
+    simulationInputAuthUI: false,
+    secondaryAuthModal: false,
+    inInputGuestButton: false
+  });
+
+  // The app shell is only reachable after the canonical auth router resolves.
+  // Never add or recreate a login overlay inside Simulation Input.
+  window.ensureNoSimulationInputAuthOverlay = function() {
+    document.getElementById('authLockOverlay')?.remove();
+
+    const inputView = document.getElementById('simulationInputView');
+    if (!inputView) return;
+
+    // Defensive cleanup for obsolete inline auth controls only inside input view.
+    [...inputView.querySelectorAll('button')].forEach(btn => {
+      const txt = (btn.textContent || '').trim();
+      if (/アカウント作成\s*\/\s*ログイン|ゲストとして今すぐ始める/.test(txt)) {
+        btn.remove();
+      }
+    });
+  };
+
+  document.addEventListener('DOMContentLoaded', window.ensureNoSimulationInputAuthOverlay);
+  setTimeout(window.ensureNoSimulationInputAuthOverlay, 0);
 })();
 </script>
 
