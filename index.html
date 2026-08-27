@@ -6175,6 +6175,165 @@ JSON Schema:
       firestoreStep35Preserved: true
     });
 
+
+    /* ============================================================
+       PHASE 7B / STEP 3.7 — INTEGRATED AUTH ROUTER STABILIZATION
+       Firebase is authoritative for registered accounts.
+       LocalStorage identity is used only for explicit guest mode.
+       ============================================================ */
+    window.LUMIFUL_AUTH_READY = false;
+
+    window.getStoredGuestIdentityOnly = function() {
+      const email = localStorage.getItem('lumiful_user_email') || localStorage.getItem('lc_user_email');
+      if (!email) return null;
+      const isGuest = email === window.LUMIFUL_GUEST_EMAIL || email.includes('@lumiful.local');
+      return isGuest ? { email, isGuest: true } : null;
+    };
+
+    window.routeByAuthState = function() {
+      const welcome = document.getElementById('welcomeAuthView');
+      const status = window.authState?.status || 'checking';
+
+      if (status === 'checking') {
+        if (welcome) welcome.classList.add('hidden');
+        document.body.classList.add('overflow-hidden');
+        return;
+      }
+
+      if (status === 'unauthenticated') {
+        if (welcome) {
+          if (typeof window.showWelcomeAuthPanel === 'function') window.showWelcomeAuthPanel('choice');
+          welcome.classList.remove('hidden');
+        }
+        document.body.classList.add('overflow-hidden');
+        return;
+      }
+
+      if (welcome) welcome.classList.add('hidden');
+      document.body.classList.remove('overflow-hidden');
+    };
+
+    window.applyAuthoritativeAuthState = async function(firebaseUser) {
+      const guest = window.getStoredGuestIdentityOnly();
+
+      if (firebaseUser) {
+        // A real Firebase session always wins over stale/local identities.
+        localStorage.setItem('lumiful_user_email', firebaseUser.email || '');
+        localStorage.removeItem('lc_user_email');
+        window.authState = {
+          status: 'authenticated',
+          user: {
+            uid: firebaseUser.uid,
+            email: firebaseUser.email || '',
+            isGuest: false
+          }
+        };
+      } else if (guest) {
+        window.authState = {
+          status: 'guest',
+          user: { email: guest.email, isGuest: true }
+        };
+      } else {
+        // Remove stale pre-Firebase/mock account identities.
+        const staleEmail = localStorage.getItem('lumiful_user_email') || localStorage.getItem('lc_user_email');
+        if (staleEmail && !staleEmail.includes('@lumiful.local')) {
+          localStorage.removeItem('lumiful_user_email');
+          localStorage.removeItem('lc_user_email');
+        }
+        window.authState = { status: 'unauthenticated', user: null };
+      }
+
+      window.LUMIFUL_AUTH_READY = true;
+      window.checkAuthState?.();
+      window.routeByAuthState();
+
+      // Restore cloud data only after Firebase has positively identified the account.
+      if (window.authState.status === 'authenticated') {
+        try {
+          await window.restorePersistedStateV2?.({ reason: 'firebase-auth-ready' });
+        } catch (error) {
+          console.error('[LUMIFUL] Auth-ready restore failed.', error);
+        }
+      }
+      return window.authState;
+    };
+
+    window.bootstrapAuthoritativeAuth = async function() {
+      window.authState = { status: 'checking', user: null };
+      window.routeByAuthState();
+
+      try {
+        const ctx = await window.ensureFirebaseAuthContext();
+        if (!ctx?.auth) throw new Error('firebase-auth-unavailable');
+
+        // onAuthStateChanged is authoritative and also fires with the initial session.
+        ctx.auth.onAuthStateChanged(
+          async (firebaseUser) => {
+            await window.applyAuthoritativeAuthState(firebaseUser);
+          },
+          (error) => {
+            console.error('[LUMIFUL] Firebase auth listener failed.', error);
+            window.LUMIFUL_AUTH_READY = true;
+            window.authState = { status: 'unauthenticated', user: null };
+            window.checkAuthState?.();
+            window.routeByAuthState();
+          }
+        );
+      } catch (error) {
+        console.error('[LUMIFUL] Firebase auth bootstrap failed.', error);
+        window.LUMIFUL_AUTH_READY = true;
+        const guest = window.getStoredGuestIdentityOnly();
+        window.authState = guest
+          ? { status: 'guest', user: { email: guest.email, isGuest: true } }
+          : { status: 'unauthenticated', user: null };
+        window.checkAuthState?.();
+        window.routeByAuthState();
+      }
+    };
+
+    // Registered-account logout must return to the full-screen login/welcome surface immediately.
+    const _step37ExistingLogout = window.handleLogout;
+    window.handleLogout = async function(...args) {
+      try {
+        const ctx = await window.ensureFirebaseAuthContext?.();
+        if (ctx?.auth?.currentUser) await ctx.auth.signOut();
+      } catch (error) {
+        console.error('[LUMIFUL] Firebase sign-out notice.', error);
+      }
+
+      localStorage.removeItem('lumiful_user_email');
+      localStorage.removeItem('lc_user_email');
+      window.authState = { status: 'unauthenticated', user: null };
+      window.checkAuthState?.();
+      window.closeAuthModal?.();
+      window.routeByAuthState();
+      return true;
+    };
+
+    // Compatibility: any old caller asking to resolve auth now delegates to Firebase bootstrap.
+    window.resolveAuthState = function() {
+      window.bootstrapAuthoritativeAuth();
+      return window.authState;
+    };
+
+    window.LUMIFUL_PHASE7B_STEP3_7 = Object.freeze({
+      authoritativeFirebaseAuth: true,
+      staleMockIdentityIgnored: true,
+      loggedOutWelcomeRouteRestored: true,
+      firestoreStep35Preserved: true,
+      simulationStep36Preserved: true
+    });
+
 </script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Run after legacy DOM-ready handlers, then let Firebase decide the real route.
+  setTimeout(function() {
+    window.bootstrapAuthoritativeAuth?.();
+  }, 0);
+});
+</script>
+
 </body>
 </html>
