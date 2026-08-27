@@ -396,9 +396,9 @@
 
         <div class="flex items-center gap-2 flex-wrap sm:flex-nowrap">
           <span id="saveStatusDesktop" class="hidden sm:inline-flex items-center gap-1 text-[10px] font-bold text-[#8A909C] whitespace-nowrap" aria-live="polite"><i class="fa-solid fa-cloud"></i><span>保存待機</span></span>
-          <button id="authAccountBtn" onclick="handleCanonicalAccountAction()" class="px-3.5 py-2 btn-lumi-primary text-xs flex items-center gap-1.5 whitespace-nowrap shrink-0">
+          <button id="authAccountBtn" onclick="handleCanonicalAccountAction()" class="hidden px-3.5 py-2 btn-lumi-primary text-xs flex items-center gap-1.5 whitespace-nowrap shrink-0">
             <i class="fa-solid fa-user-circle" id="authBtnIcon"></i>
-            <span id="authBtnText" class="whitespace-nowrap">ログイン</span>
+            <span id="authBtnText" class="whitespace-nowrap"></span>
           </button>
 
           <button onclick="openPlansModal()" class="px-3 py-2 btn-lumi-secondary text-xs flex items-center gap-1.5 whitespace-nowrap shrink-0">
@@ -1158,9 +1158,7 @@
               <p class="text-xs text-[#6F7785]">ログインするとシミュレーション結果が安全に同期保存されます。</p>
             </div>
 
-            <button id="settingsAccountActionBtn" onclick="handleCanonicalAccountAction()" class="px-4 py-2 btn-lumi-primary text-xs font-bold whitespace-nowrap shrink-0">
-              ログイン
-            </button>
+            <button id="settingsAccountActionBtn" onclick="handleCanonicalAccountAction()" class="hidden px-4 py-2 btn-lumi-primary text-xs font-bold whitespace-nowrap shrink-0"></button>
           </div>
         </div>
 
@@ -8157,6 +8155,313 @@ window.LUMIFUL_PHASE7B_STEP3_LOCK_V8_2 = Object.freeze({
     oneTimeFutureReceipts: 'life-event income',
     assetReturnRules: 'cash+stock=no return input; fund+bond=return input',
     obsoleteInputAuthOverlay: false
+  });
+})();
+</script>
+
+
+<script>
+/* ============================================================
+   PHASE 7B / STEP 3 FINAL LOCK v9.1
+   AUTH ACTION VISIBILITY FIX
+   ============================================================ */
+(function () {
+  function renderAccountActionV91() {
+    const state = window.authState || { status: 'checking', user: null };
+    const authenticated = state.status === 'authenticated';
+    const guest = state.status === 'guest';
+    const inApp = authenticated || guest;
+    const label = authenticated ? 'ログアウト' : (guest ? 'ゲスト終了' : '');
+
+    const desktopBtn = document.getElementById('authAccountBtn');
+    const mobileBtn = document.getElementById('authAccountBtnMobile');
+    const settingsBtn = document.getElementById('settingsAccountActionBtn');
+
+    [desktopBtn, mobileBtn, settingsBtn].forEach(btn => {
+      if (!btn) return;
+
+      if (inApp) {
+        btn.classList.remove('hidden');
+        btn.style.removeProperty('display');
+        btn.removeAttribute('hidden');
+        btn.setAttribute('aria-hidden', 'false');
+        btn.setAttribute('aria-label', label);
+      } else {
+        btn.classList.add('hidden');
+        btn.setAttribute('aria-hidden', 'true');
+        btn.removeAttribute('aria-label');
+      }
+    });
+
+    const desktopText = document.getElementById('authBtnText');
+    const mobileText = document.getElementById('authBtnTextMobile');
+
+    if (desktopText) desktopText.textContent = label;
+    if (mobileText) mobileText.textContent = label;
+    if (settingsBtn) settingsBtn.textContent = label;
+
+    const desktopIcon = document.getElementById('authBtnIcon');
+    const mobileIcon = document.getElementById('authBtnIconMobile');
+
+    if (desktopIcon) desktopIcon.className = 'fa-solid fa-right-from-bracket';
+    if (mobileIcon) mobileIcon.className = 'fa-solid fa-right-from-bracket';
+
+    return { inApp, label, status: state.status };
+  }
+
+  window.syncCanonicalAccountActionUI = renderAccountActionV91;
+
+  // Account button inside the app always ends the current session.
+  window.handleCanonicalAccountAction = function() {
+    const status = window.authState?.status;
+    if (status === 'authenticated' || status === 'guest') {
+      return window.handleLogout();
+    }
+
+    // Unauthenticated users do not belong in the app shell.
+    const welcome = document.getElementById('welcomeAuthView');
+    if (welcome) welcome.classList.remove('hidden');
+    document.body.classList.add('overflow-hidden');
+  };
+
+  // Re-render after every auth routing pass.
+  const routeV91 = window.routeByAuthState;
+  if (typeof routeV91 === 'function') {
+    window.routeByAuthState = function(...args) {
+      const result = routeV91.apply(this, args);
+      renderAccountActionV91();
+      return result;
+    };
+  }
+
+  const checkV91 = window.checkAuthState;
+  if (typeof checkV91 === 'function') {
+    window.checkAuthState = function(...args) {
+      const result = checkV91.apply(this, args);
+      renderAccountActionV91();
+      return result;
+    };
+  }
+
+  // Firebase may resolve after DOMContentLoaded; sync several deterministic points.
+  document.addEventListener('DOMContentLoaded', renderAccountActionV91);
+  window.addEventListener('load', function() {
+    renderAccountActionV91();
+    setTimeout(renderAccountActionV91, 50);
+    setTimeout(renderAccountActionV91, 300);
+    setTimeout(renderAccountActionV91, 1000);
+  });
+
+  window.LUMIFUL_PHASE7B_STEP3_FINAL_LOCK_V9_1 = Object.freeze({
+    status: 'LOCKED',
+    desktopLogoutVisibleWhenAuthenticated: true,
+    mobileLogoutVisibleWhenAuthenticated: true,
+    guestEndVisibleWhenGuest: true,
+    unauthenticatedActionHiddenInAppShell: true,
+    surplusAllocationV9Preserved: true
+  });
+})();
+</script>
+
+
+<script>
+/* ============================================================
+   PHASE 7B / STEP 3 FINAL LOCK v9.2
+   DIRECT FIREBASE AUTH -> PC/SP/SETTINGS UI BINDING
+   ============================================================ */
+(function () {
+  const V92 = window.LUMIFUL_AUTH_UI_V92 = {
+    firebaseListenerAttached: false,
+    attachAttempts: 0,
+    maxAttachAttempts: 40
+  };
+
+  function deriveState(firebaseUser) {
+    if (firebaseUser) {
+      return {
+        status: 'authenticated',
+        user: {
+          uid: firebaseUser.uid,
+          email: String(firebaseUser.email || '').trim().toLowerCase(),
+          emailVerified: !!firebaseUser.emailVerified,
+          isGuest: false,
+          provider: 'firebase'
+        }
+      };
+    }
+
+    const local = localStorage.getItem('lumiful_user_email') || localStorage.getItem('lc_user_email') || '';
+    if (String(local).includes('@lumiful.local')) {
+      return {
+        status: 'guest',
+        user: {
+          email: window.LUMIFUL_GUEST_EMAIL,
+          isGuest: true,
+          provider: 'local'
+        }
+      };
+    }
+
+    return { status: 'unauthenticated', user: null };
+  }
+
+  window.renderCanonicalAuthActionsV92 = function(firebaseUserOverride) {
+    const firebaseUser =
+      firebaseUserOverride !== undefined
+        ? firebaseUserOverride
+        : window.LUMIFUL_FIREBASE_RUNTIME?.auth?.currentUser || null;
+
+    const state = deriveState(firebaseUser);
+
+    // Keep canonical application state aligned with Firebase.
+    if (state.status === 'authenticated' || window.authState?.status !== 'authenticated') {
+      window.authState = state;
+    }
+
+    const authenticated = state.status === 'authenticated';
+    const guest = state.status === 'guest';
+    const inApp = authenticated || guest;
+    const label = authenticated ? 'ログアウト' : (guest ? 'ゲスト終了' : '');
+
+    const desktopBtn = document.getElementById('authAccountBtn');
+    const mobileBtn = document.getElementById('authAccountBtnMobile');
+    const settingsBtn = document.getElementById('settingsAccountActionBtn');
+
+    [desktopBtn, mobileBtn, settingsBtn].forEach(btn => {
+      if (!btn) return;
+      if (inApp) {
+        btn.classList.remove('hidden');
+        btn.style.display = '';
+        btn.hidden = false;
+        btn.setAttribute('aria-hidden', 'false');
+        btn.setAttribute('aria-label', label);
+      } else {
+        btn.classList.add('hidden');
+        btn.style.display = 'none';
+        btn.hidden = true;
+        btn.setAttribute('aria-hidden', 'true');
+        btn.removeAttribute('aria-label');
+      }
+    });
+
+    const desktopText = document.getElementById('authBtnText');
+    const mobileText = document.getElementById('authBtnTextMobile');
+    if (desktopText) desktopText.textContent = label;
+    if (mobileText) mobileText.textContent = label;
+    if (settingsBtn) settingsBtn.textContent = label;
+
+    const desktopIcon = document.getElementById('authBtnIcon');
+    const mobileIcon = document.getElementById('authBtnIconMobile');
+    if (desktopIcon) desktopIcon.className = 'fa-solid fa-right-from-bracket';
+    if (mobileIcon) mobileIcon.className = 'fa-solid fa-right-from-bracket';
+
+    const email = document.getElementById('settingsUserEmail');
+    const tag = document.getElementById('settingsAccountStatusTag');
+
+    if (email) {
+      email.textContent = authenticated
+        ? (state.user?.email || 'ログイン中')
+        : guest
+          ? 'ゲスト利用中'
+          : '';
+    }
+
+    if (tag) {
+      tag.textContent = authenticated ? 'ログイン中' : (guest ? 'ゲスト' : '');
+    }
+
+    return { status: state.status, label, inApp };
+  };
+
+  // Final public sync function.
+  window.syncCanonicalAccountActionUI = function() {
+    return window.renderCanonicalAuthActionsV92();
+  };
+
+  window.handleCanonicalAccountAction = function() {
+    const runtimeUser = window.LUMIFUL_FIREBASE_RUNTIME?.auth?.currentUser || null;
+    const state = deriveState(runtimeUser);
+
+    if (state.status === 'authenticated' || state.status === 'guest') {
+      return window.handleLogout();
+    }
+
+    // No login button is shown in app shell. Defensive return to Welcome.
+    const welcome = document.getElementById('welcomeAuthView');
+    if (welcome) welcome.classList.remove('hidden');
+    document.body.classList.add('overflow-hidden');
+  };
+
+  function attachFirebaseListener() {
+    if (V92.firebaseListenerAttached) return true;
+
+    const auth = window.LUMIFUL_FIREBASE_RUNTIME?.auth;
+    if (!auth || typeof auth.onAuthStateChanged !== 'function') return false;
+
+    V92.firebaseListenerAttached = true;
+
+    auth.onAuthStateChanged(
+      user => {
+        window.renderCanonicalAuthActionsV92(user || null);
+      },
+      error => {
+        console.error('[LUMIFUL] v9.2 auth UI listener error', error);
+        window.renderCanonicalAuthActionsV92(null);
+      }
+    );
+
+    // Immediate sync too.
+    window.renderCanonicalAuthActionsV92(auth.currentUser || null);
+    return true;
+  }
+
+  function attachWhenReady() {
+    V92.attachAttempts += 1;
+
+    if (attachFirebaseListener()) return;
+
+    if (V92.attachAttempts < V92.maxAttachAttempts) {
+      setTimeout(attachWhenReady, 100);
+    }
+  }
+
+  // Route/check hooks remain secondary safety nets.
+  const routeV92 = window.routeByAuthState;
+  if (typeof routeV92 === 'function') {
+    window.routeByAuthState = function(...args) {
+      const result = routeV92.apply(this, args);
+      window.renderCanonicalAuthActionsV92();
+      return result;
+    };
+  }
+
+  const checkV92 = window.checkAuthState;
+  if (typeof checkV92 === 'function') {
+    window.checkAuthState = function(...args) {
+      const result = checkV92.apply(this, args);
+      window.renderCanonicalAuthActionsV92();
+      return result;
+    };
+  }
+
+  document.addEventListener('DOMContentLoaded', function () {
+    window.renderCanonicalAuthActionsV92();
+    attachWhenReady();
+  });
+
+  window.addEventListener('load', function () {
+    window.renderCanonicalAuthActionsV92();
+    attachWhenReady();
+  });
+
+  window.LUMIFUL_PHASE7B_STEP3_FINAL_LOCK_V9_2 = Object.freeze({
+    status: 'LOCKED',
+    firebaseAuthDirectBinding: true,
+    desktopAccountAction: 'authenticated=ログアウト / guest=ゲスト終了',
+    mobileAccountAction: 'authenticated=ログアウト / guest=ゲスト終了',
+    settingsAccountAction: 'authenticated=ログアウト / guest=ゲスト終了',
+    unauthenticatedAppShellAction: 'hidden',
+    v9SurplusAllocationPreserved: true
   });
 })();
 </script>
