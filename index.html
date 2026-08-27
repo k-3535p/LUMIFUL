@@ -3147,6 +3147,20 @@
       canonicalAssetMetric: 'availableAssets'
     });
 
+    // STEP 3 FINAL v4 — explicit score runtime state.
+    // These were previously assigned without declaration, causing
+    // ReferenceError during restored/recalculated sessions.
+    var currentBaseScore = 0;
+    var currentAiAdjustment = 0;
+    var currentFinalScore = 0;
+    var scoreBreakdownDetails = null;
+
+    // Keep window-facing aliases synchronized for newer v2 UI helpers.
+    window.currentBaseScore = currentBaseScore;
+    window.currentAiAdjustment = currentAiAdjustment;
+    window.currentFinalScore = currentFinalScore;
+    window.scoreBreakdownDetails = scoreBreakdownDetails;
+
     window.hasMeaningfulV2Input = function(model) {
       const m = window.normalizeDataModelV2(model || window.ensureV2InputModel());
       const hasIncome = m.incomes.some(x => Number(x.amount || 0) > 0);
@@ -3162,6 +3176,11 @@
       currentBaseScore = 0;
       currentAiAdjustment = 0;
       currentFinalScore = 0;
+      scoreBreakdownDetails = null;
+      window.currentBaseScore = currentBaseScore;
+      window.currentAiAdjustment = currentAiAdjustment;
+      window.currentFinalScore = currentFinalScore;
+      window.scoreBreakdownDetails = scoreBreakdownDetails;
       window.currentSimulationV2 = { schemaVersion: 2, rows: [] };
       window.currentAdaptedSimulationV2 = { rows: [] };
       window.currentTableRows = [];
@@ -3309,6 +3328,8 @@
       const baseResult = calculateBaseScoreV2(migrated, tableRows, firstYearYield, firstYearNetCash);
       currentBaseScore = baseResult.totalScore;
       scoreBreakdownDetails = baseResult.factors;
+      window.currentBaseScore = currentBaseScore;
+      window.scoreBreakdownDetails = scoreBreakdownDetails;
 
       window.updateScoreDashboardUI();
       window.renderTable(tableRows);
@@ -3331,6 +3352,10 @@
     window.updateScoreDashboardUI = function() {
       const finalScore = Math.min(100, Math.max(0, currentBaseScore + currentAiAdjustment));
       currentFinalScore = finalScore;
+      window.currentBaseScore = currentBaseScore;
+      window.currentAiAdjustment = currentAiAdjustment;
+      window.currentFinalScore = currentFinalScore;
+      window.scoreBreakdownDetails = scoreBreakdownDetails;
 
       document.getElementById('kpi-score').innerText = finalScore;
       document.getElementById('kpi-base-score').innerText = currentBaseScore;
@@ -3761,6 +3786,7 @@ JSON Schema:
           const aiRes = JSON.parse(jsonText);
           
           currentAiAdjustment = Math.min(10, Math.max(-10, Math.round(aiRes.adjustment || 0)));
+          window.currentAiAdjustment = currentAiAdjustment;
           window.updateScoreDashboardUI();
 
           if (diagTextElem) {
@@ -6387,9 +6413,20 @@ JSON Schema:
       runtime.auth.onAuthStateChanged(async user => {
         applyState(user);
         route();
-        if (user) await restoreCurrent(true);
+        if (user) {
+          try {
+            await restoreCurrent(true);
+          } catch (restoreError) {
+            console.error('[LUMIFUL] Session is authenticated, but simulation restore failed.', restoreError);
+            // Authentication is valid. Never route to logged-out because the
+            // simulation/dashboard layer failed.
+            applyState(user);
+            route();
+            window.showToast?.('ログイン状態は維持されています。データ再計算でエラーを確認しました。', 'error');
+          }
+        }
       }, error => {
-        console.error('[LUMIFUL] FINAL v3 auth listener error', error);
+        console.error('[LUMIFUL] FINAL v4 auth listener error', error);
       });
     }
 
@@ -6430,10 +6467,18 @@ JSON Schema:
 
       applyState(credential.user);
       route();
-      await restoreCurrent(true);
       window.showToast?.('ログインしました', 'success');
+
+      try {
+        await restoreCurrent(true);
+      } catch (restoreError) {
+        console.error('[LUMIFUL] Login succeeded; simulation restore failed.', restoreError);
+        applyState(credential.user);
+        route();
+        window.showToast?.('ログインしました。シミュレーションデータの再計算を確認しています。', 'error');
+      }
     } catch (e) {
-      console.error('[LUMIFUL] FINAL v3 login failed', e?.code, e);
+      console.error('[LUMIFUL] FINAL v4 login credential failed', e?.code, e);
       if (errorEl) {
         errorEl.textContent = window.getFirebaseAuthErrorMessage?.(e, 'login') || 'ログインできませんでした。';
         errorEl.classList.remove('hidden');
@@ -6555,9 +6600,18 @@ JSON Schema:
         window.syncSimulationResultsViewV2?.();
       }
     } catch (e) {
-      console.error('[LUMIFUL] FINAL v3 boot failed', e);
-      applyState(null);
-      route();
+      console.error('[LUMIFUL] FINAL v4 application/runtime boot failed', e);
+      const persistedUser = fbUser();
+      if (persistedUser) {
+        // Firebase auth is independent from simulation runtime.
+        // Keep the valid session and surface only the runtime failure.
+        applyState(persistedUser);
+        route();
+        window.showToast?.('ログイン状態は維持されています。シミュレーション初期化エラーを確認しました。', 'error');
+      } else {
+        applyState(null);
+        route();
+      }
     } finally {
       window.LUMIFUL_STEP4_BOOTING = false;
       route();
@@ -6576,6 +6630,19 @@ JSON Schema:
     secondaryAuthModal: false
   });
 })();
+</script>
+
+
+<script>
+window.LUMIFUL_PHASE7B_STEP3_FINAL_V4 = Object.freeze({
+  firebaseSessionIndependentFromSimulationErrors: true,
+  scoreRuntimeExplicitlyDeclared: true,
+  currentAiAdjustmentReferenceErrorFixed: true,
+  loginCredentialAndRestoreSeparated: true,
+  bootAuthAndRuntimeErrorsSeparated: true,
+  firestorePersistencePreserved: true,
+  fullRuntimeHydrationPreserved: true
+});
 </script>
 
 </body>
