@@ -151,6 +151,72 @@
       box-shadow: 0 0 0 3px rgba(101, 185, 232, 0.15);
     }
   </style>
+
+<style id="phase8-step4a-ui-polish">
+  /* Phase 8 onboarding numeric answer fields */
+  #onboardingView input[type="number"] {
+    text-align: center !important;
+    font-variant-numeric: tabular-nums;
+  }
+  #onboardingView input[type="number"]::placeholder {
+    text-align: center;
+    color: #B2B7C0;
+    font-weight: 600;
+  }
+  #onboardingView #ob-age,
+  #onboardingView #ob-partner-age,
+  #onboardingView #ob-income,
+  #onboardingView #ob-income-end-age,
+  #onboardingView #ob-expense {
+    min-height: 52px;
+    font-size: 1.125rem;
+    font-weight: 800;
+    color: #253047;
+  }
+  #onboardingView .ob-lumi-avatar {
+    width: 42px;
+    height: 42px;
+    flex: 0 0 42px;
+    border-radius: 14px;
+    background: #fff;
+    border: 1px solid #F0E2B7;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+  #onboardingView .ob-lumi-avatar img {
+    width: 34px;
+    height: 34px;
+    object-fit: contain;
+  }
+  #onboardingView .ob-lumi-fallback {
+    display: none;
+    color: #D97706;
+    font-size: 16px;
+  }
+  @media (max-width: 640px) {
+    #onboardingView .ob-lumi-avatar {
+      width: 38px;
+      height: 38px;
+      flex-basis: 38px;
+      border-radius: 12px;
+    }
+    #onboardingView .ob-lumi-avatar img {
+      width: 30px;
+      height: 30px;
+    }
+    #onboardingView #ob-age,
+    #onboardingView #ob-partner-age,
+    #onboardingView #ob-income,
+    #onboardingView #ob-income-end-age,
+    #onboardingView #ob-expense {
+      min-height: 50px;
+      font-size: 1.05rem;
+    }
+  }
+</style>
+
 </head>
 <body class="bg-[#FAFAF7] text-[#253047] min-h-screen font-sans antialiased relative overflow-x-hidden">
 
@@ -664,7 +730,8 @@
               <img src="./assets/lumiful-logo.png" alt="LUMIFUL" class="h-9 sm:h-11 w-auto mx-auto object-contain">
               <div class="mt-7 flex justify-center">
                 <div class="w-16 h-16 rounded-[22px] bg-[#FFF9E6] border border-[#F0E2B7] flex items-center justify-center">
-                  <img src="./assets/lumi-spark.png" alt="LUMI" class="w-10 h-10 object-contain" onerror="this.style.display='none'">
+                  <img src="./assets/lumi-spark.png" alt="LUMI" class="w-10 h-10 object-contain" onerror="this.style.display='none';this.nextElementSibling.style.display='inline-block'">
+                  <i class="fa-solid fa-sparkles text-[#D97706] hidden"></i>
                 </div>
               </div>
 
@@ -695,14 +762,17 @@
                 <h2 class="text-xl sm:text-2xl font-extrabold text-[#253047]">あなた</h2>
               </div>
               <div class="mt-5 rounded-[16px] bg-[#FFF9E6] border border-[#F0E2B7] px-4 py-3 flex gap-3">
-                <div class="w-9 h-9 rounded-[12px] bg-white flex items-center justify-center shrink-0"><i class="fa-solid fa-sparkles text-[#D97706]"></i></div>
+                <div class="ob-lumi-avatar" aria-hidden="true">
+                  <img src="./assets/lumi-spark.png" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='inline-block'">
+                  <i class="fa-solid fa-sparkles ob-lumi-fallback"></i>
+                </div>
                 <div><div class="text-[10px] font-extrabold text-[#8C5800]">LUMI</div><p class="text-sm text-[#253047] mt-0.5">まず、あなたのことを教えてください。</p></div>
               </div>
 
               <div class="mt-6 space-y-6">
                 <div>
                   <label class="text-xs font-bold text-[#253047]">本人年齢 <span class="text-[#D46A7C]">必須</span></label>
-                  <div class="mt-2 flex items-center gap-2 max-w-[180px]">
+                  <div class="mt-2 grid grid-cols-[1fr_auto] items-center gap-2 max-w-[220px]">
                     <input id="ob-age" type="number" min="18" max="100" placeholder="例：40" class="w-full border border-[#E1E4E8] rounded-[12px] px-3.5 py-3 text-lg font-bold text-right">
                     <span class="text-sm text-[#6F7785]">歳</span>
                   </div>
@@ -718,7 +788,7 @@
 
                 <div id="ob-partner-age-wrap" class="hidden">
                   <label class="text-xs font-bold text-[#253047]">パートナー年齢</label>
-                  <div class="mt-2 flex items-center gap-2 max-w-[180px]">
+                  <div class="mt-2 grid grid-cols-[1fr_auto] items-center gap-2 max-w-[220px]">
                     <input id="ob-partner-age" type="number" min="18" max="100" placeholder="例：38" class="w-full border border-[#E1E4E8] rounded-[12px] px-3.5 py-3 text-lg font-bold text-right">
                     <span class="text-sm text-[#6F7785]">歳</span>
                   </div>
@@ -735,14 +805,17 @@
                 <h2 class="text-xl sm:text-2xl font-extrabold text-[#253047]">暮らし</h2>
               </div>
               <div class="mt-5 rounded-[16px] bg-[#FFF9E6] border border-[#F0E2B7] px-4 py-3 flex gap-3">
-                <div class="w-9 h-9 rounded-[12px] bg-white flex items-center justify-center shrink-0"><i class="fa-solid fa-sparkles text-[#D97706]"></i></div>
+                <div class="ob-lumi-avatar" aria-hidden="true">
+                  <img src="./assets/lumi-spark.png" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='inline-block'">
+                  <i class="fa-solid fa-sparkles ob-lumi-fallback"></i>
+                </div>
                 <div><div class="text-[10px] font-extrabold text-[#8C5800]">LUMI</div><p class="text-sm text-[#253047] mt-0.5">今の暮らしのお金について教えてください。</p></div>
               </div>
 
               <div class="mt-6 space-y-6">
                 <div>
                   <label class="text-xs font-bold text-[#253047]">年間手取り収入</label>
-                  <div class="mt-2 flex items-center gap-2">
+                  <div class="mt-2 grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3">
                     <input id="ob-income" type="number" min="0" placeholder="500" class="flex-1 border border-[#E1E4E8] rounded-[12px] px-3.5 py-3 text-lg font-bold text-right">
                     <span class="text-sm text-[#6F7785]">万円 / 年</span>
                   </div>
@@ -762,7 +835,7 @@
 
                 <div>
                   <label class="text-xs font-bold text-[#253047]">年間生活費</label>
-                  <div class="mt-2 flex items-center gap-2">
+                  <div class="mt-2 grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3">
                     <input id="ob-expense" type="number" min="0" placeholder="450" class="flex-1 border border-[#E1E4E8] rounded-[12px] px-3.5 py-3 text-lg font-bold text-right">
                     <span class="text-sm text-[#6F7785]">万円 / 年</span>
                   </div>
@@ -780,7 +853,10 @@
                 <h2 class="text-xl sm:text-2xl font-extrabold text-[#253047]">資産</h2>
               </div>
               <div class="mt-5 rounded-[16px] bg-[#FFF9E6] border border-[#F0E2B7] px-4 py-3 flex gap-3">
-                <div class="w-9 h-9 rounded-[12px] bg-white flex items-center justify-center shrink-0"><i class="fa-solid fa-sparkles text-[#D97706]"></i></div>
+                <div class="ob-lumi-avatar" aria-hidden="true">
+                  <img src="./assets/lumi-spark.png" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='inline-block'">
+                  <i class="fa-solid fa-sparkles ob-lumi-fallback"></i>
+                </div>
                 <div><div class="text-[10px] font-extrabold text-[#8C5800]">LUMI</div><p class="text-sm text-[#253047] mt-0.5">今持っている資産を教えてください。</p></div>
               </div>
 
@@ -804,7 +880,10 @@
                 <h2 class="text-xl sm:text-2xl font-extrabold text-[#253047]">これから</h2>
               </div>
               <div class="mt-5 rounded-[16px] bg-[#FFF9E6] border border-[#F0E2B7] px-4 py-3 flex gap-3">
-                <div class="w-9 h-9 rounded-[12px] bg-white flex items-center justify-center shrink-0"><i class="fa-solid fa-sparkles text-[#D97706]"></i></div>
+                <div class="ob-lumi-avatar" aria-hidden="true">
+                  <img src="./assets/lumi-spark.png" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='inline-block'">
+                  <i class="fa-solid fa-sparkles ob-lumi-fallback"></i>
+                </div>
                 <div><div class="text-[10px] font-extrabold text-[#8C5800]">LUMI</div><p class="text-sm text-[#253047] mt-0.5">これから予定している、大きなお金の動きはありますか？</p></div>
               </div>
 
@@ -837,7 +916,10 @@
                 <h2 class="text-xl sm:text-2xl font-extrabold text-[#253047]">お金の残し方</h2>
               </div>
               <div class="mt-5 rounded-[16px] bg-[#FFF9E6] border border-[#F0E2B7] px-4 py-3 flex gap-3">
-                <div class="w-9 h-9 rounded-[12px] bg-white flex items-center justify-center shrink-0"><i class="fa-solid fa-sparkles text-[#D97706]"></i></div>
+                <div class="ob-lumi-avatar" aria-hidden="true">
+                  <img src="./assets/lumi-spark.png" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='inline-block'">
+                  <i class="fa-solid fa-sparkles ob-lumi-fallback"></i>
+                </div>
                 <div><div class="text-[10px] font-extrabold text-[#8C5800]">LUMI</div><p class="text-sm text-[#253047] mt-0.5">毎年お金が余ったら、どうしたいですか？</p></div>
               </div>
 
@@ -9359,6 +9441,20 @@ window.LUMIFUL_PHASE7B_STEP3_LOCK_V8_2 = Object.freeze({
     phase7Base:'FINAL LOCK v9.2'
   });
 })();
+</script>
+
+
+<script>
+/* PHASE 8 / STEP 4-A — UI POLISH ONLY */
+window.LUMIFUL_PHASE8_STEP4A = Object.freeze({
+  status: 'UI_POLISH',
+  numericAlignment: 'center',
+  lumiVisibleInSteps: true,
+  schemaLogicChanged: false,
+  guestFlowChanged: false,
+  phase7EngineChanged: false,
+  base: 'PHASE8 STEP4 GUEST_SCHEMA_CONNECTED'
+});
 </script>
 
 </body>
