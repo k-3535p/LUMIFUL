@@ -7185,5 +7185,310 @@ window.LUMIFUL_PHASE7B_STEP3_FINAL_V4 = Object.freeze({
 })();
 </script>
 
+
+<script>
+/* ============================================================
+   PHASE 7B / STEP 3 FINAL v7
+   RESULT PERIODS / ANNUAL GRAPH / INPUT CLARITY
+   ============================================================ */
+(function () {
+  const money = n => `${Math.round(Number(n || 0)).toLocaleString()} 万円`;
+
+  function getRows() {
+    return Array.isArray(window.currentTableRows) ? window.currentTableRows : [];
+  }
+
+  function getModel() {
+    try { return window.normalizeDataModelV2(window.ensureV2InputModel()); }
+    catch (_) { return window.ensureV2InputModel?.() || {}; }
+  }
+
+  // ------------------------------------------------------------
+  // 1. Income semantics
+  // LUMIFUL cash-flow simulation uses spendable household cash.
+  // Therefore recurring income inputs are defined as take-home/net.
+  // ------------------------------------------------------------
+  window.LUMIFUL_INCOME_INPUT_BASIS = 'net_take_home';
+
+  function clarifyIncomeInputs() {
+    const roots = [
+      document.getElementById('simulationInputView'),
+      document.body
+    ].filter(Boolean);
+
+    const labels = [...new Set(roots.flatMap(root => [...root.querySelectorAll('label, p, span, div')]))];
+    labels.forEach(el => {
+      if (el.children.length) return;
+      const t = (el.textContent || '').trim();
+      if (!t || t.length > 45) return;
+      if (/収入/.test(t) && !/(手取り|額面|運用益|収支|収入期間)/.test(t)) {
+        if (/^(本人|配偶者|妻|夫|給与|顧問|副業|飲食|その他|年金)?.*収入/.test(t)) {
+          el.textContent = t.replace(/収入(?!（手取り）)/, '収入（手取り）');
+        }
+      }
+    });
+
+    document.querySelectorAll('input').forEach(input => {
+      const id = `${input.id || ''} ${input.name || ''}`.toLowerCase();
+      if (/(income|salary|advisor|pension|sidejob)/.test(id)) {
+        input.setAttribute('aria-description', '年間または月間の手取り額を入力してください');
+      }
+    });
+  }
+
+  // ------------------------------------------------------------
+  // 2. Age: no artificial default.
+  // Do not erase a saved/restored user age.
+  // ------------------------------------------------------------
+  function clearUnsavedAgeDefault() {
+    let hasStoredModel = false;
+    try {
+      const m = getModel();
+      hasStoredModel = Number(m?.profile?.currentAge) > 0;
+    } catch (_) {}
+
+    if (hasStoredModel) return;
+
+    document.querySelectorAll('input').forEach(input => {
+      const key = `${input.id || ''} ${input.name || ''}`.toLowerCase();
+      const label = input.closest('label')?.textContent || input.parentElement?.textContent || '';
+      if ((/currentage|current-age|本人年齢/.test(key) || /本人年齢/.test(label)) &&
+          (input.value === '39' || input.value === '40')) {
+        input.value = '';
+        input.placeholder = '例：40';
+      }
+    });
+  }
+
+  // ------------------------------------------------------------
+  // 3. Three life periods
+  // Use actual simulation rows and model ages. No fixed ages.
+  // ------------------------------------------------------------
+  window.updateThreeLifePeriodsV2 = function(rowsArg) {
+    const rows = Array.isArray(rowsArg) && rowsArg.length ? rowsArg : getRows();
+    if (!rows.length) return;
+
+    const model = getModel();
+    const startAge = Number(rows[0]?.age);
+    const endAge = Number(rows[rows.length - 1]?.age);
+    if (!Number.isFinite(startAge) || !Number.isFinite(endAge)) return;
+
+    const retirementAge = Number(
+      model?.profile?.retirementAge ??
+      model?.income?.retirementAge ??
+      model?.settings?.retirementAge
+    );
+    const pensionAge = Number(
+      model?.profile?.pensionStartAge ??
+      model?.income?.pensionStartAge ??
+      model?.settings?.pensionStartAge
+    );
+
+    let cut1 = Number.isFinite(retirementAge) && retirementAge > startAge && retirementAge < endAge
+      ? retirementAge
+      : Math.round(startAge + (endAge - startAge) / 3);
+
+    let cut2 = Number.isFinite(pensionAge) && pensionAge > cut1 && pensionAge < endAge
+      ? pensionAge
+      : Math.round(startAge + 2 * (endAge - startAge) / 3);
+
+    cut1 = Math.max(startAge, Math.min(cut1, endAge));
+    cut2 = Math.max(cut1, Math.min(cut2, endAge));
+
+    const ranges = [
+      [startAge, cut1],
+      [Math.min(cut1 + 1, endAge), cut2],
+      [Math.min(cut2 + 1, endAge), endAge]
+    ];
+
+    const titles = [
+      '現在 → 生活転換期',
+      '生活転換期 → 年金期',
+      '年金期 → シミュレーション終了'
+    ];
+
+    ranges.forEach((range, i) => {
+      const rangeEl = document.getElementById(`period-${i+1}-range`);
+      if (rangeEl) rangeEl.textContent = `${range[0]}歳 ～ ${range[1]}歳`;
+
+      const card = rangeEl?.closest('div[class*="rounded"]') || rangeEl?.parentElement?.parentElement;
+      if (card) {
+        const titleCandidates = [...card.querySelectorAll('div, p, h4')];
+        const titleEl = titleCandidates.find(el =>
+          /現在|退職|年金|シミュレーション終了|生活転換期/.test((el.textContent || '').trim()) &&
+          !/歳/.test((el.textContent || '').trim())
+        );
+        if (titleEl) titleEl.textContent = titles[i];
+
+        const phaseRows = rows.filter(r => Number(r.age) >= range[0] && Number(r.age) <= range[1]);
+        if (phaseRows.length) {
+          const first = phaseRows[0];
+          const last = phaseRows[phaseRows.length - 1];
+          card.dataset.startAssets = Number(first.availableAssets ?? first.financialAsset ?? 0);
+          card.dataset.endAssets = Number(last.availableAssets ?? last.financialAsset ?? 0);
+        }
+      }
+    });
+  };
+
+  // ------------------------------------------------------------
+  // 4. Annual projection graph
+  // Render directly from the same currentTableRows used by SCORE/results.
+  // SVG avoids a Chart.js lifecycle/dependency failure leaving a blank panel.
+  // ------------------------------------------------------------
+  window.renderAnnualProjectionV2 = function(rowsArg) {
+    const rows = Array.isArray(rowsArg) && rowsArg.length ? rowsArg : getRows();
+    const view = document.getElementById('annualProjectionView');
+    if (!view || !rows.length) return false;
+
+    let host =
+      document.getElementById('annualProjectionChart') ||
+      document.getElementById('projectionChart') ||
+      view.querySelector('canvas');
+
+    if (!host) {
+      const heading = [...view.querySelectorAll('h3, h4')].find(el =>
+        /利用可能資産.*収支|長期的推移/.test(el.textContent || '')
+      );
+      host = heading?.parentElement?.parentElement?.querySelector('div:last-child') || null;
+    }
+
+    if (!host) return false;
+
+    let mount = host;
+    if (host.tagName === 'CANVAS') {
+      mount = document.getElementById('annualProjectionSvgMount');
+      if (!mount) {
+        mount = document.createElement('div');
+        mount.id = 'annualProjectionSvgMount';
+        mount.className = 'w-full h-full min-h-[340px]';
+        host.style.display = 'none';
+        host.parentElement.appendChild(mount);
+      }
+    }
+
+    const W = Math.max(760, mount.clientWidth || 960);
+    const H = Math.max(340, mount.clientHeight || 420);
+    const pad = {l:64, r:28, t:24, b:48};
+
+    const assets = rows.map(r => Number(r.availableAssets ?? r.financialAsset ?? 0));
+    const net = rows.map(r => Number(r.netCashflow || 0));
+    const all = assets.concat(net, [0]);
+    let minY = Math.min(...all), maxY = Math.max(...all);
+    if (maxY === minY) { maxY += 1; minY -= 1; }
+    const span = maxY - minY;
+
+    const x = i => pad.l + (rows.length <= 1 ? 0 : i/(rows.length-1)) * (W-pad.l-pad.r);
+    const y = v => pad.t + (maxY-v)/span * (H-pad.t-pad.b);
+
+    const assetPoints = assets.map((v,i)=>`${x(i).toFixed(1)},${y(v).toFixed(1)}`).join(' ');
+    const zeroY = y(0);
+    const barW = Math.max(2, Math.min(10, (W-pad.l-pad.r)/Math.max(rows.length,1)*0.55));
+
+    const bars = net.map((v,i) => {
+      const yy = y(v);
+      const top = Math.min(yy, zeroY);
+      const height = Math.max(1, Math.abs(zeroY-yy));
+      return `<rect x="${(x(i)-barW/2).toFixed(1)}" y="${top.toFixed(1)}" width="${barW.toFixed(1)}" height="${height.toFixed(1)}" rx="1.5" fill="${v>=0?'#72D6B5':'#FF8FA3'}" opacity=".72"/>`;
+    }).join('');
+
+    const ticks = [0, .25, .5, .75, 1].map(p => {
+      const v = maxY - p*span;
+      const yy = pad.t + p*(H-pad.t-pad.b);
+      return `<line x1="${pad.l}" y1="${yy}" x2="${W-pad.r}" y2="${yy}" stroke="#ECEBE6"/>
+              <text x="${pad.l-10}" y="${yy+4}" text-anchor="end" font-size="11" fill="#6F7785">${Math.round(v).toLocaleString()}</text>`;
+    }).join('');
+
+    const ageIndexes = [...new Set([0, Math.floor((rows.length-1)/2), rows.length-1])];
+    const ageLabels = ageIndexes.map(i =>
+      `<text x="${x(i)}" y="${H-16}" text-anchor="middle" font-size="11" fill="#6F7785">${rows[i].age}歳</text>`
+    ).join('');
+
+    mount.innerHTML = `
+      <div class="flex flex-wrap gap-4 text-xs text-[#6F7785] mb-2">
+        <span><span class="inline-block w-5 border-t-2 border-[#65B9E8] align-middle mr-1"></span>利用可能資産</span>
+        <span><span class="inline-block w-3 h-3 bg-[#72D6B5] align-middle mr-1 rounded-sm"></span>年間収支＋</span>
+        <span><span class="inline-block w-3 h-3 bg-[#FF8FA3] align-middle mr-1 rounded-sm"></span>年間収支－</span>
+      </div>
+      <svg viewBox="0 0 ${W} ${H}" width="100%" height="${H}" role="img" aria-label="利用可能資産と年間収支の推移">
+        ${ticks}
+        <line x1="${pad.l}" y1="${zeroY}" x2="${W-pad.r}" y2="${zeroY}" stroke="#AAB0BA" stroke-width="1"/>
+        ${bars}
+        <polyline points="${assetPoints}" fill="none" stroke="#65B9E8" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+        ${ageLabels}
+      </svg>`;
+
+    const last = rows[rows.length-1];
+    const finalAssets = Number(last.availableAssets ?? last.financialAsset ?? 0);
+    const deficit = rows.filter(r => Number(r.netCashflow || 0) < 0)
+      .reduce((s,r)=>s+Math.abs(Number(r.netCashflow || 0)),0);
+    const income = rows.reduce((s,r)=>s+Math.max(0,Number(r.income || 0)),0);
+    const cover = deficit > 0 ? Math.max(0, Math.min(100, Math.round((income / (income + deficit)) * 100))) : 100;
+
+    const cards = [...view.querySelectorAll('div')];
+    const setNear = (label, value) => {
+      const labelEl = cards.find(el => el.children.length === 0 && (el.textContent || '').trim() === label);
+      const box = labelEl?.parentElement;
+      if (!box) return;
+      const valueEl = [...box.querySelectorAll('div,p')].find(el =>
+        el !== labelEl && /(?:万円|%|^-?$)/.test((el.textContent || '').trim())
+      );
+      if (valueEl) valueEl.textContent = value;
+    };
+    setNear('最終利用可能資産', money(finalAssets));
+    setNear('生涯収支カバー率', `${cover}%`);
+
+    return true;
+  };
+
+  function syncResultViews() {
+    const rows = getRows();
+    if (!rows.length) return;
+    window.updateThreeLifePeriodsV2(rows);
+    window.renderAnnualProjectionV2(rows);
+  }
+
+  // Recalculate hook.
+  const prevRecalc = window.recalculateAllV2Dashboard;
+  if (typeof prevRecalc === 'function') {
+    window.recalculateAllV2Dashboard = function(...args) {
+      const result = prevRecalc.apply(this, args);
+      setTimeout(syncResultViews, 0);
+      return result;
+    };
+  }
+
+  // View hook: graph must render after hidden view becomes visible.
+  const prevSwitch = window.switchView;
+  if (typeof prevSwitch === 'function') {
+    window.switchView = function(viewName, ...args) {
+      const result = prevSwitch.call(this, viewName, ...args);
+      if (viewName === 'annualProjection' || viewName === 'results') {
+        requestAnimationFrame(() => requestAnimationFrame(syncResultViews));
+      }
+      return result;
+    };
+  }
+
+  function bootPolish() {
+    clarifyIncomeInputs();
+    clearUnsavedAgeDefault();
+    syncResultViews();
+  }
+
+  document.addEventListener('DOMContentLoaded', bootPolish);
+  setTimeout(bootPolish, 500);
+
+  window.LUMIFUL_STEP3_V7_AUDIT = Object.freeze({
+    threePeriodsUseSimulationRows: true,
+    annualGraphUsesSimulationRows: true,
+    annualGraphIndependentOfChartJs: true,
+    incomeBasis: '手取り',
+    ageDefault: 'blank unless restored',
+    noFixedPeriodAges: true
+  });
+})();
+</script>
+
 </body>
 </html>
