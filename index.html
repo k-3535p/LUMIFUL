@@ -152,419 +152,324 @@
     }
   </style>
 
-<style id="phase8-step4a-ui-polish">
-  /* Phase 8 onboarding numeric answer fields */
-  #onboardingView input[type="number"] {
-    text-align: center !important;
-    font-variant-numeric: tabular-nums;
-  }
-  #onboardingView input[type="number"]::placeholder {
-    text-align: center;
-    color: #B2B7C0;
-    font-weight: 600;
-  }
-  #onboardingView #ob-age,
-  #onboardingView #ob-partner-age,
-  #onboardingView #ob-income,
-  #onboardingView #ob-income-end-age,
-  #onboardingView #ob-expense {
-    min-height: 52px;
-    font-size: 1.125rem;
-    font-weight: 800;
-    color: #253047;
-  }
-  #onboardingView .ob-lumi-avatar {
-    width: 42px;
-    height: 42px;
-    flex: 0 0 42px;
-    border-radius: 14px;
-    background: #fff;
-    border: 1px solid #F0E2B7;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    overflow: hidden;
-  }
-  #onboardingView .ob-lumi-avatar img {
-    width: 34px;
-    height: 34px;
-    object-fit: contain;
-  }
-  #onboardingView .ob-lumi-fallback {
-    display: none;
-    color: #D97706;
-    font-size: 16px;
-  }
-  @media (max-width: 640px) {
-    #onboardingView .ob-lumi-avatar {
-      width: 38px;
-      height: 38px;
-      flex-basis: 38px;
-      border-radius: 12px;
-    }
-    #onboardingView .ob-lumi-avatar img {
-      width: 30px;
-      height: 30px;
-    }
-    #onboardingView #ob-age,
-    #onboardingView #ob-partner-age,
-    #onboardingView #ob-income,
-    #onboardingView #ob-income-end-age,
-    #onboardingView #ob-expense {
-      min-height: 50px;
-      font-size: 1.05rem;
-    }
-  }
-</style>
-
-
-<style id="phase8-step4b-symmetric-ui">
-  /* Onboarding: one centered axis, symmetrical controls */
-  #onboardingView .onboarding-screen > div {
-    text-align: center;
+<style id="phase8-step4-final-rebuilt-ui">
+  #onboardingView{
+    --ob-card-width:610px;
+    --ob-answer-width:320px;
+    --ob-choice-width:460px;
   }
 
-  /* Section title */
-  #onboardingView .onboarding-screen > div > .flex.items-center.gap-2:first-child {
-    justify-content: center;
+  #onboardingView .ob-card{
+    width:100%;
+    max-width:var(--ob-card-width);
+    margin:0 auto;
+    padding:30px 32px 28px;
+    background:#fff;
+    border:1px solid #ECEBE6;
+    border-radius:26px;
+    text-align:center;
   }
 
-  /* LUMI conversation card */
-  #onboardingView .onboarding-screen .bg-\[\#FFF9E6\].border-\[\#F0E2B7\] {
-    text-align: left;
+  #onboardingView .ob-title-row{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:10px;
   }
 
-  /* STEP 1 question groups */
-  #onboardingScreen-1 .mt-6.space-y-6 > div {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  #onboardingScreen-1 .mt-6.space-y-6 > div > label,
-  #onboardingScreen-1 .mt-6.space-y-6 > div > .text-xs.font-bold {
-    width: 100%;
-    text-align: center;
-  }
-  #onboardingScreen-1 .mt-6.space-y-6 > div > .grid.grid-cols-2 {
-    width: min(100%, 440px);
-  }
-  #onboardingScreen-1 #ob-partner-age-wrap {
-    width: 100%;
+  #onboardingView .ob-step-badge{
+    width:30px;
+    height:30px;
+    border-radius:999px;
+    background:#EAF6FC;
+    color:#65B9E8;
+    font-size:11px;
+    font-weight:800;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    flex:0 0 30px;
   }
 
-  /* Main age fields: centered as one number + unit component */
-  #onboardingScreen-1 #ob-age,
-  #onboardingScreen-1 #ob-partner-age {
-    width: 150px !important;
-  }
-  #onboardingScreen-1 #ob-age + span,
-  #onboardingScreen-1 #ob-partner-age + span {
-    min-width: 22px;
-    text-align: left;
+  #onboardingView .ob-title-row h2{
+    margin:0;
+    color:#253047;
+    font-size:24px;
+    line-height:1.2;
+    font-weight:800;
+    letter-spacing:-0.02em;
   }
 
-  /* STEP 2 primary money questions */
-  #onboardingScreen-2 .mt-6.space-y-6 > div {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  #onboardingScreen-2 .mt-6.space-y-6 > div > label {
-    width: 100%;
-    text-align: center;
-  }
-  #onboardingScreen-2 #ob-income,
-  #onboardingScreen-2 #ob-expense {
-    width: 230px;
-    flex: none;
-  }
-  #onboardingScreen-2 #ob-income-end-age {
-    width: 150px;
+  #onboardingView .ob-lumi-guide{
+    width:min(100%,540px);
+    min-height:84px;
+    margin:20px auto 0;
+    padding:16px 20px;
+    border:1px solid #F0E2B7;
+    border-radius:16px;
+    background:#FFF9E6;
+    display:grid;
+    grid-template-columns:48px minmax(0,1fr);
+    align-items:center;
+    gap:14px;
+    text-align:left;
   }
 
-  /* Keep explanatory text centered beneath the answer */
-  #onboardingScreen-2 .bg-\[\#F7FBFE\] {
-    width: min(100%, 500px);
-    text-align: center;
-  }
-
-  /* STEP 3-5 headings / primary choice blocks share center axis */
-  #onboardingScreen-3 > div > .mt-6,
-  #onboardingScreen-4 > div > .mt-6,
-  #onboardingScreen-5 > div > .mt-6 {
-    margin-left: auto;
-    margin-right: auto;
-  }
-
-  /* Partner yes/no and other paired choices: equal dimensions */
-  #onboardingView .ob-choice {
-    min-height: 48px;
-  }
-
-  @media (min-width: 641px) {
-    #onboardingView .onboarding-screen > div {
-      padding-left: 42px;
-      padding-right: 42px;
-    }
-  }
-
-  @media (max-width: 640px) {
-    #onboardingScreen-1 .mt-6.space-y-6 > div > .grid.grid-cols-2 {
-      width: 100%;
-    }
-    #onboardingScreen-2 #ob-income,
-    #onboardingScreen-2 #ob-expense {
-      width: min(62vw, 230px);
-    }
-  }
-</style>
-
-
-<style id="phase8-step4c-center-axis">
-#onboardingView{--ob-answer-width:320px}
-#onboardingView .onboarding-screen .bg-\[\#FFF9E6\].border-\[\#F0E2B7\]{justify-content:center;text-align:center!important}
-#onboardingView .onboarding-screen .bg-\[\#FFF9E6\].border-\[\#F0E2B7\]>div:last-child{text-align:center!important}
-#onboardingView .ob-center-field{position:relative;width:min(100%,var(--ob-answer-width));margin-left:auto;margin-right:auto}
-#onboardingView .ob-center-field input{width:100%!important;max-width:none!important;text-align:center!important;padding-left:76px!important;padding-right:76px!important}
-#onboardingView .ob-center-unit{position:absolute;right:16px;top:50%;transform:translateY(-50%);font-size:12px;font-weight:700;color:#6F7785;pointer-events:none;white-space:nowrap}
-#onboardingScreen-1 .mt-6.space-y-6>div>.grid.grid-cols-2{width:min(100%,var(--ob-answer-width))!important}
-@media(max-width:640px){#onboardingView{--ob-answer-width:100%}#onboardingView .ob-center-field,#onboardingScreen-1 .mt-6.space-y-6>div>.grid.grid-cols-2{max-width:320px!important}}
-</style>
-
-
-<style id="phase8-step4d-visual-match">
-  #onboardingView{--ob-card-width:610px;--ob-answer-width:320px;--ob-choice-width:460px}
-  #onboardingView .onboarding-screen{width:100%}
-  #onboardingView .onboarding-screen>div{
-    max-width:var(--ob-card-width);margin-left:auto;margin-right:auto;
-    padding:30px 32px 28px!important;border-radius:26px!important
-  }
-  #onboardingView .onboarding-screen>div>.flex.items-center.gap-2:first-child{
-    justify-content:center!important;gap:10px!important;margin-bottom:16px
-  }
-  #onboardingView .onboarding-screen>div>.flex.items-center.gap-2:first-child>span{
-    width:30px!important;height:30px!important;font-size:11px!important
-  }
-  #onboardingView .onboarding-screen>div>.flex.items-center.gap-2:first-child h2{
-    font-size:24px!important;line-height:1.2!important;letter-spacing:-.02em
-  }
-
-  #onboardingView [data-lumi-guide="true"]{
-    width:min(100%,540px);margin:0 auto!important;min-height:84px;
-    padding:16px 20px!important;display:grid!important;
-    grid-template-columns:48px minmax(0,1fr);align-items:center;
-    column-gap:14px;text-align:left!important;border-radius:16px!important
-  }
-  #onboardingView [data-lumi-guide="true"]>div:last-child{text-align:left!important;min-width:0}
   #onboardingView .ob-lumi-avatar{
-    width:48px!important;height:48px!important;flex:0 0 48px!important;
-    border-radius:14px!important;margin:0!important;background:#fff
-  }
-  #onboardingView .ob-lumi-avatar img{width:38px!important;height:38px!important}
-  #onboardingView .ob-lumi-avatar+div>div:first-child{
-    font-size:11px!important;line-height:1.2;margin-bottom:5px;text-align:left!important
-  }
-  #onboardingView .ob-lumi-avatar+div p{
-    font-size:14px!important;line-height:1.6!important;text-align:left!important;margin:0!important
-  }
-
-  #onboardingView .onboarding-screen .mt-6.space-y-6{margin-top:26px!important}
-  #onboardingView .onboarding-screen .mt-6.space-y-6>div{margin-top:0!important;margin-bottom:22px}
-  #onboardingView .onboarding-screen label,
-  #onboardingView .onboarding-screen .text-xs.font-bold{text-align:center!important}
-
-  #onboardingView .ob-center-field{
-    width:var(--ob-answer-width)!important;max-width:100%!important;
-    min-height:74px;margin:8px auto 0!important;position:relative
-  }
-  #onboardingView .ob-center-field input{
-    width:100%!important;height:74px!important;border-radius:14px!important;
-    border:1px solid #D9DDE5!important;background:#fff!important;
-    box-shadow:none!important;padding:0 72px!important;font-size:30px!important;
-    font-weight:800!important;line-height:1!important;color:#253047!important;
-    text-align:center!important;font-variant-numeric:tabular-nums;-moz-appearance:textfield
-  }
-  #onboardingView .ob-center-field input::-webkit-inner-spin-button,
-  #onboardingView .ob-center-field input::-webkit-outer-spin-button{
-    -webkit-appearance:none;margin:0
-  }
-  #onboardingView .ob-center-unit{
-    position:absolute!important;right:20px!important;top:50%!important;
-    transform:translateY(-50%)!important;font-size:13px!important;font-weight:700!important;
-    color:#6F7785!important;white-space:nowrap;pointer-events:none
-  }
-  #onboardingView .ob-center-field input::placeholder{
-    font-size:18px!important;font-weight:600!important;color:#B9BEC7!important
+    width:48px;
+    height:48px;
+    border-radius:14px;
+    border:1px solid #F0E2B7;
+    background:#fff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
   }
 
-  #onboardingScreen-1 .mt-6.space-y-6>div>.grid.grid-cols-2{
-    width:var(--ob-choice-width)!important;max-width:100%;margin:10px auto 0!important;gap:14px!important
-  }
-  #onboardingScreen-1 .ob-choice{
-    min-height:58px!important;border-radius:14px!important;font-size:14px!important;font-weight:700!important
-  }
-  #onboardingScreen-1 .mt-6.space-y-6>div>label,
-  #onboardingScreen-1 .mt-6.space-y-6>div>.text-xs.font-bold{
-    font-size:12px!important;margin-bottom:3px!important
+  #onboardingView .ob-lumi-avatar img{
+    width:38px;
+    height:38px;
+    object-fit:contain;
   }
 
-  #onboardingBottomNav{max-width:var(--ob-card-width);margin:16px auto 0!important}
-  #onboardingBottomNav>div{border-radius:18px!important;padding:10px!important}
-  #onboardingBottomNav button:first-child{min-width:70px;height:52px;border-radius:14px!important}
-  #onboardingNextBtn{height:52px;border-radius:14px!important;font-size:15px!important}
-  #onboardingSharedHeader{max-width:var(--ob-card-width);margin-left:auto;margin-right:auto}
-
-  @media(max-width:640px){
-    #onboardingView{--ob-card-width:100%;--ob-answer-width:min(100%,320px);--ob-choice-width:100%}
-    #onboardingView .onboarding-screen>div{padding:24px 18px 22px!important;border-radius:22px!important}
-    #onboardingView [data-lumi-guide="true"]{
-      grid-template-columns:42px minmax(0,1fr);min-height:76px;
-      padding:14px 16px!important;column-gap:11px
-    }
-    #onboardingView .ob-lumi-avatar{width:42px!important;height:42px!important;flex-basis:42px!important}
-    #onboardingView .ob-lumi-avatar img{width:34px!important;height:34px!important}
-    #onboardingView .ob-center-field{min-height:66px}
-    #onboardingView .ob-center-field input{
-      height:66px!important;font-size:26px!important;padding:0 64px!important
-    }
-  }
-</style>
-
-
-<style id="phase8-step4e-mobile-input-fix">
-#onboardingView .ob-center-field input{
- color:#253047!important;-webkit-text-fill-color:#253047!important;
- caret-color:#253047!important;opacity:1!important;appearance:none!important;
- -webkit-appearance:none!important;background-image:none!important;
- text-indent:0!important;letter-spacing:0!important;padding-left:62px!important;padding-right:62px!important
-}
-#onboardingView .ob-center-field input:focus{
- outline:none!important;border-color:#65B9E8!important;
- box-shadow:0 0 0 3px rgba(101,185,232,.18)!important
-}
-#onboardingView .ob-center-unit{right:18px!important;z-index:2}
-@media(max-width:640px){
- #onboardingView [data-lumi-guide="true"]{
-  display:flex!important;flex-direction:column!important;align-items:center!important;
-  justify-content:center!important;gap:7px!important;text-align:center!important;
-  padding:18px 16px!important;min-height:154px!important
- }
- #onboardingView [data-lumi-guide="true"]>div:last-child{width:100%;text-align:center!important}
- #onboardingView .ob-lumi-avatar{
-  margin:0 auto!important;width:52px!important;height:52px!important;
-  flex:0 0 52px!important;border-radius:16px!important
- }
- #onboardingView .ob-lumi-avatar img{width:42px!important;height:42px!important}
- #onboardingView .ob-lumi-avatar+div>div:first-child{
-  text-align:center!important;font-size:13px!important;margin-bottom:5px!important
- }
- #onboardingView .ob-lumi-avatar+div p{
-  text-align:center!important;font-size:14px!important;line-height:1.65!important;
-  max-width:290px;margin-left:auto!important;margin-right:auto!important
- }
- #onboardingView .ob-center-field{
-  width:min(100%,320px)!important;min-height:68px!important
- }
- #onboardingView .ob-center-field input{
-  height:68px!important;font-size:30px!important;
-  padding-left:58px!important;padding-right:58px!important
- }
- #onboardingView .ob-center-unit{right:18px!important;font-size:13px!important}
- #onboardingScreen-1 .mt-6.space-y-6>div>.grid.grid-cols-2{
-  width:min(100%,320px)!important;gap:12px!important
- }
- #onboardingScreen-1 .ob-choice{min-height:60px!important}
-}
-</style>
-
-
-<style id="phase8-step4f-input-structure-fix">
-  /* Direct HTML structure now owns primary answer layout. */
-  #onboardingView .ob-center-field{
-    position:relative !important;
-    width:320px !important;
-    max-width:100% !important;
-    height:74px !important;
-    min-height:74px !important;
-    margin:8px auto 0 !important;
-    display:block !important;
-    overflow:visible !important;
+  #onboardingView .ob-lumi-fallback{
+    display:none;
+    align-items:center;
+    justify-content:center;
+    color:#D97706;
   }
 
-  #onboardingView input.ob-primary-number{
-    box-sizing:border-box !important;
-    display:block !important;
-    width:100% !important;
-    height:74px !important;
-    min-width:0 !important;
-    max-width:none !important;
-    margin:0 !important;
-    padding:0 72px !important;
-    border:1px solid #D9DDE5 !important;
+  #onboardingView .ob-lumi-name{
+    color:#8C5800;
+    font-size:11px;
+    font-weight:800;
+    margin-bottom:5px;
+  }
+
+  #onboardingView .ob-lumi-copy p{
+    margin:0;
+    color:#253047;
+    font-size:14px;
+    line-height:1.6;
+  }
+
+  #onboardingView .ob-question-stack{
+    margin-top:26px;
+  }
+
+  #onboardingView .ob-question{
+    width:100%;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    margin:0 0 22px;
+  }
+
+  #onboardingView .ob-label{
+    width:100%;
+    color:#253047;
+    font-size:12px;
+    line-height:1.4;
+    font-weight:800;
+    text-align:center;
+  }
+
+  #onboardingView .ob-required{
+    color:#D46A7C;
+  }
+
+  #onboardingView .ob-answer-field{
+    width:var(--ob-answer-width);
+    max-width:100%;
+    height:74px;
+    margin:8px auto 0;
+    position:relative;
+  }
+
+  #onboardingView .ob-answer-field input{
+    box-sizing:border-box;
+    display:block;
+    width:100%;
+    height:74px;
+    margin:0;
+    padding:0 64px;
+    border:1px solid #D9DDE5;
+    border-radius:14px;
+    background:#fff;
+    color:#253047;
+    -webkit-text-fill-color:#253047;
+    caret-color:#253047;
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Hiragino Sans","Noto Sans JP",sans-serif;
+    font-size:30px;
+    line-height:74px;
+    font-weight:800;
+    text-align:center;
+    font-variant-numeric:tabular-nums;
+    letter-spacing:0;
+    appearance:none;
+    -webkit-appearance:none;
+    outline:none;
+  }
+
+  #onboardingView .ob-answer-field input:focus{
+    border-color:#65B9E8;
+    box-shadow:0 0 0 3px rgba(101,185,232,.18);
+  }
+
+  #onboardingView .ob-unit{
+    position:absolute;
+    right:18px;
+    top:50%;
+    transform:translateY(-50%);
+    color:#6F7785;
+    font-size:13px;
+    line-height:1;
+    font-weight:700;
+    pointer-events:none;
+    white-space:nowrap;
+  }
+
+  #onboardingView .ob-choice-pair{
+    width:var(--ob-choice-width);
+    max-width:100%;
+    margin:10px auto 0;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:14px;
+  }
+
+  #onboardingView .ob-choice{
+    min-height:58px;
+    padding:0 16px;
+    border:1px solid #ECEBE6;
+    border-radius:14px;
+    background:#fff;
+    color:#253047;
+    font-size:14px;
+    font-weight:800;
+  }
+
+  #onboardingView .ob-choice.border-\[\#65B9E8\]{
+    border-color:#65B9E8 !important;
+    background:#EAF6FC !important;
+  }
+
+  #onboardingSharedHeader,
+  #onboardingBottomNav{
+    max-width:var(--ob-card-width);
+    margin-left:auto;
+    margin-right:auto;
+  }
+
+  #onboardingBottomNav{
+    margin-top:16px !important;
+  }
+
+  #onboardingBottomNav > div{
+    padding:10px !important;
+    border-radius:18px !important;
+  }
+
+  #onboardingBottomNav button:first-child{
+    min-width:70px;
+    height:52px;
     border-radius:14px !important;
-    background:#fff !important;
-    background-image:none !important;
-    box-shadow:none !important;
-    color:#253047 !important;
-    -webkit-text-fill-color:#253047 !important;
-    opacity:1 !important;
-    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Hiragino Sans","Noto Sans JP",sans-serif !important;
-    font-size:30px !important;
-    font-style:normal !important;
-    font-weight:800 !important;
-    font-stretch:normal !important;
-    line-height:74px !important;
-    letter-spacing:0 !important;
+  }
+
+  #onboardingNextBtn{
+    height:52px;
+    border-radius:14px !important;
+    font-size:15px !important;
+  }
+
+  /* STEP2 main numeric fields: same visual axis, without changing IDs/data logic */
+  #onboardingScreen-2 #ob-income,
+  #onboardingScreen-2 #ob-income-end-age,
+  #onboardingScreen-2 #ob-expense{
     text-align:center !important;
-    text-indent:0 !important;
-    font-variant-numeric:tabular-nums !important;
-    text-rendering:auto !important;
+    -webkit-text-fill-color:#253047 !important;
+    color:#253047 !important;
     appearance:none !important;
     -webkit-appearance:none !important;
-    overflow:visible !important;
-  }
-
-  #onboardingView input.ob-primary-number:focus{
-    outline:none !important;
-    border-color:#65B9E8 !important;
-    box-shadow:0 0 0 3px rgba(101,185,232,.18) !important;
-  }
-
-  #onboardingView input.ob-primary-number::placeholder{
-    color:transparent !important;
-    -webkit-text-fill-color:transparent !important;
-  }
-
-  #onboardingView .ob-center-unit{
-    position:absolute !important;
-    z-index:3 !important;
-    top:50% !important;
-    right:20px !important;
-    transform:translateY(-50%) !important;
-    margin:0 !important;
-    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","Hiragino Sans","Noto Sans JP",sans-serif !important;
-    font-size:13px !important;
-    font-weight:700 !important;
-    line-height:1 !important;
-    color:#6F7785 !important;
-    white-space:nowrap !important;
-    pointer-events:none !important;
   }
 
   @media(max-width:640px){
-    #onboardingView .ob-center-field{
-      width:min(100%,320px) !important;
-      height:68px !important;
-      min-height:68px !important;
+    #onboardingView{
+      --ob-card-width:100%;
+      --ob-answer-width:min(100%,320px);
+      --ob-choice-width:100%;
     }
-    #onboardingView input.ob-primary-number{
-      height:68px !important;
-      line-height:68px !important;
-      padding:0 62px !important;
-      font-size:30px !important;
+
+    #onboardingView .ob-card{
+      padding:24px 18px 22px;
+      border-radius:22px;
     }
-    #onboardingView .ob-center-unit{
-      right:18px !important;
+
+    #onboardingView .ob-title-row h2{
+      font-size:23px;
+    }
+
+    #onboardingView .ob-lumi-guide{
+      min-height:154px;
+      padding:18px 16px;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      align-items:center;
+      gap:7px;
+      text-align:center;
+    }
+
+    #onboardingView .ob-lumi-avatar{
+      width:52px;
+      height:52px;
+      border-radius:16px;
+    }
+
+    #onboardingView .ob-lumi-avatar img{
+      width:42px;
+      height:42px;
+    }
+
+    #onboardingView .ob-lumi-copy,
+    #onboardingView .ob-lumi-name,
+    #onboardingView .ob-lumi-copy p{
+      text-align:center;
+    }
+
+    #onboardingView .ob-lumi-name{
+      font-size:13px;
+    }
+
+    #onboardingView .ob-lumi-copy p{
+      max-width:290px;
+      font-size:14px;
+      line-height:1.65;
+    }
+
+    #onboardingView .ob-answer-field{
+      height:68px;
+    }
+
+    #onboardingView .ob-answer-field input{
+      height:68px;
+      line-height:68px;
+      padding:0 58px;
+      font-size:30px;
+    }
+
+    #onboardingView .ob-unit{
+      right:16px;
+      font-size:13px;
+    }
+
+    #onboardingView .ob-choice-pair{
+      gap:12px;
+    }
+
+    #onboardingView .ob-choice{
+      min-height:60px;
     }
   }
 </style>
@@ -1082,8 +987,7 @@
               <img src="./assets/lumiful-logo.png" alt="LUMIFUL" class="h-9 sm:h-11 w-auto mx-auto object-contain">
               <div class="mt-7 flex justify-center">
                 <div class="w-16 h-16 rounded-[22px] bg-[#FFF9E6] border border-[#F0E2B7] flex items-center justify-center">
-                  <img src="./assets/lumi-spark.png" alt="LUMI" class="w-10 h-10 object-contain" onerror="this.style.display='none';this.nextElementSibling.style.display='inline-block'">
-                  <i class="fa-solid fa-sparkles text-[#D97706] hidden"></i>
+                  <img src="./assets/lumi-spark.png" alt="LUMI" class="w-10 h-10 object-contain" onerror="this.style.display='none'">
                 </div>
               </div>
 
@@ -1108,36 +1012,46 @@
 
           <!-- STEP 1 -->
           <section id="onboardingScreen-1" class="onboarding-screen hidden">
-            <div class="bg-white rounded-[26px] border border-[#ECEBE6] p-5 sm:p-8">
-              <div class="flex items-center gap-2">
-                <span class="w-8 h-8 rounded-full bg-[#EAF6FC] text-[#65B9E8] font-extrabold text-xs flex items-center justify-center">01</span>
-                <h2 class="text-xl sm:text-2xl font-extrabold text-[#253047]">あなた</h2>
+            <div class="ob-card">
+              <div class="ob-title-row">
+                <span class="ob-step-badge">01</span>
+                <h2>あなた</h2>
               </div>
-              <div class="mt-5 rounded-[16px] bg-[#FFF9E6] border border-[#F0E2B7] px-4 py-3 flex gap-3">
+
+              <div class="ob-lumi-guide">
                 <div class="ob-lumi-avatar" aria-hidden="true">
-                  <img src="./assets/lumi-spark.png" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='inline-block'">
+                  <img src="./assets/lumi-spark.png" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='inline-flex'">
                   <i class="fa-solid fa-sparkles ob-lumi-fallback"></i>
                 </div>
-                <div><div class="text-[10px] font-extrabold text-[#8C5800]">LUMI</div><p class="text-sm text-[#253047] mt-0.5">まず、あなたのことを教えてください。</p></div>
+                <div class="ob-lumi-copy">
+                  <div class="ob-lumi-name">LUMI</div>
+                  <p>まず、あなたのことを教えてください。</p>
+                </div>
               </div>
 
-              <div class="mt-6 space-y-6">
-                <div>
-                  <label class="text-xs font-bold text-[#253047]">本人年齢 <span class="text-[#D46A7C]">必須</span></label>
-                  <div class="mt-2 ob-center-field"><input id="ob-age" type="text" inputmode="numeric" pattern="[0-9]*" min="18" max="100" class="border border-[#E1E4E8] rounded-[12px] font-bold ob-primary-number"><span class="ob-center-unit">歳</span></div>
-                </div>
-
-                <div>
-                  <div class="text-xs font-bold text-[#253047]">パートナーはいますか？</div>
-                  <div class="mt-2 grid grid-cols-2 gap-3">
-                    <button type="button" onclick="selectOnboardingPartner(true)" data-ob-partner="yes" class="ob-choice px-4 py-3 rounded-[14px] border border-[#ECEBE6] bg-white text-sm font-bold">いる</button>
-                    <button type="button" onclick="selectOnboardingPartner(false)" data-ob-partner="no" class="ob-choice px-4 py-3 rounded-[14px] border border-[#ECEBE6] bg-white text-sm font-bold">いない</button>
+              <div class="ob-question-stack">
+                <div class="ob-question">
+                  <div class="ob-label">本人年齢 <span class="ob-required">必須</span></div>
+                  <div class="ob-answer-field">
+                    <input id="ob-age" type="text" inputmode="numeric" pattern="[0-9]*" autocomplete="off" aria-label="本人年齢">
+                    <span class="ob-unit">歳</span>
                   </div>
                 </div>
 
-                <div id="ob-partner-age-wrap" class="hidden">
-                  <label class="text-xs font-bold text-[#253047]">パートナー年齢</label>
-                  <div class="mt-2 ob-center-field"><input id="ob-partner-age" type="text" inputmode="numeric" pattern="[0-9]*" min="18" max="100" class="border border-[#E1E4E8] rounded-[12px] font-bold ob-primary-number"><span class="ob-center-unit">歳</span></div>
+                <div class="ob-question">
+                  <div class="ob-label">パートナーはいますか？</div>
+                  <div class="ob-choice-pair">
+                    <button type="button" onclick="selectOnboardingPartner(true)" data-ob-partner="yes" class="ob-choice">いる</button>
+                    <button type="button" onclick="selectOnboardingPartner(false)" data-ob-partner="no" class="ob-choice">いない</button>
+                  </div>
+                </div>
+
+                <div id="ob-partner-age-wrap" class="ob-question hidden" aria-hidden="true">
+                  <div class="ob-label">パートナー年齢</div>
+                  <div class="ob-answer-field">
+                    <input id="ob-partner-age" type="text" inputmode="numeric" pattern="[0-9]*" autocomplete="off" aria-label="パートナー年齢">
+                    <span class="ob-unit">歳</span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -1151,23 +1065,26 @@
                 <h2 class="text-xl sm:text-2xl font-extrabold text-[#253047]">暮らし</h2>
               </div>
               <div class="mt-5 rounded-[16px] bg-[#FFF9E6] border border-[#F0E2B7] px-4 py-3 flex gap-3">
-                <div class="ob-lumi-avatar" aria-hidden="true">
-                  <img src="./assets/lumi-spark.png" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='inline-block'">
-                  <i class="fa-solid fa-sparkles ob-lumi-fallback"></i>
-                </div>
+                <div class="w-9 h-9 rounded-[12px] bg-white flex items-center justify-center shrink-0"><i class="fa-solid fa-sparkles text-[#D97706]"></i></div>
                 <div><div class="text-[10px] font-extrabold text-[#8C5800]">LUMI</div><p class="text-sm text-[#253047] mt-0.5">今の暮らしのお金について教えてください。</p></div>
               </div>
 
               <div class="mt-6 space-y-6">
                 <div>
                   <label class="text-xs font-bold text-[#253047]">年間手取り収入</label>
-                  <div class="mt-2 ob-center-field"><input id="ob-income" type="text" inputmode="numeric" pattern="[0-9]*" min="0" class="border border-[#E1E4E8] rounded-[12px] font-bold ob-primary-number"><span class="ob-center-unit">万円 / 年</span></div>
+                  <div class="mt-2 flex items-center gap-2">
+                    <input id="ob-income" type="text" inputmode="numeric" pattern="[0-9]*" class="flex-1 border border-[#E1E4E8] rounded-[12px] px-3.5 py-3 text-lg font-bold text-right">
+                    <span class="text-sm text-[#6F7785]">万円 / 年</span>
+                  </div>
                   <div class="mt-2 rounded-[12px] bg-[#F7FBFE] border border-[#DCEEF8] px-3 py-2 text-[10px] text-[#536274] leading-relaxed">
                     <strong class="text-[#253047]">入力基準：手取り</strong>　税金・社会保険料を差し引いた後に実際に使える金額を入力します。
                   </div>
                   <div class="mt-3 max-w-[240px]">
                     <label class="text-[10px] font-bold text-[#6F7785]">この収入は何歳まで？</label>
-                    <div class="mt-2 ob-center-field"><input id="ob-income-end-age" type="text" inputmode="numeric" pattern="[0-9]*" min="18" max="110" class="border border-[#E1E4E8] rounded-[10px] ob-primary-number"><span class="ob-center-unit">歳</span></div>
+                    <div class="mt-1 flex items-center gap-2">
+                      <input id="ob-income-end-age" type="text" inputmode="numeric" pattern="[0-9]*" class="w-full border border-[#E1E4E8] rounded-[10px] px-3 py-2.5 text-sm text-right">
+                      <span class="text-xs text-[#6F7785]">歳</span>
+                    </div>
                   </div>
                   <button type="button" onclick="addOnboardingIncomeRow()" class="mt-3 px-3 py-2 btn-lumi-secondary text-xs font-bold"><i class="fa-solid fa-plus mr-1"></i>追加</button>
                   <div id="ob-extra-income-list" class="mt-3 space-y-2"></div>
@@ -1175,7 +1092,10 @@
 
                 <div>
                   <label class="text-xs font-bold text-[#253047]">年間生活費</label>
-                  <div class="mt-2 ob-center-field"><input id="ob-expense" type="text" inputmode="numeric" pattern="[0-9]*" min="0" class="border border-[#E1E4E8] rounded-[12px] font-bold ob-primary-number"><span class="ob-center-unit">万円 / 年</span></div>
+                  <div class="mt-2 flex items-center gap-2">
+                    <input id="ob-expense" type="text" inputmode="numeric" pattern="[0-9]*" class="flex-1 border border-[#E1E4E8] rounded-[12px] px-3.5 py-3 text-lg font-bold text-right">
+                    <span class="text-sm text-[#6F7785]">万円 / 年</span>
+                  </div>
                   <p class="mt-2 text-[10px] text-[#8A909C]">住居費・保険・趣味など、普段の支出をまとめた金額でOKです。</p>
                 </div>
               </div>
@@ -1190,10 +1110,7 @@
                 <h2 class="text-xl sm:text-2xl font-extrabold text-[#253047]">資産</h2>
               </div>
               <div class="mt-5 rounded-[16px] bg-[#FFF9E6] border border-[#F0E2B7] px-4 py-3 flex gap-3">
-                <div class="ob-lumi-avatar" aria-hidden="true">
-                  <img src="./assets/lumi-spark.png" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='inline-block'">
-                  <i class="fa-solid fa-sparkles ob-lumi-fallback"></i>
-                </div>
+                <div class="w-9 h-9 rounded-[12px] bg-white flex items-center justify-center shrink-0"><i class="fa-solid fa-sparkles text-[#D97706]"></i></div>
                 <div><div class="text-[10px] font-extrabold text-[#8C5800]">LUMI</div><p class="text-sm text-[#253047] mt-0.5">今持っている資産を教えてください。</p></div>
               </div>
 
@@ -1217,10 +1134,7 @@
                 <h2 class="text-xl sm:text-2xl font-extrabold text-[#253047]">これから</h2>
               </div>
               <div class="mt-5 rounded-[16px] bg-[#FFF9E6] border border-[#F0E2B7] px-4 py-3 flex gap-3">
-                <div class="ob-lumi-avatar" aria-hidden="true">
-                  <img src="./assets/lumi-spark.png" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='inline-block'">
-                  <i class="fa-solid fa-sparkles ob-lumi-fallback"></i>
-                </div>
+                <div class="w-9 h-9 rounded-[12px] bg-white flex items-center justify-center shrink-0"><i class="fa-solid fa-sparkles text-[#D97706]"></i></div>
                 <div><div class="text-[10px] font-extrabold text-[#8C5800]">LUMI</div><p class="text-sm text-[#253047] mt-0.5">これから予定している、大きなお金の動きはありますか？</p></div>
               </div>
 
@@ -1253,10 +1167,7 @@
                 <h2 class="text-xl sm:text-2xl font-extrabold text-[#253047]">お金の残し方</h2>
               </div>
               <div class="mt-5 rounded-[16px] bg-[#FFF9E6] border border-[#F0E2B7] px-4 py-3 flex gap-3">
-                <div class="ob-lumi-avatar" aria-hidden="true">
-                  <img src="./assets/lumi-spark.png" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='inline-block'">
-                  <i class="fa-solid fa-sparkles ob-lumi-fallback"></i>
-                </div>
+                <div class="w-9 h-9 rounded-[12px] bg-white flex items-center justify-center shrink-0"><i class="fa-solid fa-sparkles text-[#D97706]"></i></div>
                 <div><div class="text-[10px] font-extrabold text-[#8C5800]">LUMI</div><p class="text-sm text-[#253047] mt-0.5">毎年お金が余ったら、どうしたいですか？</p></div>
               </div>
 
@@ -9782,230 +9693,30 @@ window.LUMIFUL_PHASE7B_STEP3_LOCK_V8_2 = Object.freeze({
 
 
 <script>
-/* PHASE 8 / STEP 4-A — UI POLISH ONLY */
-window.LUMIFUL_PHASE8_STEP4A = Object.freeze({
-  status: 'UI_POLISH',
-  numericAlignment: 'center',
-  lumiVisibleInSteps: true,
-  schemaLogicChanged: false,
-  guestFlowChanged: false,
-  phase7EngineChanged: false,
-  base: 'PHASE8 STEP4 GUEST_SCHEMA_CONNECTED'
-});
-</script>
-
-
-<script>
-/* PHASE 8 / STEP 4-B — SYMMETRIC ONBOARDING UI ONLY */
-window.LUMIFUL_PHASE8_STEP4B = Object.freeze({
-  status: 'SYMMETRIC_UI',
-  layoutAxis: 'center',
-  pairedChoices: 'equal',
-  schemaLogicChanged: false,
-  guestFlowChanged: false,
-  phase7EngineChanged: false,
-  base: 'PHASE8 STEP4A UI_POLISH'
-});
-</script>
-
-
-<script>
-/* PHASE 8 / STEP 4-C — CENTER AXIS UI ONLY */
+/* PHASE 8 / STEP 4 FINAL REBUILT UI */
 (function(){
- const fieldUnits={
-  'ob-age':'歳',
-  'ob-partner-age':'歳',
-  'ob-income':'万円 / 年',
-  'ob-income-end-age':'歳',
-  'ob-expense':'万円 / 年'
- };
- function centerOnboardingFields(){
-   Object.entries(fieldUnits).forEach(([id,unit])=>{
-     const input=document.getElementById(id);
-     if(!input || input.closest('.ob-center-field')) return;
-     const oldParent=input.parentElement;
-     const wrap=document.createElement('div');
-     wrap.className='ob-center-field';
-     oldParent.parentNode.insertBefore(wrap,oldParent);
-     wrap.appendChild(input);
-     const unitEl=document.createElement('span');
-     unitEl.className='ob-center-unit';
-     unitEl.textContent=unit;
-     wrap.appendChild(unitEl);
-     // Remove old standalone unit and empty wrapper.
-     [...oldParent.children].forEach(el=>{
-       if(el!==input && (el.textContent||'').trim()===unit) el.remove();
-     });
-     if(!oldParent.children.length) oldParent.remove();
-   });
- }
- if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',centerOnboardingFields);
- else centerOnboardingFields();
- window.centerOnboardingFields=centerOnboardingFields;
- window.LUMIFUL_PHASE8_STEP4C=Object.freeze({
-   status:'CENTER_AXIS_UI',
-   sharedAnswerWidth:true,
-   unitsInsideFields:true,
-   lumiCommentAlignment:'center',
-   schemaLogicChanged:false,
-   guestFlowChanged:false,
-   phase7EngineChanged:false,
-   base:'PHASE8 STEP4B SYMMETRIC_UI'
- });
-})();
-</script>
+  const numericIds=['ob-age','ob-partner-age','ob-income','ob-income-end-age','ob-expense'];
 
-
-<script>
-/* PHASE 8 / STEP 4-D — VISUAL MATCH TO APPROVED MOCK */
-(function(){
-  const units={
-    'ob-age':'歳',
-    'ob-partner-age':'歳',
-    'ob-income':'万円 / 年',
-    'ob-income-end-age':'歳',
-    'ob-expense':'万円 / 年'
-  };
-
-  function ensureVisualMatchFields(){
-    Object.entries(units).forEach(([id,unit])=>{
-      const input=document.getElementById(id);
-      if(!input)return;
-
-      let wrap=input.closest('.ob-center-field,.ob-unit-field');
-      if(!wrap){
-        wrap=document.createElement('div');
-        wrap.className='ob-center-field';
-        input.parentNode.insertBefore(wrap,input);
-        wrap.appendChild(input);
-      }else{
-        wrap.classList.remove('ob-unit-field');
-        wrap.classList.add('ob-center-field');
-      }
-
-      let unitEl=wrap.querySelector('.ob-center-unit,.ob-unit');
-      if(!unitEl){
-        unitEl=document.createElement('span');
-        wrap.appendChild(unitEl);
-      }
-      unitEl.className='ob-center-unit';
-      unitEl.textContent=unit;
-    });
-  }
-
-  function ensureLumiCardLayout(){
-    document.querySelectorAll('#onboardingView .ob-lumi-avatar').forEach(avatar=>{
-      const card=avatar.closest('.bg-\\[\\#FFF9E6\\]');
-      if(card)card.dataset.lumiGuide='true';
-    });
-  }
-
-  const prevScreen=window.goToOnboardingScreen;
-  if(typeof prevScreen==='function'){
-    window.goToOnboardingScreen=function(id){
-      const result=prevScreen.call(this,id);
-      requestAnimationFrame(()=>{
-        ensureVisualMatchFields();
-        ensureLumiCardLayout();
+  function bindNumericFields(){
+    numericIds.forEach(id=>{
+      const el=document.getElementById(id);
+      if(!el || el.dataset.finalNumericBound==='1') return;
+      el.dataset.finalNumericBound='1';
+      el.addEventListener('input',()=>{
+        const cleaned=String(el.value||'').replace(/[^\d]/g,'');
+        if(el.value!==cleaned) el.value=cleaned;
       });
-      return result;
-    };
-  }
-
-  if(document.readyState==='loading'){
-    document.addEventListener('DOMContentLoaded',()=>{
-      ensureVisualMatchFields();
-      ensureLumiCardLayout();
     });
-  }else{
-    ensureVisualMatchFields();
-    ensureLumiCardLayout();
   }
 
-  window.LUMIFUL_PHASE8_STEP4D=Object.freeze({
-    status:'VISUAL_MATCH',
-    approvedMockDirection:true,
-    lumiGuide:'avatar + label + comment aligned as one unit',
-    numericAnswer:'large centered field with internal unit',
-    partnerChoices:'symmetrical',
-    schemaLogicChanged:false,
-    guestFlowChanged:false,
-    phase7EngineChanged:false
-  });
-})();
-</script>
-
-
-<script>
-/* PHASE 8 / STEP 4-E — MOBILE NUMERIC INPUT FIX */
-(function(){
- const ids=['ob-age','ob-partner-age','ob-income','ob-income-end-age','ob-expense'];
- function bind(){
-  ids.forEach(id=>{
-   const el=document.getElementById(id);
-   if(!el||el.dataset.numericCleanBound==='1')return;
-   el.dataset.numericCleanBound='1';
-   el.addEventListener('input',()=>{
-    const cleaned=String(el.value||'').replace(/[^\d]/g,'');
-    if(el.value!==cleaned)el.value=cleaned;
-   });
-   el.addEventListener('paste',()=>requestAnimationFrame(()=>{
-    el.value=String(el.value||'').replace(/[^\d]/g,'');
-   }));
-  });
- }
- const prev=window.goToOnboardingScreen;
- if(typeof prev==='function'){
-  window.goToOnboardingScreen=function(id){
-   const r=prev.call(this,id);
-   requestAnimationFrame(bind);
-   return r;
-  };
- }
- if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',bind);
- else bind();
- window.LUMIFUL_PHASE8_STEP4E=Object.freeze({
-  status:'MOBILE_INPUT_FIXED',
-  mainNumericInputType:'text+inputmode=numeric',
-  browserSpinnerRemoved:true,
-  visibleValueGuaranteed:true,
-  mobileLumiLayout:'vertical-center',
-  schemaLogicChanged:false,
-  guestFlowChanged:false,
-  phase7EngineChanged:false,
-  base:'PHASE8 STEP4D VISUAL_MATCH'
- });
-})();
-</script>
-
-
-<script>
-/* PHASE 8 / STEP 4-F — PRIMARY INPUT STRUCTURE FIX */
-window.LUMIFUL_PHASE8_STEP4F = Object.freeze({
-  status:'INPUT_STRUCTURE_FIXED',
-  primaryNumericFields:'direct ob-center-field HTML',
-  examplePlaceholdersRemoved:true,
-  pcValueClippingFixed:true,
-  mobileValueClippingFixed:true,
-  schemaLogicChanged:false,
-  guestFlowChanged:false,
-  phase7EngineChanged:false,
-  base:'PHASE8 STEP4E'
-});
-</script>
-
-
-<script>
-/* PHASE 8 / STEP 4-G — PARTNER AGE CONDITIONAL DISPLAY */
-(function(){
-  function syncPartnerAgeVisibility(hasPartner){
+  function setPartnerAgeVisibility(hasPartner){
     const wrap=document.getElementById('ob-partner-age-wrap');
     const input=document.getElementById('ob-partner-age');
     if(!wrap) return;
 
     if(hasPartner===true){
       wrap.classList.remove('hidden');
-      wrap.removeAttribute('aria-hidden');
+      wrap.setAttribute('aria-hidden','false');
     }else{
       wrap.classList.add('hidden');
       wrap.setAttribute('aria-hidden','true');
@@ -10013,23 +9724,40 @@ window.LUMIFUL_PHASE8_STEP4F = Object.freeze({
     }
   }
 
-  const prevSelect=window.selectOnboardingPartner;
-  if(typeof prevSelect==='function'){
-    window.selectOnboardingPartner=function(hasPartner){
-      const result=prevSelect.call(this,hasPartner);
-      syncPartnerAgeVisibility(hasPartner===true);
+  const oldPartner=window.selectOnboardingPartner;
+  window.selectOnboardingPartner=function(hasPartner){
+    const result=typeof oldPartner==='function' ? oldPartner.call(this,hasPartner) : undefined;
+    setPartnerAgeVisibility(hasPartner===true);
+    return result;
+  };
+
+  const oldScreen=window.goToOnboardingScreen;
+  if(typeof oldScreen==='function'){
+    window.goToOnboardingScreen=function(id){
+      const result=oldScreen.call(this,id);
+      requestAnimationFrame(bindNumericFields);
       return result;
     };
   }
 
-  window.LUMIFUL_PHASE8_STEP4G=Object.freeze({
-    status:'PARTNER_AGE_CONDITIONAL',
-    partnerYes:'show age field',
-    partnerNo:'hide age field',
+  if(document.readyState==='loading'){
+    document.addEventListener('DOMContentLoaded',bindNumericFields);
+  }else{
+    bindNumericFields();
+  }
+
+  window.LUMIFUL_PHASE8_STEP4_FINAL_REBUILT_UI=Object.freeze({
+    status:'READY_FOR_FINAL_VISUAL_CHECK',
+    rebuiltFrom:'PHASE8 STEP4 GUEST_SCHEMA_CONNECTED',
+    uiPatchChainRemoved:true,
+    desktopCenterAxis:true,
+    mobileCenterAxis:true,
+    ageUnitInsideField:true,
+    examplePlaceholdersRemoved:true,
+    partnerAgeConditional:true,
     schemaLogicChanged:false,
     guestFlowChanged:false,
-    phase7EngineChanged:false,
-    base:'PHASE8 STEP4F'
+    phase7EngineChanged:false
   });
 })();
 </script>
