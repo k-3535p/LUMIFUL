@@ -430,6 +430,53 @@
   }
 </style>
 
+
+<style id="phase8-step4e-mobile-input-fix">
+#onboardingView .ob-center-field input{
+ color:#253047!important;-webkit-text-fill-color:#253047!important;
+ caret-color:#253047!important;opacity:1!important;appearance:none!important;
+ -webkit-appearance:none!important;background-image:none!important;
+ text-indent:0!important;letter-spacing:0!important;padding-left:62px!important;padding-right:62px!important
+}
+#onboardingView .ob-center-field input:focus{
+ outline:none!important;border-color:#65B9E8!important;
+ box-shadow:0 0 0 3px rgba(101,185,232,.18)!important
+}
+#onboardingView .ob-center-unit{right:18px!important;z-index:2}
+@media(max-width:640px){
+ #onboardingView [data-lumi-guide="true"]{
+  display:flex!important;flex-direction:column!important;align-items:center!important;
+  justify-content:center!important;gap:7px!important;text-align:center!important;
+  padding:18px 16px!important;min-height:154px!important
+ }
+ #onboardingView [data-lumi-guide="true"]>div:last-child{width:100%;text-align:center!important}
+ #onboardingView .ob-lumi-avatar{
+  margin:0 auto!important;width:52px!important;height:52px!important;
+  flex:0 0 52px!important;border-radius:16px!important
+ }
+ #onboardingView .ob-lumi-avatar img{width:42px!important;height:42px!important}
+ #onboardingView .ob-lumi-avatar+div>div:first-child{
+  text-align:center!important;font-size:13px!important;margin-bottom:5px!important
+ }
+ #onboardingView .ob-lumi-avatar+div p{
+  text-align:center!important;font-size:14px!important;line-height:1.65!important;
+  max-width:290px;margin-left:auto!important;margin-right:auto!important
+ }
+ #onboardingView .ob-center-field{
+  width:min(100%,320px)!important;min-height:68px!important
+ }
+ #onboardingView .ob-center-field input{
+  height:68px!important;font-size:30px!important;
+  padding-left:58px!important;padding-right:58px!important
+ }
+ #onboardingView .ob-center-unit{right:18px!important;font-size:13px!important}
+ #onboardingScreen-1 .mt-6.space-y-6>div>.grid.grid-cols-2{
+  width:min(100%,320px)!important;gap:12px!important
+ }
+ #onboardingScreen-1 .ob-choice{min-height:60px!important}
+}
+</style>
+
 </head>
 <body class="bg-[#FAFAF7] text-[#253047] min-h-screen font-sans antialiased relative overflow-x-hidden">
 
@@ -986,7 +1033,7 @@
                 <div>
                   <label class="text-xs font-bold text-[#253047]">本人年齢 <span class="text-[#D46A7C]">必須</span></label>
                   <div class="mt-2 inline-grid grid-cols-[150px_auto] items-center justify-center gap-2">
-                    <input id="ob-age" type="number" min="18" max="100" placeholder="例：40" class="w-full border border-[#E1E4E8] rounded-[12px] px-3.5 py-3 text-lg font-bold text-right">
+                    <input id="ob-age" type="text" inputmode="numeric" pattern="[0-9]*" min="18" max="100" placeholder="例：40" class="w-full border border-[#E1E4E8] rounded-[12px] px-3.5 py-3 text-lg font-bold text-right">
                     <span class="text-sm text-[#6F7785]">歳</span>
                   </div>
                 </div>
@@ -1002,7 +1049,7 @@
                 <div id="ob-partner-age-wrap" class="hidden">
                   <label class="text-xs font-bold text-[#253047]">パートナー年齢</label>
                   <div class="mt-2 inline-grid grid-cols-[150px_auto] items-center justify-center gap-2">
-                    <input id="ob-partner-age" type="number" min="18" max="100" placeholder="例：38" class="w-full border border-[#E1E4E8] rounded-[12px] px-3.5 py-3 text-lg font-bold text-right">
+                    <input id="ob-partner-age" type="text" inputmode="numeric" pattern="[0-9]*" min="18" max="100" placeholder="例：38" class="w-full border border-[#E1E4E8] rounded-[12px] px-3.5 py-3 text-lg font-bold text-right">
                     <span class="text-sm text-[#6F7785]">歳</span>
                   </div>
                 </div>
@@ -1029,7 +1076,7 @@
                 <div>
                   <label class="text-xs font-bold text-[#253047]">年間手取り収入</label>
                   <div class="mt-2 flex items-center justify-center gap-3 w-full">
-                    <input id="ob-income" type="number" min="0" placeholder="500" class="flex-1 border border-[#E1E4E8] rounded-[12px] px-3.5 py-3 text-lg font-bold text-right">
+                    <input id="ob-income" type="text" inputmode="numeric" pattern="[0-9]*" min="0" placeholder="500" class="flex-1 border border-[#E1E4E8] rounded-[12px] px-3.5 py-3 text-lg font-bold text-right">
                     <span class="text-sm text-[#6F7785]">万円 / 年</span>
                   </div>
                   <div class="mt-2 rounded-[12px] bg-[#F7FBFE] border border-[#DCEEF8] px-3 py-2 text-[10px] text-[#536274] leading-relaxed">
@@ -1038,7 +1085,7 @@
                   <div class="mt-3 max-w-[240px]">
                     <label class="text-[10px] font-bold text-[#6F7785]">この収入は何歳まで？</label>
                     <div class="mt-1 flex items-center gap-2">
-                      <input id="ob-income-end-age" type="number" min="18" max="110" placeholder="例：65" class="w-full border border-[#E1E4E8] rounded-[10px] px-3 py-2.5 text-sm text-right">
+                      <input id="ob-income-end-age" type="text" inputmode="numeric" pattern="[0-9]*" min="18" max="110" placeholder="例：65" class="w-full border border-[#E1E4E8] rounded-[10px] px-3 py-2.5 text-sm text-right">
                       <span class="text-xs text-[#6F7785]">歳</span>
                     </div>
                   </div>
@@ -1049,7 +1096,7 @@
                 <div>
                   <label class="text-xs font-bold text-[#253047]">年間生活費</label>
                   <div class="mt-2 flex items-center justify-center gap-3 w-full">
-                    <input id="ob-expense" type="number" min="0" placeholder="450" class="flex-1 border border-[#E1E4E8] rounded-[12px] px-3.5 py-3 text-lg font-bold text-right">
+                    <input id="ob-expense" type="text" inputmode="numeric" pattern="[0-9]*" min="0" placeholder="450" class="flex-1 border border-[#E1E4E8] rounded-[12px] px-3.5 py-3 text-lg font-bold text-right">
                     <span class="text-sm text-[#6F7785]">万円 / 年</span>
                   </div>
                   <p class="mt-2 text-[10px] text-[#8A909C]">住居費・保険・趣味など、普段の支出をまとめた金額でOKです。</p>
@@ -9808,6 +9855,49 @@ window.LUMIFUL_PHASE8_STEP4B = Object.freeze({
     guestFlowChanged:false,
     phase7EngineChanged:false
   });
+})();
+</script>
+
+
+<script>
+/* PHASE 8 / STEP 4-E — MOBILE NUMERIC INPUT FIX */
+(function(){
+ const ids=['ob-age','ob-partner-age','ob-income','ob-income-end-age','ob-expense'];
+ function bind(){
+  ids.forEach(id=>{
+   const el=document.getElementById(id);
+   if(!el||el.dataset.numericCleanBound==='1')return;
+   el.dataset.numericCleanBound='1';
+   el.addEventListener('input',()=>{
+    const cleaned=String(el.value||'').replace(/[^\d]/g,'');
+    if(el.value!==cleaned)el.value=cleaned;
+   });
+   el.addEventListener('paste',()=>requestAnimationFrame(()=>{
+    el.value=String(el.value||'').replace(/[^\d]/g,'');
+   }));
+  });
+ }
+ const prev=window.goToOnboardingScreen;
+ if(typeof prev==='function'){
+  window.goToOnboardingScreen=function(id){
+   const r=prev.call(this,id);
+   requestAnimationFrame(bind);
+   return r;
+  };
+ }
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',bind);
+ else bind();
+ window.LUMIFUL_PHASE8_STEP4E=Object.freeze({
+  status:'MOBILE_INPUT_FIXED',
+  mainNumericInputType:'text+inputmode=numeric',
+  browserSpinnerRemoved:true,
+  visibleValueGuaranteed:true,
+  mobileLumiLayout:'vertical-center',
+  schemaLogicChanged:false,
+  guestFlowChanged:false,
+  phase7EngineChanged:false,
+  base:'PHASE8 STEP4D VISUAL_MATCH'
+ });
 })();
 </script>
 
