@@ -636,7 +636,248 @@
 
       </div>
 
-      <!-- VIEW 2: SIMULATION INPUT VIEW -->
+      
+      <!-- ============================================================
+           PHASE 8 / STEP 3 — ONBOARDING UI ONLY
+           No Schema/Engine/Firestore writes in this step.
+           ============================================================ -->
+      <div id="onboardingView" class="hidden min-h-[calc(100vh-120px)]">
+        <div class="max-w-[760px] mx-auto px-4 sm:px-6 py-6 sm:py-10">
+
+          <!-- Onboarding shared header -->
+          <div id="onboardingSharedHeader" class="hidden mb-5">
+            <div class="flex items-center justify-between gap-3">
+              <button type="button" onclick="onboardingBack()" class="text-xs sm:text-sm font-bold text-[#6F7785] hover:text-[#253047] flex items-center gap-1.5">
+                <i class="fa-solid fa-chevron-left"></i><span>戻る</span>
+              </button>
+              <div id="onboardingStepLabel" class="text-[11px] sm:text-xs font-extrabold text-[#8C5800]">STEP 1 / 5</div>
+              <button type="button" onclick="skipOnboardingToHome()" class="text-xs sm:text-sm font-bold text-[#8A909C] hover:text-[#253047]">あとで設定</button>
+            </div>
+            <div class="mt-3 h-1.5 bg-[#ECEBE6] rounded-full overflow-hidden">
+              <div id="onboardingProgressBar" class="h-full bg-[#FFC83D] rounded-full transition-all duration-300" style="width:20%"></div>
+            </div>
+          </div>
+
+          <!-- ENTRY -->
+          <section id="onboardingScreen-entry" class="onboarding-screen">
+            <div class="bg-white rounded-[28px] border border-[#ECEBE6] shadow-sm px-5 py-8 sm:p-10 text-center">
+              <img src="./assets/lumiful-logo.png" alt="LUMIFUL" class="h-9 sm:h-11 w-auto mx-auto object-contain">
+              <div class="mt-7 flex justify-center">
+                <div class="w-16 h-16 rounded-[22px] bg-[#FFF9E6] border border-[#F0E2B7] flex items-center justify-center">
+                  <img src="./assets/lumi-spark.png" alt="LUMI" class="w-10 h-10 object-contain" onerror="this.style.display='none'">
+                </div>
+              </div>
+
+              <h2 class="mt-5 text-2xl sm:text-3xl font-extrabold text-[#253047] tracking-tight">あなたの未来を描いてみよう</h2>
+              <p class="mt-3 text-sm text-[#6F7785] leading-relaxed max-w-lg mx-auto">
+                LUMIと一緒なら、質問に答えるだけで最初のシミュレーションを作れます。
+              </p>
+
+              <div class="mt-8 space-y-3 max-w-md mx-auto">
+                <button type="button" onclick="startLumiOnboarding()" class="w-full px-5 py-3.5 btn-lumi-primary text-sm font-extrabold flex items-center justify-center gap-2">
+                  <i class="fa-solid fa-sparkles"></i><span>LUMIと一緒にはじめる</span>
+                </button>
+                <button type="button" onclick="onboardingUseManualInput()" class="w-full px-5 py-3.5 btn-lumi-secondary text-sm font-bold">
+                  自分で入力する
+                </button>
+                <button type="button" onclick="skipOnboardingToHome()" class="w-full px-5 py-2.5 text-xs font-bold text-[#8A909C] hover:text-[#253047]">
+                  あとで設定する
+                </button>
+              </div>
+            </div>
+          </section>
+
+          <!-- STEP 1 -->
+          <section id="onboardingScreen-1" class="onboarding-screen hidden">
+            <div class="bg-white rounded-[26px] border border-[#ECEBE6] p-5 sm:p-8">
+              <div class="flex items-center gap-2">
+                <span class="w-8 h-8 rounded-full bg-[#EAF6FC] text-[#65B9E8] font-extrabold text-xs flex items-center justify-center">01</span>
+                <h2 class="text-xl sm:text-2xl font-extrabold text-[#253047]">あなた</h2>
+              </div>
+              <div class="mt-5 rounded-[16px] bg-[#FFF9E6] border border-[#F0E2B7] px-4 py-3 flex gap-3">
+                <div class="w-9 h-9 rounded-[12px] bg-white flex items-center justify-center shrink-0"><i class="fa-solid fa-sparkles text-[#D97706]"></i></div>
+                <div><div class="text-[10px] font-extrabold text-[#8C5800]">LUMI</div><p class="text-sm text-[#253047] mt-0.5">まず、あなたのことを教えてください。</p></div>
+              </div>
+
+              <div class="mt-6 space-y-6">
+                <div>
+                  <label class="text-xs font-bold text-[#253047]">本人年齢 <span class="text-[#D46A7C]">必須</span></label>
+                  <div class="mt-2 flex items-center gap-2 max-w-[180px]">
+                    <input id="ob-age" type="number" min="18" max="100" placeholder="例：40" class="w-full border border-[#E1E4E8] rounded-[12px] px-3.5 py-3 text-lg font-bold text-right">
+                    <span class="text-sm text-[#6F7785]">歳</span>
+                  </div>
+                </div>
+
+                <div>
+                  <div class="text-xs font-bold text-[#253047]">パートナーはいますか？</div>
+                  <div class="mt-2 grid grid-cols-2 gap-3">
+                    <button type="button" onclick="selectOnboardingPartner(true)" data-ob-partner="yes" class="ob-choice px-4 py-3 rounded-[14px] border border-[#ECEBE6] bg-white text-sm font-bold">いる</button>
+                    <button type="button" onclick="selectOnboardingPartner(false)" data-ob-partner="no" class="ob-choice px-4 py-3 rounded-[14px] border border-[#ECEBE6] bg-white text-sm font-bold">いない</button>
+                  </div>
+                </div>
+
+                <div id="ob-partner-age-wrap" class="hidden">
+                  <label class="text-xs font-bold text-[#253047]">パートナー年齢</label>
+                  <div class="mt-2 flex items-center gap-2 max-w-[180px]">
+                    <input id="ob-partner-age" type="number" min="18" max="100" placeholder="例：38" class="w-full border border-[#E1E4E8] rounded-[12px] px-3.5 py-3 text-lg font-bold text-right">
+                    <span class="text-sm text-[#6F7785]">歳</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- STEP 2 -->
+          <section id="onboardingScreen-2" class="onboarding-screen hidden">
+            <div class="bg-white rounded-[26px] border border-[#ECEBE6] p-5 sm:p-8">
+              <div class="flex items-center gap-2">
+                <span class="w-8 h-8 rounded-full bg-[#EAF6FC] text-[#65B9E8] font-extrabold text-xs flex items-center justify-center">02</span>
+                <h2 class="text-xl sm:text-2xl font-extrabold text-[#253047]">暮らし</h2>
+              </div>
+              <div class="mt-5 rounded-[16px] bg-[#FFF9E6] border border-[#F0E2B7] px-4 py-3 flex gap-3">
+                <div class="w-9 h-9 rounded-[12px] bg-white flex items-center justify-center shrink-0"><i class="fa-solid fa-sparkles text-[#D97706]"></i></div>
+                <div><div class="text-[10px] font-extrabold text-[#8C5800]">LUMI</div><p class="text-sm text-[#253047] mt-0.5">今の暮らしのお金について教えてください。</p></div>
+              </div>
+
+              <div class="mt-6 space-y-6">
+                <div>
+                  <label class="text-xs font-bold text-[#253047]">年間手取り収入</label>
+                  <div class="mt-2 flex items-center gap-2">
+                    <input id="ob-income" type="number" min="0" placeholder="500" class="flex-1 border border-[#E1E4E8] rounded-[12px] px-3.5 py-3 text-lg font-bold text-right">
+                    <span class="text-sm text-[#6F7785]">万円 / 年</span>
+                  </div>
+                  <div class="mt-2 rounded-[12px] bg-[#F7FBFE] border border-[#DCEEF8] px-3 py-2 text-[10px] text-[#536274] leading-relaxed">
+                    <strong class="text-[#253047]">入力基準：手取り</strong>　税金・社会保険料を差し引いた後に実際に使える金額を入力します。
+                  </div>
+                  <button type="button" onclick="addOnboardingIncomeRow()" class="mt-3 px-3 py-2 btn-lumi-secondary text-xs font-bold"><i class="fa-solid fa-plus mr-1"></i>追加</button>
+                  <div id="ob-extra-income-list" class="mt-3 space-y-2"></div>
+                </div>
+
+                <div>
+                  <label class="text-xs font-bold text-[#253047]">年間生活費</label>
+                  <div class="mt-2 flex items-center gap-2">
+                    <input id="ob-expense" type="number" min="0" placeholder="450" class="flex-1 border border-[#E1E4E8] rounded-[12px] px-3.5 py-3 text-lg font-bold text-right">
+                    <span class="text-sm text-[#6F7785]">万円 / 年</span>
+                  </div>
+                  <p class="mt-2 text-[10px] text-[#8A909C]">住居費・保険・趣味など、普段の支出をまとめた金額でOKです。</p>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- STEP 3 -->
+          <section id="onboardingScreen-3" class="onboarding-screen hidden">
+            <div class="bg-white rounded-[26px] border border-[#ECEBE6] p-5 sm:p-8">
+              <div class="flex items-center gap-2">
+                <span class="w-8 h-8 rounded-full bg-[#EAF8F3] text-[#4FAE8E] font-extrabold text-xs flex items-center justify-center">03</span>
+                <h2 class="text-xl sm:text-2xl font-extrabold text-[#253047]">資産</h2>
+              </div>
+              <div class="mt-5 rounded-[16px] bg-[#FFF9E6] border border-[#F0E2B7] px-4 py-3 flex gap-3">
+                <div class="w-9 h-9 rounded-[12px] bg-white flex items-center justify-center shrink-0"><i class="fa-solid fa-sparkles text-[#D97706]"></i></div>
+                <div><div class="text-[10px] font-extrabold text-[#8C5800]">LUMI</div><p class="text-sm text-[#253047] mt-0.5">今持っている資産を教えてください。</p></div>
+              </div>
+
+              <div class="mt-6 grid grid-cols-2 sm:grid-cols-3 gap-3">
+                <button type="button" onclick="toggleOnboardingAsset('cash')" data-ob-asset="cash" class="ob-asset-choice p-4 rounded-[16px] border border-[#ECEBE6] text-left"><div class="text-lg">💰</div><div class="text-xs font-bold mt-2">現金・預金</div></button>
+                <button type="button" onclick="toggleOnboardingAsset('fund')" data-ob-asset="fund" class="ob-asset-choice p-4 rounded-[16px] border border-[#ECEBE6] text-left"><div class="text-lg">📈</div><div class="text-xs font-bold mt-2">投資信託</div></button>
+                <button type="button" onclick="toggleOnboardingAsset('bond')" data-ob-asset="bond" class="ob-asset-choice p-4 rounded-[16px] border border-[#ECEBE6] text-left"><div class="text-lg">📃</div><div class="text-xs font-bold mt-2">債券</div></button>
+                <button type="button" onclick="toggleOnboardingAsset('stock')" data-ob-asset="stock" class="ob-asset-choice p-4 rounded-[16px] border border-[#ECEBE6] text-left"><div class="text-lg">📊</div><div class="text-xs font-bold mt-2">株式</div></button>
+                <button type="button" onclick="toggleOnboardingAsset('other')" data-ob-asset="other" class="ob-asset-choice p-4 rounded-[16px] border border-[#ECEBE6] text-left"><div class="text-lg">🏠</div><div class="text-xs font-bold mt-2">その他</div></button>
+              </div>
+
+              <div id="ob-asset-inputs" class="mt-5 space-y-3"></div>
+            </div>
+          </section>
+
+          <!-- STEP 4 -->
+          <section id="onboardingScreen-4" class="onboarding-screen hidden">
+            <div class="bg-white rounded-[26px] border border-[#ECEBE6] p-5 sm:p-8">
+              <div class="flex items-center gap-2">
+                <span class="w-8 h-8 rounded-full bg-[#FFF0F3] text-[#D46A7C] font-extrabold text-xs flex items-center justify-center">04</span>
+                <h2 class="text-xl sm:text-2xl font-extrabold text-[#253047]">これから</h2>
+              </div>
+              <div class="mt-5 rounded-[16px] bg-[#FFF9E6] border border-[#F0E2B7] px-4 py-3 flex gap-3">
+                <div class="w-9 h-9 rounded-[12px] bg-white flex items-center justify-center shrink-0"><i class="fa-solid fa-sparkles text-[#D97706]"></i></div>
+                <div><div class="text-[10px] font-extrabold text-[#8C5800]">LUMI</div><p class="text-sm text-[#253047] mt-0.5">これから予定している、大きなお金の動きはありますか？</p></div>
+              </div>
+
+              <div class="mt-6 grid grid-cols-2 gap-3">
+                <button type="button" onclick="setOnboardingEventType('expense')" data-ob-event-type="expense" class="ob-choice px-4 py-4 rounded-[16px] border border-[#ECEBE6] text-sm font-bold"><i class="fa-solid fa-arrow-up-from-bracket mr-2 text-[#FF8FA3]"></i>支出予定</button>
+                <button type="button" onclick="setOnboardingEventType('income')" data-ob-event-type="income" class="ob-choice px-4 py-4 rounded-[16px] border border-[#ECEBE6] text-sm font-bold"><i class="fa-solid fa-arrow-down-long mr-2 text-[#72D6B5]"></i>受取予定</button>
+              </div>
+
+              <div id="ob-event-editor" class="hidden mt-4 rounded-[16px] border border-[#ECEBE6] bg-[#FAFAF7] p-4 space-y-3">
+                <select id="ob-event-kind" class="w-full border border-[#E1E4E8] bg-white rounded-[11px] px-3 py-2.5 text-xs">
+                  <option value="other">その他</option>
+                </select>
+                <div class="grid grid-cols-2 gap-3">
+                  <div><label class="text-[10px] text-[#6F7785]">何歳？</label><input id="ob-event-age" type="number" min="18" max="100" class="mt-1 w-full border border-[#E1E4E8] rounded-[11px] px-3 py-2.5 text-sm"></div>
+                  <div><label class="text-[10px] text-[#6F7785]">いくら？</label><input id="ob-event-amount" type="number" min="0" class="mt-1 w-full border border-[#E1E4E8] rounded-[11px] px-3 py-2.5 text-sm text-right" placeholder="500"></div>
+                </div>
+                <button type="button" onclick="addOnboardingEvent()" class="px-3 py-2 btn-lumi-secondary text-xs font-bold"><i class="fa-solid fa-plus mr-1"></i>予定を追加</button>
+              </div>
+
+              <div id="ob-events-list" class="mt-4 space-y-2"></div>
+              <button type="button" onclick="clearOnboardingEvents()" class="mt-5 text-xs font-bold text-[#8A909C] hover:text-[#253047]">特に予定はない</button>
+            </div>
+          </section>
+
+          <!-- STEP 5 -->
+          <section id="onboardingScreen-5" class="onboarding-screen hidden">
+            <div class="bg-white rounded-[26px] border border-[#ECEBE6] p-5 sm:p-8">
+              <div class="flex items-center gap-2">
+                <span class="w-8 h-8 rounded-full bg-[#FFF9E6] text-[#D97706] font-extrabold text-xs flex items-center justify-center">05</span>
+                <h2 class="text-xl sm:text-2xl font-extrabold text-[#253047]">お金の残し方</h2>
+              </div>
+              <div class="mt-5 rounded-[16px] bg-[#FFF9E6] border border-[#F0E2B7] px-4 py-3 flex gap-3">
+                <div class="w-9 h-9 rounded-[12px] bg-white flex items-center justify-center shrink-0"><i class="fa-solid fa-sparkles text-[#D97706]"></i></div>
+                <div><div class="text-[10px] font-extrabold text-[#8C5800]">LUMI</div><p class="text-sm text-[#253047] mt-0.5">毎年お金が余ったら、どうしたいですか？</p></div>
+              </div>
+
+              <div class="mt-6 grid grid-cols-1 sm:grid-cols-3 gap-3">
+                <button type="button" onclick="selectOnboardingSurplus('cash')" data-ob-surplus="cash" class="ob-choice p-5 rounded-[18px] border border-[#ECEBE6] text-left"><div class="text-2xl">💰</div><div class="mt-2 text-sm font-extrabold">貯金する</div><p class="mt-1 text-[10px] text-[#8A909C]">現金・預金として残す</p></button>
+                <button type="button" onclick="selectOnboardingSurplus('investment')" data-ob-surplus="investment" class="ob-choice p-5 rounded-[18px] border border-[#ECEBE6] text-left"><div class="text-2xl">📈</div><div class="mt-2 text-sm font-extrabold">投資する</div><p class="mt-1 text-[10px] text-[#8A909C]">投資資産へ回す</p></button>
+                <button type="button" onclick="selectOnboardingSurplus('both')" data-ob-surplus="both" class="ob-choice p-5 rounded-[18px] border border-[#ECEBE6] text-left"><div class="text-2xl">⚖️</div><div class="mt-2 text-sm font-extrabold">両方</div><p class="mt-1 text-[10px] text-[#8A909C]">貯金と投資に分ける</p></button>
+              </div>
+
+              <div id="ob-surplus-split" class="hidden mt-5 rounded-[16px] border border-[#ECEBE6] bg-[#FAFAF7] p-4">
+                <div class="flex justify-between text-xs font-bold"><span>貯金 <span id="ob-cash-pct">50</span>%</span><span>投資 <span id="ob-invest-pct">50</span>%</span></div>
+                <input id="ob-invest-range" type="range" min="0" max="100" value="50" oninput="updateOnboardingSplit()" class="w-full mt-3">
+              </div>
+            </div>
+          </section>
+
+          <!-- COMPLETE -->
+          <section id="onboardingScreen-complete" class="onboarding-screen hidden">
+            <div class="bg-white rounded-[28px] border border-[#ECEBE6] px-5 py-8 sm:p-10 text-center">
+              <div class="w-20 h-20 rounded-[26px] bg-[#FFF9E6] border border-[#F0E2B7] flex items-center justify-center mx-auto">
+                <i class="fa-solid fa-sparkles text-3xl text-[#D97706]"></i>
+              </div>
+              <div class="mt-4 text-[11px] font-extrabold text-[#8C5800]">LUMI</div>
+              <h2 class="mt-2 text-2xl sm:text-3xl font-extrabold text-[#253047]">あなたの未来を描く準備ができました。</h2>
+              <p class="mt-3 text-sm text-[#6F7785]">入力した内容から、これからのお金と資産の変化を見てみましょう。</p>
+
+              <div id="ob-summary" class="mt-6 grid grid-cols-2 gap-3 text-left"></div>
+
+              <div class="mt-8 space-y-3 max-w-sm mx-auto">
+                <button type="button" onclick="finishOnboardingUiOnly()" class="w-full px-5 py-3.5 btn-lumi-primary text-sm font-extrabold">未来を見る ✨</button>
+                <button type="button" onclick="goToOnboardingStep(1)" class="w-full px-5 py-3 btn-lumi-secondary text-xs font-bold">入力内容を確認する</button>
+              </div>
+            </div>
+          </section>
+
+          <!-- Shared bottom nav for steps only -->
+          <div id="onboardingBottomNav" class="hidden mt-5 sticky bottom-3 z-20">
+            <div class="bg-white/95 backdrop-blur border border-[#ECEBE6] rounded-[18px] shadow-lg p-3 flex items-center gap-3">
+              <button type="button" onclick="onboardingBack()" class="px-4 py-3 btn-lumi-secondary text-xs font-bold">戻る</button>
+              <button id="onboardingNextBtn" type="button" onclick="onboardingNext()" class="flex-1 px-5 py-3 btn-lumi-primary text-sm font-extrabold">次へ</button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+<!-- VIEW 2: SIMULATION INPUT VIEW -->
       <div id="simulationInputView" class="hidden space-y-6">
         
         <div class="space-y-1 mb-1">
@@ -8462,6 +8703,294 @@ window.LUMIFUL_PHASE7B_STEP3_LOCK_V8_2 = Object.freeze({
     settingsAccountAction: 'authenticated=ログアウト / guest=ゲスト終了',
     unauthenticatedAppShellAction: 'hidden',
     v9SurplusAllocationPreserved: true
+  });
+})();
+</script>
+
+
+<script>
+/* ============================================================
+   PHASE 8 / STEP 3 — ONBOARDING UI ONLY
+   No Schema v2 write / no Firestore write / no Engine call.
+   ============================================================ */
+(function () {
+  window.LUMIFUL_ONBOARDING_UI_STATE = {
+    current: 'entry',
+    partner: null,
+    selectedAssets: new Set(),
+    eventType: null,
+    events: [],
+    surplus: null
+  };
+
+  const screens = ['entry','1','2','3','4','5','complete'];
+
+  function screenEl(id) {
+    return document.getElementById(`onboardingScreen-${id}`);
+  }
+
+  window.openOnboardingUi = function() {
+    window.switchView?.('onboarding');
+    document.getElementById('onboardingView')?.classList.remove('hidden');
+    window.goToOnboardingScreen('entry');
+    window.scrollTo({top:0,behavior:'smooth'});
+  };
+
+  window.goToOnboardingScreen = function(id) {
+    screens.forEach(s => screenEl(s)?.classList.toggle('hidden', s !== String(id)));
+    window.LUMIFUL_ONBOARDING_UI_STATE.current = String(id);
+
+    const isStep = ['1','2','3','4','5'].includes(String(id));
+    document.getElementById('onboardingSharedHeader')?.classList.toggle('hidden', !isStep);
+    document.getElementById('onboardingBottomNav')?.classList.toggle('hidden', !isStep);
+
+    if (isStep) {
+      const n = Number(id);
+      const label = document.getElementById('onboardingStepLabel');
+      const bar = document.getElementById('onboardingProgressBar');
+      if (label) label.textContent = `STEP ${n} / 5`;
+      if (bar) bar.style.width = `${n*20}%`;
+      const next = document.getElementById('onboardingNextBtn');
+      if (next) next.textContent = n === 5 ? '確認する' : '次へ';
+    }
+
+    if (String(id) === 'complete') window.renderOnboardingSummaryUi();
+    window.scrollTo({top:0,behavior:'smooth'});
+  };
+
+  window.startLumiOnboarding = function() {
+    window.goToOnboardingScreen('1');
+  };
+
+  window.goToOnboardingStep = function(n) {
+    window.goToOnboardingScreen(String(n));
+  };
+
+  window.onboardingBack = function() {
+    const cur = window.LUMIFUL_ONBOARDING_UI_STATE.current;
+    if (cur === 'entry') return;
+    if (cur === 'complete') return window.goToOnboardingScreen('5');
+    const n = Number(cur);
+    if (n <= 1) return window.goToOnboardingScreen('entry');
+    window.goToOnboardingScreen(String(n-1));
+  };
+
+  window.onboardingNext = function() {
+    const cur = Number(window.LUMIFUL_ONBOARDING_UI_STATE.current);
+    if (cur === 1) {
+      const age = Number(document.getElementById('ob-age')?.value || 0);
+      if (!age) {
+        window.showToast?.('本人年齢を入力してください', 'error');
+        return;
+      }
+    }
+    if (cur >= 5) return window.goToOnboardingScreen('complete');
+    window.goToOnboardingScreen(String(cur+1));
+  };
+
+  window.onboardingUseManualInput = function() {
+    document.getElementById('onboardingView')?.classList.add('hidden');
+    window.switchView?.('simulationInput');
+  };
+
+  window.skipOnboardingToHome = function() {
+    document.getElementById('onboardingView')?.classList.add('hidden');
+    window.switchView?.('dashboard');
+  };
+
+  window.finishOnboardingUiOnly = function() {
+    // STEP 3 only: UI completion, no Schema/Persistence write.
+    document.getElementById('onboardingView')?.classList.add('hidden');
+    window.switchView?.('dashboard');
+    window.showToast?.('オンボーディングUI確認完了（STEP3）', 'success');
+  };
+
+  window.selectOnboardingPartner = function(hasPartner) {
+    window.LUMIFUL_ONBOARDING_UI_STATE.partner = !!hasPartner;
+    document.getElementById('ob-partner-age-wrap')?.classList.toggle('hidden', !hasPartner);
+    document.querySelectorAll('[data-ob-partner]').forEach(btn => {
+      const active = btn.dataset.obPartner === (hasPartner ? 'yes' : 'no');
+      btn.classList.toggle('border-[#65B9E8]', active);
+      btn.classList.toggle('bg-[#EAF6FC]', active);
+    });
+  };
+
+  window.addOnboardingIncomeRow = function() {
+    const box = document.getElementById('ob-extra-income-list');
+    if (!box) return;
+    const row = document.createElement('div');
+    row.className = 'grid grid-cols-2 sm:grid-cols-4 gap-2 rounded-[12px] bg-[#FAFAF7] border border-[#ECEBE6] p-3';
+    row.innerHTML = `
+      <input placeholder="収入名" class="border border-[#E1E4E8] rounded-[9px] px-2.5 py-2 text-xs">
+      <input type="number" placeholder="万円/年" class="border border-[#E1E4E8] rounded-[9px] px-2.5 py-2 text-xs text-right">
+      <input type="number" placeholder="開始年齢" class="border border-[#E1E4E8] rounded-[9px] px-2.5 py-2 text-xs">
+      <div class="flex gap-1"><input type="number" placeholder="終了年齢" class="min-w-0 flex-1 border border-[#E1E4E8] rounded-[9px] px-2.5 py-2 text-xs"><button type="button" onclick="this.closest('.grid').remove()" class="px-2 text-[#D46A7C]"><i class="fa-solid fa-xmark"></i></button></div>`;
+    box.appendChild(row);
+  };
+
+  const assetMeta = {
+    cash:{label:'現金・預金',return:false},
+    fund:{label:'投資信託',return:true},
+    bond:{label:'債券',return:true},
+    stock:{label:'株式',return:false},
+    other:{label:'その他',return:false}
+  };
+
+  window.toggleOnboardingAsset = function(key) {
+    const state = window.LUMIFUL_ONBOARDING_UI_STATE;
+    if (state.selectedAssets.has(key)) state.selectedAssets.delete(key);
+    else state.selectedAssets.add(key);
+
+    document.querySelectorAll('[data-ob-asset]').forEach(btn => {
+      const active = state.selectedAssets.has(btn.dataset.obAsset);
+      btn.classList.toggle('border-[#72D6B5]', active);
+      btn.classList.toggle('bg-[#EAF8F3]', active);
+    });
+
+    window.renderOnboardingAssetInputs();
+  };
+
+  window.renderOnboardingAssetInputs = function() {
+    const box = document.getElementById('ob-asset-inputs');
+    if (!box) return;
+    box.innerHTML = '';
+
+    [...window.LUMIFUL_ONBOARDING_UI_STATE.selectedAssets].forEach(key => {
+      const meta = assetMeta[key];
+      const row = document.createElement('div');
+      row.className = 'rounded-[14px] border border-[#ECEBE6] bg-[#FAFAF7] p-3';
+      row.dataset.obAssetInput = key;
+      row.innerHTML = `
+        <div class="text-xs font-extrabold text-[#253047]">${meta.label}</div>
+        <div class="mt-2 grid ${meta.return?'grid-cols-2':'grid-cols-1'} gap-2">
+          <div><label class="text-[10px] text-[#6F7785]">評価額</label><div class="flex items-center gap-1"><input type="number" placeholder="0" class="w-full border border-[#E1E4E8] bg-white rounded-[9px] px-2.5 py-2 text-xs text-right"><span class="text-[10px] text-[#6F7785]">万円</span></div></div>
+          ${meta.return?'<div><label class="text-[10px] text-[#6F7785]">想定利回り</label><div class="flex items-center gap-1"><input type="number" step="0.1" placeholder="4.0" class="w-full border border-[#E1E4E8] bg-white rounded-[9px] px-2.5 py-2 text-xs text-right"><span class="text-[10px] text-[#6F7785]">%</span></div></div>':''}
+        </div>`;
+      box.appendChild(row);
+    });
+  };
+
+  const eventKinds = {
+    expense:['住宅購入','結婚','出産・子育て','教育','車','旅行','その他'],
+    income:['退職金','学資保険満期','株式売却','不動産売却','相続','その他']
+  };
+
+  window.setOnboardingEventType = function(type) {
+    const state = window.LUMIFUL_ONBOARDING_UI_STATE;
+    state.eventType = type;
+    document.getElementById('ob-event-editor')?.classList.remove('hidden');
+
+    document.querySelectorAll('[data-ob-event-type]').forEach(btn => {
+      const active = btn.dataset.obEventType === type;
+      btn.classList.toggle('border-[#FFC83D]', active);
+      btn.classList.toggle('bg-[#FFF9E6]', active);
+    });
+
+    const select = document.getElementById('ob-event-kind');
+    if (select) select.innerHTML = eventKinds[type].map(v=>`<option value="${v}">${v}</option>`).join('');
+  };
+
+  window.addOnboardingEvent = function() {
+    const state = window.LUMIFUL_ONBOARDING_UI_STATE;
+    if (!state.eventType) return;
+    const kind = document.getElementById('ob-event-kind')?.value || 'その他';
+    const age = Number(document.getElementById('ob-event-age')?.value || 0);
+    const amount = Number(document.getElementById('ob-event-amount')?.value || 0);
+    if (!age || !amount) {
+      window.showToast?.('年齢と金額を入力してください', 'error');
+      return;
+    }
+    state.events.push({type:state.eventType,kind,age,amount});
+    window.renderOnboardingEvents();
+  };
+
+  window.renderOnboardingEvents = function() {
+    const box = document.getElementById('ob-events-list');
+    if (!box) return;
+    box.innerHTML = window.LUMIFUL_ONBOARDING_UI_STATE.events.map((e,i)=>`
+      <div class="flex items-center justify-between gap-3 rounded-[12px] border border-[#ECEBE6] bg-white px-3 py-2.5">
+        <div><div class="text-xs font-bold text-[#253047]">${e.kind}</div><div class="text-[10px] text-[#8A909C]">${e.age}歳 / ${e.amount.toLocaleString()}万円</div></div>
+        <button type="button" onclick="removeOnboardingEvent(${i})" class="text-[#D46A7C]"><i class="fa-solid fa-xmark"></i></button>
+      </div>`).join('');
+  };
+
+  window.removeOnboardingEvent = function(i) {
+    window.LUMIFUL_ONBOARDING_UI_STATE.events.splice(i,1);
+    window.renderOnboardingEvents();
+  };
+
+  window.clearOnboardingEvents = function() {
+    window.LUMIFUL_ONBOARDING_UI_STATE.events = [];
+    window.renderOnboardingEvents();
+    document.getElementById('ob-event-editor')?.classList.add('hidden');
+  };
+
+  window.selectOnboardingSurplus = function(mode) {
+    window.LUMIFUL_ONBOARDING_UI_STATE.surplus = mode;
+    document.querySelectorAll('[data-ob-surplus]').forEach(btn => {
+      const active = btn.dataset.obSurplus === mode;
+      btn.classList.toggle('border-[#FFC83D]', active);
+      btn.classList.toggle('bg-[#FFF9E6]', active);
+    });
+    document.getElementById('ob-surplus-split')?.classList.toggle('hidden', mode !== 'both');
+  };
+
+  window.updateOnboardingSplit = function() {
+    const invest = Number(document.getElementById('ob-invest-range')?.value || 50);
+    const cash = 100-invest;
+    const c = document.getElementById('ob-cash-pct');
+    const i = document.getElementById('ob-invest-pct');
+    if (c) c.textContent = String(cash);
+    if (i) i.textContent = String(invest);
+  };
+
+  window.renderOnboardingSummaryUi = function() {
+    const box = document.getElementById('ob-summary');
+    if (!box) return;
+    const age = document.getElementById('ob-age')?.value || '-';
+    const income = document.getElementById('ob-income')?.value || '-';
+    const expense = document.getElementById('ob-expense')?.value || '-';
+    const assets = window.LUMIFUL_ONBOARDING_UI_STATE.selectedAssets.size;
+    const events = window.LUMIFUL_ONBOARDING_UI_STATE.events.length;
+    const surplus = ({cash:'貯金',investment:'投資',both:'両方'})[window.LUMIFUL_ONBOARDING_UI_STATE.surplus] || '未設定';
+
+    const cards = [
+      ['本人年齢',`${age}歳`],
+      ['年間手取り',income==='-'?'-':`${Number(income).toLocaleString()}万円`],
+      ['年間生活費',expense==='-'?'-':`${Number(expense).toLocaleString()}万円`],
+      ['資産種類',`${assets}種類`],
+      ['将来予定',`${events}件`],
+      ['余剰資金',surplus]
+    ];
+    box.innerHTML = cards.map(([k,v])=>`
+      <div class="rounded-[14px] bg-[#FAFAF7] border border-[#ECEBE6] px-3 py-3">
+        <div class="text-[10px] text-[#8A909C]">${k}</div>
+        <div class="mt-0.5 text-sm font-extrabold text-[#253047]">${v}</div>
+      </div>`).join('');
+  };
+
+  // Extend existing switchView only to show/hide onboarding view.
+  // Existing Phase 7 view behavior is otherwise untouched.
+  const phase7SwitchView = window.switchView;
+  window.switchView = function(viewName, ...args) {
+    const onboarding = document.getElementById('onboardingView');
+    if (viewName === 'onboarding') {
+      document.querySelectorAll('#dashboardView,#simulationInputView,#simulationResultsView,#annualProjectionView,#assetDetailView,#settingsView')
+        .forEach(el => el?.classList.add('hidden'));
+      onboarding?.classList.remove('hidden');
+      return;
+    }
+    onboarding?.classList.add('hidden');
+    return phase7SwitchView.call(this, viewName, ...args);
+  };
+
+  window.LUMIFUL_PHASE8_STEP3 = Object.freeze({
+    status:'UI_ONLY',
+    schemaWrites:false,
+    firestoreWrites:false,
+    engineCalls:false,
+    onboardingScreens:['entry','1','2','3','4','5','complete'],
+    phase7Base:'FINAL LOCK v9.2'
   });
 })();
 </script>
