@@ -474,6 +474,20 @@
   }
 </style>
 
+
+<style id="phase8-step4-step1-partner-final-fix">
+  /* STEP1: partner age must exist only when "いる" is selected */
+  #onboardingView #ob-partner-age-wrap.hidden{
+    display:none !important;
+  }
+
+  #onboardingView #ob-partner-age-wrap:not(.hidden){
+    display:flex !important;
+    flex-direction:column !important;
+    align-items:center !important;
+  }
+</style>
+
 </head>
 <body class="bg-[#FAFAF7] text-[#253047] min-h-screen font-sans antialiased relative overflow-x-hidden">
 
@@ -9758,6 +9772,55 @@ window.LUMIFUL_PHASE7B_STEP3_LOCK_V8_2 = Object.freeze({
     schemaLogicChanged:false,
     guestFlowChanged:false,
     phase7EngineChanged:false
+  });
+})();
+</script>
+
+
+<script>
+/* PHASE 8 / STEP 4 — STEP1 FINAL PARTNER VISIBILITY FIX */
+(function(){
+  function applyPartnerVisibilityFinal(hasPartner){
+    const wrap=document.getElementById('ob-partner-age-wrap');
+    const input=document.getElementById('ob-partner-age');
+    if(!wrap) return;
+
+    if(hasPartner===true){
+      wrap.classList.remove('hidden');
+      wrap.setAttribute('aria-hidden','false');
+    }else{
+      wrap.classList.add('hidden');
+      wrap.setAttribute('aria-hidden','true');
+      if(input) input.value='';
+    }
+  }
+
+  const previousSelect=window.selectOnboardingPartner;
+  window.selectOnboardingPartner=function(hasPartner){
+    const result=typeof previousSelect==='function'
+      ? previousSelect.call(this,hasPartner)
+      : undefined;
+
+    applyPartnerVisibilityFinal(hasPartner===true);
+    return result;
+  };
+
+  // Initial state: no partner choice yet, so partner age is hidden.
+  if(document.readyState==='loading'){
+    document.addEventListener('DOMContentLoaded',()=>applyPartnerVisibilityFinal(false));
+  }else{
+    applyPartnerVisibilityFinal(false);
+  }
+
+  window.LUMIFUL_PHASE8_STEP4_STEP1_FINAL=Object.freeze({
+    status:'STEP1_UI_LOCK_CANDIDATE',
+    partnerAgeInitial:'hidden',
+    partnerYes:'show',
+    partnerNo:'hide-and-clear',
+    schemaLogicChanged:false,
+    guestFlowChanged:false,
+    phase7EngineChanged:false,
+    base:'PHASE8 STEP4 FINAL REBUILT UI'
   });
 })();
 </script>
