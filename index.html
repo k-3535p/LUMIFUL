@@ -5724,8 +5724,8 @@ JSON Schema:
 
     window.LUMIFUL_PHASE7B_VERSION = '0.2-firebase-auth';
 
-    // STEP 3 FINAL v2: legacy STEP2 automatic auth activation retired.
-    // The canonical controller below is the only Firebase auth-session owner.
+    // STEP 3 FINAL v3: legacy STEP2 automatic authentication boot retired.
+    // Canonical authStateReady controller below owns initial session restoration.
 
 /* ============================================================
        PHASE 7B / STEP 3 — FIRESTORE PERSISTENCE BINDING
@@ -6032,90 +6032,85 @@ JSON Schema:
 
 <script>
 /* ============================================================
-   PHASE 7B / STEP 3 FINAL v2
-   SESSION PERSISTENCE + RUNTIME HYDRATION
+   PHASE 7B / STEP 3 FINAL v3
+   AUTH-STATE-READY + FIRESTORE + FULL HYDRATION
    ============================================================ */
 (function () {
-  const P = window.LUMIFUL_STEP3_FINAL_V2 = {
-    authListenerAttached: false,
-    authResolved: false,
-    authPromise: null,
-    authResolve: null,
+  const P = window.LUMIFUL_STEP3_FINAL_V3 = {
     booted: false,
-    booting: false,
     saving: false,
     restoring: false,
     timer: null,
     debounceMs: 650,
+    authListenerAttached: false,
     restoredUid: null,
     draftPrefix: 'lumiful_account_draft_v2:'
   };
 
-  const emailNorm = v => String(v || '').trim().toLowerCase();
-  const runtimeNow = () => window.LUMIFUL_FIREBASE_RUNTIME || null;
-  const authUser = () => runtimeNow()?.auth?.currentUser || null;
-  const keyFor = uid => P.draftPrefix + String(uid || '');
+  const normEmail = v => String(v || '').trim().toLowerCase();
+  const rt = () => window.LUMIFUL_FIREBASE_RUNTIME || null;
+  const fbUser = () => rt()?.auth?.currentUser || null;
+  const draftKey = uid => P.draftPrefix + String(uid || '');
 
-  function envelopeTime(e) {
+  function eTime(e) {
     const t = Date.parse(e?.updatedAt || e?.createdAt || '');
     return Number.isFinite(t) ? t : 0;
   }
 
-  function isExplicitGuest() {
+  function explicitGuest() {
     const v = localStorage.getItem('lumiful_user_email') || localStorage.getItem('lc_user_email');
     return !!v && String(v).includes('@lumiful.local');
   }
 
-  function applyAuthState(user) {
+  function applyState(user) {
     if (user) {
-      localStorage.setItem('lumiful_user_email', emailNorm(user.email));
+      localStorage.setItem('lumiful_user_email', normEmail(user.email));
       localStorage.removeItem('lc_user_email');
       window.authState = {
         status: 'authenticated',
         user: {
           uid: user.uid,
-          email: emailNorm(user.email),
+          email: normEmail(user.email),
           emailVerified: !!user.emailVerified,
           isGuest: false,
           provider: 'firebase'
         }
       };
-    } else if (isExplicitGuest()) {
+    } else if (explicitGuest()) {
       window.authState = {
         status: 'guest',
         user: { email: window.LUMIFUL_GUEST_EMAIL, isGuest: true, provider: 'local' }
       };
     } else {
-      // Never treat a pre-Firebase mock account identity as authenticated.
       localStorage.removeItem('lumiful_user_email');
       localStorage.removeItem('lc_user_email');
       window.authState = { status: 'unauthenticated', user: null };
     }
   }
 
-  function syncAccountUI() {
-    const state = window.authState || { status: 'unauthenticated', user: null };
-    const signed = state.status === 'authenticated';
-    const guest = state.status === 'guest';
+  function syncUI() {
+    const s = window.authState || { status: 'unauthenticated', user: null };
+    const signed = s.status === 'authenticated';
+    const guest = s.status === 'guest';
     const active = signed || guest;
-    const label = signed ? 'ログアウト' : (guest ? 'ゲスト終了' : 'ログイン');
+    const action = signed ? 'ログアウト' : (guest ? 'ゲスト終了' : 'ログイン');
 
-    const setTxt = (id, value) => {
+    const txt = (id, value) => {
       const el = document.getElementById(id);
       if (el) el.textContent = value;
     };
 
-    setTxt('authBtnText', label);
-    setTxt('authBtnTextMobile', label);
-    setTxt('settingsAccountActionBtn', label);
-    setTxt('settingsUserEmail', signed ? (state.user?.email || 'ログイン中') : (guest ? 'ゲスト利用中' : 'ログインしていません'));
-    setTxt('settingsAccountStatusTag', signed ? 'ログイン中' : (guest ? 'ゲスト' : '未ログイン'));
-    setTxt('userEmailDisplay', signed ? (state.user?.email || '') : (guest ? 'ゲスト利用中' : ''));
+    txt('authBtnText', action);
+    txt('authBtnTextMobile', action);
+    txt('settingsAccountActionBtn', action);
+    txt('settingsUserEmail', signed ? (s.user?.email || 'ログイン中') : (guest ? 'ゲスト利用中' : 'ログインしていません'));
+    txt('settingsAccountStatusTag', signed ? 'ログイン中' : (guest ? 'ゲスト' : '未ログイン'));
+    txt('userEmailDisplay', signed ? (s.user?.email || '') : (guest ? 'ゲスト利用中' : ''));
 
-    const desktopIcon = document.getElementById('authBtnIcon');
-    if (desktopIcon) desktopIcon.className = active ? 'fa-solid fa-right-from-bracket' : 'fa-solid fa-user-circle';
-    const mobileIcon = document.getElementById('authBtnIconMobile');
-    if (mobileIcon) mobileIcon.className = active ? 'fa-solid fa-right-from-bracket' : 'fa-solid fa-user-circle';
+    const dIcon = document.getElementById('authBtnIcon');
+    if (dIcon) dIcon.className = active ? 'fa-solid fa-right-from-bracket' : 'fa-solid fa-user-circle';
+    const mIcon = document.getElementById('authBtnIconMobile');
+    if (mIcon) mIcon.className = active ? 'fa-solid fa-right-from-bracket' : 'fa-solid fa-user-circle';
 
     const overlay = document.getElementById('authLockOverlay');
     if (overlay) overlay.classList.toggle('hidden', active);
@@ -6139,16 +6134,16 @@ JSON Schema:
       if (welcome) welcome.classList.add('hidden');
       document.body.classList.remove('overflow-hidden');
     }
-    syncAccountUI();
+    syncUI();
   }
 
-  window.checkAuthState = syncAccountUI;
+  window.checkAuthState = syncUI;
   window.routeByAuthState = route;
 
   function readMirror(uid) {
     if (!uid) return null;
     try {
-      const raw = localStorage.getItem(keyFor(uid));
+      const raw = localStorage.getItem(draftKey(uid));
       return raw ? window.parsePersistenceEnvelopeV2(JSON.parse(raw)) : null;
     } catch (e) {
       console.warn('[LUMIFUL] mirror read notice', e);
@@ -6161,39 +6156,36 @@ JSON Schema:
   }
 
   function writeMirror(model, uid, previous) {
-    if (!uid || !model) return null;
-    const envelope = window.createPersistenceEnvelopeV2(model, previous || readMirror(uid));
-    localStorage.setItem(keyFor(uid), JSON.stringify(envelope));
-    return envelope;
+    if (!uid) return null;
+    const env = window.createPersistenceEnvelopeV2(model, previous || readMirror(uid));
+    localStorage.setItem(draftKey(uid), JSON.stringify(env));
+    return env;
   }
 
-  async function getCloudRef(uid) {
+  async function cloudRef(uid) {
     const runtime = await window.initializeFirebaseRuntime();
-    if (!runtime?.firestore || !runtime?.auth) throw new Error('firestore-unavailable');
-    if (!runtime.auth.currentUser?.uid || runtime.auth.currentUser.uid !== uid) {
-      throw new Error('firestore-auth-user-mismatch');
-    }
+    if (!runtime?.firestore || !runtime?.auth?.currentUser) throw new Error('firestore-unavailable');
+    if (runtime.auth.currentUser.uid !== uid) throw new Error('firestore-auth-user-mismatch');
     return runtime.firestore.collection('users').doc(uid);
   }
 
-  async function readCloud(uid) {
-    const ref = await getCloudRef(uid);
+  async function cloudRead(uid) {
+    const ref = await cloudRef(uid);
     const snap = await ref.get();
     return snap.exists ? window.parsePersistenceEnvelopeV2(snap.data()) : null;
   }
 
-  async function writeCloud(model, uid, previous) {
-    const ref = await getCloudRef(uid);
-    const envelope = window.createPersistenceEnvelopeV2(model, previous);
+  async function cloudWrite(model, uid, previous) {
+    const ref = await cloudRef(uid);
+    const env = window.createPersistenceEnvelopeV2(model, previous);
     const safe = window.toFirestoreSafeValue
-      ? window.toFirestoreSafeValue(envelope)
-      : JSON.parse(JSON.stringify(envelope));
+      ? window.toFirestoreSafeValue(env)
+      : JSON.parse(JSON.stringify(env));
     await ref.set(safe, { merge: false });
-    console.info('[LUMIFUL] FINAL v2 Firestore save OK', { uid, updatedAt: safe.updatedAt });
+    console.info('[LUMIFUL] FINAL v3 Firestore save OK', { uid, updatedAt: safe.updatedAt });
     return safe;
   }
 
-  // Full runtime hydration: model -> inputs -> calculation -> result widgets.
   window.hydrateSimulationRuntimeV2 = function(rawModel) {
     const model = window.cloneDataModelV2(window.normalizeDataModelV2(rawModel));
     window.activeDataModelV2 = model;
@@ -6201,8 +6193,6 @@ JSON Schema:
     window.LUMIFUL_LAST_SIMULATION_ERROR = null;
 
     window.renderV2InputUI?.();
-
-    // Recalculate from the restored v2 model without depending on stale form state.
     const result = window.recalculateAllFast?.();
     window.syncSimulationResultsViewV2?.();
     window.updateScoreDashboardUI?.();
@@ -6211,72 +6201,70 @@ JSON Schema:
     return { model: window.activeDataModelV2, result };
   };
 
-  window.getStorageAdapterForAuthState = function(state = window.authState) {
-    if (state?.status === 'guest') return window.LocalStorageAdapter;
-    if (state?.status === 'authenticated') return window.FirestoreStorageAdapter;
-    return null;
-  };
-
   window.saveUserData = async function() {
     if (window.authState?.status === 'guest') {
       return window.LocalStorageAdapter.save(currentModel());
     }
     if (window.authState?.status !== 'authenticated') return null;
 
-    const uid = authUser()?.uid;
+    const uid = fbUser()?.uid;
     if (!uid) throw new Error('firebase-auth-user-missing');
 
     const model = currentModel();
     const mirror = writeMirror(model, uid);
-    let cloud = null;
-    try { cloud = await readCloud(uid); } catch (e) { console.warn('[LUMIFUL] previous cloud read notice', e); }
 
-    const previous = envelopeTime(mirror) >= envelopeTime(cloud) ? mirror : cloud;
-    const saved = await writeCloud(model, uid, previous);
-    localStorage.setItem(keyFor(uid), JSON.stringify(saved));
+    let cloud = null;
+    try { cloud = await cloudRead(uid); }
+    catch (e) { console.warn('[LUMIFUL] prior cloud read notice', e); }
+
+    const previous = eTime(mirror) >= eTime(cloud) ? mirror : cloud;
+    const saved = await cloudWrite(model, uid, previous);
+    localStorage.setItem(draftKey(uid), JSON.stringify(saved));
     return saved;
   };
 
   window.loadUserData = async function(options = {}) {
     if (window.authState?.status === 'guest') {
-      const e = await window.LocalStorageAdapter.load();
-      if (e?.data && options.restore !== false) window.hydrateSimulationRuntimeV2(e.data);
-      return e;
+      const env = await window.LocalStorageAdapter.load();
+      if (env?.data && options.restore !== false) window.hydrateSimulationRuntimeV2(env.data);
+      return env;
     }
     if (window.authState?.status !== 'authenticated') return null;
 
-    const uid = authUser()?.uid;
+    const uid = fbUser()?.uid;
     if (!uid) return null;
 
     const mirror = readMirror(uid);
     let cloud = null;
-    let cloudErr = null;
-    try { cloud = await readCloud(uid); } catch (e) { cloudErr = e; console.warn('[LUMIFUL] cloud load notice', e); }
+    let err = null;
+    try { cloud = await cloudRead(uid); }
+    catch (e) { err = e; console.warn('[LUMIFUL] cloud load notice', e); }
 
     if (!mirror && !cloud) {
-      if (cloudErr) throw cloudErr;
+      if (err) throw err;
       return null;
     }
 
-    const selected = mirror && (!cloud || envelopeTime(mirror) > envelopeTime(cloud)) ? mirror : cloud;
+    const selected = mirror && (!cloud || eTime(mirror) > eTime(cloud)) ? mirror : cloud;
     if (selected?.data && options.restore !== false) {
       window.hydrateSimulationRuntimeV2(selected.data);
     }
-    if (selected) localStorage.setItem(keyFor(uid), JSON.stringify(selected));
+
+    if (selected) localStorage.setItem(draftKey(uid), JSON.stringify(selected));
 
     if (selected === mirror && mirror) {
-      try { await writeCloud(mirror.data, uid, cloud || mirror); }
+      try { await cloudWrite(mirror.data, uid, cloud || mirror); }
       catch (e) { console.warn('[LUMIFUL] cloud heal deferred', e); }
     }
     return selected;
   };
 
   window.scheduleAutoSave = function(reason) {
-    if (P.booting || P.saving || P.restoring) return;
+    if (P.saving || P.restoring || window.LUMIFUL_STEP4_BOOTING) return;
     if (!['authenticated', 'guest'].includes(window.authState?.status)) return;
 
     if (window.authState.status === 'authenticated') {
-      const uid = authUser()?.uid;
+      const uid = fbUser()?.uid;
       if (uid) writeMirror(currentModel(), uid);
     }
 
@@ -6288,15 +6276,16 @@ JSON Schema:
   window.performAutoSave = async function(reason) {
     if (P.saving || P.restoring) return null;
     if (!['authenticated', 'guest'].includes(window.authState?.status)) return null;
+
     P.saving = true;
     window.updateSaveStatus?.('saving');
     try {
-      const e = await window.saveUserData();
-      if (!e) throw new Error('save-returned-null');
+      const env = await window.saveUserData();
+      if (!env) throw new Error('save-returned-null');
       window.updateSaveStatus?.('saved');
-      return e;
+      return env;
     } catch (e) {
-      console.error('[LUMIFUL] FINAL v2 autosave failed', e);
+      console.error('[LUMIFUL] FINAL v3 autosave failed', e);
       window.updateSaveStatus?.('error', '保存エラー');
       return null;
     } finally {
@@ -6304,7 +6293,6 @@ JSON Schema:
     }
   };
 
-  // Attach one autosave wrapper to the Step3.6 calculation function.
   const coreCalc = window.recalculateAllFast;
   window.recalculateAllFast = function(...args) {
     const result = coreCalc.apply(this, args);
@@ -6312,11 +6300,11 @@ JSON Schema:
     return result;
   };
 
-  const coreInputSync = window.syncV2InputAndRecalculate;
+  const coreSync = window.syncV2InputAndRecalculate;
   window.syncV2InputAndRecalculate = function(...args) {
-    const result = coreInputSync.apply(this, args);
+    const result = coreSync.apply(this, args);
     if (window.authState?.status === 'authenticated') {
-      const uid = authUser()?.uid;
+      const uid = fbUser()?.uid;
       if (uid) writeMirror(currentModel(), uid);
     }
     return result;
@@ -6333,14 +6321,14 @@ JSON Schema:
 
   async function restoreCurrent(force = false) {
     if (!['authenticated', 'guest'].includes(window.authState?.status)) return null;
-    const id = authUser()?.uid || 'guest';
+    const id = fbUser()?.uid || 'guest';
     if (!force && P.restoredUid === id) return null;
 
     P.restoring = true;
     try {
-      const e = await window.loadUserData({ restore: true, silent: true });
+      const env = await window.loadUserData({ restore: true, silent: true });
       P.restoredUid = id;
-      if (!e?.data) {
+      if (!env?.data) {
         window.ensureV2InputModel?.();
         window.renderV2InputUI?.();
         window.LUMIFUL_LAST_SIMULATION_ERROR = null;
@@ -6350,28 +6338,46 @@ JSON Schema:
       } else {
         window.updateSaveStatus?.('saved');
       }
-      return e;
+      return env;
     } finally {
       P.restoring = false;
     }
   }
 
-  async function prepareAuthPersistence(auth) {
-    // Explicitly set LOCAL both at boot and immediately before credentials.
-    await auth.setPersistence(window.firebase.auth.Auth.Persistence.LOCAL);
-    return auth;
-  }
-
-  async function attachAuthListener() {
-    const runtime = await window.initializeFirebaseRuntime();
-    if (runtime?.status !== 'ready' || !runtime.auth) throw new Error('firebase-auth-unavailable');
-    await prepareAuthPersistence(runtime.auth);
-
-    if (!P.authPromise) {
-      P.authPromise = new Promise(resolve => { P.authResolve = resolve; });
+  // Critical change:
+  // On reload, FIRST let Firebase restore its previously persisted session.
+  // Do NOT call setPersistence before this check.
+  async function waitForInitialFirebaseSession(auth) {
+    if (typeof auth.authStateReady === 'function') {
+      await auth.authStateReady();
+      return auth.currentUser;
     }
 
-    // Ensure old STEP2 listener cannot own routing.
+    return new Promise((resolve, reject) => {
+      let unsub = null;
+      unsub = auth.onAuthStateChanged(
+        user => {
+          try { unsub?.(); } catch (_) {}
+          resolve(user || null);
+        },
+        error => {
+          try { unsub?.(); } catch (_) {}
+          reject(error);
+        }
+      );
+    });
+  }
+
+  async function bootAuth() {
+    const runtime = await window.initializeFirebaseRuntime();
+    if (runtime?.status !== 'ready' || !runtime.auth) throw new Error('firebase-auth-unavailable');
+
+    // Wait for Firebase's own persisted session restoration first.
+    const initialUser = await waitForInitialFirebaseSession(runtime.auth);
+    applyState(initialUser);
+    route();
+
+    // Then attach the one production listener for later changes.
     try { window.LUMIFUL_PHASE7B_STEP2_UNSUBSCRIBE?.(); } catch (_) {}
     window.LUMIFUL_PHASE7B_STEP2_UNSUBSCRIBE = null;
     window.LUMIFUL_PHASE7B_STEP2_AUTH_ACTIVE = false;
@@ -6379,46 +6385,32 @@ JSON Schema:
     if (!P.authListenerAttached) {
       P.authListenerAttached = true;
       runtime.auth.onAuthStateChanged(async user => {
-        applyAuthState(user);
+        applyState(user);
         route();
-
-        if (!P.authResolved) {
-          P.authResolved = true;
-          P.authResolve?.(user || null);
-          P.authResolve = null;
-        } else if (user) {
-          await restoreCurrent(true);
-        }
+        if (user) await restoreCurrent(true);
       }, error => {
-        console.error('[LUMIFUL] FINAL v2 auth listener error', error);
-        applyAuthState(null);
-        route();
-        if (!P.authResolved) {
-          P.authResolved = true;
-          P.authResolve?.(null);
-          P.authResolve = null;
-        }
+        console.error('[LUMIFUL] FINAL v3 auth listener error', error);
       });
     }
 
-    await P.authPromise;
     return runtime.auth;
   }
 
+  async function setLocalPersistenceForCredential(auth) {
+    await auth.setPersistence(window.firebase.auth.Auth.Persistence.LOCAL);
+    return auth;
+  }
+
   window.resolveAuthState = function() {
-    // During boot never force logged-out before Firebase has resolved persistence.
-    if (!P.authResolved) {
-      window.authState = { status: 'checking', user: null };
-    } else {
-      applyAuthState(authUser());
-    }
+    applyState(fbUser());
     route();
     return window.authState;
   };
 
   window.handleWelcomeLogin = async function(event) {
     event.preventDefault();
-    const email = emailNorm(document.getElementById('welcomeLoginEmail')?.value);
+
+    const email = normEmail(document.getElementById('welcomeLoginEmail')?.value);
     const password = document.getElementById('welcomeLoginPassword')?.value || '';
     const errorEl = document.getElementById('welcomeLoginError');
 
@@ -6433,15 +6425,15 @@ JSON Schema:
     try {
       if (errorEl) errorEl.classList.add('hidden');
       const runtime = await window.initializeFirebaseRuntime();
-      await prepareAuthPersistence(runtime.auth);
+      await setLocalPersistenceForCredential(runtime.auth);
       const credential = await runtime.auth.signInWithEmailAndPassword(email, password);
 
-      applyAuthState(credential.user);
+      applyState(credential.user);
       route();
       await restoreCurrent(true);
       window.showToast?.('ログインしました', 'success');
     } catch (e) {
-      console.error('[LUMIFUL] FINAL v2 login failed', e?.code, e);
+      console.error('[LUMIFUL] FINAL v3 login failed', e?.code, e);
       if (errorEl) {
         errorEl.textContent = window.getFirebaseAuthErrorMessage?.(e, 'login') || 'ログインできませんでした。';
         errorEl.classList.remove('hidden');
@@ -6451,7 +6443,8 @@ JSON Schema:
 
   window.handleWelcomeSignup = async function(event) {
     event.preventDefault();
-    const email = emailNorm(document.getElementById('welcomeSignupEmail')?.value);
+
+    const email = normEmail(document.getElementById('welcomeSignupEmail')?.value);
     const password = document.getElementById('welcomeSignupPassword')?.value || '';
     const errorEl = document.getElementById('welcomeSignupError');
 
@@ -6466,17 +6459,17 @@ JSON Schema:
     try {
       if (errorEl) errorEl.classList.add('hidden');
       const runtime = await window.initializeFirebaseRuntime();
-      await prepareAuthPersistence(runtime.auth);
+      await setLocalPersistenceForCredential(runtime.auth);
       const credential = await runtime.auth.createUserWithEmailAndPassword(email, password);
 
-      applyAuthState(credential.user);
+      applyState(credential.user);
       route();
       await window.saveUserData();
       P.restoredUid = credential.user.uid;
       window.updateSaveStatus?.('saved');
       window.showToast?.('LUMIFULへようこそ！', 'success');
     } catch (e) {
-      console.error('[LUMIFUL] FINAL v2 signup failed', e?.code, e);
+      console.error('[LUMIFUL] FINAL v3 signup failed', e?.code, e);
       if (errorEl) {
         errorEl.textContent = window.getFirebaseAuthErrorMessage?.(e, 'signup') || 'アカウントを作成できませんでした。';
         errorEl.classList.remove('hidden');
@@ -6489,7 +6482,7 @@ JSON Schema:
     if (runtime.auth.currentUser) await runtime.auth.signOut();
     localStorage.setItem('lumiful_user_email', window.LUMIFUL_GUEST_EMAIL);
     localStorage.removeItem('lc_user_email');
-    applyAuthState(null);
+    applyState(null);
     route();
     await restoreCurrent(true);
   };
@@ -6502,6 +6495,7 @@ JSON Schema:
         P.timer = null;
         await window.performAutoSave('logout');
       }
+
       const runtime = await window.initializeFirebaseRuntime();
       if (runtime.auth.currentUser) await runtime.auth.signOut();
 
@@ -6511,23 +6505,25 @@ JSON Schema:
       window.authState = { status: 'unauthenticated', user: null };
       route();
       window.updateSaveStatus?.('idle');
+      window.showToast?.('ログアウトしました', 'info');
     } catch (e) {
-      console.error('[LUMIFUL] FINAL v2 logout failed', e);
+      console.error('[LUMIFUL] FINAL v3 logout failed', e);
     }
   };
   window.handleAccountLogout = window.handleLogout;
 
   window.handleCanonicalAccountAction = function() {
-    if (authUser() || window.authState?.status === 'guest') return window.handleLogout();
+    if (fbUser() || window.authState?.status === 'guest') return window.handleLogout();
     window.showWelcomeAuthPanel?.('choice');
     document.getElementById('welcomeAuthView')?.classList.remove('hidden');
     document.body.classList.add('overflow-hidden');
   };
+
   window.openAuthModal = window.handleCanonicalAccountAction;
   window.closeAuthModal = function() {};
 
   window.addEventListener('pagehide', function() {
-    const uid = authUser()?.uid;
+    const uid = fbUser()?.uid;
     if (uid && window.activeDataModelV2) {
       try { writeMirror(currentModel(), uid); } catch (_) {}
     }
@@ -6536,8 +6532,9 @@ JSON Schema:
   window.onload = async function() {
     if (P.booted) return;
     P.booted = true;
-    P.booting = true;
     window.LUMIFUL_STEP4_BOOTING = true;
+
+    // Keep auth screen undecided while Firebase restores persisted state.
     window.authState = { status: 'checking', user: null };
     route();
 
@@ -6545,12 +6542,9 @@ JSON Schema:
       window.setupAgeSelects?.();
       window.loadSavedPlansFromStorageV2?.();
 
-      await attachAuthListener();
+      await bootAuth();
 
-      // Only after Firebase persistence has resolved may we route to login/home.
-      applyAuthState(authUser());
-      route();
-
+      // bootAuth has already resolved the persisted Firebase user.
       if (['authenticated', 'guest'].includes(window.authState?.status)) {
         await restoreCurrent(true);
       } else {
@@ -6561,26 +6555,25 @@ JSON Schema:
         window.syncSimulationResultsViewV2?.();
       }
     } catch (e) {
-      console.error('[LUMIFUL] FINAL v2 boot failed', e);
-      applyAuthState(null);
+      console.error('[LUMIFUL] FINAL v3 boot failed', e);
+      applyState(null);
       route();
     } finally {
       window.LUMIFUL_STEP4_BOOTING = false;
-      P.booting = false;
       route();
     }
   };
 
-  window.LUMIFUL_PHASE7B_STEP3_FINAL_V2 = Object.freeze({
-    oldStep2AutoActivationRetired: true,
-    firebasePersistenceSetBeforeCredential: true,
-    authRouteWaitsForFirebaseResolution: true,
-    runtimeHydrationAfterRestore: true,
+  window.LUMIFUL_PHASE7B_STEP3_FINAL_V3 = Object.freeze({
+    persistedSessionResolvedBeforeRouting: true,
+    authStateReadyPreferred: true,
+    setPersistenceOnlyBeforeCredential: true,
+    accountAuth: 'Firebase Authentication',
     accountStorage: 'Firestore users/{uid}',
     localRecoveryMirror: true,
+    fullRuntimeHydration: true,
     logoutVisible: true,
-    secondaryAuthModal: false,
-    simulationRuntime: 'Schema v2'
+    secondaryAuthModal: false
   });
 })();
 </script>
