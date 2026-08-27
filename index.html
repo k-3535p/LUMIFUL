@@ -151,6 +151,19 @@
       box-shadow: 0 0 0 3px rgba(101, 185, 232, 0.15);
     }
   </style>
+
+<style>
+@media (max-width: 640px) {
+  #homeView .grid.grid-cols-2 > div { padding-left:14px!important; padding-right:14px!important; }
+  #homeView .grid.grid-cols-2 > div h3,
+  #homeView .grid.grid-cols-2 > div .kpi-title,
+  #homeView .grid.grid-cols-2 > div [data-kpi-title] {
+    font-size:12px!important; line-height:1.35!important;
+    letter-spacing:-0.04em!important; white-space:nowrap!important;
+  }
+}
+</style>
+
 </head>
 <body class="bg-[#FAFAF7] text-[#253047] min-h-screen font-sans antialiased relative overflow-x-hidden">
 
@@ -7818,6 +7831,45 @@ window.LUMIFUL_PHASE7B_STEP3_FINAL_V4 = Object.freeze({
 
   document.addEventListener('DOMContentLoaded', window.ensureNoSimulationInputAuthOverlay);
   setTimeout(window.ensureNoSimulationInputAuthOverlay, 0);
+})();
+</script>
+
+
+<script>
+(function(){
+ const JP=Object.freeze({
+   income:'収入内で生活',
+   high:'優先して活用',
+   medium:'次に活用',
+   low:'最後に活用',
+   excluded:'取り崩し対象外'
+ });
+ window.LUMIFUL_UTILIZATION_PHASE_LABELS_JA=JP;
+ function localize(root){
+   root=root||document.getElementById('assetDetailView')||document;
+   root.querySelectorAll('td,th,span,div,p').forEach(el=>{
+     if(el.children.length)return;
+     const raw=(el.textContent||'').trim().toLowerCase();
+     if(JP[raw])el.textContent=JP[raw];
+   });
+ }
+ const sw=window.switchView;
+ if(typeof sw==='function'){
+   window.switchView=function(viewName,...args){
+     const r=sw.call(this,viewName,...args);
+     if(viewName==='assetDetail')requestAnimationFrame(()=>localize());
+     return r;
+   };
+ }
+ document.addEventListener('DOMContentLoaded',()=>{
+   localize();
+   const v=document.getElementById('assetDetailView');
+   if(v)new MutationObserver(()=>localize(v)).observe(v,{subtree:true,childList:true,characterData:true});
+ });
+ window.LUMIFUL_PHASE7B_STEP3_LOCK=Object.freeze({
+   version:'8.2',status:'LOCKED',
+   mobileKpiTitleWrapFixed:true,assetUtilizationPhaseJapanese:true
+ });
 })();
 </script>
 
