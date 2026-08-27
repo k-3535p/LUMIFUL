@@ -466,6 +466,42 @@
   }
 </style>
 
+
+<style id="phase8-onboarding-final-v2-step1-step2-fix">
+  /* STEP1: partner age is truly conditional */
+  #onboardingView #ob-partner-age-wrap.hidden{
+    display:none !important;
+  }
+
+  #onboardingView #ob-partner-age-wrap:not(.hidden){
+    display:flex !important;
+    flex-direction:column !important;
+    align-items:center !important;
+  }
+
+  /* STEP1: "いる / いない" total width = numeric input width */
+  #onboardingView .ob-choice-pair{
+    width:var(--ob-answer-width) !important;
+    max-width:100% !important;
+    grid-template-columns:1fr 1fr !important;
+    gap:12px !important;
+  }
+
+  /* STEP2: take-home explanation width = numeric input width */
+  #onboardingView .ob-info-note{
+    width:var(--ob-answer-width) !important;
+    max-width:100% !important;
+    box-sizing:border-box !important;
+  }
+
+  @media(max-width:640px){
+    #onboardingView .ob-choice-pair,
+    #onboardingView .ob-info-note{
+      width:min(100%,320px) !important;
+    }
+  }
+</style>
+
 </head>
 <body class="bg-[#FAFAF7] text-[#253047] min-h-screen font-sans antialiased relative overflow-x-hidden">
 
@@ -9878,6 +9914,61 @@ window.LUMIFUL_PHASE7B_STEP3_LOCK_V8_2 = Object.freeze({
     schemaLogic:'v2 preserved except monthly living frequency',
     guestFlowPreserved:true,
     phase7EnginePreserved:true
+  });
+})();
+</script>
+
+
+<script>
+/* PHASE 8 / STEP 4 FINAL UNIFIED v2 — STEP1/STEP2 TARGETED FIX */
+(function(){
+  function applyPartnerAgeVisibilityV2(hasPartner){
+    const wrap=document.getElementById('ob-partner-age-wrap');
+    const input=document.getElementById('ob-partner-age');
+    if(!wrap) return;
+
+    if(hasPartner===true){
+      wrap.classList.remove('hidden');
+      wrap.setAttribute('aria-hidden','false');
+    }else{
+      wrap.classList.add('hidden');
+      wrap.setAttribute('aria-hidden','true');
+      if(input) input.value='';
+    }
+  }
+
+  const prevPartnerSelectV2=window.selectOnboardingPartner;
+  window.selectOnboardingPartner=function(hasPartner){
+    const result=typeof prevPartnerSelectV2==='function'
+      ? prevPartnerSelectV2.call(this,hasPartner)
+      : undefined;
+
+    applyPartnerAgeVisibilityV2(hasPartner===true);
+    return result;
+  };
+
+  // Initial onboarding state: no selection yet -> hide partner age.
+  function initPartnerVisibilityV2(){
+    const state=window.LUMIFUL_ONBOARDING_UI_STATE;
+    applyPartnerAgeVisibilityV2(state?.partner===true);
+  }
+
+  if(document.readyState==='loading'){
+    document.addEventListener('DOMContentLoaded',initPartnerVisibilityV2);
+  }else{
+    initPartnerVisibilityV2();
+  }
+
+  window.LUMIFUL_PHASE8_STEP4_ONBOARDING_FINAL_V2=Object.freeze({
+    status:'STEP1_STEP2_FIXED',
+    partnerAgeConditional:true,
+    partnerChoiceWidth:'same-as-answer-field',
+    step2InfoWidth:'same-as-answer-field',
+    step3to5Changed:false,
+    schemaLogicChanged:false,
+    guestFlowChanged:false,
+    phase7EngineChanged:false,
+    base:'PHASE8 STEP4 ONBOARDING FINAL UNIFIED'
   });
 })();
 </script>
