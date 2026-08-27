@@ -722,7 +722,7 @@
               </section>
             </div>
             <details class="bg-[#FAFAF7] rounded-[18px] border border-[#ECEBE6] p-4"><summary class="cursor-pointer text-xs font-bold text-[#4F586A]">詳細設定</summary><div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4"><div><label class="block text-xs font-semibold text-[#4F586A] mb-1">生活費インフレ率</label><div class="flex items-center gap-2"><input id="v2InflationRate" type="number" min="0" max="10" step="0.1" class="w-full px-3 lumi-input text-xs font-bold" oninput="syncV2InputAndRecalculate()"><span class="text-xs text-[#6F7785]">%</span></div></div></div></details>
-            <div class="pt-5 border-t border-[#ECEBE6] flex justify-center"><button onclick="syncV2InputAndRecalculate(); switchView('dashboard'); window.scrollTo({top:0,behavior:'smooth'});" class="px-8 py-3 btn-lumi-primary text-sm font-bold flex items-center gap-2"><span>この条件で未来を確認</span><i class="fa-solid fa-arrow-right"></i></button></div>
+            <div class="pt-5 border-t border-[#ECEBE6] flex justify-center"><button type="button" onclick="confirmV2Simulation()" class="px-8 py-3 btn-lumi-primary text-sm font-bold flex items-center gap-2"><span>この条件で未来を確認</span><i class="fa-solid fa-arrow-right"></i></button></div>
           </div>
         </div>
 
@@ -2837,8 +2837,105 @@
       window.showToast('CSVを出力しました', 'success');
     };
 
+    // STEP 3.6: The dedicated result screen existed in HTML but had no
+    // Schema-v2 runtime binding. Drive it from currentTableRows / current score.
+    window.syncSimulationResultsViewV2 = function() {
+      const rows = Array.isArray(window.currentTableRows) ? window.currentTableRows : [];
+      const setText = (id, value) => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = value;
+      };
+
+      const finalScore = Number(window.currentFinalScore || 0);
+      const baseScore = Number(window.currentBaseScore || 0);
+      const aiAdjustment = Number(window.currentAiAdjustment || 0);
+
+      setText('results-score', String(Math.round(finalScore)));
+      setText('results-base-score', String(Math.round(baseScore)));
+      setText('results-ai-adjustment', (aiAdjustment >= 0 ? '+' : '') + Math.round(aiAdjustment));
+
+      if (!rows.length) {
+        setText('results-cover-rate', '-');
+        setText('results-final-assets', '0 万円');
+        const lumi = document.getElementById('results-lumi-text');
+        if (lumi) lumi.textContent = '条件を入力すると、シミュレーション結果がここに表示されます。';
+        return;
+      }
+
+      const finalRow = rows[rows.length - 1] || {};
+      const shortageRow = rows.find(r => Number(r.shortage || 0) > 0);
+      const totalDeficit = rows.reduce((sum, r) =>
+        sum + (Number(r.netCashflow || 0) < 0 ? Math.abs(Number(r.netCashflow || 0)) : 0), 0);
+      const totalCovered = rows.reduce((sum, r) =>
+        sum + Number(r.yieldUsed || 0) + Number(r.cashUsed || 0), 0);
+
+      const coverRate = shortageRow
+        ? Math.max(0, Math.min(99, totalDeficit > 0 ? Math.round((totalCovered / totalDeficit) * 100) : 0))
+        : 100;
+
+      setText('results-cover-rate', shortageRow ? `${coverRate}% カバー` : '100% カバー');
+      setText(
+        'results-final-assets',
+        `${Math.round(Number(finalRow.financialAsset ?? finalRow.availableAssets ?? 0)).toLocaleString()} 万円`
+      );
+
+      const lumi = document.getElementById('results-lumi-text');
+      if (lumi) {
+        lumi.textContent = shortageRow
+          ? `${shortageRow.age}歳頃に資金不足が発生する試算です。条件を調整して比較できます。`
+          : `${finalRow.age || ''}歳まで資金を維持できる試算です。条件を変えながら選択余力を確認できます。`;
+      }
+    };
+
+    // Presentation errors must not make the simulation input CTA look dead.
+    window.LUMIFUL_LAST_SIMULATION_ERROR = null;
+    const _step36RecalculateAllFast = window.recalculateAllFast;
+    window.recalculateAllFast = function(...args) {
+      try {
+        const result = _step36RecalculateAllFast.apply(this, args);
+        window.LUMIFUL_LAST_SIMULATION_ERROR = null;
+        try { window.syncSimulationResultsViewV2(); } catch (uiError) {
+          console.warn('[LUMIFUL] Result view sync notice:', uiError);
+        }
+        return result;
+      } catch (error) {
+        window.LUMIFUL_LAST_SIMULATION_ERROR = error;
+        console.error('[LUMIFUL] Simulation runtime failed.', error);
+        if (typeof window.showToast === 'function') {
+          window.showToast('計算処理でエラーが発生しました。入力内容は保持されています。', 'error');
+        }
+        return null;
+      }
+    };
+
+    window.confirmV2Simulation = function() {
+      try {
+        window.syncV2InputAndRecalculate?.();
+      } catch (error) {
+        window.LUMIFUL_LAST_SIMULATION_ERROR = error;
+        console.error('[LUMIFUL] Input confirmation failed.', error);
+      }
+
+      const hasRows = Array.isArray(window.currentTableRows) && window.currentTableRows.length > 0;
+      const meaningful = window.hasMeaningfulV2Input?.(window.ensureV2InputModel?.()) ?? true;
+
+      // Empty input is a valid empty-state; calculated rows are a valid success.
+      if (hasRows || !meaningful || !window.LUMIFUL_LAST_SIMULATION_ERROR) {
+        window.syncSimulationResultsViewV2?.();
+        window.switchView('dashboard');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        return true;
+      }
+
+      if (typeof window.showToast === 'function') {
+        window.showToast('シミュレーション計算を完了できませんでした。', 'error');
+      }
+      return false;
+    };
+
     window.switchView = function(viewName) {
       if (viewName === 'simulationInput' && typeof window.renderV2InputUI === 'function') window.renderV2InputUI();
+      if (viewName === 'simulationResults' && typeof window.syncSimulationResultsViewV2 === 'function') window.syncSimulationResultsViewV2();
       const views = [
         'dashboardView',
         'simulationInputView',
@@ -2927,8 +3024,10 @@
       model.settings.inflationRate = rate;
       const v2Inflation = document.getElementById('v2InflationRate');
       if (v2Inflation) v2Inflation.value = rate;
-      document.getElementById('slider-inflation-val').innerText = rate.toFixed(1) + '%';
-      document.getElementById('chart-slider-inflation-val').innerText = rate.toFixed(1) + '%';
+      const legacyInflationLabel = document.getElementById('slider-inflation-val');
+      if (legacyInflationLabel) legacyInflationLabel.innerText = rate.toFixed(1) + '%';
+      const chartInflationLabel = document.getElementById('chart-slider-inflation-val');
+      if (chartInflationLabel) chartInflationLabel.innerText = rate.toFixed(1) + '%';
 
       [1.0, 1.5, 2.0].forEach(r => {
         const key = r.toFixed(1).replace('.', '');
@@ -3507,77 +3606,90 @@
       const ctx = document.getElementById('assetChart');
       if (!ctx) return;
 
-      if (window.assetChart) {
-        window.assetChart.destroy();
+      // STEP 3.6: Chart is presentation-only. A Chart.js/CDN problem must never
+      // stop calculation, result cards, navigation, or autosave.
+      if (typeof window.Chart === 'undefined') {
+        console.warn('[LUMIFUL] Chart.js is unavailable; continuing without chart rendering.');
+        return;
       }
 
-      window.assetChart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-          labels: labels,
-          datasets: [
-            {
-              type: 'line',
-              label: '利用可能資産 (万円)',
-              data: investData,
-              borderColor: '#D97706',
-              backgroundColor: 'rgba(217, 119, 6, 0.08)',
-              borderWidth: 3,
-              pointRadius: 2,
-              fill: true,
-              yAxisID: 'y'
-            },
-            {
-              type: 'line',
-              label: '売却可能資産 (万円)',
-              data: potentialAssetsData,
-              borderColor: '#65B9E8',
-              borderWidth: 2,
-              borderDash: [4, 4],
-              pointRadius: 0,
-              fill: false,
-              yAxisID: 'y'
-            },
-            {
-              type: 'bar',
-              label: '年間純収支 (万円)',
-              data: cashflowData,
-              backgroundColor: cashflowData.map(v => v >= 0 ? 'rgba(114, 214, 181, 0.6)' : 'rgba(255, 143, 163, 0.6)'),
-              borderRadius: 4,
-              yAxisID: 'y1'
-            }
-          ]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          interaction: { mode: 'index', intersect: false },
-          scales: {
-            y: {
-              type: 'linear',
-              display: true,
-              position: 'left',
-              grid: { color: '#ECEBE6' },
-              title: { display: true, text: '資産残高 (万円)', font: { size: 10 } }
-            },
-            y1: {
-              type: 'linear',
-              display: true,
-              position: 'right',
-              grid: { drawOnChartArea: false },
-              title: { display: true, text: '年間収支 (万円)', font: { size: 10 } }
-            },
-            x: {
-              grid: { display: false },
-              ticks: { maxTicksLimit: 12, font: { size: 10 } }
-            }
-          },
-          plugins: {
-            legend: { position: 'top', labels: { boxWidth: 12, font: { size: 11 } } },
-            tooltip: { padding: 8 }
-          }
+      if (window.assetChart) {
+        try { window.assetChart.destroy(); } catch (error) {
+          console.warn('[LUMIFUL] Previous chart destroy notice:', error);
         }
-      });
+      }
+
+      try {
+        window.assetChart = new Chart(ctx, {
+          type: 'bar',
+          data: {
+            labels: labels,
+            datasets: [
+              {
+                type: 'line',
+                label: '利用可能資産 (万円)',
+                data: investData,
+                borderColor: '#D97706',
+                backgroundColor: 'rgba(217, 119, 6, 0.08)',
+                borderWidth: 3,
+                pointRadius: 2,
+                fill: true,
+                yAxisID: 'y'
+              },
+              {
+                type: 'line',
+                label: '売却可能資産 (万円)',
+                data: potentialAssetsData,
+                borderColor: '#65B9E8',
+                borderWidth: 2,
+                borderDash: [4, 4],
+                pointRadius: 0,
+                fill: false,
+                yAxisID: 'y'
+              },
+              {
+                type: 'bar',
+                label: '年間純収支 (万円)',
+                data: cashflowData,
+                backgroundColor: cashflowData.map(v => v >= 0 ? 'rgba(114, 214, 181, 0.6)' : 'rgba(255, 143, 163, 0.6)'),
+                borderRadius: 4,
+                yAxisID: 'y1'
+              }
+            ]
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            interaction: { mode: 'index', intersect: false },
+            scales: {
+              y: {
+                type: 'linear',
+                display: true,
+                position: 'left',
+                grid: { color: '#ECEBE6' },
+                title: { display: true, text: '資産残高 (万円)', font: { size: 10 } }
+              },
+              y1: {
+                type: 'linear',
+                display: true,
+                position: 'right',
+                grid: { drawOnChartArea: false },
+                title: { display: true, text: '年間収支 (万円)', font: { size: 10 } }
+              },
+              x: {
+                grid: { display: false },
+                ticks: { maxTicksLimit: 12, font: { size: 10 } }
+              }
+            },
+            plugins: {
+              legend: { position: 'top', labels: { boxWidth: 12, font: { size: 11 } } },
+              tooltip: { padding: 8 }
+            }
+          }
+        });
+      } catch (error) {
+        console.error('[LUMIFUL] Chart render failed; continuing simulation without chart.', error);
+      }
     };
 
     window.toggleEventKindFields = function() {
@@ -4080,7 +4192,14 @@ JSON Schema:
         return envelope;
       } catch (error) {
         console.error('[LUMIFUL] Auto save failed.', error);
-        window.updateSaveStatus('error');
+        const code = String(error?.code || '');
+        const message = String(error?.message || '');
+        let detail = '保存エラー';
+        if (code.includes('permission-denied')) detail = '保存権限エラー';
+        else if (code.includes('unavailable')) detail = '通信エラー';
+        else if (message.includes('firestore-auth-user-mismatch')) detail = '認証同期エラー';
+        else if (message.includes('firestore-unavailable')) detail = 'Firestore未接続';
+        window.updateSaveStatus('error', detail);
         return null;
       } finally {
         window.LUMIFUL_STEP4_SUPPRESS_AUTOSAVE = false;
@@ -5788,6 +5907,14 @@ JSON Schema:
       };
     };
 
+    // STEP 3.5: Firestore-safe persistence.
+    // Firestore rejects undefined values while LocalStorage silently drops them.
+    // Round-trip the envelope through JSON before writing so the persisted
+    // Schema v2 payload has exactly the same JSON-safe contract as local save.
+    window.toFirestoreSafeValue = function(value) {
+      return JSON.parse(JSON.stringify(value));
+    };
+
     window.FirestoreStorageAdapter = Object.freeze({
       name: 'firestore',
       async load(user) {
@@ -5798,10 +5925,19 @@ JSON Schema:
       },
       async save(model, user) {
         const { ref, fbUser } = await window.getFirestoreAccountContext(user);
-        const previous = await this.load({ uid: fbUser.uid });
+        const snapshot = await ref.get();
+        const previous = snapshot.exists
+          ? window.parsePersistenceEnvelopeV2(snapshot.data())
+          : null;
         const envelope = window.createPersistenceEnvelopeV2(model, previous);
-        await ref.set(envelope, { merge: false });
-        return envelope;
+        const firestoreSafeEnvelope = window.toFirestoreSafeValue(envelope);
+        await ref.set(firestoreSafeEnvelope, { merge: false });
+        console.info('[LUMIFUL] Firestore save OK.', {
+          uid: fbUser.uid,
+          path: `users/${fbUser.uid}`,
+          updatedAt: firestoreSafeEnvelope.updatedAt
+        });
+        return firestoreSafeEnvelope;
       },
       async clear(user) {
         const { ref } = await window.getFirestoreAccountContext(user);
@@ -6023,6 +6159,22 @@ JSON Schema:
     window.LUMIFUL_PHASE6_VERSION = '2.0-final';
 
     
-  </script>
+      window.LUMIFUL_PHASE7B_STEP3_5_HOTFIX = Object.freeze({
+      firestoreJsonSafeWrite: true,
+      directDocumentReadBeforeSave: true,
+      detailedAutoSaveStatus: true,
+      firestoreSaveDiagnostics: true
+    });
+
+    window.LUMIFUL_PHASE7B_STEP3_6 = Object.freeze({
+      simulationRuntimeStabilized: true,
+      resultViewV2Bound: true,
+      chartFailureNonFatal: true,
+      safeConfirmCTA: true,
+      legacyMissingDomGuarded: true,
+      firestoreStep35Preserved: true
+    });
+
+</script>
 </body>
 </html>
