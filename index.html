@@ -597,6 +597,155 @@
 }
 </style>
 
+
+<style id="phase9-14-sp-kpi-polish">
+/* ============================================================
+   PHASE 9-14 — SP KPI TYPOGRAPHY / OVERFLOW POLISH
+   Scope: HOME KPI cards only on smartphone widths.
+   PC / Engine / LUMI / Auth behavior unchanged.
+   ============================================================ */
+@media (max-width: 639px) {
+  #home-kpi-grid {
+    gap: 10px !important;
+  }
+
+  /* Grid children must be allowed to shrink inside the two-column layout. */
+  #home-kpi-grid > div,
+  #home-kpi-grid > div > div,
+  #home-kpi-grid .flex,
+  #home-kpi-grid span,
+  #home-kpi-grid div {
+    min-width: 0;
+  }
+
+  /* Slightly tighter card padding without changing the 2x2 layout. */
+  #home-kpi-grid > div {
+    padding: 12px !important;
+  }
+
+  /* KPI 2: annual yield */
+  #kpi-annual-yield {
+    display: flex;
+    align-items: baseline;
+    flex-wrap: nowrap;
+    white-space: nowrap;
+    font-size: 22px !important;
+    line-height: 1.08 !important;
+    letter-spacing: -0.04em !important;
+  }
+  #kpi-annual-yield .kpi-annual-unit {
+    flex: 0 0 auto;
+    margin-left: 2px;
+    font-size: 10px !important;
+    line-height: 1 !important;
+    letter-spacing: 0 !important;
+  }
+  #kpi-annual-yield .kpi-annual-average {
+    display: none !important;
+  }
+  #kpi-phase-badge {
+    max-width: 100% !important;
+    padding: 2px 7px !important;
+    font-size: 8.5px !important;
+    line-height: 1.25 !important;
+    letter-spacing: -0.015em !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+
+  /* KPI 1: keep ENGINE / LUMI score breakdown on one readable line. */
+  #kpi-score-breakdown {
+    padding: 5px !important;
+    gap: 0 !important;
+  }
+  #kpi-score-breakdown > div {
+    gap: 3px !important;
+  }
+  #kpi-score-breakdown span {
+    white-space: nowrap !important;
+  }
+  #kpi-score-breakdown span.uppercase {
+    font-size: 7.5px !important;
+    letter-spacing: 0 !important;
+  }
+  #kpi-base-score,
+  #kpi-ai-adj {
+    font-size: 10px !important;
+    line-height: 1.05 !important;
+  }
+  #kpi-score-badge {
+    max-width: 78px !important;
+    padding: 2px 7px !important;
+    font-size: 8.5px !important;
+    line-height: 1.2 !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+
+  /* KPI headings: SP-specific compact typography. */
+  #home-kpi-grid > div:nth-child(2) > div:first-child > div:first-child > span,
+  #home-kpi-grid > div:nth-child(3) > div:first-child > div:first-child > span,
+  #home-kpi-grid > div:nth-child(4) > div:first-child > div:first-child > span {
+    font-size: 9px !important;
+    line-height: 1.15 !important;
+    letter-spacing: -0.025em !important;
+  }
+
+  #home-kpi-grid > div:nth-child(2) .text-\[11px\],
+  #home-kpi-grid > div:nth-child(3) .text-\[11px\] {
+    font-size: 9.5px !important;
+    line-height: 1.3 !important;
+  }
+
+  /* KPI 3 / 4 main values and bottom explanatory copy. */
+  #kpi-cover-rate,
+  #kpi-final-assets {
+    white-space: nowrap !important;
+    font-size: 22px !important;
+    line-height: 1.08 !important;
+    letter-spacing: -0.04em !important;
+  }
+  #kpi-cover-subtext,
+  #kpi-final-status {
+    font-size: 9.5px !important;
+    line-height: 1.25 !important;
+    white-space: normal !important;
+    overflow: hidden !important;
+    text-overflow: clip !important;
+  }
+}
+
+/* Extra safety for narrow phones while preserving the two-column KPI grid. */
+@media (max-width: 374px) {
+  #home-kpi-grid {
+    gap: 8px !important;
+  }
+  #home-kpi-grid > div {
+    padding: 10px !important;
+  }
+  #kpi-annual-yield,
+  #kpi-cover-rate,
+  #kpi-final-assets {
+    font-size: 20px !important;
+  }
+  #kpi-phase-badge,
+  #kpi-score-badge {
+    font-size: 8px !important;
+    padding-left: 6px !important;
+    padding-right: 6px !important;
+  }
+  #kpi-score-breakdown span.uppercase {
+    font-size: 7px !important;
+  }
+  #kpi-base-score,
+  #kpi-ai-adj {
+    font-size: 9px !important;
+  }
+}
+</style>
+
 </head>
 <body class="bg-[#FAFAF7] text-[#253047] min-h-screen font-sans antialiased relative overflow-x-hidden">
 
@@ -906,7 +1055,7 @@
                 </div>
                 <div class="text-[11px] font-bold text-[#8C5800] mb-2">平均年間運用益 (生涯)</div>
                 <div id="kpi-annual-yield" class="text-2xl sm:text-3xl font-extrabold text-[#253047] tracking-tight">
-                  0 万円<span class="text-xs font-normal text-[#6F7785]"> /年</span>
+                  0 万円<span class="kpi-annual-unit text-xs font-normal text-[#6F7785]"> /年</span>
                 </div>
               </div>
 
@@ -4091,7 +4240,7 @@ m.profile.targetAge=_targetRaw?Math.max(m.profile.currentAge||18,Math.round(Numb
         scoreBadge.innerText = '⚪ 未設定';
       }
       const annualYield = document.getElementById('kpi-annual-yield');
-      if (annualYield) annualYield.innerHTML = `0 万円<span class="text-xs font-normal text-[#6F7785]"> /年</span>`;
+      if (annualYield) annualYield.innerHTML = `0 万円<span class="kpi-annual-unit text-xs font-normal text-[#6F7785]"> /年</span>`;
       const phaseBadge = document.getElementById('kpi-phase-badge');
       if (phaseBadge) {
         phaseBadge.innerText = '累計運用益 未設定';
@@ -4150,7 +4299,7 @@ m.profile.targetAge=_targetRaw?Math.max(m.profile.currentAge||18,Math.round(Numb
       const totalYield = tableRows.reduce((acc, r) => acc + r.annualYield, 0);
       const avgYield = Math.round(totalYield / tableRows.length);
 
-      document.getElementById('kpi-annual-yield').innerHTML = `${avgYield.toLocaleString()} 万円<span class="text-xs font-normal text-[#6F7785]"> /年 (平均)</span>`;
+      document.getElementById('kpi-annual-yield').innerHTML = `${avgYield.toLocaleString()} 万円<span class="kpi-annual-unit text-xs font-normal text-[#6F7785]"> /年</span><span class="kpi-annual-average text-xs font-normal text-[#6F7785]"> (平均)</span>`;
 
       const phaseBadge = document.getElementById('kpi-phase-badge');
       if (phaseBadge) {
