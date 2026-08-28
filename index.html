@@ -528,35 +528,6 @@
     #onboardingView .ob-bottom-nav{width:100%;max-width:var(--ob-card-width)}
   }
 </style>
-
-<style id="phase8-integrated-lock-ui">
-  .lumi-core-mark{
-    width:42px;height:42px;border-radius:14px;display:inline-flex;align-items:center;justify-content:center;
-    background:linear-gradient(145deg,#FFF9E6,#FFF0B8);border:1px solid #F0D98B;
-    color:#E0A600;font-size:21px;line-height:1;box-shadow:0 5px 14px rgba(224,166,0,.10);
-  }
-  #onboardingView .ob-lumi-avatar .lumi-core-mark{width:42px;height:42px}
-  #onboardingScreen-complete .lumi-core-mark{width:58px;height:58px;border-radius:19px;font-size:27px}
-
-  .lumi-settings-card{
-    margin-top:14px;padding:16px;border:1px solid #F0E2B7;border-radius:16px;background:#FFF9E6;
-  }
-  .lumi-settings-card-head{display:flex;align-items:center;gap:11px}
-  .lumi-settings-card-copy{min-width:0}
-  .lumi-settings-card-title{font-size:13px;font-weight:800;color:#253047}
-  .lumi-settings-card-text{margin-top:2px;font-size:10px;line-height:1.55;color:#6F7785}
-  .lumi-settings-edit-btn{
-    width:100%;height:44px;margin-top:12px;border:1px solid #E8C85D;border-radius:13px;background:#fff;
-    color:#253047;font-size:12px;font-weight:800;white-space:nowrap;
-  }
-  @media(max-width:640px){
-    .lumi-settings-card{padding:14px}
-    .lumi-settings-card-head{align-items:flex-start}
-    .lumi-settings-card-text{font-size:10px;overflow-wrap:break-word}
-    .lumi-settings-edit-btn{font-size:11px}
-  }
-</style>
-
 </head>
 <body class="bg-[#FAFAF7] text-[#253047] min-h-screen font-sans antialiased relative overflow-x-hidden">
 
@@ -576,7 +547,7 @@
           <div class="relative z-10 flex-1 min-h-0 flex flex-col items-center justify-center text-center lg:px-4">
             <div class="relative mb-2 sm:mb-3 lg:mb-6">
               <div class="absolute inset-0 rounded-full bg-[#FFF2CD] blur-2xl scale-110 opacity-70"></div>
-              <span class="lumi-core-mark" aria-hidden="true"><i class="fa-solid fa-sun"></i></span>
+              <img src="./assets/lumi-spark.png" alt="LUMI" class="relative w-20 h-20 sm:w-24 sm:h-24 lg:w-48 lg:h-48 object-contain pointer-events-none" />
             </div>
             <div class="w-full max-w-xl space-y-2 lg:space-y-4">
               <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 lg:px-3 lg:py-1 rounded-full bg-white border border-[#F0E2B7] text-[9px] sm:text-[10px] lg:text-[11px] font-bold text-[#8C5800]">
@@ -868,7 +839,7 @@
 
                   <!-- Right Side Official LUMI Character Area -->
                   <div class="shrink-0 flex items-center justify-center pl-1">
-                    <span class="lumi-core-mark" aria-hidden="true"><i class="fa-solid fa-sun"></i></span>
+                    <img src="./assets/lumi-spark.png" alt="LUMI" class="w-12 h-12 sm:w-20 sm:h-20 lg:w-24 lg:h-24 object-contain pointer-events-none" />
                   </div>
                 </div>
 
@@ -971,7 +942,7 @@
             
             <div class="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-[#F0E2B7]/80">
               <div class="flex items-center gap-2.5 min-w-0">
-                <span class="lumi-core-mark" aria-hidden="true"><i class="fa-solid fa-sun"></i></span>
+                <img src="./assets/lumi-spark.png" alt="LUMI" class="w-7 h-7 object-contain shrink-0" />
                 <h3 class="text-sm font-bold text-[#253047] truncate">LUMI AIアドバイザー</h3>
               </div>
 
@@ -1009,20 +980,7 @@
             </div>
 
           </div>
-        
-          <div id="lumiSettingsEditCard" class="lumi-settings-card">
-            <div class="lumi-settings-card-head">
-              <span class="lumi-core-mark" aria-hidden="true"><i class="fa-solid fa-sun"></i></span>
-              <div class="lumi-settings-card-copy">
-                <div class="lumi-settings-card-title">LUMI</div>
-                <div class="lumi-settings-card-text">年齢・暮らし・住まい・資産など、人生設計の基本情報を見直せます。</div>
-              </div>
-            </div>
-            <button type="button" class="lumi-settings-edit-btn" onclick="openLumiOnboarding({mode:'edit'})">
-              LUMIと設定を見直す
-            </button>
-          </div>
-</section>
+        </section>
 
         <!-- FUTURE PROJECTION CHART SECTION -->
         <section id="chart-section" class="bg-white rounded-[24px] p-5 sm:p-6 border border-[#ECEBE6] space-y-4">
@@ -1083,7 +1041,7 @@
               <img src="./assets/lumiful-logo.png" alt="LUMIFUL" class="h-9 sm:h-11 w-auto mx-auto object-contain">
               <div class="mt-7 flex justify-center">
                 <div class="w-16 h-16 rounded-[22px] bg-[#FFF9E6] border border-[#F0E2B7] flex items-center justify-center">
-                  <span class="lumi-core-mark" aria-hidden="true"><i class="fa-solid fa-sun"></i></span>
+                  <img src="./assets/lumi-spark.png" alt="LUMI" class="w-10 h-10 object-contain" onerror="this.style.display='none'">
                 </div>
               </div>
 
@@ -1116,7 +1074,8 @@
 
               <div class="ob-lumi-guide">
                 <div class="ob-lumi-avatar" aria-hidden="true">
-                  <span class="lumi-core-mark" aria-hidden="true"><i class="fa-solid fa-sun"></i></span>
+                  <img src="./assets/lumi-spark.png" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='inline-flex'">
+                  <i class="fa-solid fa-sparkles ob-lumi-fallback"></i>
                 </div>
                 <div class="ob-lumi-copy">
                   <div class="ob-lumi-name">LUMI</div>
@@ -1162,7 +1121,8 @@
 
               <div class="ob-lumi-guide">
                 <div class="ob-lumi-avatar" aria-hidden="true">
-                  <span class="lumi-core-mark" aria-hidden="true"><i class="fa-solid fa-sun"></i></span>
+                  <img src="./assets/lumi-spark.png" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='inline-flex'">
+                  <i class="fa-solid fa-sparkles ob-lumi-fallback"></i>
                 </div>
                 <div class="ob-lumi-copy">
                   <div class="ob-lumi-name">LUMI</div>
@@ -1222,7 +1182,8 @@
 
               <div class="ob-lumi-guide">
                 <div class="ob-lumi-avatar" aria-hidden="true">
-                  <span class="lumi-core-mark" aria-hidden="true"><i class="fa-solid fa-sun"></i></span>
+                  <img src="./assets/lumi-spark.png" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='inline-flex'">
+                  <i class="fa-solid fa-sparkles ob-lumi-fallback"></i>
                 </div>
                 <div class="ob-lumi-copy">
                   <div class="ob-lumi-name">LUMI</div>
@@ -1281,7 +1242,8 @@
 
               <div class="ob-lumi-guide">
                 <div class="ob-lumi-avatar" aria-hidden="true">
-                  <span class="lumi-core-mark" aria-hidden="true"><i class="fa-solid fa-sun"></i></span>
+                  <img src="./assets/lumi-spark.png" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='inline-flex'">
+                  <i class="fa-solid fa-sparkles ob-lumi-fallback"></i>
                 </div>
                 <div class="ob-lumi-copy">
                   <div class="ob-lumi-name">LUMI</div>
@@ -1326,7 +1288,8 @@
 
               <div class="ob-lumi-guide">
                 <div class="ob-lumi-avatar" aria-hidden="true">
-                  <span class="lumi-core-mark" aria-hidden="true"><i class="fa-solid fa-sun"></i></span>
+                  <img src="./assets/lumi-spark.png" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='inline-flex'">
+                  <i class="fa-solid fa-sparkles ob-lumi-fallback"></i>
                 </div>
                 <div class="ob-lumi-copy">
                   <div class="ob-lumi-name">LUMI</div>
@@ -1391,7 +1354,8 @@
 
               <div class="ob-lumi-guide">
                 <div class="ob-lumi-avatar" aria-hidden="true">
-                  <span class="lumi-core-mark" aria-hidden="true"><i class="fa-solid fa-sun"></i></span>
+                  <img src="./assets/lumi-spark.png" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='inline-flex'">
+                  <i class="fa-solid fa-sparkles ob-lumi-fallback"></i>
                 </div>
                 <div class="ob-lumi-copy">
                   <div class="ob-lumi-name">LUMI</div>
@@ -1431,7 +1395,7 @@
           <section id="onboardingScreen-complete" class="onboarding-screen hidden">
             <div class="bg-white rounded-[28px] border border-[#ECEBE6] px-5 py-8 sm:p-10 text-center">
               <div class="w-20 h-20 rounded-[26px] bg-[#FFF9E6] border border-[#F0E2B7] flex items-center justify-center mx-auto">
-                <i class="fa-solid fa-sparkles text-3xl text-[#D97706]"></i>
+                <img src="./assets/lumi-spark.png" alt="LUMI" class="w-16 h-16 object-contain pointer-events-none" />
               </div>
               <div class="mt-4 text-[11px] font-extrabold text-[#8C5800]">LUMI</div>
               <h2 class="mt-2 text-2xl sm:text-3xl font-extrabold text-[#253047]">あなたの未来を描く準備ができました。</h2>
@@ -1440,7 +1404,7 @@
               <div id="ob-summary" class="mt-6 grid grid-cols-2 gap-3 text-left"></div>
 
               <div class="mt-8 space-y-3 max-w-sm mx-auto">
-                <button type="button" onclick="finishOnboardingUiOnly()" class="w-full px-5 py-3.5 btn-lumi-primary text-sm font-extrabold">未来を見る ✨</button>
+                <button id="onboardingCompleteBtn" type="button" onclick="finishOnboardingUiOnly()" class="w-full px-5 py-3.5 btn-lumi-primary text-sm font-extrabold">未来を見る ✨</button>
                 <button type="button" onclick="goToOnboardingStep(1)" class="w-full px-5 py-3 btn-lumi-secondary text-xs font-bold">入力内容を確認する</button>
               </div>
             </div>
@@ -1470,17 +1434,23 @@
           </p>
         </div>
 
-        <div class="bg-[#FEFBF0] rounded-[20px] p-4 border border-[#F0E2B7] flex items-center gap-3">
-          <span class="lumi-core-mark" aria-hidden="true"><i class="fa-solid fa-sun"></i></span>
-          <div class="space-y-0.5">
-            <h3 class="text-xs font-bold text-[#8C5800] flex items-center gap-1">
-              <i class="fa-solid fa-sun text-[#FFC83D]"></i>
-              <span>LUMIの入力サポート</span>
-            </h3>
-            <p class="text-xs text-[#6F7785] leading-relaxed">
-              概算の入力で大丈夫です。後からいつでも条件を変更して結果を比較できます。
-            </p>
+        <div class="bg-[#FEFBF0] rounded-[20px] p-4 border border-[#F0E2B7] flex flex-col sm:flex-row sm:items-center gap-3">
+          <div class="flex items-center gap-3 min-w-0 flex-1">
+            <img src="./assets/lumi-spark.png" alt="LUMI" class="w-11 h-11 object-contain shrink-0" />
+            <div class="space-y-0.5 min-w-0">
+              <h3 class="text-xs font-bold text-[#8C5800] flex items-center gap-1 whitespace-nowrap">
+                <i class="fa-solid fa-sun text-[#FFC83D]"></i>
+                <span>LUMIの入力サポート</span>
+              </h3>
+              <p class="text-xs text-[#6F7785] leading-relaxed">
+                概算の入力で大丈夫です。後からいつでも条件を変更して結果を比較できます。
+              </p>
+            </div>
           </div>
+          <button type="button" onclick="openLumiReviewFromSimulation()" class="w-full sm:w-auto shrink-0 h-10 px-4 btn-lumi-secondary text-xs font-extrabold whitespace-nowrap flex items-center justify-center gap-1.5">
+            <span>LUMIと見直す</span>
+            <i class="fa-solid fa-arrow-right text-[10px] text-[#8C5800]"></i>
+          </button>
         </div>
 
         <div class="bg-white rounded-[24px] border border-[#ECEBE6] overflow-hidden relative" id="inputTabsContainer">
@@ -1585,7 +1555,7 @@
 
             <div class="lg:col-span-7 space-y-2">
               <div class="flex items-center gap-2">
-                <span class="lumi-core-mark" aria-hidden="true"><i class="fa-solid fa-sun"></i></span>
+                <img src="./assets/lumi-spark.png" alt="LUMI" class="w-7 h-7 object-contain" />
                 <h3 class="text-sm font-bold text-[#253047]">LUMIから見た今回の結果</h3>
               </div>
 
@@ -1720,7 +1690,7 @@
         </div>
 
         <div class="bg-[#FEFBF0] rounded-[20px] p-4 border border-[#F0E2B7] flex items-center gap-3">
-          <span class="lumi-core-mark" aria-hidden="true"><i class="fa-solid fa-sun"></i></span>
+          <img src="./assets/lumi-spark.png" alt="LUMI" class="w-11 h-11 object-contain shrink-0" />
           <div class="space-y-0.5">
             <h3 class="text-xs font-bold text-[#8C5800] flex items-center gap-1">
               <i class="fa-solid fa-chart-line text-[#FFC83D]"></i>
@@ -1860,7 +1830,7 @@
         </div>
 
         <div class="bg-[#FEFBF0] rounded-[20px] p-4 border border-[#F0E2B7] flex items-center gap-3">
-          <span class="lumi-core-mark" aria-hidden="true"><i class="fa-solid fa-sun"></i></span>
+          <img src="./assets/lumi-spark.png" alt="LUMI" class="w-11 h-11 object-contain shrink-0" />
           <div class="space-y-0.5">
             <h3 class="text-xs font-bold text-[#8C5800] flex items-center gap-1">
               <i class="fa-solid fa-sun text-[#FFC83D]"></i>
@@ -1916,7 +1886,7 @@
         </div>
 
         <div class="bg-[#FEFBF0] rounded-[24px] p-5 sm:p-6 border border-[#F0E2B7] flex flex-col sm:flex-row items-start sm:items-center gap-4">
-          <span class="lumi-core-mark" aria-hidden="true"><i class="fa-solid fa-sun"></i></span>
+          <img src="./assets/lumi-spark.png" alt="LUMI" class="w-12 h-12 sm:w-14 sm:h-14 object-contain shrink-0" />
           <div class="space-y-1">
             <h2 class="text-base font-bold text-[#253047]">こんにちは、LUMIです。</h2>
             <p class="text-xs sm:text-sm text-[#6F7785] leading-relaxed">
@@ -9348,7 +9318,16 @@ window.LUMIFUL_PHASE7B_STEP3_LOCK_V8_2 = Object.freeze({
       window.selectOnboardingHousing?.(window.LUMIFUL_ONBOARDING_UI_STATE.housingType);
     }
 
-    if (String(id) === 'complete') window.renderOnboardingSummaryUi();
+    if (String(id) === 'complete') {
+      window.renderOnboardingSummaryUi();
+      const completeBtn = document.getElementById('onboardingCompleteBtn');
+      if (completeBtn) {
+        completeBtn.textContent =
+          window.LUMIFUL_ONBOARDING_UI_STATE?.mode === 'edit'
+            ? '設定を更新する'
+            : '未来を見る ✨';
+      }
+    }
     window.scrollTo({top:0,behavior:'smooth'});
   };
 
@@ -9392,11 +9371,47 @@ window.LUMIFUL_PHASE7B_STEP3_LOCK_V8_2 = Object.freeze({
     window.switchView?.('dashboard');
   };
 
-  window.finishOnboardingUiOnly = function() {
-    // STEP 3 only: UI completion, no Schema/Persistence write.
+  window.finishOnboardingUiOnly = async function() {
+    const mode = window.LUMIFUL_ONBOARDING_UI_STATE?.mode || 'create';
+
+    if (mode === 'edit') {
+      const validation = window.validateOnboardingForSchemaV2();
+      if (!validation.ok) {
+        window.goToOnboardingStep?.(validation.step);
+        window.showToast?.(validation.message, 'error');
+        return;
+      }
+
+      try {
+        const model = window.buildSchemaV2FromOnboarding();
+        window.restorePersistedStateV2(model);
+        const envelope = await window.saveUserData?.();
+        if (!envelope && ['guest','authenticated'].includes(window.authState?.status)) {
+          throw new Error('save-returned-null');
+        }
+
+        document.getElementById('onboardingView')?.classList.add('hidden');
+        window.switchView?.('simulationInput');
+        window.renderV2InputUI?.();
+        window.recalculateAllFast?.();
+        window.syncCanonicalAccountActionUI?.();
+        window.LUMIFUL_ONBOARDING_UI_STATE.mode = 'create';
+        window.showToast?.('LUMIの設定を更新しました', 'success');
+      } catch (error) {
+        console.error('[LUMIFUL] onboarding edit update failed', error);
+        window.showToast?.('設定を更新できませんでした', 'error');
+      }
+      return;
+    }
+
+    const ok = await window.commitOnboardingToGuestSchemaV2();
+    if (!ok) return;
+
     document.getElementById('onboardingView')?.classList.add('hidden');
     window.switchView?.('dashboard');
-    window.showToast?.('オンボーディングUI確認完了（STEP3）', 'success');
+    window.recalculateAllFast?.();
+    window.syncCanonicalAccountActionUI?.();
+    window.showToast?.('未来のシミュレーションを作成しました', 'success');
   };
 
   window.selectOnboardingPartner = function(hasPartner) {
@@ -10168,176 +10183,145 @@ window.LUMIFUL_PHASE7B_STEP3_LOCK_V8_2 = Object.freeze({
 </script>
 
 <script>
-/* PHASE 8 — LUMI INTEGRATION LOCK CANDIDATE */
+/* PHASE 8 — LIMITED LUMI REVIEW INTEGRATION
+   Only Simulation Input -> existing Onboarding edit path.
+   Existing LUMI displays/Auth/Engine remain untouched. */
 (function(){
-  const state=()=>window.LUMIFUL_ONBOARDING_UI_STATE;
-
-  function setValue(id,value){
+  const numOrBlank = v => {
+    const n = Number(v);
+    return Number.isFinite(n) && n > 0 ? String(n) : '';
+  };
+  const set = (id,v) => {
     const el=document.getElementById(id);
-    if(el) el.value=(value===null||value===undefined||Number.isNaN(value))?'':String(value);
-  }
-
-  function currentSchema(){
-    return window.LUMIFUL_SCHEMA_V2_CURRENT
-      || window.currentSchemaV2
-      || window.currentModelV2
-      || window.lumifulModel
-      || null;
-  }
-
-  window.renderLumiAvatar=function(target){
-    const el=typeof target==='string'?document.querySelector(target):target;
-    if(!el) return;
-    el.innerHTML='<span class="lumi-core-mark" aria-hidden="true"><i class="fa-solid fa-sun"></i></span>';
+    if(el) el.value=(v===null||v===undefined?'':String(v));
   };
 
-  window.hydrateOnboardingFromSchemaV2=function(model){
-    if(!model || !state()) return false;
-    const s=state();
+  function clearExtraIncomeRows(){
+    const box=document.getElementById('ob-extra-income-list');
+    if(box) box.innerHTML='';
+  }
 
-    setValue('ob-age',model.profile?.currentAge);
-    const hasPartner=!!model.profile?.spouse?.enabled;
-    window.selectOnboardingPartner?.(hasPartner);
-    if(hasPartner) setValue('ob-partner-age',model.profile?.spouse?.age);
+  function hydrateExtraIncomes(incomes,currentAge,targetAge){
+    clearExtraIncomeRows();
+    const extras=(incomes||[]).slice(1);
+    extras.forEach(income=>{
+      window.addOnboardingIncomeRow?.();
+      const box=document.getElementById('ob-extra-income-list');
+      const row=box?.lastElementChild;
+      if(!row) return;
+      const inputs=[...row.querySelectorAll('input')];
+      if(inputs[0]) inputs[0].value=income.name||'追加収入';
+      if(inputs[1]) inputs[1].value=numOrBlank(income.amount);
+      if(inputs[2]) inputs[2].value=numOrBlank(income.startAge||currentAge);
+      if(inputs[3]) inputs[3].value=numOrBlank(income.endAge||targetAge);
+    });
+  }
 
-    const primary=(model.incomes||[]).find(x=>x.type==='salary'||x.type==='primary') || (model.incomes||[])[0];
-    if(primary){
-      const annual=Number(primary.amount||0);
-      setValue('ob-income', primary.frequency==='monthly' ? annual*12 : annual);
-      setValue('ob-income-end-age',primary.endAge);
+  window.hydrateOnboardingFromCurrentSchemaV2=function(){
+    const model=window.getCurrentDataModelV2ForPersistence?.();
+    if(!model) return false;
+    const state=window.LUMIFUL_ONBOARDING_UI_STATE;
+    if(!state) return false;
+
+    state.mode='edit';
+
+    const currentAge=Number(model.profile?.currentAge||0);
+    const targetAge=Number(model.profile?.targetAge||90);
+    set('ob-age',numOrBlank(currentAge));
+
+    const hasSpouse=!!model.profile?.hasSpouse;
+    window.selectOnboardingPartner?.(hasSpouse);
+    if(hasSpouse) set('ob-partner-age',numOrBlank(model.profile?.spouseAge));
+
+    const incomes=Array.isArray(model.incomes)?model.incomes:[];
+    const main=incomes[0]||null;
+    if(main){
+      set('ob-income',numOrBlank(main.frequency==='monthly'?Number(main.amount||0)*12:main.amount));
+      set('ob-income-end-age',numOrBlank(main.endAge));
+    }else{
+      set('ob-income','');
+      set('ob-income-end-age','');
     }
+    hydrateExtraIncomes(incomes,currentAge,targetAge);
 
-    const exp=model.living?.expense||{};
-    setValue('ob-expense',exp.frequency==='monthly'?Number(exp.amount||0):Number(exp.amount||0)/12);
+    const living=model.living?.expense||{};
+    set('ob-expense',numOrBlank(
+      living.frequency==='monthly'
+        ? Number(living.amount||0)
+        : Number(living.amount||0)/12
+    ));
 
-    const h=model.living?.housing||{};
-    const ht=h.type||'other';
-    s.housingType=ht;
-    window.selectOnboardingHousing?.(ht);
-    setValue('ob-housing-monthly',Number(h.monthlyAmount||0) || '');
-    setValue('ob-housing-end-age',h.endAge);
+    const housing=model.living?.housing||{};
+    const housingType=['rent','owned_with_loan','owned_no_loan','other'].includes(housing.type)
+      ? housing.type : 'other';
+    state.housingType=housingType;
+    window.selectOnboardingHousing?.(housingType);
+    set('ob-housing-monthly',housingType==='owned_no_loan'?'':numOrBlank(housing.monthlyAmount));
+    set('ob-housing-end-age',housingType==='owned_with_loan'?numOrBlank(housing.endAge):'');
 
-    s.selectedAssets=new Set();
-    s.assetDrafts={};
-    (model.assets||[]).forEach(a=>{
-      const key=({cash:'cash',fund:'fund',mutual_fund:'fund',bond:'bond',stock:'stock',other:'other'})[a.type];
+    state.selectedAssets=new Set();
+    state.assetDrafts={};
+    (Array.isArray(model.assets)?model.assets:[]).forEach(asset=>{
+      let key=null;
+      if(asset.assetClass==='potential') key='other';
+      else if(asset.category==='cash') key='cash';
+      else if(asset.category==='investment_fund') key='fund';
+      else if(asset.category==='bond') key='bond';
+      else if(asset.category==='stock') key='stock';
       if(!key) return;
-      s.selectedAssets.add(key);
-      s.assetDrafts[key]={
-        value:String(Number(a.value||a.amount||0) || ''),
-        expectedReturn:String(Number(a.expectedReturn||a.returnRate||0) || '')
+      state.selectedAssets.add(key);
+      state.assetDrafts[key]={
+        value:numOrBlank(asset.value),
+        expectedReturn:(key==='fund'||key==='bond')?numOrBlank(asset.expectedReturn):''
       };
     });
     document.querySelectorAll('[data-ob-asset]').forEach(btn=>{
-      const active=s.selectedAssets.has(btn.dataset.obAsset);
+      const active=state.selectedAssets.has(btn.dataset.obAsset);
       btn.classList.toggle('border-[#72D6B5]',active);
       btn.classList.toggle('bg-[#EAF8F3]',active);
     });
     window.renderOnboardingAssetInputs?.();
 
-    s.events=(model.events||[]).map(e=>({
-      type:e.type||'expense',
-      kind:e.kind||e.label||'その他',
+    state.events=(Array.isArray(model.lifeEvents)?model.lifeEvents:[]).map(e=>({
+      type:e.direction==='income'?'income':'expense',
+      kind:e.title||'その他',
       age:Number(e.age||0),
       amount:Number(e.amount||0)
     })).filter(e=>e.age>0&&e.amount>0);
-    s.noEvents=s.events.length===0;
+    state.noEvents=state.events.length===0;
+    state.eventType=null;
     window.renderOnboardingEvents?.();
 
-    const alloc=model.settings?.surplusAllocation||{};
-    const cashPct=Number(alloc.cashPct ?? alloc.cash ?? 50);
-    const investPct=Number(alloc.investmentPct ?? alloc.investment ?? (100-cashPct));
-    const mode=investPct<=0?'cash':cashPct<=0?'investment':'both';
+    const mode=model.settings?.surplusAllocationMode||'cash';
     window.selectOnboardingSurplus?.(mode);
-    const range=document.getElementById('ob-invest-range');
-    if(range){range.value=String(investPct);window.updateOnboardingSplit?.();}
+    if(mode==='both'){
+      const range=document.getElementById('ob-invest-range');
+      if(range) range.value=String(Number(model.settings?.surplusInvestmentPct??50));
+      window.updateOnboardingSplit?.();
+    }
 
     return true;
   };
 
-  window.openLumiOnboarding=function(options={}){
-    const mode=options.mode==='edit'?'edit':'create';
-    if(state()) state().mode=mode;
-
-    // Reuse existing onboarding surface only; no duplicate onboarding DOM.
-    if(typeof window.showView==='function') window.showView('onboarding');
-    else {
-      document.querySelectorAll('.app-view').forEach(v=>v.classList.add('hidden'));
-      document.getElementById('onboardingView')?.classList.remove('hidden');
+  window.openLumiReviewFromSimulation=function(){
+    const ok=window.hydrateOnboardingFromCurrentSchemaV2?.();
+    if(!ok){
+      window.showToast?.('現在の設定を読み込めませんでした', 'error');
+      return;
     }
-
-    if(mode==='edit'){
-      const model=currentSchema();
-      if(model) window.hydrateOnboardingFromSchemaV2(model);
-    }
+    window.switchView?.('onboarding');
+    document.getElementById('onboardingView')?.classList.remove('hidden');
     window.goToOnboardingScreen?.('1');
   };
 
-  window.refreshAccountAction=function(){
-    // Delegate to Phase 7 renderers if present. Never change auth/session state here.
-    const candidates=[
-      window.updateAuthUI,
-      window.renderAuthState,
-      window.refreshAuthUI,
-      window.renderAccountAction,
-      window.updateAccountUI,
-      window.syncAuthUI
-    ];
-    for(const fn of candidates){
-      if(typeof fn==='function'){
-        try{fn();return true;}catch(_){}
-      }
-    }
-
-    // Last-resort display sync only, based on existing session markers; no auth mutation.
-    const guest=localStorage.getItem('lumiful_guest_session')==='true'
-      || localStorage.getItem('lumiful_guest_mode')==='true'
-      || document.body?.dataset?.guest==='true';
-    const btn=document.querySelector('[data-account-action],#headerAccountAction,#accountActionBtn');
-    if(btn && guest){
-      const label=btn.querySelector('[data-account-label]')||btn;
-      label.textContent='ゲスト終了';
-      btn.classList.remove('hidden');
-      return true;
-    }
-    return false;
-  };
-
-  window.LUMIFUL_PHASE8_INTEGRATION_LOCK=Object.freeze({
-    lumiVisual:'deterministic-component',
-    onboardingEditMode:true,
-    schemaToOnboardingHydration:true,
-    accountAction:'phase7-delegated',
-    phase7AuthMutation:false,
-    duplicateOnboarding:false
+  window.LUMIFUL_PHASE8_LIMITED_REVIEW=Object.freeze({
+    entry:'simulationInput',
+    label:'LUMIと見直す',
+    canonicalSchemaGetter:'getCurrentDataModelV2ForPersistence',
+    existingLumiDisplaysChanged:false,
+    phase7AuthChanged:false,
+    phase7EngineChanged:false
   });
-})();
-</script>
-
-
-<script>
-/* Minimal post-onboarding integration hook */
-(function(){
-  function install(){
-    const names=['commitOnboardingToGuestSchemaV2','finishOnboarding','completeOnboarding'];
-    names.forEach(name=>{
-      const original=window[name];
-      if(typeof original!=='function' || original.__lumiIntegrated) return;
-      const wrapped=function(...args){
-        const result=original.apply(this,args);
-        const after=()=>{
-          try{window.refreshAccountAction?.();}catch(_){}
-        };
-        if(result && typeof result.then==='function') return result.finally(after);
-        requestAnimationFrame(after);
-        return result;
-      };
-      wrapped.__lumiIntegrated=true;
-      window[name]=wrapped;
-    });
-  }
-  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',install);
-  else install();
 })();
 </script>
 
