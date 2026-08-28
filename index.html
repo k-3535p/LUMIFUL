@@ -221,6 +221,8 @@
   #onboardingView .ob-question{
     width:100%;display:flex;flex-direction:column;align-items:center;margin:0 0 24px;
   }
+  #onboardingView #ob-partner-age-wrap.hidden{display:none!important}
+  #onboardingView #ob-partner-age-wrap:not(.hidden){display:flex!important;flex-direction:column!important;align-items:center!important}
   #onboardingView .ob-label{
     width:100%;color:#253047;font-size:12px;line-height:1.4;font-weight:800;text-align:center;
   }
@@ -246,7 +248,7 @@
   }
 
   #onboardingView .ob-choice-pair{
-    width:var(--ob-choice-width);max-width:100%;margin:10px auto 0;
+    width:var(--ob-answer-width);max-width:100%;margin:10px auto 0;
     display:grid;grid-template-columns:1fr 1fr;gap:14px;
   }
   #onboardingView .ob-choice{
@@ -256,7 +258,7 @@
   #onboardingView .ob-choice.border-\[\#65B9E8\]{border-color:#65B9E8!important;background:#EAF6FC!important}
 
   #onboardingView .ob-info-note{
-    width:min(100%,500px);margin:10px auto 0;padding:9px 12px;border:1px solid #DCEEF8;
+    width:var(--ob-answer-width);max-width:100%;box-sizing:border-box;margin:10px auto 0;padding:9px 12px;border:1px solid #DCEEF8;
     border-radius:12px;background:#F7FBFE;color:#536274;font-size:10px;line-height:1.6;text-align:center;
   }
   #onboardingView .ob-info-note strong{color:#253047;font-weight:800;margin-right:6px}
@@ -393,7 +395,7 @@
   }
   #onboardingView #ob-invest-range{width:100%;margin-top:14px;accent-color:#FFC83D}
 
-  /* identical CTA container for STEP1-5 */
+  /* identical CTA container for STEP1-6 */
   #onboardingView .ob-bottom-nav{margin-top:16px}
   #onboardingView .ob-bottom-nav-inner{
     width:100%;padding:10px;border:1px solid #ECEBE6;border-radius:18px;background:rgba(255,255,255,.96);
@@ -409,6 +411,57 @@
 
   /* Complete screen width follows same system */
   #onboardingScreen-complete>div{max-width:var(--ob-card-width);margin-left:auto;margin-right:auto}
+
+
+  #onboardingView .ob-step-badge-lavender{background:#F2EEFF;color:#7663B8}
+
+  #onboardingView .ob-housing-grid{
+    width:min(100%,520px);margin:26px auto 0;
+    display:grid;grid-template-columns:repeat(4,1fr);gap:10px;
+  }
+  #onboardingView .ob-housing-card{
+    min-height:118px;padding:14px 8px;border:1px solid #ECEBE6;border-radius:18px;background:#fff;
+    color:#253047;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;text-align:center;
+  }
+  #onboardingView .ob-housing-card.is-selected{border-color:#A89AE0;background:#F7F4FF}
+  #onboardingView .ob-housing-icon{
+    width:52px;height:52px;border-radius:17px;display:flex;align-items:center;justify-content:center;font-size:21px;
+  }
+  #onboardingView .ob-housing-rent{background:#EAF6FC;color:#4F9BC8}
+  #onboardingView .ob-housing-loan{background:#FFF5CF;color:#B47A00}
+  #onboardingView .ob-housing-owned{background:#EAF8F3;color:#3D9678}
+  #onboardingView .ob-housing-other{background:#F2EEFF;color:#7663B8}
+  #onboardingView .ob-housing-card strong{font-size:12px;font-weight:800;white-space:nowrap}
+  #onboardingView .ob-housing-card small{font-size:9px;font-weight:700;color:#8A909C;white-space:nowrap}
+  #onboardingView .ob-housing-fields{
+    width:min(100%,420px);margin:22px auto 0;padding:18px 16px 4px;border:1px solid #ECEBE6;border-radius:18px;background:#FAFAF7;
+  }
+  #onboardingView .ob-housing-fields.hidden,
+  #onboardingView #ob-housing-end-age-wrap.hidden,
+  #onboardingView #ob-housing-monthly-wrap.hidden{display:none!important}
+
+  /* SP: prevent only accidental word/unit/button breaks; explanatory copy may wrap naturally */
+  #onboardingView .ob-title-row h2,
+  #onboardingView .ob-label,
+  #onboardingView .ob-unit,
+  #onboardingView .ob-choice,
+  #onboardingView .ob-add-button,
+  #onboardingView .ob-asset-name,
+  #onboardingView .ob-event-type-card,
+  #onboardingView .ob-none-button,
+  #onboardingView .ob-back-button,
+  #onboardingView .ob-next-button,
+  #onboardingView .ob-surplus-card strong{
+    white-space:nowrap;
+    word-break:keep-all;
+  }
+  #onboardingView .ob-lumi-copy p,
+  #onboardingView .ob-help-text,
+  #onboardingView .ob-info-note{
+    word-break:normal;
+    overflow-wrap:break-word;
+    text-wrap:pretty;
+  }
 
   @media(max-width:640px){
     #onboardingView{--ob-card-width:100%;--ob-answer-width:min(100%,320px);--ob-choice-width:100%}
@@ -462,46 +515,19 @@
     #onboardingView .ob-surplus-card>span:last-child{align-self:start;margin-top:2px}
     #onboardingView .ob-surplus-split{width:100%;max-width:320px}
 
+
+    #onboardingView .ob-housing-grid{
+      width:100%;max-width:320px;grid-template-columns:1fr 1fr;gap:10px;
+    }
+    #onboardingView .ob-housing-card{min-height:104px}
+    #onboardingView .ob-housing-fields{width:100%;max-width:320px}
+    #onboardingView .ob-label{font-size:11px}
+    #onboardingView .ob-unit{font-size:11px}
+    #onboardingView .ob-choice{font-size:13px}
+
     #onboardingView .ob-bottom-nav{width:100%;max-width:var(--ob-card-width)}
   }
 </style>
-
-
-<style id="phase8-onboarding-final-v2-step1-step2-fix">
-  /* STEP1: partner age is truly conditional */
-  #onboardingView #ob-partner-age-wrap.hidden{
-    display:none !important;
-  }
-
-  #onboardingView #ob-partner-age-wrap:not(.hidden){
-    display:flex !important;
-    flex-direction:column !important;
-    align-items:center !important;
-  }
-
-  /* STEP1: "いる / いない" total width = numeric input width */
-  #onboardingView .ob-choice-pair{
-    width:var(--ob-answer-width) !important;
-    max-width:100% !important;
-    grid-template-columns:1fr 1fr !important;
-    gap:12px !important;
-  }
-
-  /* STEP2: take-home explanation width = numeric input width */
-  #onboardingView .ob-info-note{
-    width:var(--ob-answer-width) !important;
-    max-width:100% !important;
-    box-sizing:border-box !important;
-  }
-
-  @media(max-width:640px){
-    #onboardingView .ob-choice-pair,
-    #onboardingView .ob-info-note{
-      width:min(100%,320px) !important;
-    }
-  }
-</style>
-
 </head>
 <body class="bg-[#FAFAF7] text-[#253047] min-h-screen font-sans antialiased relative overflow-x-hidden">
 
@@ -1001,7 +1027,7 @@
               <button type="button" onclick="onboardingBack()" class="text-xs sm:text-sm font-bold text-[#6F7785] hover:text-[#253047] flex items-center gap-1.5">
                 <i class="fa-solid fa-chevron-left"></i><span>戻る</span>
               </button>
-              <div id="onboardingStepLabel" class="text-[11px] sm:text-xs font-extrabold text-[#8C5800]">STEP 1 / 5</div>
+              <div id="onboardingStepLabel" class="text-[11px] sm:text-xs font-extrabold text-[#8C5800]">STEP 1 / 6</div>
               <button type="button" onclick="skipOnboardingToHome()" class="text-xs sm:text-sm font-bold text-[#8A909C] hover:text-[#253047]">あとで設定</button>
             </div>
             <div class="mt-3 h-1.5 bg-[#ECEBE6] rounded-full overflow-hidden">
@@ -1136,11 +1162,11 @@
                 <div class="ob-question ob-question-last">
                   <div class="ob-label">毎月の生活費</div>
                   <div class="ob-answer-field">
-                    <input id="ob-expense" type="text" inputmode="numeric" pattern="[0-9]*" autocomplete="off" aria-label="年間生活費">
+                    <input id="ob-expense" type="text" inputmode="numeric" pattern="[0-9]*" autocomplete="off" aria-label="毎月の生活費">
                     <span class="ob-unit">万円 / 月</span>
                   </div>
 
-                  <p class="ob-help-text">住居費・保険・趣味など、普段の支出をまとめた月額でOKです。</p>
+                  <p class="ob-help-text">住居費を除き、保険・食費・趣味など普段の支出をまとめた月額でOKです。</p>
                 </div>
               </div>
             </div>
@@ -1150,7 +1176,67 @@
           <section id="onboardingScreen-3" class="onboarding-screen hidden">
             <div class="ob-card">
               <div class="ob-title-row">
-                <span class="ob-step-badge ob-step-badge-green">03</span>
+                <span class="ob-step-badge ob-step-badge-lavender">03</span>
+                <h2>住まい</h2>
+              </div>
+
+              <div class="ob-lumi-guide">
+                <div class="ob-lumi-avatar" aria-hidden="true">
+                  <img src="./assets/lumi-spark.png" alt="" onerror="this.style.display='none';this.nextElementSibling.style.display='inline-flex'">
+                  <i class="fa-solid fa-sparkles ob-lumi-fallback"></i>
+                </div>
+                <div class="ob-lumi-copy">
+                  <div class="ob-lumi-name">LUMI</div>
+                  <p>毎月の住居費も、未来のお金に大きく影響します。</p>
+                </div>
+              </div>
+
+              <div class="ob-housing-grid">
+                <button type="button" onclick="selectOnboardingHousing('rent')" data-ob-housing="rent" class="ob-housing-card">
+                  <span class="ob-housing-icon ob-housing-rent"><i class="fa-solid fa-key"></i></span>
+                  <strong>賃貸</strong>
+                </button>
+                <button type="button" onclick="selectOnboardingHousing('owned_with_loan')" data-ob-housing="owned_with_loan" class="ob-housing-card">
+                  <span class="ob-housing-icon ob-housing-loan"><i class="fa-solid fa-house-circle-check"></i></span>
+                  <strong>持ち家</strong><small>ローンあり</small>
+                </button>
+                <button type="button" onclick="selectOnboardingHousing('owned_no_loan')" data-ob-housing="owned_no_loan" class="ob-housing-card">
+                  <span class="ob-housing-icon ob-housing-owned"><i class="fa-solid fa-house"></i></span>
+                  <strong>持ち家</strong><small>ローンなし</small>
+                </button>
+                <button type="button" onclick="selectOnboardingHousing('other')" data-ob-housing="other" class="ob-housing-card">
+                  <span class="ob-housing-icon ob-housing-other"><i class="fa-solid fa-building"></i></span>
+                  <strong>その他</strong>
+                </button>
+              </div>
+
+              <div id="ob-housing-fields" class="ob-housing-fields hidden">
+                <div id="ob-housing-monthly-wrap" class="ob-question">
+                  <div id="ob-housing-monthly-label" class="ob-label">毎月の住居費</div>
+                  <div class="ob-answer-field">
+                    <input id="ob-housing-monthly" type="text" inputmode="numeric" pattern="[0-9]*" autocomplete="off" aria-label="毎月の住居費">
+                    <span class="ob-unit">万円 / 月</span>
+                  </div>
+                </div>
+
+                <div id="ob-housing-end-age-wrap" class="ob-question hidden">
+                  <div class="ob-label">ローン返済は何歳まで？</div>
+                  <div class="ob-answer-field">
+                    <input id="ob-housing-end-age" type="text" inputmode="numeric" pattern="[0-9]*" autocomplete="off" aria-label="住宅ローン返済終了年齢">
+                    <span class="ob-unit">歳</span>
+                  </div>
+                </div>
+
+                <p id="ob-housing-help" class="ob-help-text">現在の家賃を入力してください。</p>
+              </div>
+            </div>
+          </section>
+
+          <!-- STEP 4 -->
+          <section id="onboardingScreen-4" class="onboarding-screen hidden">
+            <div class="ob-card">
+              <div class="ob-title-row">
+                <span class="ob-step-badge ob-step-badge-green">04</span>
                 <h2>資産</h2>
               </div>
 
@@ -1192,11 +1278,11 @@
             </div>
           </section>
 
-          <!-- STEP 4 -->
-          <section id="onboardingScreen-4" class="onboarding-screen hidden">
+          <!-- STEP 5 -->
+          <section id="onboardingScreen-5" class="onboarding-screen hidden">
             <div class="ob-card">
               <div class="ob-title-row">
-                <span class="ob-step-badge ob-step-badge-pink">04</span>
+                <span class="ob-step-badge ob-step-badge-pink">05</span>
                 <h2>これから</h2>
               </div>
 
@@ -1258,11 +1344,11 @@
             </div>
           </section>
 
-          <!-- STEP 5 -->
-          <section id="onboardingScreen-5" class="onboarding-screen hidden">
+          <!-- STEP 6 -->
+          <section id="onboardingScreen-6" class="onboarding-screen hidden">
             <div class="ob-card">
               <div class="ob-title-row">
-                <span class="ob-step-badge ob-step-badge-yellow">05</span>
+                <span class="ob-step-badge ob-step-badge-yellow">06</span>
                 <h2>お金の残し方</h2>
               </div>
 
@@ -3845,11 +3931,11 @@
     window.renderV2PotentialAssetList = function(){const m=window.ensureV2InputModel(),box=document.getElementById('v2PotentialAssetList');if(!box)return;const arr=m.assets.filter(a=>a.assetClass==='potential');if(!arr.length){box.innerHTML='<p class="text-xs text-[#8A909C] py-2">売却できる資産はまだ登録されていません。</p>';return;}box.innerHTML=arr.map(x=>{const i=m.assets.indexOf(x);return `<div class="rounded-[14px] border border-[#F0E2B7] bg-white p-3 space-y-2"><div class="grid grid-cols-2 gap-2"><select data-v2-asset="category" data-i="${i}" class="px-2 lumi-input text-xs font-bold bg-white"><option value="real_estate" ${x.category==='real_estate'?'selected':''}>不動産</option><option value="private_stock" ${x.category==='private_stock'?'selected':''}>非上場株式</option><option value="business_equity" ${x.category==='business_equity'?'selected':''}>事業持分</option><option value="other" ${x.category==='other'?'selected':''}>その他</option></select><input data-v2-asset="name" data-i="${i}" value="${v2Esc(x.name)}" placeholder="資産名" class="px-2 lumi-input text-xs font-bold"><div class="col-span-2 flex items-center gap-1"><input data-v2-asset="value" data-i="${i}" type="number" min="0" value="${Number(x.value||0)||''}" placeholder="評価額" class="w-full px-2 lumi-input text-xs font-bold"><span class="text-[10px] text-[#6F7785]">万円</span></div></div><div class="flex justify-between items-center"><span class="text-[10px] text-[#8A909C]">シミュレーションには自動反映されません</span><button type="button" onclick="removeV2PotentialAsset(${i})" class="text-[11px] font-bold text-[#A65B67]">削除</button></div></div>`}).join('');box.querySelectorAll('[data-v2-asset]').forEach(el=>el.addEventListener('input',window.syncV2InputAndRecalculate));box.querySelectorAll('select[data-v2-asset]').forEach(el=>el.addEventListener('change',window.syncV2InputAndRecalculate));};
     window.renderV2LifestyleAssetList = function(){const m=window.ensureV2InputModel(),box=document.getElementById('v2LifestyleAssetList');if(!box)return;const arr=m.assets.filter(a=>a.assetClass==='lifestyle');if(!arr.length){box.innerHTML='<p class="text-xs text-[#8A909C] py-2">生活資産はまだ登録されていません。</p>';return;}box.innerHTML=arr.map(x=>{const i=m.assets.indexOf(x);return `<div class="rounded-[14px] border border-[#E8E7F7] bg-white p-3 space-y-2"><div class="grid grid-cols-2 gap-2"><select data-v2-asset="category" data-i="${i}" class="px-2 lumi-input text-xs font-bold bg-white"><option value="home" ${x.category==='home'?'selected':''}>自宅</option><option value="car" ${x.category==='car'?'selected':''}>自家用車</option><option value="other" ${x.category==='other'?'selected':''}>その他</option></select><input data-v2-asset="name" data-i="${i}" value="${v2Esc(x.name)}" placeholder="資産名" class="px-2 lumi-input text-xs font-bold"><div class="col-span-2 flex items-center gap-1"><input data-v2-asset="value" data-i="${i}" type="number" min="0" value="${Number(x.value||0)}" class="w-full px-2 lumi-input text-xs font-bold"><span class="text-[10px] text-[#6F7785]">万円</span></div></div><div class="flex justify-between items-center"><span class="text-[10px] text-[#8A909C]">保有状況として表示のみ</span><button type="button" onclick="removeV2LifestyleAsset(${i})" class="text-[11px] font-bold text-[#A65B67]">削除</button></div></div>`}).join('');box.querySelectorAll('[data-v2-asset]').forEach(el=>el.addEventListener('input',window.syncV2InputAndRecalculate));box.querySelectorAll('select[data-v2-asset]').forEach(el=>el.addEventListener('change',window.syncV2InputAndRecalculate));};
     window.renderV2PaymentList=function(){const m=window.ensureV2InputModel(),box=document.getElementById('v2PaymentList');if(!box)return;if(!m.payments.length){box.innerHTML='<p class="text-xs text-[#8A909C] py-2">その他の返済はありません。</p>';return;}box.innerHTML=m.payments.map((x,i)=>`<div class="rounded-[16px] border border-[#ECEBE6] bg-[#FAFAF7] p-3"><div class="grid grid-cols-2 sm:grid-cols-6 gap-2"><select data-v2-payment="category" data-i="${i}" class="px-2 lumi-input text-xs font-bold bg-white"><option value="car" ${x.category==='car'?'selected':''}>自動車</option><option value="education" ${x.category==='education'?'selected':''}>教育</option><option value="business" ${x.category==='business'?'selected':''}>事業</option><option value="other" ${x.category==='other'?'selected':''}>その他</option></select><input data-v2-payment="name" data-i="${i}" value="${v2Esc(x.name)}" placeholder="名称" class="px-2 lumi-input text-xs font-bold"><input data-v2-payment="amount" data-i="${i}" type="number" min="0" value="${Number(x.amount||0)}" class="px-2 lumi-input text-xs font-bold"><select data-v2-payment="frequency" data-i="${i}" class="px-2 lumi-input text-xs font-bold bg-white"><option value="monthly" ${x.frequency==='monthly'?'selected':''}>万円/月</option><option value="yearly" ${x.frequency==='yearly'?'selected':''}>万円/年</option></select><input data-v2-payment="endAge" data-i="${i}" type="number" min="18" max="110" value="${Number(x.endAge||0)||''}" placeholder="終了年齢" class="px-2 lumi-input text-xs font-bold"><button type="button" onclick="removeV2Payment(${i})" class="text-xs font-bold text-[#A65B67]">削除</button></div></div>`).join('');box.querySelectorAll('[data-v2-payment]').forEach(el=>el.addEventListener('input',window.syncV2InputAndRecalculate));box.querySelectorAll('select[data-v2-payment]').forEach(el=>el.addEventListener('change',window.syncV2InputAndRecalculate));};
-    window.renderV2InputUI=function(){const m=window.ensureV2InputModel();const set=(id,v)=>{const e=document.getElementById(id);if(e)e.value=v??''};set('v2CurrentAge',Number(m.profile.currentAge)>0?m.profile.currentAge:'');set('v2TargetAge',m.profile.targetAge||90);const sp=document.getElementById('v2HasSpouse');if(sp)sp.checked=!!m.profile.hasSpouse;set('v2SpouseAge',m.profile.spouseAge||'');set('v2LivingMonthly',Number(m.living?.expense?.amount||0)/12);set('v2HousingType',m.living?.housing?.type||'rent');set('v2InflationRate',m.settings?.inflationRate??1.5);window.toggleV2Spouse();window.renderV2HousingFields();window.renderV2IncomeList();window.renderV2AssetList();window.renderV2PotentialAssetList();window.renderV2PaymentList();window.v2InputInitialized=true;};
+    window.renderV2InputUI=function(){const m=window.ensureV2InputModel();const set=(id,v)=>{const e=document.getElementById(id);if(e)e.value=v??''};set('v2CurrentAge',Number(m.profile.currentAge)>0?m.profile.currentAge:'');set('v2TargetAge',m.profile.targetAge||90);const sp=document.getElementById('v2HasSpouse');if(sp)sp.checked=!!m.profile.hasSpouse;set('v2SpouseAge',m.profile.spouseAge||'');set('v2LivingMonthly',m.living?.expense?.frequency==='monthly'?Number(m.living?.expense?.amount||0):Number(m.living?.expense?.amount||0)/12);set('v2HousingType',m.living?.housing?.type||'rent');set('v2InflationRate',m.settings?.inflationRate??1.5);window.toggleV2Spouse();window.renderV2HousingFields();window.renderV2IncomeList();window.renderV2AssetList();window.renderV2PotentialAssetList();window.renderV2PaymentList();window.v2InputInitialized=true;};
     window.syncV2InputAndRecalculate=function(){const m=window.ensureV2InputModel();const _ageRaw=(document.getElementById('v2CurrentAge')?.value||'').trim();
 m.profile.currentAge=_ageRaw?Math.max(18,Math.round(Number(_ageRaw)||0)):0;
 const _targetRaw=(document.getElementById('v2TargetAge')?.value||'').trim();
-m.profile.targetAge=_targetRaw?Math.max(m.profile.currentAge||18,Math.round(Number(_targetRaw)||90)):90;m.profile.hasSpouse=!!document.getElementById('v2HasSpouse')?.checked;m.profile.spouseAge=m.profile.hasSpouse?Math.max(18,Math.round(v2Num('v2SpouseAge',m.profile.currentAge))):null;m.living.expense={amount:v2Num('v2LivingMonthly')*12,frequency:'yearly'};const ht=document.getElementById('v2HousingType')?.value||'rent';m.living.housing={type:ht,monthlyAmount:v2Num('v2HousingMonthly'),endAge:ht==='owned_with_loan'?Math.round(v2Num('v2HousingEndAge')):null};m.settings.inflationRate=v2Num('v2InflationRate',1.5);document.querySelectorAll('[data-v2-income]').forEach(el=>{const x=m.incomes[Number(el.dataset.i)];if(!x)return;const k=el.dataset.v2Income;x[k]=(k==='amount'||k==='endAge')?Number(el.value||0):el.value;x.startAge=m.profile.currentAge;});document.querySelectorAll('[data-v2-asset]').forEach(el=>{const x=m.assets[Number(el.dataset.i)];if(!x)return;const k=el.dataset.v2Asset;x[k]=(k==='value'||k==='expectedReturn')?Number(el.value||0):el.value;});m.assets.filter(a=>a.assetClass==='simulation'&&(a.category==='cash'||a.category==='stock')).forEach(a=>{a.expectedReturn=0;});document.querySelectorAll('[data-v2-withdrawal]').forEach(el=>{const x=m.assets[Number(el.dataset.i)];if(!x)return;const v=el.value;if(v==='auto'){x.withdrawalSetting='auto';x.withdrawalPriority=null;}else if(v==='excluded'){x.withdrawalSetting='excluded';x.withdrawalPriority='excluded';}else{x.withdrawalSetting='manual';x.withdrawalPriority=v;}});document.querySelectorAll('[data-v2-payment]').forEach(el=>{const x=m.payments[Number(el.dataset.i)];if(!x)return;const k=el.dataset.v2Payment;x[k]=(k==='amount'||k==='endAge')?Number(el.value||0):el.value;x.startAge=m.profile.currentAge;});if(m.profile.currentAge>0&&typeof window.recalculateAllFast==='function')window.recalculateAllFast();else window.renderV2EmptyDashboard?.();};
+m.profile.targetAge=_targetRaw?Math.max(m.profile.currentAge||18,Math.round(Number(_targetRaw)||90)):90;m.profile.hasSpouse=!!document.getElementById('v2HasSpouse')?.checked;m.profile.spouseAge=m.profile.hasSpouse?Math.max(18,Math.round(v2Num('v2SpouseAge',m.profile.currentAge))):null;m.living.expense={amount:v2Num('v2LivingMonthly'),frequency:'monthly'};const ht=document.getElementById('v2HousingType')?.value||'rent';m.living.housing={type:ht,monthlyAmount:v2Num('v2HousingMonthly'),endAge:ht==='owned_with_loan'?Math.round(v2Num('v2HousingEndAge')):null};m.settings.inflationRate=v2Num('v2InflationRate',1.5);document.querySelectorAll('[data-v2-income]').forEach(el=>{const x=m.incomes[Number(el.dataset.i)];if(!x)return;const k=el.dataset.v2Income;x[k]=(k==='amount'||k==='endAge')?Number(el.value||0):el.value;x.startAge=m.profile.currentAge;});document.querySelectorAll('[data-v2-asset]').forEach(el=>{const x=m.assets[Number(el.dataset.i)];if(!x)return;const k=el.dataset.v2Asset;x[k]=(k==='value'||k==='expectedReturn')?Number(el.value||0):el.value;});m.assets.filter(a=>a.assetClass==='simulation'&&(a.category==='cash'||a.category==='stock')).forEach(a=>{a.expectedReturn=0;});document.querySelectorAll('[data-v2-withdrawal]').forEach(el=>{const x=m.assets[Number(el.dataset.i)];if(!x)return;const v=el.value;if(v==='auto'){x.withdrawalSetting='auto';x.withdrawalPriority=null;}else if(v==='excluded'){x.withdrawalSetting='excluded';x.withdrawalPriority='excluded';}else{x.withdrawalSetting='manual';x.withdrawalPriority=v;}});document.querySelectorAll('[data-v2-payment]').forEach(el=>{const x=m.payments[Number(el.dataset.i)];if(!x)return;const k=el.dataset.v2Payment;x[k]=(k==='amount'||k==='endAge')?Number(el.value||0):el.value;x.startAge=m.profile.currentAge;});if(m.profile.currentAge>0&&typeof window.recalculateAllFast==='function')window.recalculateAllFast();else window.renderV2EmptyDashboard?.();};
     window.addV2Income=function(){const m=window.ensureV2InputModel();m.incomes.push({id:v2Id('income'),category:'salary',name:'給与',owner:'self',amount:0,frequency:'yearly',startAge:m.profile.currentAge||0,endAge:0});window.renderV2IncomeList();};window.removeV2Income=function(i){window.ensureV2InputModel().incomes.splice(i,1);window.renderV2IncomeList();window.recalculateAllFast();};
     window.addV2Asset=function(){const m=window.ensureV2InputModel();m.assets.push({id:v2Id('asset'),assetClass:'simulation',category:'cash',name:'現金・預金',owner:'self',value:0,expectedReturn:0,withdrawalSetting:'auto',withdrawalPriority:null});window.renderV2AssetList();};window.removeV2Asset=function(i){window.ensureV2InputModel().assets.splice(i,1);window.renderV2AssetList();window.recalculateAllFast();};window.addV2PotentialAsset=function(){const m=window.ensureV2InputModel();m.assets.push({id:v2Id('potential'),assetClass:'potential',category:'real_estate',name:'売却できる資産',owner:'self',value:0});window.renderV2PotentialAssetList();};window.removeV2PotentialAsset=function(i){window.ensureV2InputModel().assets.splice(i,1);window.renderV2PotentialAssetList();window.recalculateAllFast();};window.addV2LifestyleAsset=function(){const m=window.ensureV2InputModel();m.assets.push({id:v2Id('lifestyle'),assetClass:'lifestyle',category:'home',name:'自宅',owner:'self',value:0});window.renderV2LifestyleAssetList();};window.removeV2LifestyleAsset=function(i){window.ensureV2InputModel().assets.splice(i,1);window.renderV2LifestyleAssetList();window.recalculateAllFast();};
     window.addV2Payment=function(){const m=window.ensureV2InputModel();m.payments.push({id:v2Id('payment'),category:'other',name:'返済',amount:0,frequency:'monthly',startAge:m.profile.currentAge||0,endAge:50});window.renderV2PaymentList();};window.removeV2Payment=function(i){window.ensureV2InputModel().payments.splice(i,1);window.renderV2PaymentList();window.recalculateAllFast();};
@@ -9175,13 +9261,15 @@ window.LUMIFUL_PHASE7B_STEP3_LOCK_V8_2 = Object.freeze({
   window.LUMIFUL_ONBOARDING_UI_STATE = {
     current: 'entry',
     partner: null,
+    housingType: null,
     selectedAssets: new Set(),
+    assetDrafts: {},
     eventType: null,
     events: [],
     surplus: null
   };
 
-  const screens = ['entry','1','2','3','4','5','complete'];
+  const screens = ['entry','1','2','3','4','5','6','complete'];
 
   function screenEl(id) {
     return document.getElementById(`onboardingScreen-${id}`);
@@ -9198,7 +9286,7 @@ window.LUMIFUL_PHASE7B_STEP3_LOCK_V8_2 = Object.freeze({
     screens.forEach(s => screenEl(s)?.classList.toggle('hidden', s !== String(id)));
     window.LUMIFUL_ONBOARDING_UI_STATE.current = String(id);
 
-    const isStep = ['1','2','3','4','5'].includes(String(id));
+    const isStep = ['1','2','3','4','5','6'].includes(String(id));
     document.getElementById('onboardingSharedHeader')?.classList.toggle('hidden', !isStep);
     document.getElementById('onboardingBottomNav')?.classList.toggle('hidden', !isStep);
 
@@ -9206,10 +9294,21 @@ window.LUMIFUL_PHASE7B_STEP3_LOCK_V8_2 = Object.freeze({
       const n = Number(id);
       const label = document.getElementById('onboardingStepLabel');
       const bar = document.getElementById('onboardingProgressBar');
-      if (label) label.textContent = `STEP ${n} / 5`;
-      if (bar) bar.style.width = `${n*20}%`;
+      if (label) label.textContent = `STEP ${n} / 6`;
+      if (bar) bar.style.width = `${(n/6)*100}%`;
       const next = document.getElementById('onboardingNextBtn');
-      if (next) next.textContent = n === 5 ? '確認する' : '次へ';
+      if (next) next.textContent = n === 6 ? '確認する' : '次へ';
+    }
+
+    if (String(id) === '1') {
+      const hasPartner = window.LUMIFUL_ONBOARDING_UI_STATE.partner === true;
+      const wrap = document.getElementById('ob-partner-age-wrap');
+      wrap?.classList.toggle('hidden', !hasPartner);
+      wrap?.setAttribute('aria-hidden', hasPartner ? 'false' : 'true');
+    }
+
+    if (String(id) === '3' && window.LUMIFUL_ONBOARDING_UI_STATE.housingType) {
+      window.selectOnboardingHousing?.(window.LUMIFUL_ONBOARDING_UI_STATE.housingType);
     }
 
     if (String(id) === 'complete') window.renderOnboardingSummaryUi();
@@ -9227,7 +9326,7 @@ window.LUMIFUL_PHASE7B_STEP3_LOCK_V8_2 = Object.freeze({
   window.onboardingBack = function() {
     const cur = window.LUMIFUL_ONBOARDING_UI_STATE.current;
     if (cur === 'entry') return;
-    if (cur === 'complete') return window.goToOnboardingScreen('5');
+    if (cur === 'complete') return window.goToOnboardingScreen('6');
     const n = Number(cur);
     if (n <= 1) return window.goToOnboardingScreen('entry');
     window.goToOnboardingScreen(String(n-1));
@@ -9242,7 +9341,7 @@ window.LUMIFUL_PHASE7B_STEP3_LOCK_V8_2 = Object.freeze({
         return;
       }
     }
-    if (cur >= 5) return window.goToOnboardingScreen('complete');
+    if (cur >= 6) return window.goToOnboardingScreen('complete');
     window.goToOnboardingScreen(String(cur+1));
   };
 
@@ -9264,13 +9363,69 @@ window.LUMIFUL_PHASE7B_STEP3_LOCK_V8_2 = Object.freeze({
   };
 
   window.selectOnboardingPartner = function(hasPartner) {
-    window.LUMIFUL_ONBOARDING_UI_STATE.partner = !!hasPartner;
-    document.getElementById('ob-partner-age-wrap')?.classList.toggle('hidden', !hasPartner);
+    const state = window.LUMIFUL_ONBOARDING_UI_STATE;
+    state.partner = !!hasPartner;
+
+    const wrap = document.getElementById('ob-partner-age-wrap');
+    const input = document.getElementById('ob-partner-age');
+
+    if (hasPartner) {
+      wrap?.classList.remove('hidden');
+      wrap?.setAttribute('aria-hidden','false');
+    } else {
+      wrap?.classList.add('hidden');
+      wrap?.setAttribute('aria-hidden','true');
+      if (input) input.value = '';
+    }
+
     document.querySelectorAll('[data-ob-partner]').forEach(btn => {
       const active = btn.dataset.obPartner === (hasPartner ? 'yes' : 'no');
       btn.classList.toggle('border-[#65B9E8]', active);
       btn.classList.toggle('bg-[#EAF6FC]', active);
     });
+  };
+
+
+  window.selectOnboardingHousing = function(type) {
+    const state = window.LUMIFUL_ONBOARDING_UI_STATE;
+    state.housingType = type;
+
+    document.querySelectorAll('[data-ob-housing]').forEach(btn => {
+      btn.classList.toggle('is-selected', btn.dataset.obHousing === type);
+    });
+
+    const fields = document.getElementById('ob-housing-fields');
+    const monthlyWrap = document.getElementById('ob-housing-monthly-wrap');
+    const endWrap = document.getElementById('ob-housing-end-age-wrap');
+    const label = document.getElementById('ob-housing-monthly-label');
+    const help = document.getElementById('ob-housing-help');
+    const monthly = document.getElementById('ob-housing-monthly');
+    const endAge = document.getElementById('ob-housing-end-age');
+
+    fields?.classList.remove('hidden');
+
+    if (type === 'owned_no_loan') {
+      monthlyWrap?.classList.add('hidden');
+      endWrap?.classList.add('hidden');
+      if (monthly) monthly.value = '';
+      if (endAge) endAge.value = '';
+      if (help) help.textContent = '住宅ローン返済はありません。';
+      return;
+    }
+
+    monthlyWrap?.classList.remove('hidden');
+    if (type === 'owned_with_loan') {
+      endWrap?.classList.remove('hidden');
+      if (label) label.textContent = '毎月の住宅ローン返済額';
+      if (help) help.textContent = '現在の毎月返済額と、返済が終わる年齢を入力してください。';
+    } else {
+      endWrap?.classList.add('hidden');
+      if (endAge) endAge.value = '';
+      if (label) label.textContent = type === 'rent' ? '毎月の家賃' : '毎月の住居費';
+      if (help) help.textContent = type === 'rent'
+        ? '現在の家賃を入力してください。'
+        : '現在の住居費を入力してください。';
+    }
   };
 
   window.addOnboardingIncomeRow = function() {
@@ -9296,6 +9451,17 @@ window.LUMIFUL_PHASE7B_STEP3_LOCK_V8_2 = Object.freeze({
 
   window.toggleOnboardingAsset = function(key) {
     const state = window.LUMIFUL_ONBOARDING_UI_STATE;
+    state.assetDrafts = state.assetDrafts || {};
+
+    document.querySelectorAll('[data-ob-asset-input]').forEach(row => {
+      const k = row.dataset.obAssetInput;
+      const inputs = [...row.querySelectorAll('input')];
+      state.assetDrafts[k] = {
+        value: inputs[0]?.value || '',
+        expectedReturn: inputs[1]?.value || ''
+      };
+    });
+
     if (state.selectedAssets.has(key)) state.selectedAssets.delete(key);
     else state.selectedAssets.add(key);
 
@@ -9311,10 +9477,14 @@ window.LUMIFUL_PHASE7B_STEP3_LOCK_V8_2 = Object.freeze({
   window.renderOnboardingAssetInputs = function() {
     const box = document.getElementById('ob-asset-inputs');
     if (!box) return;
+
+    const state = window.LUMIFUL_ONBOARDING_UI_STATE;
+    state.assetDrafts = state.assetDrafts || {};
     box.innerHTML = '';
 
-    [...window.LUMIFUL_ONBOARDING_UI_STATE.selectedAssets].forEach(key => {
+    [...state.selectedAssets].forEach(key => {
       const meta = assetMeta[key];
+      const draft = state.assetDrafts[key] || { value:'', expectedReturn:'' };
       const row = document.createElement('div');
       row.className = 'ob-asset-detail';
       row.dataset.obAssetInput = key;
@@ -9324,7 +9494,9 @@ window.LUMIFUL_PHASE7B_STEP3_LOCK_V8_2 = Object.freeze({
           <div class="ob-mini-question">
             <div class="ob-label">評価額</div>
             <div class="ob-small-field">
-              <input type="text" inputmode="numeric" pattern="[0-9]*" autocomplete="off" aria-label="${meta.label}の評価額">
+              <input type="text" inputmode="numeric" pattern="[0-9]*" autocomplete="off"
+                     value="${String(draft.value || '').replace(/"/g,'&quot;')}"
+                     data-ob-asset-value="${key}" aria-label="${meta.label}の評価額">
               <span>万円</span>
             </div>
           </div>
@@ -9332,12 +9504,24 @@ window.LUMIFUL_PHASE7B_STEP3_LOCK_V8_2 = Object.freeze({
           <div class="ob-mini-question">
             <div class="ob-label">想定利回り</div>
             <div class="ob-small-field">
-              <input type="text" inputmode="decimal" autocomplete="off" data-ob-decimal="true" aria-label="${meta.label}の想定利回り">
+              <input type="text" inputmode="decimal" autocomplete="off"
+                     value="${String(draft.expectedReturn || '').replace(/"/g,'&quot;')}"
+                     data-ob-decimal="true" data-ob-asset-return="${key}" aria-label="${meta.label}の想定利回り">
               <span>%</span>
             </div>
           </div>` : ''}
         </div>`;
       box.appendChild(row);
+
+      const inputs = [...row.querySelectorAll('input')];
+      inputs[0]?.addEventListener('input', e => {
+        state.assetDrafts[key] = state.assetDrafts[key] || {};
+        state.assetDrafts[key].value = e.target.value;
+      });
+      inputs[1]?.addEventListener('input', e => {
+        state.assetDrafts[key] = state.assetDrafts[key] || {};
+        state.assetDrafts[key].expectedReturn = e.target.value;
+      });
     });
   };
 
@@ -9446,14 +9630,27 @@ window.LUMIFUL_PHASE7B_STEP3_LOCK_V8_2 = Object.freeze({
     const age = document.getElementById('ob-age')?.value || '-';
     const income = document.getElementById('ob-income')?.value || '-';
     const expense = document.getElementById('ob-expense')?.value || '-';
+    const housingMonthly = document.getElementById('ob-housing-monthly')?.value || '-';
+    const housingType = window.LUMIFUL_ONBOARDING_UI_STATE.housingType;
+    const housingLabel = ({
+      rent:'賃貸',
+      owned_with_loan:'持ち家（ローンあり）',
+      owned_no_loan:'持ち家（ローンなし）',
+      other:'その他'
+    })[housingType] || '未設定';
     const assets = window.LUMIFUL_ONBOARDING_UI_STATE.selectedAssets.size;
     const events = window.LUMIFUL_ONBOARDING_UI_STATE.events.length;
     const surplus = ({cash:'貯金',investment:'投資',both:'両方'})[window.LUMIFUL_ONBOARDING_UI_STATE.surplus] || '未設定';
+
+    const housingValue = housingType === 'owned_no_loan'
+      ? housingLabel
+      : `${housingLabel}${housingMonthly==='-' ? '' : ` / ${Number(housingMonthly).toLocaleString()}万円/月`}`;
 
     const cards = [
       ['本人年齢',`${age}歳`],
       ['年間手取り',income==='-'?'-':`${Number(income).toLocaleString()}万円`],
       ['毎月の生活費',expense==='-'?'-':`${Number(expense).toLocaleString()}万円`],
+      ['住まい',housingValue],
       ['資産種類',`${assets}種類`],
       ['将来予定',window.LUMIFUL_ONBOARDING_UI_STATE.noEvents ? '特になし' : `${events}件`],
       ['余剰資金',surplus]
@@ -9461,7 +9658,7 @@ window.LUMIFUL_PHASE7B_STEP3_LOCK_V8_2 = Object.freeze({
     box.innerHTML = cards.map(([k,v])=>`
       <div class="rounded-[14px] bg-[#FAFAF7] border border-[#ECEBE6] px-3 py-3">
         <div class="text-[10px] text-[#8A909C]">${k}</div>
-        <div class="mt-0.5 text-sm font-extrabold text-[#253047]">${v}</div>
+        <div class="mt-0.5 text-sm font-extrabold text-[#253047] break-words">${v}</div>
       </div>`).join('');
   };
 
@@ -9485,7 +9682,7 @@ window.LUMIFUL_PHASE7B_STEP3_LOCK_V8_2 = Object.freeze({
     schemaWrites:false,
     firestoreWrites:false,
     engineCalls:false,
-    onboardingScreens:['entry','1','2','3','4','5','complete'],
+    onboardingScreens:['entry','1','2','3','4','5','6','complete'],
     phase7Base:'FINAL LOCK v9.2'
   });
 })();
@@ -9663,17 +9860,19 @@ window.LUMIFUL_PHASE7B_STEP3_LOCK_V8_2 = Object.freeze({
     }
     model.incomes.push(...readExtraIncomes(currentAge, targetAge));
 
-    // Onboarding intentionally keeps living cost simple.
-    // Its monthly living-cost input is the complete recurring household cost;
-    // therefore housing remains zero here to avoid double counting.
+    // STEP2 living expense excludes housing; STEP3 stores housing separately.
     model.living.expense = {
       amount: num('ob-expense'),
       frequency: 'monthly'
     };
+
+    const housingType = window.LUMIFUL_ONBOARDING_UI_STATE?.housingType || 'other';
+    const housingMonthly = housingType === 'owned_no_loan' ? 0 : num('ob-housing-monthly');
+    const housingEndAge = housingType === 'owned_with_loan' ? num('ob-housing-end-age') : 0;
     model.living.housing = {
-      type: 'other',
-      monthlyAmount: 0,
-      endAge: null
+      type: housingType,
+      monthlyAmount: housingMonthly,
+      endAge: housingEndAge > 0 ? Math.max(currentAge, housingEndAge) : null
     };
 
     model.assets = readAssets();
@@ -9693,7 +9892,7 @@ window.LUMIFUL_PHASE7B_STEP3_LOCK_V8_2 = Object.freeze({
       inflationRate: 1.5,
       surplusAllocationMode: surplusMode,
       surplusInvestmentPct: investPct,
-      onboardingLivingExpenseIncludesHousing: true
+      onboardingLivingExpenseIncludesHousing: false
     };
 
     return window.normalizeDataModelV2(model);
@@ -9711,6 +9910,16 @@ window.LUMIFUL_PHASE7B_STEP3_LOCK_V8_2 = Object.freeze({
 
     if (endAge > 0 && endAge < age) {
       return { ok:false, message:'収入の終了年齢は現在年齢以上にしてください。', step:2 };
+    }
+
+    const housingType = window.LUMIFUL_ONBOARDING_UI_STATE?.housingType;
+    const housingMonthly = num('ob-housing-monthly');
+    const housingEndAge = num('ob-housing-end-age');
+    if (housingType === 'owned_with_loan' && housingMonthly > 0 && housingEndAge <= 0) {
+      return { ok:false, message:'住宅ローンの返済終了年齢を入力してください。', step:3 };
+    }
+    if (housingType === 'owned_with_loan' && housingEndAge > 0 && housingEndAge < age) {
+      return { ok:false, message:'住宅ローンの返済終了年齢は現在年齢以上にしてください。', step:3 };
     }
 
     return { ok:true };
@@ -9855,7 +10064,7 @@ window.LUMIFUL_PHASE7B_STEP3_LOCK_V8_2 = Object.freeze({
 (function(){
   const numericIntegerIds=[
     'ob-age','ob-partner-age','ob-income','ob-income-end-age','ob-expense',
-    'ob-event-age','ob-event-amount'
+    'ob-event-age','ob-event-amount','ob-housing-monthly','ob-housing-end-age'
   ];
 
   function sanitizeInput(el, decimal){
@@ -9909,69 +10118,16 @@ window.LUMIFUL_PHASE7B_STEP3_LOCK_V8_2 = Object.freeze({
     step2LivingExpense:'monthly',
     step3PopAssetCards:true,
     step4NoEventAction:true,
-    step1to5BottomNavWidth:'unified',
+    step1to6BottomNavWidth:'unified',
     pcSpUnified:true,
-    schemaLogic:'v2 preserved except monthly living frequency',
+    schemaLogic:'v2 preserved; living monthly reflection fixed; housing mapped separately',
     guestFlowPreserved:true,
-    phase7EnginePreserved:true
+    phase7EnginePreserved:true,
+    housingStepAdded:true,
+    assetDraftPreservation:true,
+    mobileWrapAudit:true
   });
 })();
 </script>
-
-
-<script>
-/* PHASE 8 / STEP 4 FINAL UNIFIED v2 — STEP1/STEP2 TARGETED FIX */
-(function(){
-  function applyPartnerAgeVisibilityV2(hasPartner){
-    const wrap=document.getElementById('ob-partner-age-wrap');
-    const input=document.getElementById('ob-partner-age');
-    if(!wrap) return;
-
-    if(hasPartner===true){
-      wrap.classList.remove('hidden');
-      wrap.setAttribute('aria-hidden','false');
-    }else{
-      wrap.classList.add('hidden');
-      wrap.setAttribute('aria-hidden','true');
-      if(input) input.value='';
-    }
-  }
-
-  const prevPartnerSelectV2=window.selectOnboardingPartner;
-  window.selectOnboardingPartner=function(hasPartner){
-    const result=typeof prevPartnerSelectV2==='function'
-      ? prevPartnerSelectV2.call(this,hasPartner)
-      : undefined;
-
-    applyPartnerAgeVisibilityV2(hasPartner===true);
-    return result;
-  };
-
-  // Initial onboarding state: no selection yet -> hide partner age.
-  function initPartnerVisibilityV2(){
-    const state=window.LUMIFUL_ONBOARDING_UI_STATE;
-    applyPartnerAgeVisibilityV2(state?.partner===true);
-  }
-
-  if(document.readyState==='loading'){
-    document.addEventListener('DOMContentLoaded',initPartnerVisibilityV2);
-  }else{
-    initPartnerVisibilityV2();
-  }
-
-  window.LUMIFUL_PHASE8_STEP4_ONBOARDING_FINAL_V2=Object.freeze({
-    status:'STEP1_STEP2_FIXED',
-    partnerAgeConditional:true,
-    partnerChoiceWidth:'same-as-answer-field',
-    step2InfoWidth:'same-as-answer-field',
-    step3to5Changed:false,
-    schemaLogicChanged:false,
-    guestFlowChanged:false,
-    phase7EngineChanged:false,
-    base:'PHASE8 STEP4 ONBOARDING FINAL UNIFIED'
-  });
-})();
-</script>
-
 </body>
 </html>
