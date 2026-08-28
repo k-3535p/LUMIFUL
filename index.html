@@ -559,6 +559,44 @@
     #onboardingView .ob-priority-option{min-height:68px}
   }
 </style>
+
+<style id="phase9-12-ui-polish">
+/* Phase 9-12: UI polish only. Engine / Schema / Auth / LUMI runtime untouched. */
+@media (max-width: 639px) {
+  #home-kpi-grid { gap: 10px; }
+  #home-kpi-grid > div { min-width: 0; padding: 12px; border-radius: 20px; }
+  #home-kpi-grid > div span,
+  #home-kpi-grid > div div { min-width: 0; }
+  #home-kpi-grid > div .whitespace-nowrap { white-space: normal; }
+  #kpi-score { font-size: clamp(1.55rem, 8vw, 2rem); }
+  #kpi-annual-yield,
+  #kpi-final-assets { font-size: clamp(1.15rem, 5.8vw, 1.5rem); line-height: 1.15; overflow-wrap: anywhere; }
+  #kpi-cover-rate { font-size: clamp(1.15rem, 5.8vw, 1.45rem); line-height: 1.15; }
+  #kpi-phase-badge,
+  #kpi-cover-subtext,
+  #kpi-final-status { height: auto; min-height: 36px; overflow: visible; text-overflow: clip; white-space: normal; line-height: 1.35; }
+  #kpi-score-badge { white-space: nowrap; }
+}
+
+/* LUMI diagnosis: keep hierarchy, but make AI reasoning comfortably readable. */
+#lumiAdvisorView .p95-axis p,
+#lumiAdvisorView .p95-diagnosis p,
+#lumiAdvisorView .lumi-next-action .text-\[\#6F7785\] {
+  color: #4F586A;
+  font-weight: 500;
+}
+#lumiAdvisorView .p95-axis p,
+#lumiAdvisorView .p95-diagnosis p { line-height: 1.75; }
+#lumiAdvisorView .p95-diagnosis h4 { font-weight: 800; color: #253047; }
+#lumiAdvisorView .p95-section-title { font-weight: 800; }
+#lumiAdvisorView > div > p.text-\[\#6F7785\],
+#lumiAdvisorView p.text-\[\#6F7785\] { color: #4F586A; }
+@media (max-width: 639px) {
+  #lumiAdvisorView .p95-axis p,
+  #lumiAdvisorView .p95-diagnosis p { font-size: 12px; }
+}
+</style>
+
 </head>
 <body class="bg-[#FAFAF7] text-[#253047] min-h-screen font-sans antialiased relative overflow-x-hidden">
 
@@ -791,7 +829,7 @@
         <section id="hero-section" class="space-y-4">
           
           <!-- 4 KPI EQUAL GRID (Phase 5A Equal 4-Card Layout) -->
-          <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+          <div id="home-kpi-grid" class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
             
             <!-- KPI 1: LUMIFUL SCORE CARD -->
             <div class="bg-[#FFFDF8] rounded-[24px] p-3.5 sm:p-5 border border-[#ECEBE6] flex flex-col justify-between relative overflow-hidden transition shadow-sm">
@@ -2205,10 +2243,10 @@
 
           <div class="bg-[#EAF6FC] p-3.5 rounded-[16px] border border-[#65B9E8]/40">
             <h4 class="font-bold text-[#253047] text-xs mb-1.5 flex items-center gap-1.5">
-              <i class="fa-solid fa-lightbulb text-[#65B9E8]"></i> LUMIFUL AI改善アドバイス
+              <i class="fa-solid fa-lightbulb text-[#65B9E8]"></i> ENGINEから見た参考ポイント
             </h4>
             <p id="scoreDetailSuggestion" class="text-[#253047] leading-relaxed text-[11px]">
-              現在はBase Scoreによる数値評価を表示しています。
+              現在のシミュレーション条件から、数値面の参考ポイントを表示します。
             </p>
           </div>
         </div>
@@ -11002,5 +11040,254 @@ ${JSON.stringify(OUTPUT_SCHEMA_EXAMPLE,null,2)}
      CTA terminology unified to "LUMIのAI診断を見る".
      Simulation Input "LUMIと見直す" remains unchanged.
      No Engine / Schema / Auth / Firebase / AI runtime changes. -->
+
+<script>
+/* ============================================================
+   PHASE 9-13 — CANONICAL AUTH ACTION STABILITY HOTFIX
+   ------------------------------------------------------------
+   Scope:
+   - Keep PC / SP / Settings account action visible for a valid
+     guest session ("ゲスト終了") or Firebase account ("ログアウト").
+   - Do not change Auth, Firestore, Engine, Schema or LUMI logic.
+   - Treat Firebase currentUser + durable local guest marker as
+     canonical; authState is synchronized from those sources.
+   ============================================================ */
+(function () {
+  const H = window.LUMIFUL_AUTH_ACTION_STABILITY_V1 = {
+    syncing: false,
+    observer: null,
+    scheduled: false
+  };
+
+  function durableState() {
+    const firebaseUser = window.LUMIFUL_FIREBASE_RUNTIME?.auth?.currentUser || null;
+    if (firebaseUser) {
+      return {
+        status: 'authenticated',
+        user: {
+          uid: firebaseUser.uid,
+          email: String(firebaseUser.email || '').trim().toLowerCase(),
+          emailVerified: !!firebaseUser.emailVerified,
+          isGuest: false,
+          provider: 'firebase'
+        }
+      };
+    }
+
+    const stored = String(
+      localStorage.getItem('lumiful_user_email') ||
+      localStorage.getItem('lc_user_email') ||
+      ''
+    );
+
+    if (stored.includes('@lumiful.local')) {
+      return {
+        status: 'guest',
+        user: {
+          email: window.LUMIFUL_GUEST_EMAIL || stored,
+          isGuest: true,
+          provider: 'local'
+        }
+      };
+    }
+
+    return { status: 'unauthenticated', user: null };
+  }
+
+  function applyButton(btn, visible, label) {
+    if (!btn) return;
+    if (visible) {
+      btn.classList.remove('hidden');
+      btn.hidden = false;
+      btn.style.removeProperty('display');
+      btn.setAttribute('aria-hidden', 'false');
+      btn.setAttribute('aria-label', label);
+    } else {
+      btn.classList.add('hidden');
+      btn.hidden = true;
+      btn.style.display = 'none';
+      btn.setAttribute('aria-hidden', 'true');
+      btn.removeAttribute('aria-label');
+    }
+  }
+
+  function renderStableAuthAction() {
+    if (H.syncing) return null;
+    H.syncing = true;
+    try {
+      const state = durableState();
+      const inApp = state.status === 'guest' || state.status === 'authenticated';
+      const label =
+        state.status === 'guest' ? 'ゲスト終了' :
+        state.status === 'authenticated' ? 'ログアウト' : '';
+
+      // Synchronize transient authState from canonical durable sources.
+      // This prevents old wrappers / async Firebase checks from leaving
+      // the action hidden after ordinary navigation or recalculation.
+      if (
+        window.authState?.status !== state.status ||
+        (state.status === 'authenticated' &&
+         window.authState?.user?.uid !== state.user?.uid)
+      ) {
+        window.authState = state;
+      }
+
+      applyButton(document.getElementById('authAccountBtn'), inApp, label);
+      applyButton(document.getElementById('authAccountBtnMobile'), inApp, label);
+      applyButton(document.getElementById('settingsAccountActionBtn'), inApp, label);
+
+      const desktopText = document.getElementById('authBtnText');
+      const mobileText = document.getElementById('authBtnTextMobile');
+      const settingsBtn = document.getElementById('settingsAccountActionBtn');
+      if (desktopText) desktopText.textContent = label;
+      if (mobileText) mobileText.textContent = label;
+      if (settingsBtn) settingsBtn.textContent = label;
+
+      const desktopIcon = document.getElementById('authBtnIcon');
+      const mobileIcon = document.getElementById('authBtnIconMobile');
+      if (desktopIcon) desktopIcon.className = 'fa-solid fa-right-from-bracket';
+      if (mobileIcon) mobileIcon.className = 'fa-solid fa-right-from-bracket';
+
+      const email = document.getElementById('settingsUserEmail');
+      const tag = document.getElementById('settingsAccountStatusTag');
+      if (email) {
+        email.textContent =
+          state.status === 'authenticated'
+            ? (state.user?.email || 'ログイン中')
+            : state.status === 'guest'
+              ? 'ゲスト利用中'
+              : '';
+      }
+      if (tag) {
+        tag.textContent =
+          state.status === 'authenticated' ? 'ログイン中' :
+          state.status === 'guest' ? 'ゲスト' : '';
+      }
+
+      return { status: state.status, label, inApp };
+    } finally {
+      H.syncing = false;
+    }
+  }
+
+  function scheduleStableSync() {
+    if (H.scheduled) return;
+    H.scheduled = true;
+    requestAnimationFrame(function () {
+      H.scheduled = false;
+      renderStableAuthAction();
+    });
+  }
+
+  // Final canonical public renderer. Existing callers now all converge here.
+  window.syncCanonicalAccountActionUI = renderStableAuthAction;
+
+  // Reassert after view changes without changing view behavior.
+  const previousSwitch = window.switchView;
+  if (typeof previousSwitch === 'function') {
+    window.switchView = function () {
+      const result = previousSwitch.apply(this, arguments);
+      scheduleStableSync();
+      return result;
+    };
+  }
+
+  // Reassert after auth routing/checks. The original functions still run first.
+  ['routeByAuthState', 'checkAuthState'].forEach(function (name) {
+    const previous = window[name];
+    if (typeof previous !== 'function') return;
+    window[name] = function () {
+      const result = previous.apply(this, arguments);
+      scheduleStableSync();
+      return result;
+    };
+  });
+
+  // Firebase resolves asynchronously; bind one lightweight listener when ready.
+  let attachAttempts = 0;
+  function attachFirebaseAuthStabilityListener() {
+    const auth = window.LUMIFUL_FIREBASE_RUNTIME?.auth;
+    if (auth && typeof auth.onAuthStateChanged === 'function') {
+      if (!H.firebaseUnsubscribe) {
+        H.firebaseUnsubscribe = auth.onAuthStateChanged(function () {
+          scheduleStableSync();
+        });
+      }
+      scheduleStableSync();
+      return;
+    }
+    attachAttempts += 1;
+    if (attachAttempts < 50) setTimeout(attachFirebaseAuthStabilityListener, 100);
+  }
+
+  // If any historical UI wrapper hides/replaces the account action during
+  // ordinary app operations, restore it only when durable auth says it belongs.
+  function attachObserver() {
+    if (H.observer || !document.body || typeof MutationObserver !== 'function') return;
+    H.observer = new MutationObserver(function (mutations) {
+      const state = durableState();
+      if (state.status !== 'guest' && state.status !== 'authenticated') return;
+
+      let touched = false;
+      for (const m of mutations) {
+        const t = m.target;
+        if (
+          t?.id === 'authAccountBtn' ||
+          t?.id === 'authAccountBtnMobile' ||
+          t?.id === 'settingsAccountActionBtn' ||
+          t?.id === 'authBtnText' ||
+          t?.id === 'authBtnTextMobile'
+        ) {
+          touched = true;
+          break;
+        }
+      }
+      if (touched) scheduleStableSync();
+    });
+
+    ['authAccountBtn','authAccountBtnMobile','settingsAccountActionBtn','authBtnText','authBtnTextMobile']
+      .map(id => document.getElementById(id))
+      .filter(Boolean)
+      .forEach(el => H.observer.observe(el, {
+        attributes: true,
+        attributeFilter: ['class','style','hidden','aria-hidden'],
+        childList: true,
+        characterData: true,
+        subtree: true
+      }));
+  }
+
+  document.addEventListener('DOMContentLoaded', function () {
+    renderStableAuthAction();
+    attachObserver();
+    attachFirebaseAuthStabilityListener();
+  });
+
+  window.addEventListener('load', scheduleStableSync);
+  window.addEventListener('pageshow', scheduleStableSync);
+  window.addEventListener('focus', scheduleStableSync);
+  document.addEventListener('visibilitychange', function () {
+    if (!document.hidden) scheduleStableSync();
+  });
+  window.addEventListener('storage', function (event) {
+    if (event.key === 'lumiful_user_email' || event.key === 'lc_user_email') {
+      scheduleStableSync();
+    }
+  });
+
+  // Initial pass for scripts loaded after DOM construction.
+  setTimeout(renderStableAuthAction, 0);
+
+  window.LUMIFUL_PHASE9_13_AUTH_ACTION_STABILITY = Object.freeze({
+    status: 'HOTFIX',
+    guestAction: 'ゲスト終了',
+    accountAction: 'ログアウト',
+    sources: ['Firebase currentUser', 'local guest marker'],
+    pcSpSettingsUnified: true,
+    engineSchemaLumiUntouched: true
+  });
+})();
+</script>
+
 </body>
 </html>
