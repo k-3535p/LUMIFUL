@@ -10920,7 +10920,7 @@ ${JSON.stringify(OUTPUT_SCHEMA_EXAMPLE,null,2)}
     if(!rt||rt.status!=='ready'||!rt.app) throw Object.assign(new Error('Firebaseを初期化できませんでした。'),{code:'FIREBASE_UNAVAILABLE'});
     if(!window.firebase?.functions){const v=window.LUMIFUL_FIREBASE_SDK_VERSION||'12.18.0';await window.loadExternalScriptOnce(`https://www.gstatic.com/firebasejs/${v}/firebase-functions-compat.js`,SDK_ID);}
     if(!window.firebase?.functions) throw Object.assign(new Error('Firebase Functions SDKを読み込めませんでした。'),{code:'FUNCTIONS_UNAVAILABLE'});
-    return window.firebase.functions(rt.app,REGION);
+    return rt.app.functions(REGION);
   }
   async function callBackend(context){
     const fn=await ensureFunctions(), callable=fn.httpsCallable(FUNCTION_NAME,{timeout:30000});
