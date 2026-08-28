@@ -8683,6 +8683,7 @@ window.LUMIFUL_PHASE7B_STEP3_LOCK_V8_2 = Object.freeze({
     status:'LOCKED',
   unifiedWelcomeAuthUi:true,
   welcomeCenteredLayout:true,
+  onboardingSkipCanonicalAccountSync:true,
   finalCtaSparkleRemoved:true,
     appShellAuthStates:['authenticated','guest'],
     authenticatedAction:'ログアウト',
@@ -9324,6 +9325,9 @@ window.LUMIFUL_PHASE7B_STEP3_LOCK_V8_2 = Object.freeze({
   window.skipOnboardingToHome = function() {
     document.getElementById('onboardingView')?.classList.add('hidden');
     window.switchView?.('dashboard');
+
+    // Keep Phase 7 account action UI deterministic after onboarding skip.
+    window.syncCanonicalAccountActionUI?.();
   };
 
   
@@ -9976,9 +9980,7 @@ window.LUMIFUL_PHASE7B_STEP3_LOCK_V8_2 = Object.freeze({
   };
 
   const originalSkipS4 = window.skipOnboardingToHome;
-  window.skipOnboardingToHome = function() {
-    return originalSkipS4?.();
-  };
+  // Phase 8 final: preserve the canonical skip handler without re-wrapping it.
 
   window.runPhase8Step4SchemaAudit = function() {
     const requiredFns = [
