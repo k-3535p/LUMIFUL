@@ -746,6 +746,178 @@
 }
 </style>
 
+
+<style id="phase9-15-sp-kpi-final-polish">
+/* PHASE 9-15 — smartphone KPI final polish only */
+@media (max-width: 639px) {
+  #home-kpi-grid {
+    gap: 10px !important;
+  }
+  #home-kpi-grid > div {
+    min-width: 0 !important;
+    padding: 12px !important;
+  }
+
+  /* SCORE: ENGINE / LUMI are deliberately equal in visual hierarchy */
+  #kpi-score-breakdown {
+    display: grid !important;
+    grid-template-columns: minmax(0,1fr) 1px minmax(0,1fr) !important;
+    align-items: center !important;
+    gap: 5px !important;
+    padding: 7px 6px !important;
+  }
+  #kpi-score-breakdown > div {
+    min-width: 0 !important;
+  }
+  #kpi-score-breakdown > div:not(:nth-child(2)) {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 3px !important;
+  }
+  #kpi-score-breakdown > div:nth-child(2) {
+    width: 1px !important;
+    height: 18px !important;
+    background: #E7E9ED !important;
+    opacity: 1 !important;
+  }
+  #kpi-score-breakdown .uppercase {
+    font-size: 7.5px !important;
+    line-height: 1 !important;
+    letter-spacing: 0 !important;
+    font-weight: 700 !important;
+    white-space: nowrap !important;
+  }
+  #kpi-base-score,
+  #kpi-ai-adj {
+    font-size: 10px !important;
+    line-height: 1 !important;
+    font-weight: 800 !important;
+    letter-spacing: -0.01em !important;
+    white-space: nowrap !important;
+  }
+  #kpi-ai-adj {
+    max-width: 40px !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+
+  /* Main score badge */
+  #kpi-score-badge {
+    max-width: 76px !important;
+    padding: 2px 7px !important;
+    font-size: 8.5px !important;
+    line-height: 1.15 !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+  }
+
+  /* Annual return: keep value and unit compact on one line */
+  #kpi-annual-yield {
+    display: flex !important;
+    align-items: baseline !important;
+    flex-wrap: nowrap !important;
+    white-space: nowrap !important;
+    font-size: 21px !important;
+    line-height: 1.05 !important;
+    letter-spacing: -0.035em !important;
+  }
+  #kpi-annual-yield .kpi-annual-unit {
+    flex: 0 0 auto !important;
+    margin-left: 2px !important;
+    font-size: 9.5px !important;
+    line-height: 1 !important;
+    letter-spacing: 0 !important;
+  }
+  #kpi-annual-yield .kpi-annual-average {
+    display: none !important;
+  }
+
+  /* Cumulative return is text, not a pill/badge */
+  #kpi-phase-badge {
+    display: inline !important;
+    max-width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    font-size: 9px !important;
+    line-height: 1.25 !important;
+    font-weight: 700 !important;
+    color: #435064 !important;
+    white-space: nowrap !important;
+    overflow: visible !important;
+    text-overflow: clip !important;
+  }
+
+  /* Other KPI values */
+  #kpi-cover-rate {
+    font-size: 20px !important;
+    line-height: 1.05 !important;
+    letter-spacing: -0.035em !important;
+    white-space: nowrap !important;
+  }
+  #kpi-final-assets {
+    font-size: 21px !important;
+    line-height: 1.05 !important;
+    letter-spacing: -0.03em !important;
+    white-space: nowrap !important;
+  }
+  #kpi-cover-subtext,
+  #kpi-final-status {
+    font-size: 9px !important;
+    line-height: 1.25 !important;
+  }
+
+  /* Card headings: compact enough for two columns, still readable */
+  #home-kpi-grid > div:nth-child(n+2) > div:first-child > div:first-child > span {
+    font-size: 8.5px !important;
+    line-height: 1.15 !important;
+    letter-spacing: -0.02em !important;
+  }
+
+  /* Align bottom info areas without forcing odd pill dimensions */
+  #home-kpi-grid > div:nth-child(2) > div:last-child,
+  #home-kpi-grid > div:nth-child(3) > div:last-child,
+  #home-kpi-grid > div:nth-child(4) > div:last-child {
+    min-height: 26px !important;
+    display: flex !important;
+    align-items: center !important;
+  }
+}
+
+@media (max-width: 374px) {
+  #home-kpi-grid {
+    gap: 8px !important;
+  }
+  #home-kpi-grid > div {
+    padding: 10px !important;
+  }
+  #kpi-score-breakdown {
+    gap: 4px !important;
+    padding: 6px 5px !important;
+  }
+  #kpi-score-breakdown .uppercase {
+    font-size: 7px !important;
+  }
+  #kpi-base-score,
+  #kpi-ai-adj {
+    font-size: 9.5px !important;
+  }
+  #kpi-annual-yield,
+  #kpi-cover-rate,
+  #kpi-final-assets {
+    font-size: 19px !important;
+  }
+  #kpi-phase-badge {
+    font-size: 8.5px !important;
+  }
+}
+</style>
+
 </head>
 <body class="bg-[#FAFAF7] text-[#253047] min-h-screen font-sans antialiased relative overflow-x-hidden">
 
@@ -11150,7 +11322,7 @@ ${JSON.stringify(OUTPUT_SCHEMA_EXAMPLE,null,2)}
   function syncScoreSurfaces(r=window.LUMIFUL_LAST_LUMI_RESULT){
     r=currentValidResult(r);
     const s=scoreState(r), has=!!r?.score;
-    setText('kpi-score',String(Math.round(s.total100))); setText('kpi-base-score',`${s.engine90} / 90`); setText('kpi-ai-adj',has?`${s.lumi10} / 10`:'未評価');
+    setText('kpi-score',String(Math.round(s.total100))); setText('kpi-base-score',String(Math.ceil(Number(s.engine90)||0))); setText('kpi-ai-adj',has?String(Math.round((Number(s.lumi10)||0)*100)/100):'未評価');
     const labels=document.querySelectorAll('#kpi-score-breakdown span.uppercase'); if(labels[0])labels[0].textContent='ENGINE';if(labels[1])labels[1].textContent='LUMI';
     const badge=document.getElementById('kpi-score-badge');if(badge)badge.textContent=has?'LUMIFUL SCORE':'LUMI 未評価';
     setText('results-score',String(Math.round(s.total100))); setText('results-base-score',`${s.engine90} / 90`); setText('results-ai-adjustment',has?`${s.lumi10} / 10`:'未評価');
@@ -11434,6 +11606,67 @@ ${JSON.stringify(OUTPUT_SCHEMA_EXAMPLE,null,2)}
     sources: ['Firebase currentUser', 'local guest marker'],
     pcSpSettingsUnified: true,
     engineSchemaLumiUntouched: true
+  });
+})();
+</script>
+
+
+<script>
+/* PHASE 9-15 — KPI display-only final normalizer */
+(function () {
+  function normalizeKpiPresentation() {
+    const engine = document.getElementById('kpi-base-score');
+    if (engine) {
+      const raw = String(engine.textContent || '').trim();
+      const firstNumber = raw.match(/-?\d+(?:\.\d+)?/);
+      if (firstNumber) {
+        const n = Number(firstNumber[0]);
+        if (Number.isFinite(n)) engine.textContent = String(Math.ceil(n));
+      }
+    }
+
+    const lumi = document.getElementById('kpi-ai-adj');
+    if (lumi) {
+      const raw = String(lumi.textContent || '').trim();
+      if (/未評価/.test(raw)) {
+        lumi.textContent = '未評価';
+      } else {
+        const firstNumber = raw.match(/-?\d+(?:\.\d+)?/);
+        if (firstNumber) {
+          const n = Number(firstNumber[0]);
+          if (Number.isFinite(n)) lumi.textContent = String(Math.round(n * 100) / 100);
+        }
+      }
+    }
+
+    const cumulative = document.getElementById('kpi-phase-badge');
+    if (cumulative) {
+      [
+        'rounded-full','border','border-[#ECEBE6]','bg-[#FAFAF7]',
+        'px-2','py-0.5','sm:px-2.5'
+      ].forEach(c => cumulative.classList.remove(c));
+    }
+  }
+
+  const previousScoreUi = window.updateScoreDashboardUI;
+  if (typeof previousScoreUi === 'function') {
+    window.updateScoreDashboardUI = function () {
+      const result = previousScoreUi.apply(this, arguments);
+      requestAnimationFrame(normalizeKpiPresentation);
+      return result;
+    };
+  }
+
+  document.addEventListener('DOMContentLoaded', normalizeKpiPresentation);
+  window.addEventListener('load', normalizeKpiPresentation);
+  setTimeout(normalizeKpiPresentation, 0);
+
+  window.LUMIFUL_PHASE9_15_SP_KPI_FINAL = Object.freeze({
+    engineIntegerOnly: true,
+    engineMaxRemovedFromKpi: true,
+    engineLumiTypographyUnified: true,
+    cumulativeReturnPlainText: true,
+    scope: 'SP KPI presentation only'
   });
 })();
 </script>
