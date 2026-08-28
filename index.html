@@ -9371,48 +9371,7 @@ window.LUMIFUL_PHASE7B_STEP3_LOCK_V8_2 = Object.freeze({
     window.switchView?.('dashboard');
   };
 
-  window.finishOnboardingUiOnly = async function() {
-    const mode = window.LUMIFUL_ONBOARDING_UI_STATE?.mode || 'create';
-
-    if (mode === 'edit') {
-      const validation = window.validateOnboardingForSchemaV2();
-      if (!validation.ok) {
-        window.goToOnboardingStep?.(validation.step);
-        window.showToast?.(validation.message, 'error');
-        return;
-      }
-
-      try {
-        const model = window.buildSchemaV2FromOnboarding();
-        window.restorePersistedStateV2(model);
-        const envelope = await window.saveUserData?.();
-        if (!envelope && ['guest','authenticated'].includes(window.authState?.status)) {
-          throw new Error('save-returned-null');
-        }
-
-        document.getElementById('onboardingView')?.classList.add('hidden');
-        window.switchView?.('simulationInput');
-        window.renderV2InputUI?.();
-        window.recalculateAllFast?.();
-        window.syncCanonicalAccountActionUI?.();
-        window.LUMIFUL_ONBOARDING_UI_STATE.mode = 'create';
-        window.showToast?.('LUMIの設定を更新しました', 'success');
-      } catch (error) {
-        console.error('[LUMIFUL] onboarding edit update failed', error);
-        window.showToast?.('設定を更新できませんでした', 'error');
-      }
-      return;
-    }
-
-    const ok = await window.commitOnboardingToGuestSchemaV2();
-    if (!ok) return;
-
-    document.getElementById('onboardingView')?.classList.add('hidden');
-    window.switchView?.('dashboard');
-    window.recalculateAllFast?.();
-    window.syncCanonicalAccountActionUI?.();
-    window.showToast?.('未来のシミュレーションを作成しました', 'success');
-  };
+  
 
   window.selectOnboardingPartner = function(hasPartner) {
     const state = window.LUMIFUL_ONBOARDING_UI_STATE;
@@ -9491,6 +9450,7 @@ window.LUMIFUL_PHASE7B_STEP3_LOCK_V8_2 = Object.freeze({
       <input type="number" placeholder="開始年齢" class="border border-[#E1E4E8] rounded-[9px] px-2.5 py-2 text-xs">
       <div class="flex gap-1"><input type="number" placeholder="終了年齢" class="min-w-0 flex-1 border border-[#E1E4E8] rounded-[9px] px-2.5 py-2 text-xs"><button type="button" onclick="this.closest('.grid').remove()" class="px-2 text-[#D46A7C]"><i class="fa-solid fa-xmark"></i></button></div>`;
     box.appendChild(row);
+    requestAnimationFrame(()=>window.__bindOnboardingNumericIme?.());
   };
 
   const assetMeta = {
@@ -10033,15 +9993,7 @@ window.LUMIFUL_PHASE7B_STEP3_LOCK_V8_2 = Object.freeze({
   };
 
   // Finish now performs the first real Schema connection.
-  window.finishOnboardingUiOnly = async function() {
-    const ok = await window.commitOnboardingToGuestSchemaV2();
-    if (!ok) return;
-
-    document.getElementById('onboardingView')?.classList.add('hidden');
-    window.switchView?.('dashboard');
-    window.recalculateAllFast?.();
-    window.showToast?.('未来のシミュレーションを作成しました', 'success');
-  };
+  
 
   // Guest is the test route for Phase 8 STEP4.
   // Firebase login flow remains exactly as Phase 7 LOCK.
@@ -10119,34 +10071,86 @@ window.LUMIFUL_PHASE7B_STEP3_LOCK_V8_2 = Object.freeze({
     'ob-event-age','ob-event-amount','ob-housing-monthly','ob-housing-end-age'
   ];
 
-  function sanitizeInput(el, decimal){
-    const raw=String(el.value||'');
-    let cleaned;
+  function normalizeNumericText(raw, decimal){
+    let normalized=String(raw||'').normalize('NFKC');
     if(decimal){
-      cleaned=raw.replace(/[^\d.]/g,'');
-      const parts=cleaned.split('.');
-      cleaned=parts.shift() + (parts.length ? '.' + parts.join('') : '');
+      normalized=normalized.replace(/[^\d.]/g,'');
+      const parts=normalized.split('.');
+      normalized=parts.shift() + (parts.length ? '.' + parts.join('') : '');
     }else{
-      cleaned=raw.replace(/[^\d]/g,'');
+      normalized=normalized.replace(/[^\d]/g,'');
     }
-    if(raw!==cleaned) el.value=cleaned;
+    return normalized;
+  }
+
+  function bindNumericImeFriendly(el, decimal){
+    if(!el || el.dataset.finalNumericBound==='1') return;
+    el.dataset.finalNumericBound='1';
+    el.dataset.lastValidNumeric=normalizeNumericText(el.value,decimal);
+    let composing=false;
+
+    el.addEventListener('compositionstart',()=>{
+      composing=true;
+    });
+
+    el.addEventListener('input',()=>{
+      if(composing) return;
+      const cleaned=normalizeNumericText(el.value,decimal);
+      if(cleaned){
+        el.value=cleaned;
+        el.dataset.lastValidNumeric=cleaned;
+      }else if(String(el.value||'')===''){
+        el.dataset.lastValidNumeric='';
+      }else{
+        el.value=el.dataset.lastValidNumeric||'';
+      }
+    });
+
+    el.addEventListener('compositionend',()=>{
+      composing=false;
+      const cleaned=normalizeNumericText(el.value,decimal);
+      if(cleaned){
+        el.value=cleaned;
+        el.dataset.lastValidNumeric=cleaned;
+        el.dispatchEvent(new Event('input',{bubbles:true}));
+      }else{
+        el.value=el.dataset.lastValidNumeric||'';
+      }
+    });
+
+    el.addEventListener('blur',()=>{
+      const cleaned=normalizeNumericText(el.value,decimal);
+      if(cleaned || String(el.value||'')===''){
+        el.value=cleaned;
+        el.dataset.lastValidNumeric=cleaned;
+      }else{
+        el.value=el.dataset.lastValidNumeric||'';
+      }
+    });
   }
 
   function bindOnboardingNumeric(){
     numericIntegerIds.forEach(id=>{
-      const el=document.getElementById(id);
-      if(!el || el.dataset.finalNumericBound==='1') return;
-      el.dataset.finalNumericBound='1';
-      el.addEventListener('input',()=>sanitizeInput(el,false));
+      bindNumericImeFriendly(document.getElementById(id),false);
     });
 
     document.querySelectorAll('#onboardingView [data-ob-asset-input] input').forEach(el=>{
-      if(el.dataset.finalNumericBound==='1') return;
-      el.dataset.finalNumericBound='1';
-      const decimal=el.dataset.obDecimal==='true';
-      el.addEventListener('input',()=>sanitizeInput(el,decimal));
+      bindNumericImeFriendly(el,el.dataset.obDecimal==='true');
+    });
+
+    // Additional income rows are dynamically generated.
+    document.querySelectorAll('#ob-extra-income-list input').forEach((el,index)=>{
+      if(index % 4 === 0) return; // income name is text
+      if(el.type==='number'){
+        el.type='text';
+        el.setAttribute('inputmode','numeric');
+        el.setAttribute('pattern','[0-9]*');
+      }
+      bindNumericImeFriendly(el,false);
     });
   }
+
+  window.__bindOnboardingNumericIme=bindOnboardingNumeric;
 
   const prevAssetRender=window.renderOnboardingAssetInputs;
   window.renderOnboardingAssetInputs=function(...args){
@@ -10180,6 +10184,66 @@ window.LUMIFUL_PHASE7B_STEP3_LOCK_V8_2 = Object.freeze({
     mobileWrapAudit:true
   });
 })();
+</script>
+
+<script>
+/* PHASE 8 ONBOARDING FINAL LOCK — canonical completion */
+
+window.finishOnboardingUiOnly = async function() {
+  const mode = window.LUMIFUL_ONBOARDING_UI_STATE?.mode || 'create';
+
+  if (mode === 'edit') {
+    const validation = window.validateOnboardingForSchemaV2();
+    if (!validation.ok) {
+      window.goToOnboardingStep?.(validation.step);
+      window.showToast?.(validation.message, 'error');
+      return;
+    }
+
+    try {
+      const model = window.buildSchemaV2FromOnboarding();
+      window.restorePersistedStateV2(model);
+
+      const envelope = await window.saveUserData?.();
+      if (!envelope && ['guest','authenticated'].includes(window.authState?.status)) {
+        throw new Error('save-returned-null');
+      }
+
+      document.getElementById('onboardingView')?.classList.add('hidden');
+      window.switchView?.('simulationInput');
+      window.renderV2InputUI?.();
+      window.recalculateAllFast?.();
+      window.syncCanonicalAccountActionUI?.();
+
+      if (window.LUMIFUL_ONBOARDING_UI_STATE) {
+        window.LUMIFUL_ONBOARDING_UI_STATE.mode = 'create';
+      }
+
+      window.showToast?.('LUMIの設定を更新しました', 'success');
+    } catch (error) {
+      console.error('[LUMIFUL] onboarding edit update failed', error);
+      window.showToast?.('設定を更新できませんでした', 'error');
+    }
+    return;
+  }
+
+  const ok = await window.commitOnboardingToGuestSchemaV2();
+  if (!ok) return;
+
+  document.getElementById('onboardingView')?.classList.add('hidden');
+  window.switchView?.('dashboard');
+  window.recalculateAllFast?.();
+
+  // Phase 7 FINAL LOCK canonical account state renderer.
+  window.syncCanonicalAccountActionUI?.();
+
+  if (window.LUMIFUL_ONBOARDING_UI_STATE) {
+    window.LUMIFUL_ONBOARDING_UI_STATE.mode = 'create';
+  }
+
+  window.showToast?.('未来のシミュレーションを作成しました', 'success');
+};
+
 </script>
 
 <script>
@@ -10323,6 +10387,26 @@ window.LUMIFUL_PHASE7B_STEP3_LOCK_V8_2 = Object.freeze({
     phase7EngineChanged:false
   });
 })();
+</script>
+
+
+<script>
+window.LUMIFUL_PHASE8_ONBOARDING_LOCK = Object.freeze({
+  status:'LOCKED',
+  steps:6,
+  housingStep:true,
+  livingExpenseMonthly:true,
+  assetDraftPreservation:true,
+  lumiReviewEntry:'simulationInput',
+  lumiReviewLabel:'LUMIと見直す',
+  canonicalCompletionFunction:true,
+  canonicalAccountActionSync:true,
+  guestEndButtonExpected:true,
+  phase7EnginePreserved:true,
+  phase7AuthPreserved:true,
+  imeFriendlyNumericInput:true,
+  fullWidthNumericNormalization:true
+});
 </script>
 
 </body>
