@@ -719,7 +719,7 @@
           </button>
           <button id="nav-item-lumi" onclick="switchView('lumiAdvisor')" class="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-[14px] text-[#6F7785] hover:bg-[#FAFAF7] hover:text-[#253047] transition text-left">
             <i class="fa-solid fa-heart text-sm w-4 text-center"></i>
-            <span>AIアドバイザー (LUMI)</span>
+            <span>LUMI AI診断</span>
           </button>
           <button id="nav-item-settings" onclick="switchView('settings')" class="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-[14px] text-[#6F7785] hover:bg-[#FAFAF7] hover:text-[#253047] transition text-left">
             <i class="fa-solid fa-gear text-sm w-4 text-center"></i>
@@ -927,7 +927,7 @@
             <div class="flex flex-wrap items-center justify-between gap-3 pb-3 border-b border-[#F0E2B7]/80">
               <div class="flex items-center gap-2.5 min-w-0">
                 <img src="./assets/lumi-spark.png" alt="LUMI" class="w-7 h-7 object-contain shrink-0" />
-                <h3 class="text-sm font-bold text-[#253047] truncate">LUMI AIアドバイザー</h3>
+                <h3 class="text-sm font-bold text-[#253047] truncate">LUMI AI診断</h3>
               </div>
 
               <div class="flex items-center gap-2 flex-wrap sm:flex-nowrap shrink-0">
@@ -940,7 +940,7 @@
 
                 <button onclick="switchView('lumiAdvisor')" id="ai-diagnose-btn" class="px-3.5 py-1.5 btn-lumi-primary text-xs flex items-center gap-1.5 whitespace-nowrap shrink-0">
                   <i class="fa-solid fa-arrows-rotate text-[11px]" id="ai-btn-icon"></i>
-                  <span>LUMIの診断を見る</span>
+                  <span>LUMIのAI診断を見る</span>
                 </button>
               </div>
             </div>
@@ -956,12 +956,6 @@
               </div>
             </div>
 
-            <div class="pt-2 flex justify-end">
-              <button onclick="switchView('lumiAdvisor')" class="px-4 py-2 btn-lumi-secondary text-xs flex items-center gap-1.5 font-bold">
-                <i class="fa-solid fa-heart text-[#FF8FA3]"></i>
-                <span>LUMIの詳しい分析を見る →</span>
-              </button>
-            </div>
 
           </div>
         </section>
@@ -1179,6 +1173,14 @@
                   <div class="ob-info-note">
                     <strong>入力基準：手取り</strong>
                     <span>税金・社会保険料を差し引いた後に実際に使える金額を入力します。</span>
+                  </div>
+                </div>
+
+                <div class="ob-question">
+                  <div class="ob-label">この収入は何歳から？</div>
+                  <div class="ob-answer-field ob-answer-field-age">
+                    <input id="ob-income-start-age" type="text" inputmode="numeric" pattern="[0-9]*" autocomplete="off" aria-label="収入開始年齢">
+                    <span class="ob-unit">歳</span>
                   </div>
                 </div>
 
@@ -1602,8 +1604,9 @@
               </p>
 
               <div class="pt-2">
-                <button onclick="switchView('lumiAdvisor')" class="px-3.5 py-1.5 btn-lumi-secondary text-xs font-bold">
-                  <span>LUMI Advisor で相談する →</span>
+                <button onclick="switchView('lumiAdvisor')" class="px-3.5 py-1.5 btn-lumi-primary text-xs flex items-center gap-1.5 whitespace-nowrap shrink-0">
+                  <i class="fa-solid fa-arrows-rotate text-[11px]"></i>
+                  <span>LUMIのAI診断を見る</span>
                 </button>
               </div>
             </div>
@@ -1918,7 +1921,7 @@
         <div class="space-y-1 mb-1">
           <h1 class="text-2xl sm:text-3xl font-extrabold text-[#253047] tracking-tight flex items-center gap-2">
             <i class="fa-solid fa-heart text-[#FF8FA3]"></i>
-            <span>LUMI Advisor</span>
+            <span>LUMI AI診断</span>
           </h1>
           <p class="text-xs sm:text-sm text-[#6F7785]">数字だけでは見えない、あなたの未来を一緒に考えます。</p>
         </div>
@@ -1947,7 +1950,7 @@
 
           <div class="p-4 bg-[#FAFAF7] rounded-[16px] border border-[#ECEBE6] space-y-3">
             <p id="lumi-main-analysis-text" class="text-xs sm:text-sm text-[#253047] leading-relaxed font-medium">
-              ダッシュボードやシミュレーション画面で設定された最新の数値条件をもとに、AIアドバイザーがいつでも人生の選択肢を診断します。
+              ダッシュボードやシミュレーション画面で設定された最新の数値条件をもとに、LUMIがいつでも人生の選択肢をAI診断します。
             </p>
             <p id="lumi-analysis-detail-text" class="text-xs text-[#6F7785] leading-relaxed border-t border-[#ECEBE6] pt-2 hidden">
               詳細な数値条件を変更した場合は、「再分析する」を押すことで新しい分析結果に更新されます。
@@ -3944,7 +3947,7 @@
     window.renderV2IncomeList = function() {
       const model=window.ensureV2InputModel(), box=document.getElementById('v2IncomeList'); if(!box)return;
       if(!model.incomes.length){box.innerHTML='<p class="text-xs text-[#8A909C] py-2">収入はまだ登録されていません。</p>';return;}
-      box.innerHTML=model.incomes.map((x,i)=>`<div class="rounded-[16px] border border-[#ECEBE6] bg-[#FAFAF7] p-3 space-y-2"><div class="grid grid-cols-2 sm:grid-cols-6 gap-2"><select data-v2-income="category" data-i="${i}" class="px-2 lumi-input text-xs font-bold bg-white"><option value="salary" ${x.category==='salary'?'selected':''}>給与</option><option value="business" ${x.category==='business'?'selected':''}>事業</option><option value="side" ${x.category==='side'?'selected':''}>副業</option><option value="pension" ${x.category==='pension'?'selected':''}>年金</option><option value="dividend" ${x.category==='dividend'?'selected':''}>配当</option><option value="realestate" ${x.category==='realestate'?'selected':''}>不動産収入</option><option value="other" ${x.category==='other'?'selected':''}>その他</option></select><input data-v2-income="name" data-i="${i}" value="${v2Esc(x.name)}" placeholder="名称" class="px-2 lumi-input text-xs font-bold"><input data-v2-income="amount" data-i="${i}" type="number" min="0" value="${Number(x.amount||0) || ''}" placeholder="金額" class="px-2 lumi-input text-xs font-bold"><select data-v2-income="frequency" data-i="${i}" class="px-2 lumi-input text-xs font-bold bg-white"><option value="yearly" ${x.frequency==='yearly'?'selected':''}>万円/年</option><option value="monthly" ${x.frequency==='monthly'?'selected':''}>万円/月</option></select><input data-v2-income="endAge" data-i="${i}" type="number" min="18" max="110" value="${Number(x.endAge||0)||''}" placeholder="終了年齢" class="px-2 lumi-input text-xs font-bold"><button type="button" onclick="removeV2Income(${i})" class="text-xs font-bold text-[#A65B67]">削除</button></div><div class="flex gap-3 text-[10px] text-[#6F7785]"><label>対象 <select data-v2-income="owner" data-i="${i}" class="ml-1 bg-white border border-[#ECEBE6] rounded px-1.5 py-1"><option value="self" ${x.owner==='self'?'selected':''}>本人</option><option value="spouse" ${x.owner==='spouse'?'selected':''}>配偶者</option></select></label><span>開始 ${Number(x.startAge||model.profile.currentAge)}歳</span></div></div>`).join('');
+      box.innerHTML=model.incomes.map((x,i)=>`<div class="rounded-[16px] border border-[#ECEBE6] bg-[#FAFAF7] p-3 space-y-2"><div class="grid grid-cols-2 sm:grid-cols-7 gap-2"><select data-v2-income="category" data-i="${i}" class="px-2 lumi-input text-xs font-bold bg-white"><option value="salary" ${x.category==='salary'?'selected':''}>給与</option><option value="business" ${x.category==='business'?'selected':''}>事業</option><option value="side" ${x.category==='side'?'selected':''}>副業</option><option value="pension" ${x.category==='pension'?'selected':''}>年金</option><option value="dividend" ${x.category==='dividend'?'selected':''}>配当</option><option value="realestate" ${x.category==='realestate'?'selected':''}>不動産収入</option><option value="other" ${x.category==='other'?'selected':''}>その他</option></select><input data-v2-income="name" data-i="${i}" value="${v2Esc(x.name)}" placeholder="名称" class="px-2 lumi-input text-xs font-bold"><input data-v2-income="amount" data-i="${i}" type="number" min="0" value="${Number(x.amount||0) || ''}" placeholder="金額" class="px-2 lumi-input text-xs font-bold"><select data-v2-income="frequency" data-i="${i}" class="px-2 lumi-input text-xs font-bold bg-white"><option value="yearly" ${x.frequency==='yearly'?'selected':''}>万円/年</option><option value="monthly" ${x.frequency==='monthly'?'selected':''}>万円/月</option></select><input data-v2-income="startAge" data-i="${i}" type="number" min="18" max="110" value="${Number(x.startAge||model.profile.currentAge)||''}" placeholder="開始年齢" aria-label="収入開始年齢" class="px-2 lumi-input text-xs font-bold"><input data-v2-income="endAge" data-i="${i}" type="number" min="18" max="110" value="${Number(x.endAge||0)||''}" placeholder="終了年齢" aria-label="収入終了年齢" class="px-2 lumi-input text-xs font-bold"><button type="button" onclick="removeV2Income(${i})" class="text-xs font-bold text-[#A65B67]">削除</button></div><div class="flex gap-3 text-[10px] text-[#6F7785]"><label>対象 <select data-v2-income="owner" data-i="${i}" class="ml-1 bg-white border border-[#ECEBE6] rounded px-1.5 py-1"><option value="self" ${x.owner==='self'?'selected':''}>本人</option><option value="spouse" ${x.owner==='spouse'?'selected':''}>配偶者</option></select></label><span>開始・終了年齢を変更すると、その期間だけ収入として計算します。</span></div></div>`).join('');
       box.querySelectorAll('[data-v2-income]').forEach(el=>el.addEventListener('input',window.syncV2InputAndRecalculate)); box.querySelectorAll('select[data-v2-income]').forEach(el=>el.addEventListener('change',window.syncV2InputAndRecalculate));
     };
     /* ============================================================
@@ -3978,7 +3981,7 @@
     window.syncV2InputAndRecalculate=function(event){const m=window.ensureV2InputModel();const _ageRaw=(document.getElementById('v2CurrentAge')?.value||'').trim();
 m.profile.currentAge=_ageRaw?Math.max(18,Math.round(Number(_ageRaw)||0)):0;
 const _targetRaw=(document.getElementById('v2TargetAge')?.value||'').trim();
-m.profile.targetAge=_targetRaw?Math.max(m.profile.currentAge||18,Math.round(Number(_targetRaw)||90)):90;m.profile.hasSpouse=!!document.getElementById('v2HasSpouse')?.checked;m.profile.spouseAge=m.profile.hasSpouse?Math.max(18,Math.round(v2Num('v2SpouseAge',m.profile.currentAge))):null;m.living.expense={amount:v2Num('v2LivingMonthly'),frequency:'monthly'};const ht=document.getElementById('v2HousingType')?.value||'rent';m.living.housing={type:ht,monthlyAmount:v2Num('v2HousingMonthly'),endAge:ht==='owned_with_loan'?Math.round(v2Num('v2HousingEndAge')):null};m.settings.inflationRate=v2Num('v2InflationRate',1.5);document.querySelectorAll('[data-v2-income]').forEach(el=>{const x=m.incomes[Number(el.dataset.i)];if(!x)return;const k=el.dataset.v2Income;x[k]=(k==='amount'||k==='endAge')?Number(el.value||0):el.value;x.startAge=m.profile.currentAge;});document.querySelectorAll('[data-v2-asset]').forEach(el=>{const x=m.assets[Number(el.dataset.i)];if(!x)return;const k=el.dataset.v2Asset;x[k]=(k==='value'||k==='expectedReturn')?Number(el.value||0):el.value;});m.assets.filter(a=>a.assetClass==='simulation'&&(a.category==='cash'||a.category==='stock')).forEach(a=>{a.expectedReturn=0;});document.querySelectorAll('[data-v2-withdrawal]').forEach(el=>{const x=m.assets[Number(el.dataset.i)];if(!x)return;const v=el.value;if(v==='auto'){x.withdrawalSetting='auto';x.withdrawalPriority=null;}else if(v==='excluded'){x.withdrawalSetting='excluded';x.withdrawalPriority='excluded';}else{x.withdrawalSetting='manual';x.withdrawalPriority=v;}});document.querySelectorAll('[data-v2-payment]').forEach(el=>{const x=m.payments[Number(el.dataset.i)];if(!x)return;const k=el.dataset.v2Payment;x[k]=(k==='amount'||k==='endAge')?Number(el.value||0):el.value;x.startAge=m.profile.currentAge;});window.LUMIFUL_LUMI_CONTEXT_DIRTY=true;if(m.profile.currentAge>0&&typeof window.recalculateAllFast==='function'){if(event?.type==='input'){clearTimeout(window.__lumifulInputRecalcTimer);window.__lumifulInputRecalcTimer=setTimeout(()=>window.recalculateAllFast(),140);}else{clearTimeout(window.__lumifulInputRecalcTimer);window.recalculateAllFast();}}else window.renderV2EmptyDashboard?.();};
+m.profile.targetAge=_targetRaw?Math.max(m.profile.currentAge||18,Math.round(Number(_targetRaw)||90)):90;m.profile.hasSpouse=!!document.getElementById('v2HasSpouse')?.checked;m.profile.spouseAge=m.profile.hasSpouse?Math.max(18,Math.round(v2Num('v2SpouseAge',m.profile.currentAge))):null;m.living.expense={amount:v2Num('v2LivingMonthly'),frequency:'monthly'};const ht=document.getElementById('v2HousingType')?.value||'rent';m.living.housing={type:ht,monthlyAmount:v2Num('v2HousingMonthly'),endAge:ht==='owned_with_loan'?Math.round(v2Num('v2HousingEndAge')):null};m.settings.inflationRate=v2Num('v2InflationRate',1.5);document.querySelectorAll('[data-v2-income]').forEach(el=>{const x=m.incomes[Number(el.dataset.i)];if(!x)return;const k=el.dataset.v2Income;x[k]=(k==='amount'||k==='startAge'||k==='endAge')?Number(el.value||0):el.value;});document.querySelectorAll('[data-v2-asset]').forEach(el=>{const x=m.assets[Number(el.dataset.i)];if(!x)return;const k=el.dataset.v2Asset;x[k]=(k==='value'||k==='expectedReturn')?Number(el.value||0):el.value;});m.assets.filter(a=>a.assetClass==='simulation'&&(a.category==='cash'||a.category==='stock')).forEach(a=>{a.expectedReturn=0;});document.querySelectorAll('[data-v2-withdrawal]').forEach(el=>{const x=m.assets[Number(el.dataset.i)];if(!x)return;const v=el.value;if(v==='auto'){x.withdrawalSetting='auto';x.withdrawalPriority=null;}else if(v==='excluded'){x.withdrawalSetting='excluded';x.withdrawalPriority='excluded';}else{x.withdrawalSetting='manual';x.withdrawalPriority=v;}});document.querySelectorAll('[data-v2-payment]').forEach(el=>{const x=m.payments[Number(el.dataset.i)];if(!x)return;const k=el.dataset.v2Payment;x[k]=(k==='amount'||k==='endAge')?Number(el.value||0):el.value;x.startAge=m.profile.currentAge;});window.LUMIFUL_LUMI_CONTEXT_DIRTY=true;if(m.profile.currentAge>0&&typeof window.recalculateAllFast==='function'){if(event?.type==='input'){clearTimeout(window.__lumifulInputRecalcTimer);window.__lumifulInputRecalcTimer=setTimeout(()=>window.recalculateAllFast(),140);}else{clearTimeout(window.__lumifulInputRecalcTimer);window.recalculateAllFast();}}else window.renderV2EmptyDashboard?.();};
     window.addV2Income=function(){const m=window.ensureV2InputModel();m.incomes.push({id:v2Id('income'),category:'salary',name:'給与',owner:'self',amount:0,frequency:'yearly',startAge:m.profile.currentAge||0,endAge:0});window.renderV2IncomeList();};window.removeV2Income=function(i){window.ensureV2InputModel().incomes.splice(i,1);window.renderV2IncomeList();window.recalculateAllFast();};
     window.addV2Asset=function(){const m=window.ensureV2InputModel();m.assets.push({id:v2Id('asset'),assetClass:'simulation',category:'cash',name:'現金・預金',owner:'self',value:0,expectedReturn:0,withdrawalSetting:'auto',withdrawalPriority:null});window.renderV2AssetList();};window.removeV2Asset=function(i){window.ensureV2InputModel().assets.splice(i,1);window.renderV2AssetList();window.recalculateAllFast();};window.addV2PotentialAsset=function(){const m=window.ensureV2InputModel();m.assets.push({id:v2Id('potential'),assetClass:'potential',category:'real_estate',name:'売却できる資産',owner:'self',value:0});window.renderV2PotentialAssetList();};window.removeV2PotentialAsset=function(i){window.ensureV2InputModel().assets.splice(i,1);window.renderV2PotentialAssetList();window.recalculateAllFast();};window.addV2LifestyleAsset=function(){const m=window.ensureV2InputModel();m.assets.push({id:v2Id('lifestyle'),assetClass:'lifestyle',category:'home',name:'自宅',owner:'self',value:0});window.renderV2LifestyleAssetList();};window.removeV2LifestyleAsset=function(i){window.ensureV2InputModel().assets.splice(i,1);window.renderV2LifestyleAssetList();window.recalculateAllFast();};
     window.addV2Payment=function(){const m=window.ensureV2InputModel();m.payments.push({id:v2Id('payment'),category:'other',name:'返済',amount:0,frequency:'monthly',startAge:m.profile.currentAge||0,endAge:50});window.renderV2PaymentList();};window.removeV2Payment=function(i){window.ensureV2InputModel().payments.splice(i,1);window.renderV2PaymentList();window.recalculateAllFast();};
@@ -9754,6 +9757,7 @@ window.LUMIFUL_PHASE7B_STEP3_LOCK_V8_2 = Object.freeze({
     };
 
     const mainIncome = num('ob-income');
+    const mainIncomeStart = num('ob-income-start-age') || currentAge;
     const mainIncomeEnd = num('ob-income-end-age');
 
     model.incomes = [];
@@ -9765,8 +9769,8 @@ window.LUMIFUL_PHASE7B_STEP3_LOCK_V8_2 = Object.freeze({
         owner: 'self',
         amount: mainIncome,
         frequency: 'yearly',
-        startAge: currentAge,
-        endAge: mainIncomeEnd > 0 ? Math.max(currentAge, mainIncomeEnd) : targetAge
+        startAge: Math.max(currentAge, mainIncomeStart),
+        endAge: mainIncomeEnd > 0 ? Math.max(Math.max(currentAge, mainIncomeStart), mainIncomeEnd) : targetAge
       });
     }
     model.incomes.push(...readExtraIncomes(currentAge, targetAge));
@@ -9814,13 +9818,17 @@ window.LUMIFUL_PHASE7B_STEP3_LOCK_V8_2 = Object.freeze({
     if (age <= 0) return { ok:false, message:'本人年齢を入力してください。', step:1 };
 
     const mainIncome = num('ob-income');
+    const startAge = num('ob-income-start-age') || age;
     const endAge = num('ob-income-end-age');
+    if (mainIncome > 0 && startAge < age) {
+      return { ok:false, message:'収入の開始年齢は現在年齢以上にしてください。', step:2 };
+    }
     if (mainIncome > 0 && endAge <= 0) {
       return { ok:false, message:'現在の収入が何歳まで続くか入力してください。', step:2 };
     }
 
-    if (endAge > 0 && endAge < age) {
-      return { ok:false, message:'収入の終了年齢は現在年齢以上にしてください。', step:2 };
+    if (endAge > 0 && endAge < startAge) {
+      return { ok:false, message:'収入の終了年齢は開始年齢以上にしてください。', step:2 };
     }
 
     const housingType = window.LUMIFUL_ONBOARDING_UI_STATE?.housingType;
@@ -9964,7 +9972,7 @@ window.LUMIFUL_PHASE7B_STEP3_LOCK_V8_2 = Object.freeze({
 /* PHASE 8 / STEP 4 — ONBOARDING FINAL UNIFIED UI */
 (function(){
   const numericIntegerIds=[
-    'ob-age','ob-partner-age','ob-income','ob-income-end-age','ob-expense',
+    'ob-age','ob-partner-age','ob-income','ob-income-start-age','ob-income-end-age','ob-expense',
     'ob-event-age','ob-event-amount','ob-housing-monthly','ob-housing-end-age'
   ];
 
@@ -10198,9 +10206,11 @@ window.finishOnboardingUiOnly = async function() {
     const main=incomes[0]||null;
     if(main){
       set('ob-income',numOrBlank(main.frequency==='monthly'?Number(main.amount||0)*12:main.amount));
+      set('ob-income-start-age',numOrBlank(main.startAge||currentAge));
       set('ob-income-end-age',numOrBlank(main.endAge));
     }else{
       set('ob-income','');
+      set('ob-income-start-age',numOrBlank(currentAge));
       set('ob-income-end-age','');
     }
     hydrateExtraIncomes(incomes,currentAge,targetAge);
@@ -10985,5 +10995,12 @@ ${JSON.stringify(OUTPUT_SCHEMA_EXAMPLE,null,2)}
 })();
 </script>
 
+
+<script>window.LUMIFUL_PHASE9_10_INCOME_START_AGE=Object.freeze({status:'READY',scope:'income-start-age-only',engineMutation:false,schemaVersionChange:false,lumiAiMutation:false});</script>
+
+<!-- PHASE 9-11: LUMI FLOW CLEANUP
+     CTA terminology unified to "LUMIのAI診断を見る".
+     Simulation Input "LUMIと見直す" remains unchanged.
+     No Engine / Schema / Auth / Firebase / AI runtime changes. -->
 </body>
 </html>
