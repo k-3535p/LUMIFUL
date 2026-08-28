@@ -532,137 +532,90 @@
 <body class="bg-[#FAFAF7] text-[#253047] min-h-screen font-sans antialiased relative overflow-x-hidden">
 
   <!-- PHASE 7 / STEP 1: WELCOME + AUTH EXPERIENCE (UI LAYER) -->
-  <div id="welcomeAuthView" class="fixed inset-0 z-[70] bg-[#FAFAF7] hidden overflow-hidden">
-    <div class="h-[100dvh] min-h-0 flex items-stretch">
-      <div class="w-full h-full grid grid-rows-[44%_56%] lg:grid-rows-1 lg:grid-cols-2">
-        <!-- Brand Experience -->
-        <section class="relative overflow-hidden bg-[#FFFDF8] px-5 py-4 sm:px-8 sm:py-6 lg:px-14 lg:py-12 flex flex-col border-b lg:border-b-0 lg:border-r border-[#ECEBE6] min-h-0">
-          <div class="absolute -top-20 -right-16 w-72 h-72 rounded-full bg-[#FFF2CD] blur-3xl opacity-80 pointer-events-none"></div>
-          <div class="absolute bottom-[-80px] left-[-70px] w-64 h-64 rounded-full bg-[#EAF6FC] blur-3xl opacity-70 pointer-events-none"></div>
+  <div id="welcomeAuthView" class="fixed inset-0 z-[70] bg-[#FAFAF7] hidden overflow-y-auto">
+    <div class="min-h-[100dvh] w-full px-4 py-6 sm:px-6 sm:py-10 flex items-center justify-center relative">
+      <div class="absolute -top-24 -left-20 w-72 h-72 rounded-full bg-[#FFF2CD] blur-3xl opacity-70 pointer-events-none"></div>
+      <div class="absolute -bottom-24 -right-20 w-72 h-72 rounded-full bg-[#EAF6FC] blur-3xl opacity-60 pointer-events-none"></div>
 
-          <div class="relative z-10 shrink-0">
-            <img src="./assets/lumiful-logo.png" alt="LUMIFUL" class="h-7 sm:h-9 lg:h-11 w-auto object-contain" />
+      <section class="relative z-10 w-full max-w-[430px] bg-white border border-[#ECEBE6] rounded-[28px] shadow-[0_18px_60px_rgba(37,48,71,0.08)] px-5 py-7 sm:px-8 sm:py-9">
+        <div class="flex flex-col items-center text-center mb-6 sm:mb-7">
+          <img src="./assets/lumiful-logo.png" alt="LUMIFUL" class="h-8 sm:h-9 w-auto object-contain mb-4" />
+          <div class="relative mb-2">
+            <div class="absolute inset-0 rounded-full bg-[#FFF2CD] blur-xl scale-110 opacity-70"></div>
+            <img src="./assets/lumi-spark.png" alt="LUMI" class="relative w-20 h-20 sm:w-24 sm:h-24 object-contain pointer-events-none" />
+          </div>
+        </div>
+
+        <!-- Default Login / Choice -->
+        <div id="welcomeAuthChoice" class="space-y-4">
+          <div class="text-center mb-5">
+            <p class="text-[13px] sm:text-sm font-extrabold tracking-[0.12em] text-[#D99A00] uppercase">WELCOME TO LUMIFUL</p>
           </div>
 
-          <div class="relative z-10 flex-1 min-h-0 flex flex-col items-center justify-center text-center lg:px-4">
-            <div class="relative mb-2 sm:mb-3 lg:mb-6">
-              <div class="absolute inset-0 rounded-full bg-[#FFF2CD] blur-2xl scale-110 opacity-70"></div>
-              <img src="./assets/lumi-spark.png" alt="LUMI" class="relative w-20 h-20 sm:w-24 sm:h-24 lg:w-48 lg:h-48 object-contain pointer-events-none" />
-            </div>
-            <div class="w-full max-w-xl space-y-2 lg:space-y-4">
-              <div class="inline-flex items-center gap-1.5 px-2.5 py-0.5 lg:px-3 lg:py-1 rounded-full bg-white border border-[#F0E2B7] text-[9px] sm:text-[10px] lg:text-[11px] font-bold text-[#8C5800]">
-                <i class="fa-solid fa-sparkles text-[#FFC83D]"></i>
-                <span>LUMIがあなたの未来づくりをサポート</span>
+          <form onsubmit="handleWelcomeLogin(event)" class="space-y-3 text-left">
+            <div>
+              <label for="welcomeLoginEmail" class="block text-[11px] font-semibold text-[#4F586A] mb-1.5">メールアドレス</label>
+              <div class="relative">
+                <i class="fa-regular fa-envelope absolute left-3.5 top-1/2 -translate-y-1/2 text-[#8A909C] text-sm pointer-events-none"></i>
+                <input type="email" id="welcomeLoginEmail" required autocomplete="email" placeholder="メールアドレス" class="w-full pl-10 pr-3 lumi-input text-sm font-bold text-left" />
               </div>
-              <h1 class="font-black tracking-tight text-[#253047] leading-none whitespace-nowrap text-[clamp(1.35rem,6.2vw,2rem)] sm:text-3xl lg:text-5xl">
-                未来を、もっと自分らしく。
-              </h1>
             </div>
+            <div>
+              <label for="welcomeLoginPassword" class="block text-[11px] font-semibold text-[#4F586A] mb-1.5">パスワード</label>
+              <div class="relative">
+                <i class="fa-solid fa-lock absolute left-3.5 top-1/2 -translate-y-1/2 text-[#8A909C] text-sm pointer-events-none"></i>
+                <input type="password" id="welcomeLoginPassword" required minlength="8" autocomplete="current-password" placeholder="8桁以上のパスワード" class="w-full pl-10 pr-3 lumi-input text-sm font-bold text-left" />
+              </div>
+            </div>
+            <div id="welcomeLoginError" class="hidden text-xs font-bold text-rose-600"></div>
+            <button type="submit" class="w-full min-h-[48px] btn-lumi-primary text-sm font-extrabold flex items-center justify-center">ログイン</button>
+            <button type="button" onclick="openPasswordRecoveryModal('welcomeLoginEmail')" class="w-full text-[11px] font-bold text-[#6F7785] hover:text-[#8C5800] transition py-1.5 text-center">パスワードを忘れた方</button>
+          </form>
+
+          <div class="relative flex items-center py-1">
+            <div class="flex-1 border-t border-[#ECEBE6]"></div>
+            <span class="px-3 text-[10px] text-[#9AA0AA] font-bold">または</span>
+            <div class="flex-1 border-t border-[#ECEBE6]"></div>
           </div>
 
-          <div class="relative z-10 hidden lg:flex items-center justify-center gap-5 text-[11px] text-[#6F7785] font-semibold shrink-0">
-            <span class="flex items-center gap-1.5"><i class="fa-solid fa-chart-line text-[#65B9E8]"></i>未来を可視化</span>
-            <span class="flex items-center gap-1.5"><i class="fa-solid fa-wallet text-[#72D6B5]"></i>資産を整理</span>
-            <span class="flex items-center gap-1.5"><i class="fa-solid fa-heart text-[#FF8FA3]"></i>LUMIが伴走</span>
+          <div class="space-y-2.5">
+            <button type="button" onclick="showWelcomeAuthPanel('signup')" class="w-full min-h-[46px] btn-lumi-secondary text-sm font-bold flex items-center justify-center gap-2">
+              <i class="fa-regular fa-user text-[#253047]"></i>
+              <span>アカウントを作成</span>
+            </button>
+            <button type="button" onclick="handleWelcomeGuestStart()" class="w-full min-h-[46px] text-sm font-bold text-[#253047] bg-[#FAFAF7] hover:bg-[#F5F4EF] border border-[#ECEBE6] rounded-[14px] transition flex items-center justify-center gap-2">
+              <i class="fa-solid fa-bolt text-[#FFC83D]"></i>
+              <span>ゲストではじめる</span>
+            </button>
           </div>
-        </section>
 
-        <!-- Auth Actions -->
-        <section class="bg-white px-5 py-4 sm:px-8 sm:py-6 lg:px-14 lg:py-12 flex items-start lg:items-center justify-center min-h-0 overflow-hidden">
-          <div class="w-full max-w-md h-full lg:h-auto flex flex-col justify-start lg:justify-center">
-            <!-- Welcome Actions -->
-            <div id="welcomeAuthChoice" class="space-y-3 sm:space-y-4 lg:space-y-6 pt-0 sm:pt-1 lg:pt-0">
-              <div class="space-y-1 sm:space-y-2">
-                <p class="text-xs font-bold tracking-wider text-[#8C5800] uppercase">Welcome to LUMIFUL</p>
-                <h2 class="text-xl sm:text-2xl lg:text-3xl font-extrabold text-[#253047] tracking-tight">こんにちは！</h2>
-                <p class="text-xs sm:text-sm text-[#6F7785] leading-relaxed">
-                  続きから始める方はログイン。はじめての方は、新しいLUMIFULをつくりましょう。
-                </p>
-              </div>
+          <p class="text-[10px] text-[#9AA0AA] leading-relaxed text-center pt-1">ゲスト利用のデータはこの端末に保存されます。</p>
+        </div>
 
-              <div class="space-y-2 sm:space-y-3">
-                <button type="button" onclick="showWelcomeAuthPanel('login')" class="w-full min-h-[42px] sm:min-h-[48px] btn-lumi-primary text-sm font-bold flex items-center justify-center gap-2">
-                  <i class="fa-solid fa-right-to-bracket"></i>
-                  <span>ログイン</span>
-                </button>
-                <button type="button" onclick="showWelcomeAuthPanel('signup')" class="w-full min-h-[42px] sm:min-h-[48px] btn-lumi-secondary text-sm font-bold flex items-center justify-center gap-2">
-                  <i class="fa-solid fa-user-plus text-[#65B9E8]"></i>
-                  <span>はじめて使う</span>
-                </button>
-              </div>
-
-              <div class="relative flex items-center py-0 sm:py-1">
-                <div class="flex-1 border-t border-[#ECEBE6]"></div>
-                <span class="px-3 text-[10px] text-[#9AA0AA] font-bold">登録せずに試す</span>
-                <div class="flex-1 border-t border-[#ECEBE6]"></div>
-              </div>
-
-              <button type="button" onclick="handleWelcomeGuestStart()" class="w-full min-h-[40px] sm:min-h-[46px] text-xs sm:text-sm font-bold text-[#253047] bg-[#FAFAF7] hover:bg-[#F5F4EF] border border-[#ECEBE6] rounded-[14px] transition flex items-center justify-center gap-2">
-                <i class="fa-solid fa-bolt text-[#FFC83D]"></i>
-                <span>ゲストで試す</span>
-              </button>
-
-              <p class="text-[10px] text-[#9AA0AA] leading-relaxed text-center">
-                ゲスト利用のデータはこの端末に保存されます。
-              </p>
-            </div>
-
-            <!-- Login Panel -->
-            <div id="welcomeLoginPanel" class="hidden space-y-3 sm:space-y-4 lg:space-y-5">
-              <button type="button" onclick="showWelcomeAuthPanel('choice')" class="inline-flex items-center gap-1.5 text-xs font-bold text-[#6F7785] hover:text-[#253047] transition">
-                <i class="fa-solid fa-arrow-left"></i><span>戻る</span>
-              </button>
-              <div class="space-y-1.5">
-                <h2 class="text-2xl font-extrabold text-[#253047]">おかえりなさい</h2>
-                <p class="text-sm text-[#6F7785]">保存したLUMIFULを呼び出します。</p>
-              </div>
-              <form onsubmit="handleWelcomeLogin(event)" class="space-y-3">
-                <div>
-                  <label for="welcomeLoginEmail" class="block text-[11px] font-semibold text-[#4F586A] mb-1">メールアドレス</label>
-                  <input type="email" id="welcomeLoginEmail" required autocomplete="email" placeholder="example@lumiful.com" class="w-full px-3 lumi-input text-sm font-bold" />
-                </div>
-                <div>
-                  <label for="welcomeLoginPassword" class="block text-[11px] font-semibold text-[#4F586A] mb-1">パスワード</label>
-                  <input type="password" id="welcomeLoginPassword" required minlength="8" autocomplete="current-password" placeholder="8桁以上のパスワード" class="w-full px-3 lumi-input text-sm font-bold" />
-                </div>
-                <div id="welcomeLoginError" class="hidden text-xs font-bold text-rose-600"></div>
-                <button type="submit" class="w-full min-h-[48px] btn-lumi-primary text-sm font-bold flex items-center justify-center gap-2">
-                  <i class="fa-solid fa-right-to-bracket"></i><span>ログイン</span>
-                </button>
-                <button type="button" onclick="openPasswordRecoveryModal('welcomeLoginEmail')" class="w-full text-[11px] font-bold text-[#6F7785] hover:text-[#8C5800] transition py-1">
-                  パスワードを忘れた方
-                </button>
-              </form>
-            </div>
-
-            <!-- Sign Up Panel -->
-            <div id="welcomeSignupPanel" class="hidden space-y-3 sm:space-y-4 lg:space-y-5">
-              <button type="button" onclick="showWelcomeAuthPanel('choice')" class="inline-flex items-center gap-1.5 text-xs font-bold text-[#6F7785] hover:text-[#253047] transition">
-                <i class="fa-solid fa-arrow-left"></i><span>戻る</span>
-              </button>
-              <div class="space-y-1.5">
-                <h2 class="text-2xl font-extrabold text-[#253047]">LUMIFULをはじめよう</h2>
-                <p class="text-sm text-[#6F7785]">アカウントを作って、あなたの未来を保存できるようにします。</p>
-              </div>
-              <form onsubmit="handleWelcomeSignup(event)" class="space-y-3">
-                <div>
-                  <label for="welcomeSignupEmail" class="block text-[11px] font-semibold text-[#4F586A] mb-1">メールアドレス</label>
-                  <input type="email" id="welcomeSignupEmail" required autocomplete="email" placeholder="example@lumiful.com" class="w-full px-3 lumi-input text-sm font-bold" />
-                </div>
-                <div>
-                  <label for="welcomeSignupPassword" class="block text-[11px] font-semibold text-[#4F586A] mb-1">パスワード</label>
-                  <input type="password" id="welcomeSignupPassword" required minlength="8" autocomplete="new-password" placeholder="8桁以上のパスワード" class="w-full px-3 lumi-input text-sm font-bold" />
-                </div>
-                <div id="welcomeSignupError" class="hidden text-xs font-bold text-rose-600"></div>
-                <button type="submit" class="w-full min-h-[48px] btn-lumi-primary text-sm font-bold flex items-center justify-center gap-2">
-                  <i class="fa-solid fa-user-plus"></i><span>アカウントを作る</span>
-                </button>
-              </form>
-
-            </div>
+        <!-- Sign Up Panel -->
+        <div id="welcomeSignupPanel" class="hidden space-y-4">
+          <button type="button" onclick="showWelcomeAuthPanel('choice')" class="inline-flex items-center gap-1.5 text-xs font-bold text-[#6F7785] hover:text-[#253047] transition">
+            <i class="fa-solid fa-arrow-left"></i><span>戻る</span>
+          </button>
+          <div class="text-center space-y-1.5 pb-1">
+            <p class="text-[13px] sm:text-sm font-extrabold tracking-[0.12em] text-[#D99A00] uppercase">WELCOME TO LUMIFUL</p>
+            <h2 class="text-xl font-extrabold text-[#253047]">アカウントを作成</h2>
+            <p class="text-xs text-[#6F7785]">あなたの未来をクラウドに保存できます。</p>
           </div>
-        </section>
-      </div>
+          <form onsubmit="handleWelcomeSignup(event)" class="space-y-3 text-left">
+            <div>
+              <label for="welcomeSignupEmail" class="block text-[11px] font-semibold text-[#4F586A] mb-1.5">メールアドレス</label>
+              <input type="email" id="welcomeSignupEmail" required autocomplete="email" placeholder="メールアドレス" class="w-full px-3 lumi-input text-sm font-bold text-left" />
+            </div>
+            <div>
+              <label for="welcomeSignupPassword" class="block text-[11px] font-semibold text-[#4F586A] mb-1.5">パスワード</label>
+              <input type="password" id="welcomeSignupPassword" required minlength="8" autocomplete="new-password" placeholder="8桁以上のパスワード" class="w-full px-3 lumi-input text-sm font-bold text-left" />
+            </div>
+            <div id="welcomeSignupError" class="hidden text-xs font-bold text-rose-600"></div>
+            <button type="submit" class="w-full min-h-[48px] btn-lumi-primary text-sm font-extrabold flex items-center justify-center">アカウントを作る</button>
+          </form>
+        </div>
+      </section>
     </div>
   </div>
   <!-- PHASE 7B / STEP 3.3: LOGIN ONE-SCREEN UI — layout-only; existing LUMIFUL assets/colors preserved -->
@@ -1404,7 +1357,7 @@
               <div id="ob-summary" class="mt-6 grid grid-cols-2 gap-3 text-left"></div>
 
               <div class="mt-8 space-y-3 max-w-sm mx-auto">
-                <button id="onboardingCompleteBtn" type="button" onclick="finishOnboardingUiOnly()" class="w-full px-5 py-3.5 btn-lumi-primary text-sm font-extrabold">未来を見る ✨</button>
+                <button id="onboardingCompleteBtn" type="button" onclick="finishOnboardingUiOnly()" class="w-full px-5 py-3.5 btn-lumi-primary text-sm font-extrabold">未来を見る</button>
                 <button type="button" onclick="goToOnboardingStep(1)" class="w-full px-5 py-3 btn-lumi-secondary text-xs font-bold">入力内容を確認する</button>
               </div>
             </div>
@@ -3289,11 +3242,10 @@
 
     window.showWelcomeAuthPanel = function(panel) {
       const choice = document.getElementById('welcomeAuthChoice');
-      const login = document.getElementById('welcomeLoginPanel');
       const signup = document.getElementById('welcomeSignupPanel');
-      if (choice) choice.classList.toggle('hidden', panel !== 'choice');
-      if (login) login.classList.toggle('hidden', panel !== 'login');
-      if (signup) signup.classList.toggle('hidden', panel !== 'signup');
+      const showSignup = panel === 'signup';
+      if (choice) choice.classList.toggle('hidden', showSignup);
+      if (signup) signup.classList.toggle('hidden', !showSignup);
     };
 
     window.handleWelcomeLogin = function(event) {
@@ -8729,6 +8681,9 @@ window.LUMIFUL_PHASE7B_STEP3_LOCK_V8_2 = Object.freeze({
 
   window.LUMIFUL_PHASE7B_STEP3_LOCK_V8_4=Object.freeze({
     status:'LOCKED',
+  unifiedWelcomeAuthUi:true,
+  welcomeCenteredLayout:true,
+  finalCtaSparkleRemoved:true,
     appShellAuthStates:['authenticated','guest'],
     authenticatedAction:'ログアウト',
     guestAction:'ゲスト終了',
@@ -9325,7 +9280,7 @@ window.LUMIFUL_PHASE7B_STEP3_LOCK_V8_2 = Object.freeze({
         completeBtn.textContent =
           window.LUMIFUL_ONBOARDING_UI_STATE?.mode === 'edit'
             ? '設定を更新する'
-            : '未来を見る ✨';
+            : '未来を見る';
       }
     }
     window.scrollTo({top:0,behavior:'smooth'});
