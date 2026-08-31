@@ -11438,12 +11438,12 @@ ${JSON.stringify(OUTPUT_SCHEMA_EXAMPLE,null,2)}
       if(String(label.textContent||'').includes('LUMIのAI診断'))label.textContent=hasCurrentDiagnosis?'LUMIのAI診断を見る':'LUMIのAI再診断をする';
     });
   }
-  function syncLumiScoreExpressionV1(score,hasCurrentDiagnosis){
+  function syncLumiScoreExpressionV1(engineScore){
     const root=document.getElementById('kpi-lumi-expression');
     const img=root?.querySelector('.lumi-score-expression-img');
     if(!root||!img)return;
-    const n=Number(score);
-    const mood=!hasCurrentDiagnosis||!Number.isFinite(n)?'calm':n>=80?'bright':n>=65?'steady':n>=50?'thinking':'supportive';
+    const n=Number(engineScore);
+    const mood=!Number.isFinite(n)?'calm':n>=80?'bright':n>=65?'steady':n>=50?'thinking':'supportive';
     const srcByMood={
       calm:'./assets/lumi-spark.png',
       bright:'./assets/lumi-spark-bright.png',
@@ -11459,7 +11459,7 @@ ${JSON.stringify(OUTPUT_SCHEMA_EXAMPLE,null,2)}
     r=currentValidResult(r);
     const s=scoreState(r), has=!!r?.score;
     setText('kpi-score',String(Math.round(s.total100))); setText('kpi-base-score',String(Math.ceil(Number(s.engine90)||0))); setText('kpi-ai-adj',has?String(Math.round((Number(s.lumi10)||0)*100)/100):'未評価');
-    syncLumiScoreExpressionV1(s.total100,has);
+    syncLumiScoreExpressionV1(s.engine90);
     const labels=document.querySelectorAll('#kpi-score-breakdown span.uppercase'); if(labels[0])labels[0].textContent='ENGINE';if(labels[1])labels[1].textContent='LUMI';
     const badge=document.getElementById('kpi-score-badge');if(badge)badge.textContent=has?'LUMIFUL SCORE':'LUMI 未評価';
     setText('results-score',String(Math.round(s.total100))); setText('results-base-score',`${s.engine90} / 90`); setText('results-ai-adjustment',has?`${s.lumi10} / 10`:'未評価');
