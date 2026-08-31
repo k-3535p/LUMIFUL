@@ -1087,7 +1087,7 @@
           </button>
           <button id="nav-item-settings" onclick="switchView('settings')" class="w-full flex items-center gap-3 px-3.5 py-2.5 rounded-[14px] text-[#6F7785] hover:bg-[#FAFAF7] hover:text-[#253047] transition text-left">
             <i class="fa-solid fa-gear text-sm w-4 text-center"></i>
-            <span>設定 / プラン管理</span>
+            <span>設定</span>
           </button>
         </nav>
       </div>
@@ -1124,26 +1124,6 @@
           <button id="authAccountBtn" onclick="handleCanonicalAccountAction()" class="hidden px-3.5 py-2 btn-lumi-primary text-xs flex items-center gap-1.5 whitespace-nowrap shrink-0">
             <i class="fa-solid fa-user-circle" id="authBtnIcon"></i>
             <span id="authBtnText" class="whitespace-nowrap"></span>
-          </button>
-
-          <button onclick="openPlansModal()" class="px-3 py-2 btn-lumi-secondary text-xs flex items-center gap-1.5 whitespace-nowrap shrink-0">
-            <i class="fa-solid fa-folder-open text-[#65B9E8]"></i>
-            <span class="hidden sm:inline whitespace-nowrap">プラン管理</span>
-          </button>
-
-          <button onclick="openShareModal()" class="px-3 py-2 btn-lumi-secondary text-xs flex items-center gap-1.5 whitespace-nowrap shrink-0">
-            <i class="fa-solid fa-share-nodes text-[#FF8FA3]"></i>
-            <span class="hidden sm:inline whitespace-nowrap">スマホへ送る</span>
-          </button>
-
-          <button onclick="exportCSV()" class="px-3 py-2 btn-lumi-ghost text-xs flex items-center gap-1.5 whitespace-nowrap shrink-0">
-            <i class="fa-solid fa-file-csv text-[#72D6B5]"></i>
-            <span class="hidden sm:inline whitespace-nowrap">CSV</span>
-          </button>
-
-          <button onclick="window.print()" class="px-3.5 py-2 bg-[#253047] hover:bg-[#1e2638] text-white text-xs font-bold rounded-[14px] transition flex items-center gap-1.5 whitespace-nowrap shrink-0">
-            <i class="fa-solid fa-print"></i>
-            <span class="whitespace-nowrap">印刷 / PDF</span>
           </button>
         </div>
       </header>
@@ -2329,8 +2309,8 @@
         
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-1">
           <div class="space-y-1">
-            <h1 class="text-2xl sm:text-3xl font-extrabold text-[#253047] tracking-tight flex items-center gap-2"><i class="fa-solid fa-gear text-[#6F7785]"></i><span>設定 / プラン管理</span></h1>
-            <p class="text-xs sm:text-sm text-[#6F7785]">アカウントや保存したプラン、データの管理ができます。</p>
+            <h1 class="text-2xl sm:text-3xl font-extrabold text-[#253047] tracking-tight flex items-center gap-2"><i class="fa-solid fa-gear text-[#6F7785]"></i><span>設定</span></h1>
+            <p class="text-xs sm:text-sm text-[#6F7785]">アカウントとデータの保存状態を確認できます。</p>
           </div>
           <span class="px-3 py-1 rounded-[12px] text-xs font-bold bg-[#FEFBF0] text-[#8C5800] border border-[#F0E2B7] self-start sm:self-auto">
             LUMIFUL Settings
@@ -2357,63 +2337,6 @@
             <button id="settingsAccountActionBtn" onclick="handleCanonicalAccountAction()" class="hidden px-4 py-2 btn-lumi-primary text-xs font-bold whitespace-nowrap shrink-0"></button>
           </div>
         </div>
-
-        <div class="bg-white rounded-[24px] p-5 sm:p-6 border border-[#ECEBE6] space-y-4">
-          <div class="flex items-center justify-between pb-3 border-b border-[#ECEBE6]">
-            <h3 class="text-sm font-bold text-[#253047] flex items-center gap-2">
-              <i class="fa-solid fa-folder-open text-[#FFC83D]"></i>
-              <span>保存したプラン</span>
-            </h3>
-          </div>
-
-          <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-            <p class="text-xs text-[#6F7785] leading-relaxed">
-              複数のシナリオ（退職時期や副業パターンなど）をプランとして保存・切り替えることができます。
-            </p>
-
-            <button onclick="openPlansModal()" class="px-4 py-2 btn-lumi-secondary text-xs font-bold whitespace-nowrap shrink-0">
-              保存したプランを見る →
-            </button>
-          </div>
-        </div>
-
-        <div class="bg-white rounded-[24px] p-5 sm:p-6 border border-[#ECEBE6] space-y-4">
-          <h3 class="text-sm font-bold text-[#253047] flex items-center gap-2 pb-3 border-b border-[#ECEBE6]">
-            <i class="fa-solid fa-share-nodes text-[#72D6B5]"></i>
-            <span>データ・共有</span>
-          </h3>
-
-          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <div class="p-4 bg-[#FAFAF7] rounded-[16px] border border-[#ECEBE6] flex flex-col justify-between space-y-3">
-              <div>
-                <h4 class="text-xs font-bold text-[#253047]">スマホへ送る</h4>
-                <p class="text-[11px] text-[#6F7785] mt-1">URLを生成してスマホで確認できます。</p>
-              </div>
-              <button onclick="openShareModal()" class="w-full py-1.5 btn-lumi-secondary text-xs font-bold">
-                共有URL発行
-              </button>
-            </div>
-
-            <div class="p-4 bg-[#FAFAF7] rounded-[16px] border border-[#ECEBE6] flex flex-col justify-between space-y-3">
-              <div>
-                <h4 class="text-xs font-bold text-[#253047]">CSV出力</h4>
-                <p class="text-[11px] text-[#6F7785] mt-1">年次キャッシュフローデータをCSV出力します。</p>
-              </div>
-              <button onclick="exportCSV()" class="w-full py-1.5 btn-lumi-secondary text-xs font-bold">
-                CSVダウンロード
-              </button>
-            </div>
-
-            <div class="p-4 bg-[#FAFAF7] rounded-[16px] border border-[#ECEBE6] flex flex-col justify-between space-y-3">
-              <div>
-                <h4 class="text-xs font-bold text-[#253047]">印刷 / PDF</h4>
-                <p class="text-[11px] text-[#6F7785] mt-1">結果シートを印刷・PDF保存します。</p>
-              </div>
-              <button onclick="window.print()" class="w-full py-1.5 btn-lumi-secondary text-xs font-bold">
-                印刷 / PDF出力
-              </button>
-            </div>
-          </div>
         </div>
 
         <div class="bg-white rounded-[24px] p-5 sm:p-6 border border-[#ECEBE6] space-y-4">
@@ -2588,62 +2511,7 @@
        welcomeAuthView is the only authentication surface. -->
 
   <!-- MODAL 3: Plans Modal -->
-  <div id="plansModal" class="fixed inset-0 bg-[#253047]/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-    <div class="bg-white rounded-[24px] max-w-md w-full p-5 sm:p-6 shadow-xl border border-[#ECEBE6]">
-      <div class="flex items-center justify-between mb-4">
-        <h3 class="text-base font-bold text-[#253047] flex items-center gap-2">
-          <i class="fa-solid fa-folder-open text-[#65B9E8]"></i> LUMIFUL プラン管理
-        </h3>
-        <button onclick="closePlansModal()" class="text-[#6F7785] hover:text-[#253047] w-8 h-8 rounded-full flex items-center justify-center">
-          <i class="fa-solid fa-xmark text-lg"></i>
-        </button>
-      </div>
-
-      <div class="space-y-4 text-xs">
-        <div class="flex gap-2">
-          <input type="text" id="newPlanName" placeholder="プラン名（例: リッチ退職案）" class="flex-1 px-3 lumi-input font-bold">
-          <button onclick="saveCurrentPlanAsNew()" class="px-3 py-2 btn-lumi-primary text-xs font-bold shrink-0 whitespace-nowrap">
-            保存
-          </button>
-        </div>
-
-        <div class="border border-[#ECEBE6] rounded-[16px] p-2 max-h-56 overflow-y-auto space-y-1.5" id="savedPlansList">
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- MODAL 4: Share Modal -->
-  <div id="shareModal" class="fixed inset-0 bg-[#253047]/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-    <div class="bg-white rounded-[24px] max-w-md w-full p-5 sm:p-6 shadow-xl border border-[#ECEBE6]">
-      <div class="flex items-center justify-between mb-4">
-        <h3 class="text-base font-bold text-[#253047] flex items-center gap-2">
-          <i class="fa-solid fa-share-nodes text-[#FF8FA3]"></i> 外出先で見る (スマホへ送る)
-        </h3>
-        <button onclick="closeShareModal()" class="text-[#6F7785] hover:text-[#253047] w-8 h-8 rounded-full flex items-center justify-center">
-          <i class="fa-solid fa-xmark text-lg"></i>
-        </button>
-      </div>
-      <div class="space-y-4 text-xs text-[#253047]">
-        <p class="leading-relaxed text-[#6F7785]">現在のシミュレーション状態を専用URLに変換しました。<br>このURLを自分のLINEやメールに送るだけで、サーバー設定不要で外出先のスマホから同じデータを開けます。</p>
-        <div>
-          <textarea id="shareUrlText" readonly rows="3" class="w-full p-3 border border-[#ECEBE6] rounded-[14px] bg-[#FAFAF7] text-[10px] text-[#6F7785] break-all focus:outline-none"></textarea>
-        </div>
-        <div class="flex gap-2">
-          <button onclick="copyShareUrl()" class="flex-1 py-2.5 btn-lumi-primary text-xs font-bold flex items-center justify-center gap-1.5 whitespace-nowrap">
-            <i class="fa-solid fa-copy"></i>
-            <span>URLコピー</span>
-          </button>
-          <a id="lineShareBtn" href="#" target="_blank" class="flex-1 py-2.5 bg-[#06C755] hover:bg-[#05b34c] text-white font-bold rounded-[14px] transition flex items-center justify-center gap-1.5 whitespace-nowrap">
-            <i class="fa-brands fa-line text-base"></i>
-            <span>LINEで送る</span>
-          </a>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- MODAL 5: Event Creation Modal -->
+<!-- MODAL 5: Event Creation Modal -->
   <div id="addEventModal" class="fixed inset-0 bg-[#253047]/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
     <div class="bg-white rounded-[24px] max-w-md w-full p-5 sm:p-6 shadow-xl border border-[#ECEBE6]">
       <div class="flex items-center justify-between mb-4">
@@ -3649,18 +3517,6 @@
       return window.cloneDataModelV2(window.normalizeDataModelV2(window.ensureV2InputModel()));
     };
 
-    window.loadSavedPlansFromStorageV2 = function() {
-      try {
-        const raw = localStorage.getItem('lumiful_saved_plans');
-        const parsed = raw ? JSON.parse(raw) : [];
-        window.savedPlansV2 = Array.isArray(parsed) ? parsed : [];
-      } catch (error) {
-        console.warn('[LUMIFUL] Failed to read saved plans.', error);
-        window.savedPlansV2 = [];
-      }
-      return window.savedPlansV2;
-    };
-
     window.restorePersistedStateV2 = function(rawState) {
       const model = window.normalizeDataModelV2(rawState);
       window.activeDataModelV2 = window.cloneDataModelV2(model);
@@ -3741,42 +3597,6 @@
       window.handleAnonymousAuth();
       window.closeAuthModal();
     };
-    window.openPlansModal = function() {
-      if (!['guest', 'authenticated'].includes(window.authState?.status)) {
-        openAuthModal();
-        return;
-      }
-      const el = document.getElementById('plansModal');
-      if (el) el.classList.remove('hidden');
-      window.renderPlansList();
-    };
-    window.closePlansModal = function() {
-      const el = document.getElementById('plansModal');
-      if (el) el.classList.add('hidden');
-    };
-    window.openShareModal = function() {
-      const el = document.getElementById('shareModal');
-      if (el) el.classList.remove('hidden');
-      if (typeof LZString !== 'undefined') {
-        const shareData = window.getCurrentDataModelV2ForPersistence();
-        const compressed = LZString.compressToEncodedURIComponent(JSON.stringify(shareData));
-        const url = window.location.origin + window.location.pathname + '?data=' + compressed;
-        document.getElementById('shareUrlText').value = url;
-        const lineText = encodeURIComponent('【LUMIFUL】シミュレーションデータ:\n') + encodeURIComponent(url);
-        document.getElementById('lineShareBtn').href = `https://line.me/R/msg/text/?${lineText}`;
-      }
-    };
-    window.closeShareModal = function() {
-      const el = document.getElementById('shareModal');
-      if (el) el.classList.add('hidden');
-    };
-    window.copyShareUrl = function() {
-      const urlText = document.getElementById('shareUrlText');
-      urlText.select();
-      urlText.setSelectionRange(0, 99999);
-      document.execCommand('copy');
-      window.showToast('URLをコピーしました！LINE等に貼り付けて送信できます。', 'success');
-    };
     window.openAddEventModal = function() {
       if (!['guest', 'authenticated'].includes(window.authState?.status)) {
         openAuthModal();
@@ -3831,93 +3651,6 @@
       window.closeAuthModal();
       window.resolveAuthState();
       window.showToast('ログアウトしました', 'info');
-    };
-
-    window.renderPlansList = function() {
-      const container = document.getElementById('savedPlansList');
-      if (!container) return;
-      container.innerHTML = '';
-
-      if (!window.savedPlansV2 || window.savedPlansV2.length === 0) {
-        container.innerHTML = `<div class="p-3 text-center text-[#6F7785]">保存されたプランはありません</div>`;
-        return;
-      }
-
-      window.savedPlansV2.forEach((plan, idx) => {
-        const item = document.createElement('div');
-        item.className = 'flex items-center justify-between p-2.5 bg-[#FAFAF7] rounded-[14px] border border-[#ECEBE6]';
-        item.innerHTML = `
-          <div>
-            <div class="font-bold text-[#253047] text-xs">${plan.name}</div>
-            <div class="text-[10px] text-[#6F7785]">${plan.date || ''}</div>
-          </div>
-          <div class="flex items-center gap-1.5">
-            <button onclick="loadPlan(${idx})" class="px-2.5 py-1 btn-lumi-primary font-bold rounded-[8px] text-[10px] whitespace-nowrap">読込</button>
-            <button onclick="deletePlan(${idx})" class="px-2 py-1 bg-rose-50 text-rose-600 hover:bg-rose-100 font-bold rounded-[8px] text-[10px] transition"><i class="fa-solid fa-trash"></i></button>
-          </div>
-        `;
-        container.appendChild(item);
-      });
-    };
-
-    window.saveCurrentPlanAsNew = function() {
-      const input = document.getElementById('newPlanName');
-      const name = input ? input.value.trim() : '';
-      if (!name) return;
-
-      if (!Array.isArray(window.savedPlansV2)) window.loadSavedPlansFromStorageV2();
-      const planData = window.getCurrentDataModelV2ForPersistence();
-
-      window.savedPlansV2.push({
-        name,
-        date: new Date().toLocaleDateString('ja-JP'),
-        schemaVersion: 2,
-        state: planData
-      });
-
-      if (input) input.value = '';
-      localStorage.setItem('lumiful_saved_plans', JSON.stringify(window.savedPlansV2));
-      window.renderPlansList();
-      window.showToast(`プラン「${name}」を保存しました`, 'success');
-    };
-
-    window.loadPlan = function(idx) {
-      if (!window.savedPlansV2 || !window.savedPlansV2[idx]) return;
-      const targetState = window.savedPlansV2[idx].state;
-      window.restorePersistedStateV2(targetState);
-      window.closePlansModal();
-      window.showToast(`プランを読み込みました`, 'success');
-    };
-
-    window.deletePlan = function(idx) {
-      if (!window.savedPlansV2) return;
-      window.savedPlansV2.splice(idx, 1);
-      localStorage.setItem('lumiful_saved_plans', JSON.stringify(window.savedPlansV2));
-      window.renderPlansList();
-      window.showToast('プランを削除しました', 'info');
-    };
-
-    window.exportCSV = function() {
-      if (!window.currentTableRows || window.currentTableRows.length === 0) {
-        window.showToast('出力可能な明細データがありません。条件を入力してください。', 'warning');
-        return;
-      }
-
-      let csvContent = '\uFEFF年齢,通常収入,年間支出,生活収支,年間運用益,運用益活用,元本売却額,活用フェーズ,臨時収入,年末現金,利用可能資産,売却可能資産\n';
-
-      window.currentTableRows.forEach(r => {
-        csvContent += `${r.age}歳,${r.normalIncome},${r.totalExpense},${r.netCashflow},${r.annualYield},${r.yieldUsed},${r.principalSold},"${window.getUtilizationPhaseLabelJa ? window.getUtilizationPhaseLabelJa(r.phase) : r.phase}",${r.eventIncomeTotal},${r.currentCash},${r.financialAsset},${Number(r.potentialAssets ?? 0)}\n`;
-      });
-
-      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement('a');
-      link.setAttribute('href', url);
-      link.setAttribute('download', `lumiful_cashflow_${new Date().toISOString().slice(0, 10)}.csv`);
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      window.showToast('CSVを出力しました', 'success');
     };
 
     // STEP 3.6: The dedicated result screen existed in HTML but had no
@@ -4952,7 +4685,6 @@ m.profile.targetAge=_targetRaw?Math.max(m.profile.currentAge||18,Math.round(Numb
       }
 
       setupAgeSelects();
-      window.loadSavedPlansFromStorageV2();
       window.LUMIFUL_STEP4_BOOTING = true;
 
       // Restore shared URL first. A shared simulation is an explicit user action
@@ -7667,7 +7399,6 @@ m.profile.targetAge=_targetRaw?Math.max(m.profile.currentAge||18,Math.round(Numb
 
     try {
       window.setupAgeSelects?.();
-      window.loadSavedPlansFromStorageV2?.();
 
       await bootAuth();
 
