@@ -5692,10 +5692,28 @@ if(m.profile.currentAge>0&&typeof window.recalculateAllFast==='function'){if(eve
         return;
       }
 
+      if (window.assetChart && window.assetChart.canvas === ctx) {
+        try {
+          window.assetChart.data.labels = labels;
+          const datasets = window.assetChart.data.datasets || [];
+          if (datasets[0]) datasets[0].data = investData;
+          if (datasets[1]) datasets[1].data = potentialAssetsData;
+          if (datasets[2]) {
+            datasets[2].data = cashflowData;
+            datasets[2].backgroundColor = cashflowData.map(v => v >= 0 ? 'rgba(114, 214, 181, 0.6)' : 'rgba(255, 143, 163, 0.6)');
+          }
+          window.assetChart.update('none');
+          return;
+        } catch (error) {
+          console.warn('[LUMIFUL] Existing HOME chart update notice:', error);
+        }
+      }
+
       if (window.assetChart) {
         try { window.assetChart.destroy(); } catch (error) {
           console.warn('[LUMIFUL] Previous chart destroy notice:', error);
         }
+        window.assetChart = null;
       }
 
       try {
@@ -8393,6 +8411,7 @@ if(m.profile.currentAge>0&&typeof window.recalculateAllFast==='function'){if(eve
 
   async function restoreCurrent(force = false) {
     if (!['authenticated', 'guest'].includes(window.authState?.status)) return null;
+    if (P.restoring) return null;
     const id = fbUser()?.uid || 'guest';
     if (!force && P.restoredUid === id) return null;
 
@@ -8459,7 +8478,10 @@ if(m.profile.currentAge>0&&typeof window.recalculateAllFast==='function'){if(eve
       runtime.auth.onAuthStateChanged(async user => {
         applyState(user);
         route();
-        if (user) {
+
+        // Initial restoration is owned by window.onload after bootAuth().
+        // Avoid a second simultaneous restore/hydration while the app is booting.
+        if (user && !window.LUMIFUL_STEP4_BOOTING) {
           try {
             await restoreCurrent(true);
           } catch (restoreError) {
@@ -8663,6 +8685,14 @@ if(m.profile.currentAge>0&&typeof window.recalculateAllFast==='function'){if(eve
       route();
     }
   };
+
+  window.LUMIFUL_PHASE9_19_BOOT_RENDER_STABILITY = Object.freeze({
+    initialRestoreOwner:'window.onload',
+    authListenerSkipsRestoreDuringBoot:true,
+    restoreConcurrencyGuard:true,
+    homeChartReusedOnRecalculation:true,
+    scenarioBehaviorPreserved:true
+  });
 
   window.LUMIFUL_PHASE7B_STEP3_FINAL_V3 = Object.freeze({
     persistedSessionResolvedBeforeRouting: true,
