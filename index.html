@@ -11451,14 +11451,33 @@ ${JSON.stringify(OUTPUT_SCHEMA_EXAMPLE,null,2)}
       <div class="mt-5 rounded-2xl bg-[#F7FBFE] border border-[#DCEEF8] px-4 py-3 text-xs text-[#536274] leading-relaxed">
         この比較ではLUMIの再診断は行っていません。現在の条件と一時的な条件を、同じ数値シミュレーションで比較しています。
       </div>
-      <div class="flex justify-end mt-5">
-        <button type="button" id="lumiScenarioStep1Back" class="px-5 py-2.5 rounded-[14px] bg-[#253047] text-white text-xs font-bold">元のプランに戻る</button>
+      <div class="flex flex-col-reverse sm:flex-row sm:justify-end gap-2 mt-5">
+        <button type="button" id="lumiScenarioStep1Back" class="px-5 py-2.5 rounded-[14px] border border-[#D9DCE2] bg-white text-[#536274] text-xs font-bold">元のプランに戻る</button>
+        <button type="button" id="lumiScenarioStep1Apply" class="px-5 py-2.5 rounded-[14px] bg-[#253047] text-white text-xs font-bold">この条件をプランに反映する</button>
       </div>
     </div>`;
 
     document.body.appendChild(modal);
     modal.querySelector('#lumiScenarioStep1Close')?.addEventListener('click',closeScenarioStep1);
     modal.querySelector('#lumiScenarioStep1Back')?.addEventListener('click',closeScenarioStep1);
+    modal.querySelector('#lumiScenarioStep1Apply')?.addEventListener('click',()=>{
+      const applyButton=modal.querySelector('#lumiScenarioStep1Apply');
+      if(applyButton?.disabled)return;
+      if(applyButton)applyButton.disabled=true;
+
+      // STEP 2: this is the only canonical Schema mutation in Scenario.
+      window.activeDataModelV2=window.cloneDataModelV2(
+        window.normalizeDataModelV2(scenarioModel)
+      );
+      window.v2InputInitialized=true;
+
+      window.renderV2InputUI?.();
+      window.recalculateAllFast?.();
+      window.scheduleAutoSave?.('lumi-scenario-step2-apply');
+
+      closeScenarioStep1();
+      window.showToast?.('この条件を現在のプランに反映しました。','success');
+    });
     modal.addEventListener('click',e=>{if(e.target===modal)closeScenarioStep1();});
     return true;
   }
@@ -11472,10 +11491,11 @@ ${JSON.stringify(OUTPUT_SCHEMA_EXAMPLE,null,2)}
   };
 
   window.LUMIFUL_PHASE9_SCENARIO_STEP1=Object.freeze({
-    status:'EXPECTED_RETURN_ONLY',
-    schemaMutation:false,
-    persistence:false,
+    status:'EXPECTED_RETURN_APPLY_CANDIDATE',
+    schemaMutation:'explicit-apply-only',
+    persistence:'after-explicit-apply',
     aiCallOnCompare:false,
+    diagnosisStateIntegration:false,
     detachedEngine:true
   });
 
