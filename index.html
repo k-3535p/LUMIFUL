@@ -1449,8 +1449,8 @@
               </div>
 
               <div class="ob-priority-actions">
-                <button type="button" onclick="continueFromLifePriorities()" class="w-full px-5 py-3.5 btn-lumi-primary text-sm font-extrabold">次へ</button>
-                <button type="button" onclick="skipLifePrioritiesStep()" class="ob-priority-skip">あとで設定</button>
+                <button id="obPriorityContinueBtn" type="button" onclick="continueFromLifePriorities()" class="w-full px-5 py-3.5 btn-lumi-primary text-sm font-extrabold">次へ</button>
+                <button id="obPrioritySkipBtn" type="button" onclick="skipLifePrioritiesStep()" class="ob-priority-skip">あとで設定</button>
               </div>
             </div>
           </section>
@@ -10798,11 +10798,70 @@ window.finishOnboardingUiOnly = async function() {
     const el=document.getElementById('ob-priority-custom');
     if(s && el) s.lifePrioritiesCustom=String(el.value||'').trim().slice(0,240);
   }
-  window.continueFromLifePriorities=function(){
+  function setPriorityDirectEditUi(active){
+    const next=document.getElementById('obPriorityContinueBtn');
+    const skip=document.getElementById('obPrioritySkipBtn');
+    if(next) next.textContent=active?'保存してLUMI AI診断へ戻る':'次へ';
+    if(skip) skip.textContent=active?'変更せず戻る':'あとで設定';
+  }
+
+  window.openLifePrioritiesFromLumiV1=function(){
+    const ok=window.hydrateOnboardingFromCurrentSchemaV2?.();
+    if(!ok){
+      window.showToast?.('現在の設定を読み込めませんでした','error');
+      return false;
+    }
+    window.LUMIFUL_LIFE_PRIORITIES_DIRECT_EDIT=true;
+    setPriorityDirectEditUi(true);
+    window.switchView?.('onboarding');
+    document.getElementById('onboardingView')?.classList.remove('hidden');
+    window.goToOnboardingScreen?.('priority');
+    return true;
+  };
+
+  async function saveLifePrioritiesDirectV1(){
+    syncCustomIntoState();
+    const current=window.getCurrentDataModelV2ForPersistence?.();
+    if(!current) throw new Error('current-schema-unavailable');
+    const s=window.LUMIFUL_ONBOARDING_UI_STATE;
+    const next=window.cloneDataModelV2(window.normalizeDataModelV2(current));
+    next.lifePriorities=cleanPriorities({
+      selected:[...(s?.lifePriorities || [])],
+      customText:s?.lifePrioritiesCustom || ''
+    });
+    window.restorePersistedStateV2(next);
+    window.LUMIFUL_LUMI_CONTEXT_DIRTY=true;
+    window.invalidateLumiDiagnosisAfterScenarioV1?.();
+    const envelope=await window.saveUserData?.();
+    if(!envelope && ['guest','authenticated'].includes(window.authState?.status)) throw new Error('save-returned-null');
+  }
+
+  window.continueFromLifePriorities=async function(){
+    if(window.LUMIFUL_LIFE_PRIORITIES_DIRECT_EDIT){
+      try{
+        await saveLifePrioritiesDirectV1();
+        window.LUMIFUL_LIFE_PRIORITIES_DIRECT_EDIT=false;
+        setPriorityDirectEditUi(false);
+        document.getElementById('onboardingView')?.classList.add('hidden');
+        window.switchView?.('lumiAdvisor');
+        window.showToast?.('大切な価値観を保存しました','success');
+      }catch(error){
+        console.error('[LUMIFUL] life priorities direct save failed',error);
+        window.showToast?.('大切な価値観を保存できませんでした','error');
+      }
+      return;
+    }
     syncCustomIntoState();
     window.goToOnboardingScreen?.('1');
   };
   window.skipLifePrioritiesStep=function(){
+    if(window.LUMIFUL_LIFE_PRIORITIES_DIRECT_EDIT){
+      window.LUMIFUL_LIFE_PRIORITIES_DIRECT_EDIT=false;
+      setPriorityDirectEditUi(false);
+      document.getElementById('onboardingView')?.classList.add('hidden');
+      window.switchView?.('lumiAdvisor');
+      return;
+    }
     // Optional input: skipping never blocks the existing onboarding flow.
     syncCustomIntoState();
     window.goToOnboardingScreen?.('1');
@@ -12313,8 +12372,20 @@ ${JSON.stringify(OUTPUT_SCHEMA_EXAMPLE,null,2)}
     return true;
   }
 
+  function isLifePrioritiesLumiActionV1(type,target,label){
+    const route=resolveLumiActionRouteV1(type,target,label);
+    if(route!==LUMI_ACTION_ROUTE_V1.review && route!==LUMI_ACTION_ROUTE_V1.input)return false;
+    const text=String(label||'');
+    return /価値観|大切にしたい|大切なこと|人生で大切/.test(text);
+  }
+
   window.handleLumiSuggestedActionV1=function(type,target,suggestedValue,label){
     const route=resolveLumiActionRouteV1(type,target,label);
+
+    if(isLifePrioritiesLumiActionV1(type,target,label)){
+      window.openLifePrioritiesFromLumiV1?.();
+      return;
+    }
 
     if(route===LUMI_ACTION_ROUTE_V1.expected_return){
       if(openExpectedReturnScenarioStep1(suggestedValue))return;
