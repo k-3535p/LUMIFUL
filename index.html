@@ -918,920 +918,6 @@
 }
 </style>
 
-
-<!-- PHASE 9-16: exact visual CSS transplanted from known aligned candidate; no candidate runtime scripts -->
-<style id="phase9-16-sp-home-lock">
-@media (max-width:639px){
-#home-kpi-grid>div{display:flex!important;flex-direction:column!important}
-#home-kpi-grid>div:nth-child(2)>div:last-child,#home-kpi-grid>div:nth-child(3)>div:last-child,#home-kpi-grid>div:nth-child(4)>div:last-child{margin-top:auto!important;min-height:34px!important;display:flex!important;align-items:center!important;padding-top:8px!important}
-#kpi-phase-badge{display:inline!important;padding:0!important;margin:0!important;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;white-space:nowrap!important}
-#kpi-base-score,#kpi-ai-adj{min-width:18px!important;text-align:center!important;font-size:10px!important;line-height:1!important;font-weight:800!important}
-}</style>
-
-<style id="phase9-16-sp-home-final-balance">
-/* Final balance pass: HOME KPI cards only */
-@media (max-width:639px){
-  /* Keep top-row cards visually balanced with the LUMIFUL SCORE card. */
-  #home-kpi-grid > div:nth-child(1),
-  #home-kpi-grid > div:nth-child(2){
-    min-height: 176px !important;
-  }
-
-  #kpi-yield-living-support{
-    display:flex !important;
-    align-items:baseline !important;
-    gap:3px !important;
-    min-height:18px !important;
-    margin-top:7px !important;
-    font-size:9px !important;
-    line-height:1.2 !important;
-    font-weight:600 !important;
-    color:#657083 !important;
-    white-space:nowrap !important;
-  }
-  #kpi-yield-living-support-rate{
-    font-size:11px !important;
-    font-weight:800 !important;
-    color:#334155 !important;
-    letter-spacing:-0.01em !important;
-  }
-
-  /* Preserve the shared lower information baseline from 9-16. */
-  #home-kpi-grid > div:nth-child(2) > div:last-child{
-    margin-top:auto !important;
-    min-height:34px !important;
-    padding-top:8px !important;
-  }
-}
-@media (max-width:374px){
-  #home-kpi-grid > div:nth-child(1),
-  #home-kpi-grid > div:nth-child(2){
-    min-height:170px !important;
-  }
-  #kpi-yield-living-support{
-    font-size:8.5px !important;
-    gap:2px !important;
-  }
-  #kpi-yield-living-support-rate{
-    font-size:10px !important;
-  }
-}
-</style>
-
-<style id="phase9-16-kpi-navigation-final">
-/* PHASE 9-16 FINAL — common KPI information architecture + navigation */
-#home-kpi-grid .kpi-standard-card{min-width:0;}
-#home-kpi-grid .kpi-standard-content{display:flex;flex:1;min-height:0;flex-direction:column;}
-#home-kpi-grid .kpi-standard-metric{padding-top:12px;}
-#home-kpi-grid .kpi-standard-support{min-height:18px;}
-#home-kpi-grid .kpi-card-cta{
-  margin-top:auto;padding-top:12px;border-top:1px solid #ECEBE6;
-  height:38px;display:flex;align-items:flex-start;justify-content:flex-end;flex:none;
-}
-#home-kpi-grid .kpi-card-cta-button{
-  display:flex;align-items:center;justify-content:flex-end;gap:4px;min-width:0;
-  padding:0;border:0;background:transparent;color:#253047;cursor:pointer;
-  font-size:10px;font-weight:700;line-height:1.2;white-space:nowrap;transition:color .2s ease;
-}
-#home-kpi-grid .kpi-card-cta-button:hover{color:#8C5800;}
-#home-kpi-grid .kpi-card-cta-button i{font-size:9px;flex:none;}
-#kpi-phase-badge{padding:0!important;margin:0!important;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;white-space:normal!important;overflow:visible!important;text-overflow:clip!important;}
-
-@media (min-width:640px){
-  #home-kpi-grid .kpi-standard-content{justify-content:flex-start;}
-  #home-kpi-grid .kpi-standard-metric{padding-top:18px;}
-  #home-kpi-grid .kpi-card-cta-button{font-size:12px;}
-  #home-kpi-grid .kpi-card-cta-button i{font-size:10px;}
-}
-
-@media (max-width:639px){
-  /* Non-score cards follow the same rhythm as SCORE: header, metric/support, flexible space, CTA. */
-  #home-kpi-grid .kpi-standard-card{min-height:176px!important;}
-  #home-kpi-grid .kpi-standard-content{justify-content:flex-start;}
-  #home-kpi-grid .kpi-standard-metric{padding-top:8px!important;}
-  #home-kpi-grid .kpi-standard-support{margin-top:6px!important;min-height:auto!important;}
-  #home-kpi-grid .kpi-card-cta{height:36px!important;margin-top:auto!important;padding-top:9px!important;}
-  #home-kpi-grid .kpi-card-cta-button{font-size:9px!important;gap:3px!important;letter-spacing:-.015em;}
-  #home-kpi-grid .kpi-card-cta-button i{font-size:8px!important;}
-  #kpi-card-cover .kpi-card-cta-button{font-size:8.2px!important;}
-  #kpi-yield-living-support{display:block!important;min-height:0!important;margin-top:0!important;font-size:9px!important;white-space:normal!important;}
-  #kpi-yield-living-support-rate{font-size:10px!important;}
-  #kpi-phase-badge{font-size:8.5px!important;line-height:1.2!important;margin-top:3px!important;}
-  #kpi-cover-subtext,#kpi-final-status{height:auto!important;min-height:0!important;padding-top:0!important;border-top:0!important;overflow:visible!important;}
-}
-@media (max-width:374px){
-  #home-kpi-grid .kpi-standard-card{min-height:170px!important;}
-  #home-kpi-grid .kpi-card-cta-button{font-size:8.3px!important;}
-  #kpi-card-cover .kpi-card-cta-button{font-size:7.5px!important;letter-spacing:-.03em;}
-}
-</style>
-
-<style id="phase9-16-kpi-three-card-alignment">
-/* ============================================================
-   PHASE 9-16 — Standard KPI alignment
-   SCORE remains intentionally special.
-   Align only Yield / Cover / Final Assets.
-   ============================================================ */
-#home-kpi-grid .kpi-standard-card .kpi-standard-header{
-  min-height:40px;
-  margin-bottom:0 !important;
-}
-#home-kpi-grid .kpi-standard-card .kpi-standard-metric{
-  padding-top:12px !important;
-  display:grid !important;
-  grid-template-rows:18px 38px minmax(34px,auto);
-  align-content:start;
-}
-#home-kpi-grid .kpi-standard-card .kpi-standard-eyebrow{
-  height:18px;
-  margin:0 !important;
-  display:flex;
-  align-items:flex-start;
-  line-height:1.15;
-}
-#home-kpi-grid .kpi-standard-card .kpi-standard-eyebrow-placeholder{
-  visibility:hidden;
-}
-#home-kpi-grid .kpi-standard-card .kpi-standard-value{
-  height:38px;
-  margin:0 !important;
-  display:flex;
-  align-items:center;
-  font-size:24px !important;
-  line-height:1 !important;
-  font-weight:800 !important;
-  letter-spacing:-0.025em !important;
-  white-space:nowrap;
-}
-#home-kpi-grid .kpi-standard-card .kpi-standard-support{
-  margin-top:6px !important;
-  min-height:34px !important;
-  align-self:start;
-}
-
-/* Remove legacy separator styling from cover-card support.
-   CTA separator at the bottom remains intact. */
-#kpi-cover-subtext{
-  border:0 !important;
-  border-top:0 !important;
-  box-shadow:none !important;
-  padding-top:0 !important;
-}
-
-/* Keep the three standard cards' CTA baseline identical. */
-#home-kpi-grid .kpi-standard-card .kpi-card-cta{
-  margin-top:auto !important;
-  height:38px !important;
-  padding-top:12px !important;
-}
-
-/* SP: preserve 2-column layout without wrapping the main values. */
-@media (max-width:639px){
-  #home-kpi-grid .kpi-standard-card .kpi-standard-header{
-    min-height:34px;
-  }
-  #home-kpi-grid .kpi-standard-card .kpi-standard-metric{
-    padding-top:9px !important;
-    grid-template-rows:16px 32px minmax(32px,auto);
-  }
-  #home-kpi-grid .kpi-standard-card .kpi-standard-eyebrow{
-    height:16px;
-    font-size:8.5px !important;
-    line-height:1.1 !important;
-  }
-  #home-kpi-grid .kpi-standard-card .kpi-standard-value{
-    height:32px;
-    font-size:20px !important;
-    line-height:1 !important;
-  }
-  #home-kpi-grid .kpi-standard-card .kpi-standard-support{
-    min-height:32px !important;
-    margin-top:5px !important;
-    font-size:8.5px !important;
-    line-height:1.25 !important;
-  }
-  #home-kpi-grid .kpi-standard-card .kpi-card-cta{
-    height:36px !important;
-    padding-top:10px !important;
-  }
-}
-@media (max-width:374px){
-  #home-kpi-grid .kpi-standard-card .kpi-standard-value{
-    font-size:18px !important;
-  }
-  #home-kpi-grid .kpi-standard-card .kpi-standard-eyebrow,
-  #home-kpi-grid .kpi-standard-card .kpi-standard-support{
-    font-size:8px !important;
-  }
-}
-</style>
-
-<style id="phase9-16-kpi-insight-final-v2">
-/* SCORE remains intentionally special. */
-#home-kpi-grid .kpi-standard-card .kpi-standard-metric{
-  display:flex !important;
-  flex-direction:column !important;
-  align-items:stretch !important;
-  padding-top:12px !important;
-}
-#home-kpi-grid .kpi-standard-card .kpi-standard-value{
-  margin-top:0 !important;
-}
-
-/* Common insight component: placed lower to create deliberate breathing room. */
-#home-kpi-grid .kpi-standard-card .kpi-insight-box{
-  margin-top:24px !important;
-  min-height:42px !important;
-  padding:9px 11px !important;
-  border-radius:10px !important;
-  display:flex !important;
-  align-items:center !important;
-  gap:10px !important;
-  font-size:10px !important;
-  line-height:1.25 !important;
-  font-weight:700 !important;
-  box-sizing:border-box !important;
-  border-top-width:1px !important;
-}
-#home-kpi-grid .kpi-standard-card .kpi-insight-line{
-  min-width:0;
-  white-space:nowrap;
-}
-
-/* Same component, semantic tone only. */
-#home-kpi-grid .kpi-insight-neutral{
-  background:rgba(248,245,236,.92) !important;
-  border:1px solid rgba(225,212,177,.90) !important;
-  color:#6D5A2D !important;
-}
-#home-kpi-grid .kpi-insight-warning{
-  background:rgba(255,241,243,.92) !important;
-  border:1px solid rgba(248,194,202,.88) !important;
-  color:#D85A72 !important;
-}
-#home-kpi-grid .kpi-insight-info{
-  background:rgba(244,248,252,.96) !important;
-  border:1px solid rgba(211,222,234,.95) !important;
-  color:#64748B !important;
-}
-
-/* Yield carries two related facts. */
-#kpi-yield-insight{
-  justify-content:flex-start !important;
-}
-#kpi-yield-insight .kpi-insight-line + .kpi-insight-line{
-  position:relative;
-  padding-left:11px;
-}
-#kpi-yield-insight .kpi-insight-line + .kpi-insight-line::before{
-  content:"";
-  position:absolute;
-  left:0;
-  top:15%;
-  bottom:15%;
-  width:1px;
-  background:rgba(109,90,45,.22);
-}
-
-/* Strip all legacy pill styling from cumulative return. */
-#kpi-phase-badge{
-  display:inline !important;
-  padding:0 !important;
-  margin:0 !important;
-  border:0 !important;
-  border-radius:0 !important;
-  background:transparent !important;
-  box-shadow:none !important;
-  color:inherit !important;
-  font:inherit !important;
-}
-
-/* Ensure there is no accidental legacy horizontal line on cover support. */
-#kpi-cover-subtext{
-  box-shadow:none !important;
-}
-
-/* Keep CTA as the bottom anchor. */
-#home-kpi-grid .kpi-standard-card .kpi-card-cta{
-  margin-top:auto !important;
-}
-
-/* Smartphone layout */
-@media (max-width:639px){
-  #home-kpi-grid .kpi-standard-card .kpi-standard-metric{
-    padding-top:9px !important;
-  }
-  #home-kpi-grid .kpi-standard-card .kpi-insight-box{
-    margin-top:18px !important;
-    min-height:40px !important;
-    padding:7px 8px !important;
-    border-radius:9px !important;
-    font-size:8.5px !important;
-    line-height:1.25 !important;
-    gap:4px !important;
-  }
-  /* Two rows on SP prevents crowding and keeps card rhythm clean. */
-  #kpi-yield-insight{
-    flex-direction:column !important;
-    align-items:flex-start !important;
-    justify-content:center !important;
-    gap:3px !important;
-  }
-  #kpi-yield-insight .kpi-insight-line{
-    width:100%;
-  }
-  #kpi-yield-insight .kpi-insight-line + .kpi-insight-line{
-    padding-left:0 !important;
-  }
-  #kpi-yield-insight .kpi-insight-line + .kpi-insight-line::before{
-    content:none !important;
-  }
-  #home-kpi-grid .kpi-standard-card .kpi-card-cta{
-    margin-top:14px !important;
-  }
-}
-@media (max-width:374px){
-  #home-kpi-grid .kpi-standard-card .kpi-insight-box{
-    margin-top:16px !important;
-    padding:6px 7px !important;
-    font-size:8px !important;
-  }
-}
-</style>
-
-<style id="phase9-16-cover-insight-lock">
-/* PHASE 9-16 final alignment lock:
-   keep the cover-rate insight on the exact same visual row as the other KPI insights. */
-#home-kpi-grid .kpi-standard-card #kpi-cover-subtext.kpi-insight-box{
-  margin-top:24px !important;
-  min-height:42px !important;
-  padding:9px 11px !important;
-  border-radius:10px !important;
-  display:flex !important;
-  align-items:center !important;
-  gap:6px !important;
-  background:rgba(255,241,243,.92) !important;
-  border:1px solid rgba(248,194,202,.88) !important;
-  color:#D85A72 !important;
-  font-size:10px !important;
-  line-height:1.25 !important;
-  font-weight:700 !important;
-  box-shadow:none !important;
-  transform:none !important;
-}
-#home-kpi-grid .kpi-standard-card #kpi-cover-subtext .kpi-insight-line{
-  display:flex !important;
-  align-items:center !important;
-  min-height:20px !important;
-  margin:0 !important;
-  padding:0 !important;
-  white-space:nowrap !important;
-}
-/* If historical code injects an icon, keep it inline instead of affecting vertical rhythm. */
-#home-kpi-grid .kpi-standard-card #kpi-cover-subtext svg,
-#home-kpi-grid .kpi-standard-card #kpi-cover-subtext i{
-  flex:0 0 auto !important;
-  margin:0 4px 0 0 !important;
-}
-
-@media (max-width:639px){
-  #home-kpi-grid .kpi-standard-card #kpi-cover-subtext.kpi-insight-box{
-    margin-top:18px !important;
-    min-height:40px !important;
-    padding:7px 8px !important;
-    border-radius:9px !important;
-    font-size:8.5px !important;
-    line-height:1.25 !important;
-  }
-}
-@media (max-width:374px){
-  #home-kpi-grid .kpi-standard-card #kpi-cover-subtext.kpi-insight-box{
-    margin-top:16px !important;
-    padding:6px 7px !important;
-    font-size:8px !important;
-  }
-}
-</style>
-
-<style id="phase9-16-kpi-baseline-lock">
-/* ============================================================
-   PHASE 9-16 — FINAL BASELINE LOCK
-   Three standard KPI cards use identical row geometry.
-   SCORE card remains intentionally independent.
-   ============================================================ */
-
-/* Fixed internal rows:
-   1) eyebrow/subtitle
-   2) main value
-   3) breathing space
-   4) insight box
-*/
-#home-kpi-grid .kpi-standard-card .kpi-standard-metric{
-  display:grid !important;
-  grid-template-rows:18px 38px 24px 42px !important;
-  row-gap:0 !important;
-  align-content:start !important;
-  padding-top:12px !important;
-}
-
-#home-kpi-grid .kpi-standard-card .kpi-standard-eyebrow{
-  grid-row:1 !important;
-  height:18px !important;
-  margin:0 !important;
-}
-
-#home-kpi-grid .kpi-standard-card .kpi-standard-value{
-  grid-row:2 !important;
-  height:38px !important;
-  margin:0 !important;
-  align-self:center !important;
-}
-
-/* The insight row is hard-locked to the same vertical baseline and height. */
-#home-kpi-grid .kpi-standard-card .kpi-insight-box{
-  grid-row:4 !important;
-  margin:0 !important;
-  height:42px !important;
-  min-height:42px !important;
-  max-height:42px !important;
-  align-self:stretch !important;
-  box-sizing:border-box !important;
-}
-
-/* Yield / Cover / Assets explicitly share identical geometry. */
-#kpi-yield-insight,
-#kpi-cover-subtext,
-#kpi-final-status{
-  margin-top:0 !important;
-  height:42px !important;
-  min-height:42px !important;
-  max-height:42px !important;
-}
-
-/* Historical cover styles must never alter the shared row. */
-#kpi-cover-subtext{
-  padding-top:9px !important;
-  padding-bottom:9px !important;
-  border-top-width:1px !important;
-  transform:none !important;
-}
-
-/* SP uses the same geometry at a compact scale. */
-@media (max-width:639px){
-  #home-kpi-grid .kpi-standard-card .kpi-standard-metric{
-    grid-template-rows:16px 32px 18px 40px !important;
-    padding-top:9px !important;
-  }
-  #home-kpi-grid .kpi-standard-card .kpi-standard-eyebrow{
-    height:16px !important;
-  }
-  #home-kpi-grid .kpi-standard-card .kpi-standard-value{
-    height:32px !important;
-  }
-  #home-kpi-grid .kpi-standard-card .kpi-insight-box,
-  #kpi-yield-insight,
-  #kpi-cover-subtext,
-  #kpi-final-status{
-    height:40px !important;
-    min-height:40px !important;
-    max-height:40px !important;
-    margin:0 !important;
-  }
-  #kpi-cover-subtext{
-    padding-top:7px !important;
-    padding-bottom:7px !important;
-  }
-}
-</style>
-
-<style id="phase9-16-final-cover-baseline-fix">
-/* FINAL MICRO FIX — cover insight only */
-#home-kpi-grid .kpi-standard-card #kpi-cover-subtext.kpi-insight-box{
-  position:relative !important;
-  top:-10px !important;
-}
-
-/* Preserve the shared CTA baseline after the visual lift. */
-#home-kpi-grid .kpi-standard-card #kpi-cover-subtext.kpi-insight-box + .kpi-card-cta{
-  margin-top:auto !important;
-}
-
-@media (max-width:639px){
-  #home-kpi-grid .kpi-standard-card #kpi-cover-subtext.kpi-insight-box{
-    top:-6px !important;
-  }
-}
-</style>
-
-<style id="phase9-16-true-alignment-lock">
-/* Structural alignment: no transform/offset workaround. */
-#home-kpi-grid #kpi-cover-subtext.kpi-insight-box{
-  position:static !important;
-  top:auto !important;
-  transform:none !important;
-}
-
-/* All three standard main values occupy the exact same grid row. */
-#home-kpi-grid .kpi-standard-card #kpi-cover-rate.kpi-standard-value{
-  grid-row:2 !important;
-  height:38px !important;
-  margin:0 !important;
-  display:flex !important;
-  align-items:center !important;
-  align-self:center !important;
-  font-size:24px !important;
-  line-height:1 !important;
-  font-weight:800 !important;
-  letter-spacing:-0.025em !important;
-  white-space:nowrap !important;
-}
-
-/* All three insights occupy row 4 with identical dimensions. */
-#home-kpi-grid .kpi-standard-card #kpi-yield-insight,
-#home-kpi-grid .kpi-standard-card #kpi-cover-subtext,
-#home-kpi-grid .kpi-standard-card #kpi-final-status{
-  grid-row:4 !important;
-  position:static !important;
-  top:auto !important;
-  margin:0 !important;
-  height:42px !important;
-  min-height:42px !important;
-  max-height:42px !important;
-  align-self:stretch !important;
-}
-
-@media (max-width:639px){
-  #home-kpi-grid .kpi-standard-card #kpi-cover-rate.kpi-standard-value{
-    height:32px !important;
-    font-size:20px !important;
-  }
-  #home-kpi-grid .kpi-standard-card #kpi-yield-insight,
-  #home-kpi-grid .kpi-standard-card #kpi-cover-subtext,
-  #home-kpi-grid .kpi-standard-card #kpi-final-status{
-    height:40px !important;
-    min-height:40px !important;
-    max-height:40px !important;
-  }
-}
-@media (max-width:374px){
-  #home-kpi-grid .kpi-standard-card #kpi-cover-rate.kpi-standard-value{
-    font-size:18px !important;
-  }
-}
-</style>
-
-<style id="phase9-16-absolute-insight-alignment-lock">
-/* ============================================================
-   PHASE 9-16 — ABSOLUTE INSIGHT ALIGNMENT LOCK
-   Final presentation-only solution:
-   anchor the three standard insight boxes to the same card-bottom
-   baseline instead of inheriting historical metric-flow differences.
-   SCORE card remains untouched.
-   ============================================================ */
-
-#home-kpi-grid .kpi-standard-card{
-  position:relative !important;
-}
-
-/* Reserve vertical room so metric content can never collide with insight. */
-#home-kpi-grid .kpi-standard-card .kpi-standard-content{
-  padding-bottom:64px !important;
-}
-
-/* Exact shared Y anchor for the three insight boxes. */
-#home-kpi-grid .kpi-standard-card #kpi-yield-insight,
-#home-kpi-grid .kpi-standard-card #kpi-cover-subtext,
-#home-kpi-grid .kpi-standard-card #kpi-final-status{
-  position:absolute !important;
-  top:auto !important;
-  bottom:70px !important;
-  left:20px !important;
-  right:20px !important;
-
-  margin:0 !important;
-  transform:none !important;
-
-  height:42px !important;
-  min-height:42px !important;
-  max-height:42px !important;
-
-  box-sizing:border-box !important;
-  z-index:2 !important;
-}
-
-/* Neutralize historical cover-only overrides completely. */
-#home-kpi-grid .kpi-standard-card #kpi-cover-subtext.kpi-insight-box{
-  position:absolute !important;
-  top:auto !important;
-  bottom:70px !important;
-  margin:0 !important;
-  transform:none !important;
-}
-
-/* CTA remains independently bottom-anchored by the existing flex layout. */
-#home-kpi-grid .kpi-standard-card .kpi-card-cta{
-  position:relative !important;
-  z-index:3 !important;
-}
-
-/* Smartphone: same concept, compact card padding / CTA height. */
-@media (max-width:639px){
-  #home-kpi-grid .kpi-standard-card .kpi-standard-content{
-    padding-bottom:58px !important;
-  }
-
-  #home-kpi-grid .kpi-standard-card #kpi-yield-insight,
-  #home-kpi-grid .kpi-standard-card #kpi-cover-subtext,
-  #home-kpi-grid .kpi-standard-card #kpi-final-status,
-  #home-kpi-grid .kpi-standard-card #kpi-cover-subtext.kpi-insight-box{
-    bottom:54px !important;
-    left:12px !important;
-    right:12px !important;
-    height:40px !important;
-    min-height:40px !important;
-    max-height:40px !important;
-  }
-}
-</style>
-
-<style id="phase9-16-four-card-insight-alignment-lock">
-/* ============================================================
-   PHASE 9-16 — FOUR CARD INSIGHT ALIGNMENT LOCK
-   The SCORE card remains visually special, but its insight bar
-   now shares the exact Y coordinate and height of the other three.
-   The divider below SCORE insight is intentionally preserved.
-   ============================================================ */
-
-/* Let SCORE insight anchor to the card itself, not its historical
-   positioned inner wrapper. */
-#kpi-card-score > .kpi-score-content{
-  position:static !important;
-}
-
-/* Same desktop anchor and height as the three standard KPI insights. */
-#kpi-card-score #kpi-score-breakdown{
-  position:absolute !important;
-  top:auto !important;
-  bottom:70px !important;
-  left:20px !important;
-  right:20px !important;
-
-  margin:0 !important;
-  transform:none !important;
-
-  height:42px !important;
-  min-height:42px !important;
-  max-height:42px !important;
-
-  display:flex !important;
-  align-items:center !important;
-  box-sizing:border-box !important;
-  z-index:2 !important;
-}
-
-/* Keep SCORE's divider / CTA structure exactly as designed. */
-#kpi-card-score > div:last-child{
-  position:relative !important;
-  z-index:3 !important;
-}
-
-/* Explicitly lock all four insight heights together. */
-#kpi-card-score #kpi-score-breakdown,
-#home-kpi-grid .kpi-standard-card #kpi-yield-insight,
-#home-kpi-grid .kpi-standard-card #kpi-cover-subtext,
-#home-kpi-grid .kpi-standard-card #kpi-final-status{
-  height:42px !important;
-  min-height:42px !important;
-  max-height:42px !important;
-}
-
-/* Smartphone: identical compact Y coordinate and height for all four. */
-@media (max-width:639px){
-  #kpi-card-score #kpi-score-breakdown{
-    bottom:54px !important;
-    left:12px !important;
-    right:12px !important;
-
-    height:40px !important;
-    min-height:40px !important;
-    max-height:40px !important;
-
-    padding:7px 8px !important;
-  }
-
-  #kpi-card-score #kpi-score-breakdown,
-  #home-kpi-grid .kpi-standard-card #kpi-yield-insight,
-  #home-kpi-grid .kpi-standard-card #kpi-cover-subtext,
-  #home-kpi-grid .kpi-standard-card #kpi-final-status{
-    height:40px !important;
-    min-height:40px !important;
-    max-height:40px !important;
-  }
-}
-</style>
-
-<style id="phase9-16-score-insight-overflow-final-fix">
-/* ============================================================
-   PHASE 9-16 — GitHub candidate final fix
-   SCORE insight keeps its original design, shared Y/height,
-   and the divider below it. Only the absolute-width conflict
-   is removed.
-   ============================================================ */
-
-#kpi-card-score #kpi-score-breakdown{
-  width:auto !important;       /* neutralize historical w-full */
-  max-width:none !important;
-  box-sizing:border-box !important;
-
-  left:20px !important;
-  right:20px !important;
-  bottom:70px !important;
-
-  height:42px !important;
-  min-height:42px !important;
-  max-height:42px !important;
-
-  overflow:hidden !important;
-}
-
-/* Preserve the original SCORE insight's internal two-column balance. */
-#kpi-card-score #kpi-score-breakdown > div.flex-1{
-  min-width:0 !important;
-}
-#kpi-card-score #kpi-score-breakdown #kpi-base-score,
-#kpi-card-score #kpi-score-breakdown #kpi-ai-adj{
-  flex:0 0 auto !important;
-}
-
-/* SCORE divider + CTA remain exactly below the aligned insight. */
-#kpi-card-score > div:last-child{
-  margin-top:auto !important;
-}
-
-/* Smartphone final guard:
-   same Y coordinate / height concept, narrower inset, no overflow. */
-@media (max-width:639px){
-  #kpi-card-score #kpi-score-breakdown{
-    width:auto !important;
-    left:12px !important;
-    right:12px !important;
-    bottom:54px !important;
-
-    height:40px !important;
-    min-height:40px !important;
-    max-height:40px !important;
-
-    padding:6px 7px !important;
-    border-radius:11px !important;
-  }
-
-  /* Protect the 2-column ENGINE / LUMI row on narrow screens. */
-  #kpi-card-score #kpi-score-breakdown > div.flex-1{
-    gap:3px !important;
-  }
-  #kpi-card-score #kpi-score-breakdown > div.flex-1 > span{
-    white-space:nowrap !important;
-  }
-}
-
-@media (max-width:374px){
-  #kpi-card-score #kpi-score-breakdown{
-    left:10px !important;
-    right:10px !important;
-    padding-left:5px !important;
-    padding-right:5px !important;
-  }
-}
-</style>
-
-
-<style id="phase9-16-sp-final-polish-v3">
-/* ============================================================
-   PHASE 9-16 — SP FINAL POLISH v3
-   Scope: smartphone HOME KPI cards only.
-   PC layout / Engine / Auth / LUMI runtime unchanged.
-   ============================================================ */
-@media (max-width:639px){
-
-  /* 1) Card height: lock all four cards to the same compact height. */
-  #home-kpi-grid > #kpi-card-score,
-  #home-kpi-grid > #kpi-card-yield,
-  #home-kpi-grid > #kpi-card-cover,
-  #home-kpi-grid > #kpi-card-assets{
-    height:220px !important;
-    min-height:220px !important;
-    max-height:220px !important;
-  }
-
-  /* 2) LUMI score breakdown:
-        internal "未評価" is a non-numeric state, so show "—" on SP only.
-        The top status badge remains "LUMI 未評価". */
-  #kpi-card-score #kpi-ai-adj{
-    font-size:0 !important;
-    line-height:1 !important;
-    min-width:18px !important;
-    text-align:center !important;
-  }
-  #kpi-card-score #kpi-ai-adj::after{
-    content:"—";
-    font-size:10px !important;
-    line-height:1 !important;
-    font-weight:800 !important;
-    color:#8C5800 !important;
-  }
-
-  /* 3) All four bottom navigation links use exactly the same typography. */
-  #kpi-card-score > div:last-child button,
-  #home-kpi-grid .kpi-standard-card .kpi-card-cta-button{
-    font-family:inherit !important;
-    font-size:10px !important;
-    line-height:1.2 !important;
-    font-weight:700 !important;
-    letter-spacing:0 !important;
-    gap:4px !important;
-    white-space:nowrap !important;
-  }
-  #kpi-card-score > div:last-child button i,
-  #home-kpi-grid .kpi-standard-card .kpi-card-cta-button i{
-    font-size:9px !important;
-  }
-
-  /* Remove the historical special reduction only for the long cover CTA. */
-  #kpi-card-cover .kpi-card-cta-button{
-    font-size:10px !important;
-    letter-spacing:0 !important;
-  }
-}
-
-/* Very narrow phones: keep the same hierarchy but prevent clipping. */
-@media (max-width:374px){
-  #home-kpi-grid > #kpi-card-score,
-  #home-kpi-grid > #kpi-card-yield,
-  #home-kpi-grid > #kpi-card-cover,
-  #home-kpi-grid > #kpi-card-assets{
-    height:214px !important;
-    min-height:214px !important;
-    max-height:214px !important;
-  }
-
-  #kpi-card-score > div:last-child button,
-  #home-kpi-grid .kpi-standard-card .kpi-card-cta-button,
-  #kpi-card-cover .kpi-card-cta-button{
-    font-size:9px !important;
-  }
-}
-</style>
-
-
-
-<style id="phase9-17-lumi-font-polish">
-/* ============================================================
-   PHASE 9-17 — LUMI AI DIAGNOSIS FONT POLISH ONLY
-   Scope: typography weight inside LUMI AI diagnosis.
-   No wording / color / layout / Engine / Schema / Auth / AI runtime changes.
-   ============================================================ */
-#lumiAdvisorView .p95-axis p,
-#lumiAdvisorView .p95-diagnosis p,
-#lumiAdvisorView .lumi-next-action .text-\[\#6F7785\],
-#lumiAdvisorView .text-\[\#6F7785\],
-#lumiAdvisorView .text-\[\#5B6472\] {
-  font-weight: 500 !important;
-}
-</style>
-
-
-<style id="phase9-17-score-sync-fix">
-/* ============================================================
-   PHASE 9-17 — SCORE SYNC / SP BADGE FIX
-   Scope:
-   - Show the actual existing #kpi-ai-adj text on SP after LUMI diagnosis.
-   - No diagnosis: runtime writes "—".
-   - Prevent #kpi-score-badge from ellipsis truncation on SP.
-   No Engine / AI prompt / Auth / Schema / HOME layout changes.
-   ============================================================ */
-@media (max-width: 639px) {
-  #homeView #home-kpi-grid #kpi-card-score #kpi-score-breakdown #kpi-ai-adj {
-    font-size: 10px !important;
-    line-height: 1.05 !important;
-    min-width: 18px !important;
-    text-align: center !important;
-  }
-
-  #homeView #home-kpi-grid #kpi-card-score #kpi-score-breakdown #kpi-ai-adj::after {
-    content: none !important;
-    display: none !important;
-  }
-
-  #homeView #home-kpi-grid #kpi-card-score #kpi-score-badge {
-    max-width: none !important;
-    width: auto !important;
-    overflow: visible !important;
-    text-overflow: clip !important;
-    white-space: nowrap !important;
-  }
-}
-</style>
-
 </head>
 <body class="bg-[#FAFAF7] text-[#253047] min-h-screen font-sans antialiased relative overflow-x-hidden">
 
@@ -2067,12 +1153,12 @@
           <div id="home-kpi-grid" class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
             
             <!-- KPI 1: LUMIFUL SCORE CARD -->
-            <div id="kpi-card-score" class="bg-[#FFFDF8] rounded-[24px] p-3.5 sm:p-5 border border-[#ECEBE6] flex flex-col justify-between relative overflow-hidden transition shadow-sm">
+            <div class="bg-[#FFFDF8] rounded-[24px] p-3.5 sm:p-5 border border-[#ECEBE6] flex flex-col justify-between relative overflow-hidden transition shadow-sm">
               
               <!-- Hero-Wide Organic Light Field Background Canvas -->
               <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_85%_35%,rgba(255,200,61,0.22)_0%,rgba(255,200,61,0.08)_45%,rgba(255,253,248,0)_75%)] pointer-events-none -z-0"></div>
 
-              <div class="kpi-score-content relative z-10 space-y-2 sm:space-y-3">
+              <div class="relative z-10 space-y-2 sm:space-y-3">
                 <!-- Header: Title (Top Left) & Dynamic Badge (Top Right) -->
                 <div class="flex items-center justify-between gap-1 sm:gap-2">
                   <div class="shrink-0 font-extrabold uppercase leading-[0.92]" aria-label="LUMIFUL SCORE">
@@ -2132,76 +1218,63 @@
 
             </div>
 
-            <!-- KPI 2: 年間運用益 -->
-            <div id="kpi-card-yield" class="bg-white rounded-[24px] p-3.5 sm:p-5 border border-[#ECEBE6] flex flex-col relative overflow-hidden transition kpi-standard-card">
-              <div class="kpi-standard-content">
-                <div class="flex items-center justify-between gap-1 sm:gap-2 mb-1 kpi-standard-header">
+            <!-- KPI 2: 年間運用益 (専用画像アセットを絶対保護・維持) -->
+            <div class="bg-white rounded-[24px] p-3.5 sm:p-5 border border-[#ECEBE6] flex flex-col justify-between relative overflow-hidden transition">
+              <div>
+                <div class="flex items-center justify-between gap-1 sm:gap-2 mb-1">
                   <span class="text-[10px] sm:text-xs font-bold text-[#6F7785] whitespace-nowrap tracking-[-0.02em]">資産が生活を支える力</span>
                   <img src="./assets/kpi-annual-yield.png" alt="" class="w-8 h-8 sm:w-10 sm:h-10 object-contain shrink-0 pointer-events-none" />
                 </div>
-                <div class="kpi-standard-metric">
-                  <div class="kpi-standard-eyebrow text-[11px] font-bold text-[#8C5800]">平均年間運用益 (生涯)</div>
-                  <div id="kpi-annual-yield" class="kpi-standard-value text-2xl sm:text-3xl font-extrabold text-[#253047] tracking-tight">
-                    0 万円<span class="kpi-annual-unit text-xs font-normal text-[#6F7785]"> /年</span>
-                  </div>
-                  <div id="kpi-yield-insight" class="kpi-standard-support kpi-insight-box kpi-insight-neutral">
-                    <div class="kpi-insight-line">
-                      生活費の <span id="kpi-yield-living-support-rate">—</span> 相当
-                    </div>
-                    <div class="kpi-insight-line">
-                      <span id="kpi-phase-badge">累計運用益 未設定</span>
-                    </div>
-                  </div>
+                <div class="text-[11px] font-bold text-[#8C5800] mb-2">平均年間運用益 (生涯)</div>
+                <div id="kpi-annual-yield" class="text-2xl sm:text-3xl font-extrabold text-[#253047] tracking-tight">
+                  0 万円<span class="kpi-annual-unit text-xs font-normal text-[#6F7785]"> /年</span>
                 </div>
               </div>
-              <div class="kpi-card-cta">
-                <button onclick="switchView('annualProjection')" class="kpi-card-cta-button group">
-                  <span>推移を見る</span><i class="fa-solid fa-arrow-right group-hover:translate-x-0.5 transition-transform"></i>
-                </button>
+
+              <div class="flex items-start justify-start pt-3 border-t border-[#ECEBE6] mt-3 h-[36px] sm:h-[38px] shrink-0">
+                <span id="kpi-phase-badge" class="max-w-full truncate px-2 py-0.5 sm:px-2.5 rounded-full text-[9px] sm:text-[10px] font-bold bg-[#FAFAF7] text-[#6F7785] border border-[#ECEBE6]">
+                  累計運用益 未設定
+                </span>
               </div>
             </div>
 
-            <!-- KPI 3: 生涯収支カバー率 -->
-            <div id="kpi-card-cover" class="bg-white rounded-[24px] p-3.5 sm:p-5 border border-[#ECEBE6] flex flex-col relative overflow-hidden transition kpi-standard-card">
-              <div class="kpi-standard-content">
-                <div class="flex items-center justify-between gap-2 mb-1 kpi-standard-header">
-                  <span class="text-[10px] sm:text-xs font-bold text-[#6F7785] flex items-center gap-0.5 sm:gap-1 whitespace-nowrap tracking-[-0.02em]">生涯収支カバー率</span>
+            <!-- KPI 3: 生涯収支カバー率 (専用画像アセットを絶対保護・維持) -->
+            <div class="bg-white rounded-[24px] p-3.5 sm:p-5 border border-[#ECEBE6] flex flex-col justify-between relative overflow-hidden transition">
+              <div>
+                <div class="flex items-center justify-between gap-2 mb-1">
+                  <span class="text-[10px] sm:text-xs font-bold text-[#6F7785] flex items-center gap-0.5 sm:gap-1 whitespace-nowrap tracking-[-0.02em]">
+                    生涯収支カバー率
+                    
+                  </span>
                   <img src="./assets/kpi-cover-rate.png" alt="" class="w-8 h-8 sm:w-10 sm:h-10 object-contain shrink-0 pointer-events-none" />
                 </div>
-                <div class="kpi-standard-metric">
-                  <div class="kpi-standard-eyebrow text-[11px] font-bold text-[#65B9E8]">生涯の資金維持達成率</div>
-                  <div id="kpi-cover-rate" class="kpi-standard-value text-xl sm:text-2xl font-extrabold text-[#6F7785] tracking-tight whitespace-nowrap">-</div>
-                  <div id="kpi-cover-subtext" class="kpi-standard-support kpi-insight-box kpi-insight-warning">
-                    <div class="kpi-insight-line">目標年齢までの資金維持力</div>
-                  </div>
+                <div class="text-[11px] font-bold text-[#65B9E8] mb-2">生涯の資金維持達成率</div>
+                <div id="kpi-cover-rate" class="text-xl sm:text-2xl font-extrabold text-[#6F7785] tracking-tight whitespace-nowrap">
+                  -
                 </div>
               </div>
-              <div class="kpi-card-cta">
-                <button onclick="switchView('simulationResults')" class="kpi-card-cta-button group">
-                  <span>シミュレーション結果を見る</span><i class="fa-solid fa-arrow-right group-hover:translate-x-0.5 transition-transform"></i>
-                </button>
+
+              <div id="kpi-cover-subtext" class="text-[11px] text-[#6F7785] pt-3 border-t border-[#ECEBE6] mt-3 h-[36px] sm:h-[38px] flex items-start truncate shrink-0">
+                目標年齢までの資金維持力
               </div>
             </div>
 
-            <!-- KPI 4: 目標年齢時点の想定資産 -->
-            <div id="kpi-card-assets" class="bg-white rounded-[24px] p-3.5 sm:p-5 border border-[#ECEBE6] flex flex-col relative overflow-hidden transition kpi-standard-card">
-              <div class="kpi-standard-content">
-                <div class="flex items-center justify-between gap-2 mb-1 kpi-standard-header">
-                  <span class="text-[10px] sm:text-xs font-bold text-[#6F7785] whitespace-nowrap tracking-[-0.02em]"><span id="kpi-final-age-label">90</span>歳時点の想定資産</span>
+            <!-- KPI 4: 目標年齢時点の想定資産 (専用画像アセットを絶対保護・維持) -->
+            <div class="bg-white rounded-[24px] p-3.5 sm:p-5 border border-[#ECEBE6] flex flex-col justify-between relative overflow-hidden transition">
+              <div>
+                <div class="flex items-center justify-between gap-2 mb-1">
+                  <span class="text-[10px] sm:text-xs font-bold text-[#6F7785] whitespace-nowrap tracking-[-0.02em]">
+                    <span id="kpi-final-age-label">90</span>歳時点の想定資産
+                  </span>
                   <img src="./assets/kpi-future-assets.png" alt="" class="w-8 h-8 sm:w-10 sm:h-10 object-contain shrink-0 pointer-events-none" />
                 </div>
-                <div class="kpi-standard-metric">
-                  <div class="kpi-standard-eyebrow kpi-standard-eyebrow-placeholder" aria-hidden="true">&nbsp;</div>
-                  <div id="kpi-final-assets" class="kpi-standard-value text-2xl sm:text-3xl font-extrabold text-[#253047] tracking-tight">0 万円</div>
-                  <div id="kpi-final-status" class="kpi-standard-support kpi-insight-box kpi-insight-info">
-                    <div class="kpi-insight-line">利用可能資産のみで算出</div>
-                  </div>
+                <div id="kpi-final-assets" class="text-2xl sm:text-3xl font-extrabold text-[#253047] tracking-tight mt-3">
+                  0 万円
                 </div>
               </div>
-              <div class="kpi-card-cta">
-                <button onclick="switchView('assetDetails')" class="kpi-card-cta-button group">
-                  <span>資産詳細を見る</span><i class="fa-solid fa-arrow-right group-hover:translate-x-0.5 transition-transform"></i>
-                </button>
+
+              <div id="kpi-final-status" class="text-[11px] text-[#6F7785] pt-3 border-t border-[#ECEBE6] mt-3 h-[36px] sm:h-[38px] flex items-start shrink-0">
+                利用可能資産のみで算出
               </div>
             </div>
 
@@ -2224,9 +1297,9 @@
                   <button onclick="setInflationPreset(2.0)" id="header-inf-20" class="px-2 py-0.5 rounded-[8px] font-bold transition border border-transparent">2.0%</button>
                 </div>
 
-                <button onclick="openLumiDiagnosisFromCtaV1()" id="ai-diagnose-btn" class="px-3.5 py-1.5 btn-lumi-primary text-xs flex items-center gap-1.5 whitespace-nowrap shrink-0">
+                <button onclick="switchView('lumiAdvisor')" id="ai-diagnose-btn" class="px-3.5 py-1.5 btn-lumi-primary text-xs flex items-center gap-1.5 whitespace-nowrap shrink-0">
                   <i class="fa-solid fa-arrows-rotate text-[11px]" id="ai-btn-icon"></i>
-                  <span id="ai-diagnose-btn-label">LUMI AI診断をする</span>
+                  <span>LUMIのAI診断を見る</span>
                 </button>
               </div>
             </div>
@@ -2890,9 +1963,9 @@
               </p>
 
               <div class="pt-2">
-                <button onclick="openLumiDiagnosisFromCtaV1()" id="results-ai-diagnose-btn" class="px-3.5 py-1.5 btn-lumi-primary text-xs flex items-center gap-1.5 whitespace-nowrap shrink-0">
+                <button onclick="switchView('lumiAdvisor')" class="px-3.5 py-1.5 btn-lumi-primary text-xs flex items-center gap-1.5 whitespace-nowrap shrink-0">
                   <i class="fa-solid fa-arrows-rotate text-[11px]"></i>
-                  <span id="results-ai-diagnose-btn-label">LUMI AI診断をする</span>
+                  <span>LUMIのAI診断を見る</span>
                 </button>
               </div>
             </div>
@@ -5055,7 +4128,6 @@
         });
       });
 
-      window.invalidateLumiDiagnosisContextV1?.('inflation-change');
       window.recalculateAllFast();
     };
 
@@ -5268,9 +4340,7 @@
     window.syncV2InputAndRecalculate=function(event){const m=window.ensureV2InputModel();const _ageRaw=(document.getElementById('v2CurrentAge')?.value||'').trim();
 m.profile.currentAge=_ageRaw?Math.max(18,Math.round(Number(_ageRaw)||0)):0;
 const _targetRaw=(document.getElementById('v2TargetAge')?.value||'').trim();
-m.profile.targetAge=_targetRaw?Math.max(m.profile.currentAge||18,Math.round(Number(_targetRaw)||90)):90;m.profile.hasSpouse=!!document.getElementById('v2HasSpouse')?.checked;m.profile.spouseAge=m.profile.hasSpouse?Math.max(18,Math.round(v2Num('v2SpouseAge',m.profile.currentAge))):null;m.living.expense={amount:v2Num('v2LivingMonthly'),frequency:'monthly'};const ht=document.getElementById('v2HousingType')?.value||'rent';m.living.housing={type:ht,monthlyAmount:v2Num('v2HousingMonthly'),endAge:ht==='owned_with_loan'?Math.round(v2Num('v2HousingEndAge')):null};m.settings.inflationRate=v2Num('v2InflationRate',1.5);document.querySelectorAll('[data-v2-income]').forEach(el=>{const x=m.incomes[Number(el.dataset.i)];if(!x)return;const k=el.dataset.v2Income;x[k]=(k==='amount'||k==='startAge'||k==='endAge')?Number(el.value||0):el.value;});document.querySelectorAll('[data-v2-asset]').forEach(el=>{const x=m.assets[Number(el.dataset.i)];if(!x)return;const k=el.dataset.v2Asset;x[k]=(k==='value'||k==='expectedReturn')?Number(el.value||0):el.value;});m.assets.filter(a=>a.assetClass==='simulation'&&(a.category==='cash'||a.category==='stock')).forEach(a=>{a.expectedReturn=0;});document.querySelectorAll('[data-v2-withdrawal]').forEach(el=>{const x=m.assets[Number(el.dataset.i)];if(!x)return;const v=el.value;if(v==='auto'){x.withdrawalSetting='auto';x.withdrawalPriority=null;}else if(v==='excluded'){x.withdrawalSetting='excluded';x.withdrawalPriority='excluded';}else{x.withdrawalSetting='manual';x.withdrawalPriority=v;}});document.querySelectorAll('[data-v2-payment]').forEach(el=>{const x=m.payments[Number(el.dataset.i)];if(!x)return;const k=el.dataset.v2Payment;x[k]=(k==='amount'||k==='endAge')?Number(el.value||0):el.value;x.startAge=m.profile.currentAge;});window.LUMIFUL_LUMI_CONTEXT_DIRTY=true;
-if(event?.type==='input'||event?.type==='change')window.invalidateLumiDiagnosisContextV1?.('input-change');
-if(m.profile.currentAge>0&&typeof window.recalculateAllFast==='function'){if(event?.type==='input'){clearTimeout(window.__lumifulInputRecalcTimer);window.__lumifulInputRecalcTimer=setTimeout(()=>window.recalculateAllFast(),140);}else{clearTimeout(window.__lumifulInputRecalcTimer);window.recalculateAllFast();}}else window.renderV2EmptyDashboard?.();};
+m.profile.targetAge=_targetRaw?Math.max(m.profile.currentAge||18,Math.round(Number(_targetRaw)||90)):90;m.profile.hasSpouse=!!document.getElementById('v2HasSpouse')?.checked;m.profile.spouseAge=m.profile.hasSpouse?Math.max(18,Math.round(v2Num('v2SpouseAge',m.profile.currentAge))):null;m.living.expense={amount:v2Num('v2LivingMonthly'),frequency:'monthly'};const ht=document.getElementById('v2HousingType')?.value||'rent';m.living.housing={type:ht,monthlyAmount:v2Num('v2HousingMonthly'),endAge:ht==='owned_with_loan'?Math.round(v2Num('v2HousingEndAge')):null};m.settings.inflationRate=v2Num('v2InflationRate',1.5);document.querySelectorAll('[data-v2-income]').forEach(el=>{const x=m.incomes[Number(el.dataset.i)];if(!x)return;const k=el.dataset.v2Income;x[k]=(k==='amount'||k==='startAge'||k==='endAge')?Number(el.value||0):el.value;});document.querySelectorAll('[data-v2-asset]').forEach(el=>{const x=m.assets[Number(el.dataset.i)];if(!x)return;const k=el.dataset.v2Asset;x[k]=(k==='value'||k==='expectedReturn')?Number(el.value||0):el.value;});m.assets.filter(a=>a.assetClass==='simulation'&&(a.category==='cash'||a.category==='stock')).forEach(a=>{a.expectedReturn=0;});document.querySelectorAll('[data-v2-withdrawal]').forEach(el=>{const x=m.assets[Number(el.dataset.i)];if(!x)return;const v=el.value;if(v==='auto'){x.withdrawalSetting='auto';x.withdrawalPriority=null;}else if(v==='excluded'){x.withdrawalSetting='excluded';x.withdrawalPriority='excluded';}else{x.withdrawalSetting='manual';x.withdrawalPriority=v;}});document.querySelectorAll('[data-v2-payment]').forEach(el=>{const x=m.payments[Number(el.dataset.i)];if(!x)return;const k=el.dataset.v2Payment;x[k]=(k==='amount'||k==='endAge')?Number(el.value||0):el.value;x.startAge=m.profile.currentAge;});window.LUMIFUL_LUMI_CONTEXT_DIRTY=true;if(m.profile.currentAge>0&&typeof window.recalculateAllFast==='function'){if(event?.type==='input'){clearTimeout(window.__lumifulInputRecalcTimer);window.__lumifulInputRecalcTimer=setTimeout(()=>window.recalculateAllFast(),140);}else{clearTimeout(window.__lumifulInputRecalcTimer);window.recalculateAllFast();}}else window.renderV2EmptyDashboard?.();};
     window.addV2Income=function(){const m=window.ensureV2InputModel();m.incomes.push({id:v2Id('income'),category:'salary',name:'給与',owner:'self',amount:0,frequency:'yearly',startAge:m.profile.currentAge||0,endAge:0});window.renderV2IncomeList();};window.removeV2Income=function(i){window.ensureV2InputModel().incomes.splice(i,1);window.renderV2IncomeList();window.recalculateAllFast();};
     window.addV2Asset=function(){const m=window.ensureV2InputModel();m.assets.push({id:v2Id('asset'),assetClass:'simulation',category:'cash',name:'現金・預金',owner:'self',value:0,expectedReturn:0,withdrawalSetting:'auto',withdrawalPriority:null});window.renderV2AssetList();};window.removeV2Asset=function(i){window.ensureV2InputModel().assets.splice(i,1);window.renderV2AssetList();window.recalculateAllFast();};window.addV2PotentialAsset=function(){const m=window.ensureV2InputModel();m.assets.push({id:v2Id('potential'),assetClass:'potential',category:'real_estate',name:'売却できる資産',owner:'self',value:0});window.renderV2PotentialAssetList();};window.removeV2PotentialAsset=function(i){window.ensureV2InputModel().assets.splice(i,1);window.renderV2PotentialAssetList();window.recalculateAllFast();};window.addV2LifestyleAsset=function(){const m=window.ensureV2InputModel();m.assets.push({id:v2Id('lifestyle'),assetClass:'lifestyle',category:'home',name:'自宅',owner:'self',value:0});window.renderV2LifestyleAssetList();};window.removeV2LifestyleAsset=function(i){window.ensureV2InputModel().assets.splice(i,1);window.renderV2LifestyleAssetList();window.recalculateAllFast();};
     window.addV2Payment=function(){const m=window.ensureV2InputModel();m.payments.push({id:v2Id('payment'),category:'other',name:'返済',amount:0,frequency:'monthly',startAge:m.profile.currentAge||0,endAge:50});window.renderV2PaymentList();};window.removeV2Payment=function(i){window.ensureV2InputModel().payments.splice(i,1);window.renderV2PaymentList();window.recalculateAllFast();};
@@ -5334,7 +4404,6 @@ if(m.profile.currentAge>0&&typeof window.recalculateAllFast==='function'){if(eve
       setText('kpi-score-status-text', '条件を入力してください');
       setText('kpi-final-age-label', String(window.ensureV2InputModel()?.profile?.targetAge || 90));
       setText('kpi-final-assets', '0 万円');
-      setText('kpi-yield-living-support-rate', '—');
       setText('asset-potential-assets', '0 万円');
 
       const scoreBadge = document.getElementById('kpi-score-badge');
@@ -5402,31 +4471,6 @@ if(m.profile.currentAge>0&&typeof window.recalculateAllFast==='function'){if(eve
       const totalYield = tableRows.reduce((acc, r) => acc + r.annualYield, 0);
       const avgYield = Math.round(totalYield / tableRows.length);
 
-      // PHASE 9-16 — HOME insight only.
-      // Uses the same expense definition already used by the existing cover-rate logic:
-      // annual living expense + annual housing expense.
-      const yieldSupportLivingAnnual = window.normalizeAnnualAmountV2(
-        migrated.living?.expense?.amount,
-        migrated.living?.expense?.frequency
-      );
-      const yieldSupportHousing = migrated.living?.housing || {};
-      const yieldSupportHousingAnnual =
-        yieldSupportHousing.type === 'owned_no_loan'
-          ? 0
-          : Math.max(0, Number(yieldSupportHousing.monthlyAmount || 0)) * 12;
-      const yieldSupportExpenseAnnual =
-        yieldSupportLivingAnnual + yieldSupportHousingAnnual;
-      const yieldSupportRate =
-        yieldSupportExpenseAnnual > 0
-          ? Math.max(0, Math.round((avgYield / yieldSupportExpenseAnnual) * 100))
-          : null;
-      const yieldSupportRateElem =
-        document.getElementById('kpi-yield-living-support-rate');
-      if (yieldSupportRateElem) {
-        yieldSupportRateElem.textContent =
-          yieldSupportRate === null ? '—' : `${yieldSupportRate}%`;
-      }
-
       document.getElementById('kpi-annual-yield').innerHTML = `${avgYield.toLocaleString()} 万円<span class="kpi-annual-unit text-xs font-normal text-[#6F7785]"> /年</span><span class="kpi-annual-average text-xs font-normal text-[#6F7785]"> (平均)</span>`;
 
       const phaseBadge = document.getElementById('kpi-phase-badge');
@@ -5455,7 +4499,7 @@ if(m.profile.currentAge>0&&typeof window.recalculateAllFast==='function'){if(eve
           coverRateElem.className = 'text-xl sm:text-2xl font-extrabold text-[#FF8FA3] tracking-tight whitespace-nowrap';
           if (coverSubtextElem) {
             coverSubtextElem.innerText = `🚨 ${insolvencyAge}歳頃に資金不足`;
-            coverSubtextElem.className = 'kpi-standard-support kpi-insight-box kpi-insight-warning text-[11px] font-bold flex items-center';
+            coverSubtextElem.className = 'text-[11px] text-[#FF8FA3] font-bold pt-3 border-t border-[#ECEBE6] mt-3 h-[36px] sm:h-[38px] flex items-start truncate shrink-0';
           }
         } else if (totalDeficit === 0) {
           coverRateElem.innerText = '全期間 100% カバー';
@@ -5463,10 +4507,10 @@ if(m.profile.currentAge>0&&typeof window.recalculateAllFast==='function'){if(eve
           if (coverSubtextElem) {
             if (minFinAsset >= yearlyExpenseAvg * 3) {
               coverSubtextElem.innerText = '✨ 十分な資金余力あり';
-              coverSubtextElem.className = 'kpi-standard-support kpi-insight-box kpi-insight-warning text-[11px] font-bold flex items-center';
+              coverSubtextElem.className = 'text-[11px] text-[#253047] font-bold pt-3 border-t border-[#ECEBE6] mt-3 h-[36px] sm:h-[38px] flex items-start truncate shrink-0';
             } else {
               coverSubtextElem.innerText = `🟢 ${effectiveTargetAge}歳まで資金維持`;
-              coverSubtextElem.className = 'kpi-standard-support kpi-insight-box kpi-insight-warning text-[11px] font-bold flex items-center';
+              coverSubtextElem.className = 'text-[11px] text-[#253047] font-semibold pt-3 border-t border-[#ECEBE6] mt-3 h-[36px] sm:h-[38px] flex items-start truncate shrink-0';
             }
           }
         } else {
@@ -5475,13 +4519,13 @@ if(m.profile.currentAge>0&&typeof window.recalculateAllFast==='function'){if(eve
           if (coverSubtextElem) {
             if (minFinAsset >= yearlyExpenseAvg * 3 && finalFinAsset >= yearlyExpenseAvg * 2) {
               coverSubtextElem.innerText = '✨ 十分な資金余力あり';
-              coverSubtextElem.className = 'kpi-standard-support kpi-insight-box kpi-insight-warning text-[11px] font-bold flex items-center';
+              coverSubtextElem.className = 'text-[11px] text-[#253047] font-bold pt-3 border-t border-[#ECEBE6] mt-3 h-[36px] sm:h-[38px] flex items-start truncate shrink-0';
             } else if (minFinAsset >= yearlyExpenseAvg * 1.5) {
               coverSubtextElem.innerText = `🟢 ${effectiveTargetAge}歳まで資金維持`;
-              coverSubtextElem.className = 'kpi-standard-support kpi-insight-box kpi-insight-warning text-[11px] font-bold flex items-center';
+              coverSubtextElem.className = 'text-[11px] text-[#253047] font-semibold pt-3 border-t border-[#ECEBE6] mt-3 h-[36px] sm:h-[38px] flex items-start truncate shrink-0';
             } else {
               coverSubtextElem.innerText = '⚠️ 達成予定・余力は少なめ';
-              coverSubtextElem.className = 'kpi-standard-support kpi-insight-box kpi-insight-warning text-[11px] font-bold flex items-center';
+              coverSubtextElem.className = 'text-[11px] text-[#8C5800] font-bold pt-3 border-t border-[#ECEBE6] mt-3 h-[36px] sm:h-[38px] flex items-start truncate shrink-0';
             }
           }
         }
@@ -5692,28 +4736,10 @@ if(m.profile.currentAge>0&&typeof window.recalculateAllFast==='function'){if(eve
         return;
       }
 
-      if (window.assetChart && window.assetChart.canvas === ctx) {
-        try {
-          window.assetChart.data.labels = labels;
-          const datasets = window.assetChart.data.datasets || [];
-          if (datasets[0]) datasets[0].data = investData;
-          if (datasets[1]) datasets[1].data = potentialAssetsData;
-          if (datasets[2]) {
-            datasets[2].data = cashflowData;
-            datasets[2].backgroundColor = cashflowData.map(v => v >= 0 ? 'rgba(114, 214, 181, 0.6)' : 'rgba(255, 143, 163, 0.6)');
-          }
-          window.assetChart.update('none');
-          return;
-        } catch (error) {
-          console.warn('[LUMIFUL] HOME chart in-place update notice:', error);
-        }
-      }
-
       if (window.assetChart) {
         try { window.assetChart.destroy(); } catch (error) {
-          console.warn('[LUMIFUL] Stale HOME chart destroy notice:', error);
+          console.warn('[LUMIFUL] Previous chart destroy notice:', error);
         }
-        window.assetChart = null;
       }
 
       try {
@@ -5980,18 +5006,11 @@ if(m.profile.currentAge>0&&typeof window.recalculateAllFast==='function'){if(eve
     window.createPersistenceEnvelopeV2 = function(model, existingEnvelope) {
       const now = new Date().toISOString();
       const normalized = window.cloneDataModelV2(window.normalizeDataModelV2(model));
-      const activeLumiDiagnosis =
-        window.LUMIFUL_ACTIVE_LUMI_DIAGNOSIS_RECORD !== undefined
-          ? window.LUMIFUL_ACTIVE_LUMI_DIAGNOSIS_RECORD
-          : existingEnvelope?.lumiDiagnosis;
       return {
         schemaVersion: 2,
         createdAt: existingEnvelope?.createdAt || now,
         updatedAt: now,
-        data: normalized,
-        ...(activeLumiDiagnosis && typeof activeLumiDiagnosis === 'object'
-          ? { lumiDiagnosis: JSON.parse(JSON.stringify(activeLumiDiagnosis)) }
-          : {})
+        data: normalized
       };
     };
 
@@ -6007,10 +5026,7 @@ if(m.profile.currentAge>0&&typeof window.recalculateAllFast==='function'){if(eve
         schemaVersion: 2,
         createdAt: parsed.createdAt || parsed.updatedAt || new Date().toISOString(),
         updatedAt: parsed.updatedAt || parsed.createdAt || new Date().toISOString(),
-        data: window.cloneDataModelV2(window.normalizeDataModelV2(parsed.data)),
-        ...(parsed.lumiDiagnosis && typeof parsed.lumiDiagnosis === 'object'
-          ? { lumiDiagnosis: JSON.parse(JSON.stringify(parsed.lumiDiagnosis)) }
-          : {})
+        data: window.cloneDataModelV2(window.normalizeDataModelV2(parsed.data))
       };
     };
 
@@ -8313,7 +7329,6 @@ if(m.profile.currentAge>0&&typeof window.recalculateAllFast==='function'){if(eve
   window.loadUserData = async function(options = {}) {
     if (window.authState?.status === 'guest') {
       const env = await window.LocalStorageAdapter.load();
-      window.restoreLumiDiagnosisPersistenceV1?.(env?.lumiDiagnosis || null);
       if (env?.data && options.restore !== false) window.hydrateSimulationRuntimeV2(env.data);
       return env;
     }
@@ -8329,13 +7344,11 @@ if(m.profile.currentAge>0&&typeof window.recalculateAllFast==='function'){if(eve
     catch (e) { err = e; console.warn('[LUMIFUL] cloud load notice', e); }
 
     if (!mirror && !cloud) {
-      window.restoreLumiDiagnosisPersistenceV1?.(null);
       if (err) throw err;
       return null;
     }
 
     const selected = mirror && (!cloud || eTime(mirror) > eTime(cloud)) ? mirror : cloud;
-    window.restoreLumiDiagnosisPersistenceV1?.(selected?.lumiDiagnosis || null);
     if (selected?.data && options.restore !== false) {
       window.hydrateSimulationRuntimeV2(selected.data);
     }
@@ -12269,1173 +11282,75 @@ ${JSON.stringify(OUTPUT_SCHEMA_EXAMPLE,null,2)}
 
 
 <script id="phase9-9-real-ai-runtime">
-/* ============================================================
-   LUMIFUL PHASE 9-18 — LUMI DIAGNOSIS STATE + PERSISTENCE
-   ------------------------------------------------------------
-   Source of truth:
-   persisted diagnosis record + current LUMI context fingerprint.
-
-   States:
-   - unassessed   -> 未診断
-   - diagnosing  -> 診断中
-   - diagnosed   -> 診断済み
-   - rediagnose  -> 再診断
-
-   Persistence:
-   - Guest: existing LocalStorage persistence envelope
-   - Account: existing Firestore users/{uid} persistence envelope
-   - Schema v2 `data` is unchanged.
-
-   API:
-   - valid saved diagnosis -> reuse, no API call
-   - changed/no diagnosis -> API only on explicit diagnosis action
-   ============================================================ */
+/* LUMIFUL PHASE 9-9 FINAL — REAL AI RUNTIME */
 (function(){
   'use strict';
-
-  const SDK_ID='lumiful-firebase-functions-sdk';
-  const FUNCTION_NAME='lumiDiagnose';
-  const REGION='asia-northeast1';
-
-  let inflight=null;
-  let cacheKey='';
-  let cacheValue=null;
-  let activeRecord=null;
-  let currentContextKey='';
-  let contextKeyDirty=true;
-  let explicitRunOnOpen=false;
-
+  const SDK_ID='lumiful-firebase-functions-sdk', FUNCTION_NAME='lumiDiagnose', REGION='asia-northeast1';
+  let inflight=null, cacheKey='', cacheValue=null;
   const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const axisLabel={lifeAlignment:'人生との整合性',freedom:'選択の自由度',riskHealth:'リスク健全性'};
   const checkLabel={clear:'大きな注意点なし',attention:'確認したい前提あり',warning:'見直したい前提あり'};
-
-  function hashContext(v){
-    let s='';
-    try{s=JSON.stringify(v);}catch(_){return '';}
-    let h=2166136261;
-    for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619);}
-    return(h>>>0).toString(16);
-  }
-
-  function buildCurrentPackage(){
-    const pkg=window.buildLumiPromptPackageV1?.();
-    if(!pkg?.context) throw Object.assign(new Error('LUMI Contextを生成できませんでした。'),{code:'CONTEXT_UNAVAILABLE'});
-    return pkg;
-  }
-
-  function resolveCurrentContextKey(force=false){
-    if(!force&&!contextKeyDirty&&currentContextKey)return currentContextKey;
-    currentContextKey=hashContext(buildCurrentPackage().context);
-    contextKeyDirty=false;
-    return currentContextKey;
-  }
-
-  function normalizeStoredResult(raw){
-    if(!raw||typeof raw!=='object'||!raw.validated)return null;
-    const validated=window.validateLumiResponseV1?.(raw.validated);
-    if(!validated)return null;
-    const score=window.composeLumiScoreV1?.(validated);
-    if(!score)return null;
-    return {
-      validated,
-      score,
-      meta:{
-        ...(raw.meta&&typeof raw.meta==='object'?raw.meta:{}),
-        source:raw.meta?.source||'persisted'
-      }
-    };
-  }
-
-  function normalizeRecord(raw){
-    if(!raw||typeof raw!=='object'||String(raw.contextKey||'')==='')return null;
-    const result=normalizeStoredResult(raw.result);
-    if(!result)return null;
-    return {
-      version:1,
-      contextKey:String(raw.contextKey),
-      diagnosedAt:String(raw.diagnosedAt||result.meta?.receivedAt||new Date().toISOString()),
-      result
-    };
-  }
-
-  function setActiveRecord(record){
-    activeRecord=normalizeRecord(record);
-    window.LUMIFUL_ACTIVE_LUMI_DIAGNOSIS_RECORD=activeRecord
-      ? JSON.parse(JSON.stringify(activeRecord))
-      : null;
-    if(activeRecord){
-      cacheKey=activeRecord.contextKey;
-      cacheValue=activeRecord.result;
-      window.LUMIFUL_LAST_LUMI_RESULT=activeRecord.result;
-    }else{
-      cacheKey='';
-      cacheValue=null;
-      window.LUMIFUL_LAST_LUMI_RESULT=null;
-    }
-  }
-
-  function diagnosisState(options={}){
-    if(inflight)return {status:'diagnosing',record:activeRecord,result:null};
-    if(!activeRecord?.result?.score)return {status:'unassessed',record:null,result:null};
-    let key='';
-    try{key=resolveCurrentContextKey(!!options.refreshContext);}
-    catch(_){return {status:'rediagnose',record:activeRecord,result:null};}
-    if(key&&activeRecord.contextKey===key){
-      return {status:'diagnosed',record:activeRecord,result:activeRecord.result};
-    }
-    return {status:'rediagnose',record:activeRecord,result:null};
-  }
-
-  const statusUi={
-    unassessed:{badge:'未診断',cta:'LUMI AI診断をする'},
-    diagnosing:{badge:'診断中',cta:'診断中…'},
-    diagnosed:{badge:'診断済み',cta:'LUMI AI診断を見る'},
-    rediagnose:{badge:'再診断',cta:'LUMI AI再診断をする'}
-  };
-
-  function scoreState(r){
-    const raw=Math.max(0,Math.min(100,Number(window.currentBaseScore||0)));
-    return r?.score||{
-      engine90:Number((raw*.9).toFixed(2)),
-      lumi10:null,
-      total100:Number((raw*.9).toFixed(2)),
-      axes:{},
-      checkLevel:'clear'
-    };
-  }
-
-  function setText(id,text){
-    const el=document.getElementById(id);
-    if(el)el.textContent=text;
-  }
-
-  function setCtaState(id,labelId,state){
-    const btn=document.getElementById(id);
-    const label=document.getElementById(labelId);
-    const ui=statusUi[state.status]||statusUi.unassessed;
-    if(label)label.textContent=ui.cta;
-    if(btn){
-      const busy=state.status==='diagnosing';
-      btn.disabled=busy;
-      btn.setAttribute('aria-busy',busy?'true':'false');
-      btn.classList.toggle('opacity-60',busy);
-      btn.classList.toggle('cursor-wait',busy);
-    }
-  }
-
-  function syncScoreSurfaces(options={}){
-    const state=diagnosisState({refreshContext:!!options.refreshContext});
-    const r=state.status==='diagnosed'?state.result:null;
-    const s=scoreState(r);
-    const has=state.status==='diagnosed'&&!!r?.score;
-    const ui=statusUi[state.status]||statusUi.unassessed;
-
-    setText('kpi-score',String(Math.round(s.total100)));
-    setText('kpi-base-score',String(Math.ceil(Number(s.engine90)||0)));
-    setText('kpi-ai-adj',has?String(Math.round((Number(s.lumi10)||0)*100)/100):'—');
-
-    const labels=document.querySelectorAll('#kpi-score-breakdown span.uppercase');
-    if(labels[0])labels[0].textContent='ENGINE';
-    if(labels[1])labels[1].textContent='LUMI';
-
-    setText('kpi-score-badge',ui.badge);
-
-    setText('results-score',String(Math.round(s.total100)));
-    setText('results-base-score',`${s.engine90} / 90`);
-    setText('results-ai-adjustment',has?`${s.lumi10} / 10`:'未評価');
-
-    setText('detailScoreFinal',String(Math.round(s.total100)));
-    setText('detailBaseScore',`${s.engine90} / 90`);
-    setText('detailAiAdj',has?`${s.lumi10} / 10`:'未評価');
-    setText('detailScoreBadge',ui.badge);
-
-    const notice=document.getElementById('detailAiStatusNotice');
-    if(notice){
-      notice.textContent=
-        state.status==='diagnosed'?'※ LUMIのAI総合判断を反映':
-        state.status==='rediagnose'?'※ 条件が変更されています。LUMIの再診断が必要です':
-        state.status==='diagnosing'?'※ LUMIが診断中です':
-        '※ LUMIは未診断です';
-    }
-
-    const diag=document.getElementById('kpi-diagnosis-text');
-    if(diag){
-      if(has&&r.validated?.diagnosis?.summary){
-        diag.textContent=r.validated.diagnosis.summary;
-      }else if(state.status==='rediagnose'){
-        diag.textContent='シミュレーション条件が変更されています。現在の条件でLUMI AI再診断をすると、診断結果を更新できます。';
-      }else if(state.status==='diagnosing'){
-        diag.textContent='現在の条件をLUMIが診断しています。';
-      }else{
-        diag.textContent='プロファイルや収支、資産の数値を設定すると、数値シミュレーションと連動したAI分析アドバイスが表示されます。';
-      }
-    }
-
-    const resultDiag=document.getElementById('results-lumi-text');
-    if(resultDiag){
-      if(has&&r.validated?.diagnosis?.summary){
-        resultDiag.textContent=r.validated.diagnosis.summary;
-      }else if(state.status==='rediagnose'){
-        resultDiag.textContent='条件が変更されています。現在のシミュレーション結果に合わせてLUMI AI再診断を実行できます。';
-      }else if(state.status==='diagnosing'){
-        resultDiag.textContent='現在の条件をLUMIが診断しています。';
-      }else{
-        resultDiag.textContent='条件を設定すると、AIコンパニオンLUMIによるシミュレーション解釈とアドバイスが表示されます。';
-      }
-    }
-
-    setCtaState('ai-diagnose-btn','ai-diagnose-btn-label',state);
-    setCtaState('results-ai-diagnose-btn','results-ai-diagnose-btn-label',state);
-
-    return state;
-  }
-
+  function hashContext(v){let s='';try{s=JSON.stringify(v);}catch(_){return '';}let h=2166136261;for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619);}return(h>>>0).toString(16);}
   async function ensureFunctions(){
     const rt=await window.initializeFirebaseRuntime?.();
-    if(!rt||rt.status!=='ready'||!rt.app){
-      throw Object.assign(new Error('Firebaseを初期化できませんでした。'),{code:'FIREBASE_UNAVAILABLE'});
-    }
-    if(!window.firebase?.functions){
-      const v=window.LUMIFUL_FIREBASE_SDK_VERSION||'12.18.0';
-      await window.loadExternalScriptOnce(`https://www.gstatic.com/firebasejs/${v}/firebase-functions-compat.js`,SDK_ID);
-    }
-    if(!window.firebase?.functions){
-      throw Object.assign(new Error('Firebase Functions SDKを読み込めませんでした。'),{code:'FUNCTIONS_UNAVAILABLE'});
-    }
+    if(!rt||rt.status!=='ready'||!rt.app) throw Object.assign(new Error('Firebaseを初期化できませんでした。'),{code:'FIREBASE_UNAVAILABLE'});
+    if(!window.firebase?.functions){const v=window.LUMIFUL_FIREBASE_SDK_VERSION||'12.18.0';await window.loadExternalScriptOnce(`https://www.gstatic.com/firebasejs/${v}/firebase-functions-compat.js`,SDK_ID);}
+    if(!window.firebase?.functions) throw Object.assign(new Error('Firebase Functions SDKを読み込めませんでした。'),{code:'FUNCTIONS_UNAVAILABLE'});
     return rt.app.functions(REGION);
   }
-
   async function callBackend(context){
-    const fn=await ensureFunctions();
-    const callable=fn.httpsCallable(FUNCTION_NAME,{timeout:30000});
-    const response=await callable({
-      protocol:'lumiful-lumi/v1',
-      contextVersion:'1.0',
-      promptVersion:'1.0',
-      context
-    });
-    const body=response?.data||{};
-    const raw=(body.result&&typeof body.result==='object')?body.result:body;
+    const fn=await ensureFunctions(), callable=fn.httpsCallable(FUNCTION_NAME,{timeout:30000});
+    const response=await callable({protocol:'lumiful-lumi/v1',contextVersion:'1.0',promptVersion:'1.0',context});
+    const body=response?.data||{}, raw=(body.result&&typeof body.result==='object')?body.result:body;
     const validated=window.validateLumiResponseV1?.(raw);
-    if(!validated){
-      throw Object.assign(new Error('LUMIの回答を検証できませんでした。'),{code:'INVALID_RESPONSE'});
-    }
+    if(!validated) throw Object.assign(new Error('LUMIの回答を検証できませんでした。'),{code:'INVALID_RESPONSE'});
     const score=window.composeLumiScoreV1?.(validated);
-    if(!score){
-      throw Object.assign(new Error('LUMI SCOREを構成できませんでした。'),{code:'SCORE_UNAVAILABLE'});
-    }
-    return {
-      validated,
-      score,
-      meta:{
-        ...(body.meta||{}),
-        source:'firebase-callable',
-        receivedAt:new Date().toISOString()
-      }
-    };
+    if(!score) throw Object.assign(new Error('LUMI SCOREを構成できませんでした。'),{code:'SCORE_UNAVAILABLE'});
+    return {validated,score,meta:{...(body.meta||{}),source:'firebase-callable',receivedAt:new Date().toISOString()}};
   }
-
-  async function persistActiveRecord(){
-    if(!activeRecord)return null;
-    window.LUMIFUL_ACTIVE_LUMI_DIAGNOSIS_RECORD=JSON.parse(JSON.stringify(activeRecord));
-    try{
-      return await window.saveUserData?.();
-    }catch(e){
-      console.warn('[LUMIFUL] LUMI diagnosis persistence deferred',e);
-      return null;
-    }
-  }
-
   async function diagnose(options={}){
-    const pkg=buildCurrentPackage();
-    const key=hashContext(pkg.context);
-
-    currentContextKey=key;
-    contextKeyDirty=false;
-
-    if(!options.force&&activeRecord?.contextKey===key&&activeRecord?.result?.score){
-      cacheKey=key;
-      cacheValue=activeRecord.result;
-      window.LUMIFUL_LAST_LUMI_RESULT=activeRecord.result;
-      syncScoreSurfaces();
-      return activeRecord.result;
-    }
-
-    if(!options.force&&cacheValue&&cacheKey===key){
-      const record={
-        version:1,
-        contextKey:key,
-        diagnosedAt:String(cacheValue.meta?.receivedAt||new Date().toISOString()),
-        result:cacheValue
-      };
-      setActiveRecord(record);
-      await persistActiveRecord();
-      syncScoreSurfaces();
-      return cacheValue;
-    }
-
-    if(inflight)return inflight;
-
-    syncScoreSurfaces();
-
-    inflight=callBackend(pkg.context)
-      .then(async v=>{
-        const record={
-          version:1,
-          contextKey:key,
-          diagnosedAt:String(v.meta?.receivedAt||new Date().toISOString()),
-          result:v
-        };
-        setActiveRecord(record);
-        window.LUMIFUL_LUMI_CONTEXT_DIRTY=false;
-        await persistActiveRecord();
-        syncScoreSurfaces();
-        return v;
-      })
-      .finally(()=>{
-        inflight=null;
-        syncScoreSurfaces();
-      });
-
-    return inflight;
+    const pkg=window.buildLumiPromptPackageV1?.(); if(!pkg?.context) throw Object.assign(new Error('LUMI Contextを生成できませんでした。'),{code:'CONTEXT_UNAVAILABLE'});
+    const key=hashContext(pkg.context); if(!options.force&&cacheValue&&cacheKey===key)return cacheValue; if(inflight)return inflight;
+    inflight=callBackend(pkg.context).then(v=>{cacheKey=key;cacheValue=v;window.LUMIFUL_LAST_LUMI_RESULT=v;window.LUMIFUL_LUMI_CONTEXT_DIRTY=false;syncScoreSurfaces(v);return v;}).finally(()=>{inflight=null;}); return inflight;
   }
-
-  function renderLoading(){
-    const root=document.getElementById('lumiAdvisorView');
-    if(!root)return;
-    root.innerHTML=`<div class="space-y-1 mb-1"><h1 class="text-2xl sm:text-3xl font-extrabold text-[#253047] tracking-tight flex items-center gap-2"><i class="fa-solid fa-sun text-[#FFC83D]"></i><span>LUMIの診断</span></h1><p class="text-xs sm:text-sm text-[#6F7785]">あなたの未来をLUMIが読み取っています。</p></div><div class="bg-[#FEFBF0] rounded-[24px] p-6 border border-[#F0E2B7] flex gap-4 items-center"><img src="./assets/lumi-spark.png" class="w-12 h-12 object-contain" alt="LUMI"><div><div class="font-bold text-[#253047]">未来を一緒に確認しています…</div><div class="text-xs text-[#6F7785] mt-1">数字・大切にしたいこと・前提条件を総合して考えています。</div></div></div>`;
+  function scoreState(r){const raw=Math.max(0,Math.min(100,Number(window.currentBaseScore||0)));return r?.score||{engine90:Number((raw*.9).toFixed(2)),lumi10:null,total100:Number((raw*.9).toFixed(2)),axes:{},checkLevel:'clear'};}
+  function setText(id,text){const el=document.getElementById(id);if(el)el.textContent=text;}
+  function currentValidResult(candidate=window.LUMIFUL_LAST_LUMI_RESULT){
+    if(!candidate?.score||!cacheKey||window.LUMIFUL_LUMI_CONTEXT_DIRTY)return null;
+    return candidate;
   }
-
-  function renderReady(state){
-    const root=document.getElementById('lumiAdvisorView');
-    if(!root)return;
-    const isRedo=state.status==='rediagnose';
-    const title=isRedo?'現在の条件で再診断できます':'LUMI AI診断を始めましょう';
-    const body=isRedo
-      ?'前回の診断後にシミュレーション条件が変更されています。保存済みの前回結果は残したまま、現在条件で再診断できます。'
-      :'現在のシミュレーション条件をもとに、LUMIが未来の意味と選択肢を一緒に確認します。';
-    const cta=isRedo?'LUMI AI再診断をする':'LUMI AI診断をする';
-    root.innerHTML=`<div class="space-y-1 mb-1"><h1 class="text-2xl sm:text-3xl font-extrabold text-[#253047] tracking-tight flex items-center gap-2"><i class="fa-solid fa-sun text-[#FFC83D]"></i><span>LUMIの診断</span></h1><p class="text-xs sm:text-sm text-[#6F7785]">数字の未来と、あなたが大切にしたい人生を一緒に見ます。</p></div><div class="bg-[#FEFBF0] rounded-[24px] p-5 sm:p-6 border border-[#F0E2B7] flex gap-4 items-start"><img src="./assets/lumi-spark.png" class="w-12 h-12 sm:w-14 sm:h-14 object-contain shrink-0" alt="LUMI"><div class="min-w-0"><h2 class="text-base font-bold text-[#253047]">${esc(title)}</h2><p class="text-xs sm:text-sm text-[#253047] leading-relaxed font-medium mt-2">${esc(body)}</p><button type="button" id="lumi-start-diagnosis-button" class="mt-4 px-4 py-2 btn-lumi-primary text-xs font-bold">${esc(cta)}</button></div></div>`;
-    root.querySelector('#lumi-start-diagnosis-button')?.addEventListener('click',()=>renderReal({force:isRedo,explicit:true}));
+  function syncScoreSurfaces(r=window.LUMIFUL_LAST_LUMI_RESULT){
+    r=currentValidResult(r);
+    const s=scoreState(r), has=!!r?.score;
+    setText('kpi-score',String(Math.round(s.total100))); setText('kpi-base-score',String(Math.ceil(Number(s.engine90)||0))); setText('kpi-ai-adj',has?String(Math.round((Number(s.lumi10)||0)*100)/100):'未評価');
+    const labels=document.querySelectorAll('#kpi-score-breakdown span.uppercase'); if(labels[0])labels[0].textContent='ENGINE';if(labels[1])labels[1].textContent='LUMI';
+    const badge=document.getElementById('kpi-score-badge');if(badge)badge.textContent=has?'LUMIFUL SCORE':'LUMI 未評価';
+    setText('results-score',String(Math.round(s.total100))); setText('results-base-score',`${s.engine90} / 90`); setText('results-ai-adjustment',has?`${s.lumi10} / 10`:'未評価');
+    setText('detailScoreFinal',String(Math.round(s.total100))); setText('detailBaseScore',`${s.engine90} / 90`); setText('detailAiAdj',has?`${s.lumi10} / 10`:'未評価');
+    const notice=document.getElementById('detailAiStatusNotice');if(notice)notice.textContent=has?'※ LUMIのAI総合判断を反映':'※ LUMIは未評価です';
+    const diag=document.getElementById('kpi-diagnosis-text'); if(diag&&has&&r.validated?.diagnosis?.summary)diag.textContent=r.validated.diagnosis.summary;
+    const resultDiag=document.getElementById('results-lumi-text'); if(resultDiag&&has&&r.validated?.diagnosis?.summary)resultDiag.textContent=r.validated.diagnosis.summary;
   }
-
+  function renderLoading(){const root=document.getElementById('lumiAdvisorView');if(!root)return;root.innerHTML=`<div class="space-y-1 mb-1"><h1 class="text-2xl sm:text-3xl font-extrabold text-[#253047] tracking-tight flex items-center gap-2"><i class="fa-solid fa-sun text-[#FFC83D]"></i><span>LUMIの診断</span></h1><p class="text-xs sm:text-sm text-[#6F7785]">あなたの未来をLUMIが読み取っています。</p></div><div class="bg-[#FEFBF0] rounded-[24px] p-6 border border-[#F0E2B7] flex gap-4 items-center"><img src="./assets/lumi-spark.png" class="w-12 h-12 object-contain" alt="LUMI"><div><div class="font-bold text-[#253047]">未来を一緒に確認しています…</div><div class="text-xs text-[#6F7785] mt-1">数字・大切にしたいこと・前提条件を総合して考えています。</div></div></div>`;}
   function renderResult(r){
-    const root=document.getElementById('lumiAdvisorView');
-    if(!root||!r)return;
-    if(window.LUMIFUL_ACTIVE_VIEW&&window.LUMIFUL_ACTIVE_VIEW!=='lumiAdvisor')root.classList.add('hidden');
-
-    const v=r.validated;
-    const s=r.score;
-    const axes=['lifeAlignment','freedom','riskHealth'].map(k=>{
-      const a=s.axes[k];
-      const j=v.scoreJudgment[k];
-      const score=a.unknown?'未評価':`${a.points} / ${a.max}`;
-      return `<div class="p95-axis"><div class="p95-axis-head"><span>${axisLabel[k]}</span><strong>${score}</strong></div><p>${esc(j.reason||'')}</p></div>`;
-    }).join('');
-
-    const items=v.lumiCheck.items
-      .map(i=>`<div class="text-xs sm:text-sm text-[#5B6472] leading-relaxed">• ${esc(i.message)}</div>`)
-      .join('');
-
-    const indexedActions=(Array.isArray(v.nextActions)?v.nextActions:[]).map((a,i)=>({a,i}));
-    const actions=indexedActions
-      .filter(({a})=>isSupportedScenarioAction(a))
-      .map(({a,i})=>`<button type="button" class="lumi-next-action w-full text-left bg-white border border-[#E8E6DF] rounded-2xl p-4 hover:bg-[#FAFAF7] transition" data-action-index="${i}"><div class="font-bold text-sm text-[#253047]">${esc(a.label)}</div><div class="text-xs text-[#6F7785] mt-1">${esc(a.reason)}</div></button>`)
-      .join('');
-    const reviewActions=indexedActions
-      .filter(({a})=>!isSupportedScenarioAction(a))
-      .map(({a})=>`<div class="w-full bg-white border border-[#E8E6DF] rounded-2xl p-4"><div class="font-bold text-sm text-[#253047]">${esc(a.label)}</div><div class="text-xs text-[#6F7785] mt-1">${esc(a.reason)}</div></div>`)
-      .join('');
-
-    root.innerHTML=`<div class="space-y-1 mb-1"><h1 class="text-2xl sm:text-3xl font-extrabold text-[#253047] tracking-tight flex items-center gap-2"><i class="fa-solid fa-sun text-[#FFC83D]"></i><span>LUMIの診断</span></h1><p class="text-xs sm:text-sm text-[#6F7785]">数字の未来と、あなたが大切にしたい人生を一緒に見ます。</p></div><div class="bg-[#FEFBF0] rounded-[24px] p-5 sm:p-6 border border-[#F0E2B7] flex gap-4 items-start"><img src="./assets/lumi-spark.png" class="w-12 h-12 sm:w-14 sm:h-14 object-contain shrink-0" alt="LUMI"><div class="min-w-0"><div class="flex flex-wrap items-center gap-2"><h2 class="text-base font-bold text-[#253047]">LUMI SCORE ${s.lumi10} / 10</h2><span class="p95-badge">AI</span></div><p class="text-xs sm:text-sm text-[#6F7785] leading-relaxed mt-2">${esc(v.diagnosis.summary)}</p></div></div><div class="bg-white rounded-[24px] p-5 sm:p-6 border border-[#ECEBE6] space-y-4"><div class="p95-section-title"><i class="fa-solid fa-sliders text-[#65B9E8]"></i>LUMI SCOREの内訳</div><div class="grid grid-cols-1 sm:grid-cols-3 gap-3">${axes}</div></div><div class="bg-white rounded-[24px] p-5 sm:p-6 border border-[#ECEBE6] space-y-3"><div class="p95-section-title"><i class="fa-solid fa-triangle-exclamation text-[#FFB35C]"></i>LUMI CHECK：${checkLabel[s.checkLevel]||checkLabel.clear}</div>${items||'<div class="text-xs sm:text-sm text-[#6F7785]">現在の前提では、大きな注意点は見つかりませんでした。</div>'}</div><div class="bg-white rounded-[24px] p-5 sm:p-6 border border-[#ECEBE6] space-y-4"><div class="p95-section-title"><i class="fa-solid fa-comment-dots text-[#FFB35C]"></i>LUMIの見立て</div><div class="p95-diagnosis"><div><h4>未来の見立て</h4><p>${esc(v.diagnosis.summary)}</p></div><div><h4>いいところ</h4><p>${esc(v.diagnosis.strength)}</p></div><div><h4>確認したいこと</h4><p>${esc(v.diagnosis.attention)}</p></div><div><h4>LUMIからの提案</h4><p>${esc(v.diagnosis.advice)}</p></div></div></div>${actions?`<div class="bg-[#FAFAF7] rounded-[24px] p-5 sm:p-6 border border-[#ECEBE6] space-y-3"><div class="p95-section-title">別の未来も見てみる</div>${actions}</div>`:''}${reviewActions?`<div class="bg-[#FAFAF7] rounded-[24px] p-5 sm:p-6 border border-[#ECEBE6] space-y-3"><div class="p95-section-title">LUMIからの提案</div>${reviewActions}</div>`:''}<div class="flex justify-end"><button type="button" class="text-xs font-bold text-[#6F7785] hover:text-[#253047]" id="lumi-refresh-button">LUMIでもう一度確認する</button></div>`;
-
-    root.querySelectorAll('.lumi-next-action').forEach(btn=>btn.addEventListener('click',()=>{
-      const a=v.nextActions[Number(btn.dataset.actionIndex)];
-      if(a)window.handleLumiSuggestedActionV1?.(a.type,a.target,a.suggestedValue);
-    }));
+    const root=document.getElementById('lumiAdvisorView');if(!root||!r)return;if(window.LUMIFUL_ACTIVE_VIEW&&window.LUMIFUL_ACTIVE_VIEW!=='lumiAdvisor')root.classList.add('hidden');const v=r.validated,s=r.score;
+    const axes=['lifeAlignment','freedom','riskHealth'].map(k=>{const a=s.axes[k],j=v.scoreJudgment[k],score=a.unknown?'未評価':`${a.points} / ${a.max}`;return `<div class="p95-axis"><div class="p95-axis-head"><span>${axisLabel[k]}</span><strong>${score}</strong></div><p>${esc(j.reason||'')}</p></div>`;}).join('');
+    const items=v.lumiCheck.items.map(i=>`<div class="text-xs sm:text-sm text-[#5B6472] leading-relaxed">• ${esc(i.message)}</div>`).join('');
+    const actions=v.nextActions.map((a,i)=>`<button type="button" class="lumi-next-action w-full text-left bg-white border border-[#E8E6DF] rounded-2xl p-4 hover:bg-[#FAFAF7] transition" data-action-index="${i}"><div class="font-bold text-sm text-[#253047]">${esc(a.label)}</div><div class="text-xs text-[#6F7785] mt-1">${esc(a.reason)}</div></button>`).join('');
+    root.innerHTML=`<div class="space-y-1 mb-1"><h1 class="text-2xl sm:text-3xl font-extrabold text-[#253047] tracking-tight flex items-center gap-2"><i class="fa-solid fa-sun text-[#FFC83D]"></i><span>LUMIの診断</span></h1><p class="text-xs sm:text-sm text-[#6F7785]">数字の未来と、あなたが大切にしたい人生を一緒に見ます。</p></div><div class="bg-[#FEFBF0] rounded-[24px] p-5 sm:p-6 border border-[#F0E2B7] flex gap-4 items-start"><img src="./assets/lumi-spark.png" class="w-12 h-12 sm:w-14 sm:h-14 object-contain shrink-0" alt="LUMI"><div class="min-w-0"><div class="flex flex-wrap items-center gap-2"><h2 class="text-base font-bold text-[#253047]">LUMI SCORE ${s.lumi10} / 10</h2><span class="p95-badge">AI</span></div><p class="text-xs sm:text-sm text-[#6F7785] leading-relaxed mt-2">${esc(v.diagnosis.summary)}</p></div></div><div class="bg-white rounded-[24px] p-5 sm:p-6 border border-[#ECEBE6] space-y-4"><div class="p95-section-title"><i class="fa-solid fa-sliders text-[#65B9E8]"></i>LUMI SCOREの内訳</div><div class="grid grid-cols-1 sm:grid-cols-3 gap-3">${axes}</div></div><div class="bg-white rounded-[24px] p-5 sm:p-6 border border-[#ECEBE6] space-y-3"><div class="p95-section-title"><i class="fa-solid fa-triangle-exclamation text-[#FFB35C]"></i>LUMI CHECK：${checkLabel[s.checkLevel]||checkLabel.clear}</div>${items||'<div class="text-xs sm:text-sm text-[#6F7785]">現在の前提では、大きな注意点は見つかりませんでした。</div>'}</div><div class="bg-white rounded-[24px] p-5 sm:p-6 border border-[#ECEBE6] space-y-4"><div class="p95-section-title"><i class="fa-solid fa-comment-dots text-[#FFB35C]"></i>LUMIの見立て</div><div class="p95-diagnosis"><div><h4>未来の見立て</h4><p>${esc(v.diagnosis.summary)}</p></div><div><h4>いいところ</h4><p>${esc(v.diagnosis.strength)}</p></div><div><h4>確認したいこと</h4><p>${esc(v.diagnosis.attention)}</p></div><div><h4>LUMIからの提案</h4><p>${esc(v.diagnosis.advice)}</p></div></div></div>${actions?`<div class="bg-[#FAFAF7] rounded-[24px] p-5 sm:p-6 border border-[#ECEBE6] space-y-3"><div class="p95-section-title">別の未来も見てみる</div>${actions}</div>`:''}<div class="flex justify-end"><button type="button" class="text-xs font-bold text-[#6F7785] hover:text-[#253047]" id="lumi-refresh-button">LUMIでもう一度確認する</button></div>`;
+    root.querySelectorAll('.lumi-next-action').forEach(btn=>btn.addEventListener('click',()=>{const a=v.nextActions[Number(btn.dataset.actionIndex)];if(a)window.handleLumiSuggestedActionV1?.(a.type,a.target,a.suggestedValue);}));
     root.querySelector('#lumi-refresh-button')?.addEventListener('click',()=>window.refreshLumiDiagnosisV1?.());
   }
-
-  function renderError(e){
-    const root=document.getElementById('lumiAdvisorView');
-    if(!root)return;
-    const msg=String(e?.code||'').includes('not-found')
-      ?'LUMIのバックエンドがまだデプロイされていません。'
-      :(e?.message||'LUMIとの通信に失敗しました。');
-    root.innerHTML=`<div class="space-y-1 mb-1"><h1 class="text-2xl sm:text-3xl font-extrabold text-[#253047] tracking-tight flex items-center gap-2"><i class="fa-solid fa-sun text-[#FFC83D]"></i><span>LUMIの診断</span></h1></div><div class="bg-white rounded-[24px] p-6 border border-[#ECEBE6]"><div class="font-bold text-[#253047]">LUMIは現在接続待ちです</div><p class="text-sm text-[#6F7785] mt-2">${esc(msg)}</p><p class="text-xs text-[#8B93A1] mt-3">Engineの計算結果や入力データには影響ありません。</p></div>`;
-  }
-
-  async function renderReal(options={}){
-    const before=syncScoreSurfaces({refreshContext:true});
-    if(!options.force&&before.status==='diagnosed'){
-      renderResult(before.result);
-      return before.result;
-    }
-    if(!options.explicit){
-      renderReady(before);
-      return null;
-    }
-
-    renderLoading();
-    syncScoreSurfaces();
-
-    try{
-      const result=await diagnose({force:!!options.force});
-      renderResult(result);
-      return result;
-    }catch(e){
-      console.warn('[LUMIFUL] LUMI AI unavailable',e);
-      renderError(e);
-      syncScoreSurfaces({refreshContext:true});
-      return null;
-    }
-  }
-
-  window.restoreLumiDiagnosisPersistenceV1=function(rawRecord){
-    setActiveRecord(rawRecord);
-    contextKeyDirty=true;
-    currentContextKey='';
-    window.LUMIFUL_LUMI_CONTEXT_DIRTY=false;
-    setTimeout(()=>syncScoreSurfaces({refreshContext:true}),0);
-    return activeRecord;
-  };
-
-  window.invalidateLumiDiagnosisContextV1=function(){
-    contextKeyDirty=true;
-    currentContextKey='';
-    if(activeRecord){
-      const state={status:'rediagnose',record:activeRecord,result:null};
-      const ui=statusUi.rediagnose;
-      setText('kpi-score-badge',ui.badge);
-      setText('kpi-ai-adj','—');
-      setCtaState('ai-diagnose-btn','ai-diagnose-btn-label',state);
-      setCtaState('results-ai-diagnose-btn','results-ai-diagnose-btn-label',state);
-    }
-  };
-
-  window.getLumiDiagnosisStateV1=function(options={}){
-    return diagnosisState({refreshContext:options.refreshContext!==false});
-  };
-
-  window.openLumiDiagnosisFromCtaV1=function(){
-    const state=syncScoreSurfaces({refreshContext:true});
-    explicitRunOnOpen=state.status!=='diagnosed';
-    window.switchView?.('lumiAdvisor');
-  };
-
-  window.refreshLumiDiagnosisV1=()=>renderReal({force:true,explicit:true});
-
-  window.handleLumiSuggestedActionV1=function(type,target,suggestedValue){
-    if(type!=='scenario'){
-      window.showToast?.('現在の入力値は変更していません。Simulation Inputから内容を確認できます。','info');
-      return;
-    }
-    window.openLumiScenarioDraftV1?.({type,target,suggestedValue});
-  };
-
-  window.LUMIFUL_LUMI_REAL_AI_V1=Object.freeze({
-    diagnose,
-    render:renderReal,
-    region:REGION,
-    functionName:FUNCTION_NAME,
-    providerSecretInClient:false,
-    schemaMutation:false,
-    engineMutation:false
-  });
-
-  const previousSwitch=window.switchView;
-  if(typeof previousSwitch==='function'){
-    window.switchView=function(name){
-      window.LUMIFUL_ACTIVE_VIEW=name;
-      const r=previousSwitch.apply(this,arguments);
-      const lumiRoot=document.getElementById('lumiAdvisorView');
-
-      if(lumiRoot&&name!=='lumiAdvisor')lumiRoot.classList.add('hidden');
-
-      if(name==='lumiAdvisor'){
-        const run=explicitRunOnOpen;
-        explicitRunOnOpen=false;
-        setTimeout(()=>{
-          const state=syncScoreSurfaces({refreshContext:true});
-          if(state.status==='diagnosed'){
-            renderResult(state.result);
-          }else if(run){
-            renderReal({force:state.status==='rediagnose',explicit:true});
-          }else{
-            renderReady(state);
-          }
-        },40);
-      }else if(name==='dashboard'||name==='simulationResults'){
-        setTimeout(()=>{
-          syncScoreSurfaces({refreshContext:true});
-          if(name==='dashboard'){
-            const chart=window.assetChart;
-            const canvas=document.getElementById('assetChart');
-            if(chart&&chart.canvas===canvas){
-              try{chart.resize();chart.update('none');}catch(error){console.warn('[LUMIFUL] HOME chart visible resize notice:',error);}
-            }else if(Array.isArray(window.currentTableRows)&&window.currentTableRows.length){
-              try{window.recalculateAllFast?.();}catch(error){console.warn('[LUMIFUL] HOME chart visible render notice:',error);}
-            }
-          }
-        },0);
-      }
-
-      return r;
-    };
-  }
-
-  const previousScore=window.updateScoreDashboardUI;
-  if(typeof previousScore==='function'){
-    window.updateScoreDashboardUI=function(){
-      const r=previousScore.apply(this,arguments);
-      syncScoreSurfaces();
-      return r;
-    };
-  }
-
-  const previousResults=window.syncSimulationResultsViewV2;
-  if(typeof previousResults==='function'){
-    window.syncSimulationResultsViewV2=function(){
-      const r=previousResults.apply(this,arguments);
-      syncScoreSurfaces();
-      return r;
-    };
-  }
-
-  document.addEventListener('DOMContentLoaded',()=>setTimeout(()=>syncScoreSurfaces({refreshContext:true}),0));
-  setTimeout(()=>syncScoreSurfaces({refreshContext:true}),100);
-
-
-  /* ============================================================
-     PHASE 9-19 — LUMI SCENARIO / ENGINE COMPARISON
-     ------------------------------------------------------------
-     Verified Engine path in current code:
-       Schema v2 clone
-         -> calculateSimulationV2(model)
-         -> adaptSimulationV2ForDashboard(result)
-         -> calculateBaseScoreV2(model, rows, firstYield, firstNet)
-
-     calculateSimulationV2 is explicitly implemented as detached:
-     it copies asset balances and does not mutate the source model.
-
-     Scenario rules:
-     - Draft / comparison never writes activeDataModelV2
-     - Draft / comparison never persists
-     - Draft / comparison never calls Gemini
-     - Only explicit "この条件をプランに反映する" writes Schema v2
-     ============================================================ */
-
-  const LUMI_SCENARIO_ALLOWED_V1=Object.freeze({
-    housing:Object.freeze({
-      label:'住宅費を変えた未来',
-      unit:'万円 / 月',
-      inputMode:'decimal',
-      min:0,
-      max:10000
-    }),
-    livingCost:Object.freeze({
-      label:'生活費を変えた未来',
-      unit:'万円 / 月',
-      inputMode:'decimal',
-      min:0,
-      max:10000
-    }),
-    incomeAmount:Object.freeze({
-      label:'収入を変えた未来',
-      unit:'万円',
-      inputMode:'decimal',
-      min:0,
-      max:100000
-    }),
-    incomeEndAge:Object.freeze({
-      label:'働く期間を変えた未来',
-      unit:'歳まで',
-      inputMode:'numeric',
-      min:18,
-      max:120
-    }),
-    pensionAmount:Object.freeze({
-      label:'年金を変えた未来',
-      unit:'万円',
-      inputMode:'decimal',
-      min:0,
-      max:100000
-    }),
-    expectedReturn:Object.freeze({
-      label:'想定利回りを変えた未来',
-      unit:'%',
-      inputMode:'decimal',
-      min:-100,
-      max:100
-    })
-  });
-
-  let activeScenarioDraft=null;
-  let activeScenarioComparison=null;
-
-  function scenarioTargetKey(raw){
-    const t=String(raw||'').trim().toLowerCase();
-    if(!t)return '';
-    if(t.includes('housing')||t.includes('住宅'))return 'housing';
-    if(t.includes('living')||t.includes('expense')||t.includes('生活費'))return 'livingCost';
-    if((t.includes('income')||t.includes('収入'))&&(t.includes('end')||t.includes('age')||t.includes('期間')))return 'incomeEndAge';
-    if(t.includes('pension')||t.includes('年金'))return 'pensionAmount';
-    if(t.includes('return')||t.includes('yield')||t.includes('利回'))return 'expectedReturn';
-    if(t.includes('income')||t.includes('収入'))return 'incomeAmount';
-    return '';
-  }
-
-  function isSupportedScenarioAction(action){
-    if(String(action?.type||'')!=='scenario')return false;
-    const key=scenarioTargetKey(action?.target);
-    return !!(key&&LUMI_SCENARIO_ALLOWED_V1[key]);
-  }
-
-  function normalizedCurrentModel(){
-    return window.cloneDataModelV2(
-      window.normalizeDataModelV2(window.ensureV2InputModel())
-    );
-  }
-
-  function annualIncomeAmount(item){
-    return window.normalizeAnnualAmountV2?.(item?.amount,item?.frequency) || 0;
-  }
-
-  function resolveSingleWorkIncome(model){
-    const candidates=(model.incomes||[])
-      .map((x,i)=>({x,i}))
-      .filter(({x})=>x?.category!=='pension' && (x?.owner==='self'||!x?.owner));
-    if(candidates.length===1)return candidates[0];
-    return null;
-  }
-
-  function resolveSinglePension(model){
-    const candidates=(model.incomes||[])
-      .map((x,i)=>({x,i}))
-      .filter(({x})=>x?.category==='pension');
-    if(candidates.length===1)return candidates[0];
-    return null;
-  }
-
-  function resolveReturnAssets(model, sourceTarget=''){
-    const eligible=(model.assets||[])
-      .map((x,i)=>({x,i}))
-      .filter(({x})=>
-        x?.assetClass==='simulation' &&
-        x?.category!=='cash' &&
-        x?.category!=='stock' &&
-        Number.isFinite(Number(x?.expectedReturn))
-      );
-
-    if(eligible.length<=1)return eligible;
-
-    const t=String(sourceTarget||'').toLowerCase();
-    const matched=eligible.filter(({x})=>{
-      const category=String(x?.category||'').toLowerCase();
-      const name=String(x?.name||'').toLowerCase();
-      if(t.includes('bond')||t.includes('債券'))return category.includes('bond')||name.includes('債券');
-      if(t.includes('fund')||t.includes('投資信託'))return category.includes('fund')||name.includes('投資信託');
-      return name && t.includes(name);
-    });
-    return matched.length===1?matched:[];
-  }
-
-  function scenarioBinding(model,key,sourceTarget=''){
-    if(key==='housing'){
-      return {
-        currentValue:Number(model.living?.housing?.monthlyAmount||0),
-        apply:(m,v)=>{m.living.housing.monthlyAmount=v;}
-      };
-    }
-
-    if(key==='livingCost'){
-      const expense=model.living?.expense||{};
-      const currentAnnual=window.normalizeAnnualAmountV2?.(expense.amount,expense.frequency)||0;
-      return {
-        currentValue:currentAnnual/12,
-        apply:(m,v)=>{
-          m.living.expense.amount = m.living.expense.frequency==='yearly' ? v*12 : v;
-        }
-      };
-    }
-
-    if(key==='incomeAmount'){
-      const found=resolveSingleWorkIncome(model);
-      if(!found)return null;
-      const isMonthly=found.x.frequency==='monthly';
-      return {
-        currentValue:Number(found.x.amount||0),
-        detail:found.x.name||'収入',
-        apply:(m,v)=>{m.incomes[found.i].amount=v;},
-        unit:isMonthly?'万円 / 月':'万円 / 年'
-      };
-    }
-
-    if(key==='incomeEndAge'){
-      const found=resolveSingleWorkIncome(model);
-      if(!found)return null;
-      return {
-        currentValue:Number(found.x.endAge||0),
-        detail:found.x.name||'収入',
-        apply:(m,v)=>{m.incomes[found.i].endAge=Math.round(v);}
-      };
-    }
-
-    if(key==='pensionAmount'){
-      const found=resolveSinglePension(model);
-      if(!found)return null;
-      const isMonthly=found.x.frequency==='monthly';
-      return {
-        currentValue:Number(found.x.amount||0),
-        detail:found.x.name||'年金',
-        apply:(m,v)=>{m.incomes[found.i].amount=v;},
-        unit:isMonthly?'万円 / 月':'万円 / 年'
-      };
-    }
-
-    if(key==='expectedReturn'){
-      const targets=resolveReturnAssets(model,sourceTarget);
-      if(targets.length!==1)return null;
-      const target=targets[0];
-      return {
-        currentValue:Number(target.x.expectedReturn||0),
-        detail:target.x.name||'運用資産',
-        apply:(m,v)=>{m.assets[target.i].expectedReturn=v;}
-      };
-    }
-
-    return null;
-  }
-
-  function normalizeSuggestedScenarioValue(value,current){
-    if(value===null||value===undefined||value==='')return current;
-    const n=Number(String(value).replace(/,/g,'').replace(/[^0-9.+-]/g,''));
-    return Number.isFinite(n)?n:current;
-  }
-
-  function buildScenarioDraft(action){
-    const key=scenarioTargetKey(action?.target);
-    if(!key||!LUMI_SCENARIO_ALLOWED_V1[key])return null;
-
-    const model=normalizedCurrentModel();
-    const binding=scenarioBinding(model,key,action?.target);
-    if(!binding)return {
-      unsupportedBinding:true,
-      key,
-      sourceTarget:String(action?.target||'')
-    };
-
-    const def=LUMI_SCENARIO_ALLOWED_V1[key];
-    const current=Number(binding.currentValue||0);
-    const suggested=normalizeSuggestedScenarioValue(action?.suggestedValue,current);
-
-    return {
-      version:1,
-      key,
-      type:'scenario',
-      sourceTarget:String(action?.target||''),
-      actionLabel:String(action?.label||def.label),
-      reason:String(action?.reason||''),
-      label:def.label,
-      detail:String(binding.detail||''),
-      unit:String(binding.unit||def.unit),
-      currentValue:current,
-      draftValue:Number.isFinite(Number(suggested))?Number(suggested):current,
-      createdAt:new Date().toISOString()
-    };
-  }
-
-  function scenarioValueText(value,key,unit=''){
-    const n=Number(value||0);
-    if(key==='expectedReturn')return `${Math.round(n*100)/100}%`;
-    if(key==='incomeEndAge')return `${Math.round(n)}歳`;
-    return `${Math.round(n*10)/10}${unit||'万円'}`;
-  }
-
-  function buildScenarioModel(draft){
-    const current=normalizedCurrentModel();
-    const scenario=window.cloneDataModelV2(current);
-    const binding=scenarioBinding(scenario,draft.key,draft.sourceTarget);
-    if(!binding)throw new Error('scenario-target-not-uniquely-resolved');
-    binding.apply(scenario,Number(draft.draftValue));
-    return window.normalizeDataModelV2(scenario);
-  }
-
-  function engineScoreFor(model,rows){
-    if(!rows.length)return null;
-    if(typeof window.calculateBaseScoreV2!=='function')return null;
-    const first=rows[0];
-    const result=window.calculateBaseScoreV2(
-      model,
-      rows,
-      Number(first?.annualYield||0),
-      Number(first?.netCashflow||0)
-    );
-    const raw=Number(result?.totalScore);
-    if(!Number.isFinite(raw))return null;
-    return {
-      raw100:raw,
-      engine90:Number((raw*.9).toFixed(2))
-    };
-  }
-
-  function summarizeScenarioEngine(model){
-    if(typeof window.calculateSimulationV2!=='function' ||
-       typeof window.adaptSimulationV2ForDashboard!=='function'){
-      throw new Error('scenario-engine-path-unavailable');
-    }
-
-    const simulation=window.calculateSimulationV2(model);
-    const adapted=window.adaptSimulationV2ForDashboard(simulation);
-    const rows=Array.isArray(adapted?.rows)?adapted.rows:[];
-    if(!rows.length)throw new Error('scenario-engine-returned-no-rows');
-
-    const finalRow=rows[rows.length-1];
-    const shortage=rows.find(r=>Number(r.shortage||0)>0);
-    const totalYield=rows.reduce((s,r)=>s+Number(r.annualYield||0),0);
-    const avgNet=rows.reduce((s,r)=>s+Number(r.netCashflow||0),0)/rows.length;
-    const minAssets=Math.min(...rows.map(r=>Number(r.availableAssets??r.financialAsset??0)));
-
-    return {
-      simulation,
-      adapted,
-      rows,
-      score:engineScoreFor(model,rows),
-      finalAssets:Number(finalRow.availableAssets??finalRow.financialAsset??0),
-      minimumAssets:minAssets,
-      shortageAge:shortage?.age||null,
-      targetAge:Number(adapted.targetAge||finalRow.age||0),
-      totalYield,
-      averageNetCashflow:avgNet
-    };
-  }
-
-  function buildScenarioComparison(draft){
-    const currentModel=normalizedCurrentModel();
-    const scenarioModel=buildScenarioModel(draft);
-
-    // Both calls use the verified detached Engine v2 path.
-    const current=summarizeScenarioEngine(currentModel);
-    const scenario=summarizeScenarioEngine(scenarioModel);
-
-    return {
-      version:1,
-      draft:{...draft},
-      currentModel,
-      scenarioModel,
-      current,
-      scenario,
-      createdAt:new Date().toISOString()
-    };
-  }
-
-  function signed(n,digits=0){
-    const x=Number(n||0);
-    const rounded=digits?Math.round(x*10)/10:Math.round(x);
-    return `${x>0?'+':''}${rounded.toLocaleString('ja-JP')}`;
-  }
-
-  function scoreText(summary){
-    const n=summary?.score?.engine90;
-    return Number.isFinite(Number(n))?`${Math.round(Number(n)*10)/10} / 90`:'—';
-  }
-
-  function shortageText(summary){
-    return summary.shortageAge ? `${summary.shortageAge}歳` : `${summary.targetAge}歳まで維持`;
-  }
-
-  function scenarioComparisonSvg(currentRows,scenarioRows){
-    const count=Math.min(currentRows.length,scenarioRows.length);
-    if(!count)return '';
-    const a=currentRows.slice(0,count).map(r=>Number(r.availableAssets??r.financialAsset??0));
-    const b=scenarioRows.slice(0,count).map(r=>Number(r.availableAssets??r.financialAsset??0));
-    const vals=a.concat(b,[0]);
-    let min=Math.min(...vals),max=Math.max(...vals);
-    if(max===min){max+=1;min-=1;}
-
-    const W=760,H=260,p={l:46,r:18,t:18,b:36};
-    const x=i=>p.l+(count<=1?0:i/(count-1))*(W-p.l-p.r);
-    const y=v=>p.t+(max-v)/(max-min)*(H-p.t-p.b);
-    const pts=arr=>arr.map((v,i)=>`${x(i).toFixed(1)},${y(v).toFixed(1)}`).join(' ');
-    const zeroY=y(0);
-    const firstAge=currentRows[0]?.age||'';
-    const lastAge=currentRows[count-1]?.age||'';
-
-    return `<div class="mt-4 overflow-hidden rounded-2xl border border-[#E8EEF2] bg-white p-3">
-      <div class="flex items-center gap-4 text-[10px] font-bold text-[#6F7785] mb-2">
-        <span><span class="inline-block w-5 border-t-[3px] border-[#AAB0BA] align-middle mr-1"></span>今の未来</span>
-        <span><span class="inline-block w-5 border-t-[3px] border-[#65B9E8] align-middle mr-1"></span>別の未来</span>
-      </div>
-      <svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="今の未来と別の未来の利用可能資産比較">
-        <line x1="${p.l}" y1="${zeroY}" x2="${W-p.r}" y2="${zeroY}" stroke="#ECEBE6"/>
-        <polyline points="${pts(a)}" fill="none" stroke="#AAB0BA" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-        <polyline points="${pts(b)}" fill="none" stroke="#65B9E8" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-        <text x="${p.l}" y="${H-10}" font-size="11" fill="#8B93A1">${firstAge}歳</text>
-        <text x="${W-p.r}" y="${H-10}" text-anchor="end" font-size="11" fill="#8B93A1">${lastAge}歳</text>
-      </svg>
-    </div>`;
-  }
-
-  function renderScenarioDraftModal(draft){
-    document.getElementById('lumi-scenario-modal-v1')?.remove();
-
-    const def=LUMI_SCENARIO_ALLOWED_V1[draft.key];
-    const overlay=document.createElement('div');
-    overlay.id='lumi-scenario-modal-v1';
-    overlay.className='fixed inset-0 z-[120] bg-black/35 flex items-end sm:items-center justify-center p-0 sm:p-5';
-    overlay.innerHTML=`<div class="bg-white w-full sm:max-w-lg rounded-t-[26px] sm:rounded-[26px] p-5 sm:p-6 shadow-2xl" role="dialog" aria-modal="true" aria-labelledby="lumi-scenario-title-v1">
-      <div class="flex items-start justify-between gap-4">
-        <div>
-          <div class="text-[11px] font-bold tracking-wide text-[#65B9E8]">LUMI SCENARIO</div>
-          <h2 id="lumi-scenario-title-v1" class="text-xl font-extrabold text-[#253047] mt-1">${esc(draft.actionLabel||draft.label)}</h2>
-          ${draft.detail?`<div class="text-[11px] font-bold text-[#8B93A1] mt-1">${esc(draft.detail)}</div>`:''}
-        </div>
-        <button type="button" id="lumi-scenario-close-v1" class="w-9 h-9 rounded-full bg-[#F5F5F2] text-[#6F7785]" aria-label="閉じる"><i class="fa-solid fa-xmark"></i></button>
-      </div>
-
-      ${draft.reason?`<p class="text-xs text-[#5B6472] leading-relaxed font-medium mt-4">${esc(draft.reason)}</p>`:''}
-
-      <div class="mt-5 bg-[#FAFAF7] rounded-2xl p-4">
-        <div class="text-xs font-bold text-[#8B93A1]">現在</div>
-        <div class="text-lg font-extrabold text-[#253047] mt-1">${esc(scenarioValueText(draft.currentValue,draft.key,draft.unit))}</div>
-      </div>
-
-      <div class="mt-4">
-        <label for="lumi-scenario-value-v1" class="block text-xs font-bold text-[#6F7785] mb-2">試す条件</label>
-        <div class="flex items-center gap-2">
-          <input id="lumi-scenario-value-v1" type="text" inputmode="${def.inputMode==='decimal'?'decimal':'numeric'}" value="${esc(draft.draftValue)}" class="w-full rounded-2xl border border-[#E2E4E8] px-4 py-3 text-lg font-bold text-[#253047] outline-none focus:border-[#65B9E8]">
-          <span class="text-xs font-bold text-[#8B93A1] whitespace-nowrap">${esc(draft.unit)}</span>
-        </div>
-        <p class="text-[11px] text-[#8B93A1] leading-relaxed mt-2">ここで変更しても、現在のプラン・保存データは変更されません。</p>
-      </div>
-
-      <div class="mt-6 grid grid-cols-2 gap-3">
-        <button type="button" id="lumi-scenario-cancel-v1" class="px-4 py-3 rounded-2xl bg-[#F5F5F2] text-sm font-bold text-[#5B6472]">戻る</button>
-        <button type="button" id="lumi-scenario-try-v1" class="px-4 py-3 rounded-2xl btn-lumi-primary text-sm font-bold">この未来を試す</button>
-      </div>
-    </div>`;
-
-    document.body.appendChild(overlay);
-
-    const close=()=>overlay.remove();
-    overlay.querySelector('#lumi-scenario-close-v1')?.addEventListener('click',close);
-    overlay.querySelector('#lumi-scenario-cancel-v1')?.addEventListener('click',close);
-    overlay.addEventListener('click',e=>{if(e.target===overlay)close();});
-
-    overlay.querySelector('#lumi-scenario-try-v1')?.addEventListener('click',()=>{
-      const input=overlay.querySelector('#lumi-scenario-value-v1');
-      const raw=Number(String(input?.value||'').replace(/,/g,'').replace(/[^0-9.+-]/g,''));
-      if(!Number.isFinite(raw)){
-        window.showToast?.('試す条件を数字で入力してください。','warning');
-        return;
-      }
-      const value=Math.max(def.min,Math.min(def.max,raw));
-      activeScenarioDraft={...draft,draftValue:value};
-      window.LUMIFUL_ACTIVE_SCENARIO_DRAFT=JSON.parse(JSON.stringify(activeScenarioDraft));
-      close();
-
-      try{
-        activeScenarioComparison=buildScenarioComparison(activeScenarioDraft);
-        window.LUMIFUL_ACTIVE_SCENARIO_COMPARISON=activeScenarioComparison;
-        renderScenarioComparison(activeScenarioComparison);
-      }catch(e){
-        console.warn('[LUMIFUL] Scenario comparison unavailable',e);
-        window.showToast?.('この提案は現在、安全に比較できる対象を特定できませんでした。現在のプランは変更していません。','warning');
-      }
-    });
-  }
-
-  function comparisonCell(label,currentValue,scenarioValue,deltaText=''){
-    return `<div class="grid grid-cols-[1.1fr_1fr_1fr] gap-2 items-center py-3 border-b border-[#ECEBE6] last:border-0">
-      <div class="text-[11px] sm:text-xs font-bold text-[#6F7785]">${esc(label)}</div>
-      <div class="text-xs sm:text-sm font-extrabold text-[#253047] text-right">${esc(currentValue)}</div>
-      <div class="text-xs sm:text-sm font-extrabold text-[#253047] text-right">${esc(scenarioValue)}${deltaText?`<div class="text-[10px] text-[#65B9E8] mt-0.5">${esc(deltaText)}</div>`:''}</div>
-    </div>`;
-  }
-
-  function renderScenarioComparison(comp){
-    const root=document.getElementById('lumiAdvisorView');
-    if(!root||!comp)return;
-
-    root.querySelector('#lumi-scenario-comparison-v1')?.remove();
-
-    const c=comp.current,s=comp.scenario,d=comp.draft;
-    const scoreDelta=(Number.isFinite(Number(c.score?.engine90))&&Number.isFinite(Number(s.score?.engine90)))
-      ? Number(s.score.engine90)-Number(c.score.engine90)
-      : null;
-    const assetDelta=s.finalAssets-c.finalAssets;
-    const yieldDelta=s.totalYield-c.totalYield;
-
-    const panel=document.createElement('div');
-    panel.id='lumi-scenario-comparison-v1';
-    panel.className='bg-[#F7FBFE] rounded-[24px] p-5 sm:p-6 border border-[#DCEEF8] space-y-4';
-    panel.innerHTML=`<div class="flex items-start justify-between gap-3">
-        <div>
-          <div class="text-[11px] font-bold tracking-wide text-[#65B9E8]">LUMI SCENARIO</div>
-          <div class="p95-section-title mt-1"><i class="fa-solid fa-code-compare text-[#65B9E8]"></i>今の未来と比べる</div>
-          <div class="text-xs font-bold text-[#253047] mt-1">${esc(d.actionLabel||d.label)}</div>
-        </div>
-        <button type="button" id="lumi-scenario-close-comparison-v1" class="text-xs font-bold text-[#8B93A1]">閉じる</button>
-      </div>
-
-      <div class="grid grid-cols-[1.1fr_1fr_1fr] gap-2 px-0.5 text-[10px] font-bold text-[#8B93A1]">
-        <div></div><div class="text-right">今の未来</div><div class="text-right text-[#65B9E8]">別の未来</div>
-      </div>
-
-      <div class="bg-white rounded-2xl px-4 border border-[#E8EEF2]">
-        ${comparisonCell('試した条件',
-          scenarioValueText(d.currentValue,d.key,d.unit),
-          scenarioValueText(d.draftValue,d.key,d.unit))}
-        ${comparisonCell('ENGINE SCORE',
-          scoreText(c),
-          scoreText(s),
-          scoreDelta===null?'':`${signed(scoreDelta,1)} pt`)}
-        ${comparisonCell('最終利用可能資産',
-          `${Math.round(c.finalAssets).toLocaleString('ja-JP')}万円`,
-          `${Math.round(s.finalAssets).toLocaleString('ja-JP')}万円`,
-          `${signed(assetDelta)}万円`)}
-        ${comparisonCell('資金維持',
-          shortageText(c),
-          shortageText(s))}
-        ${comparisonCell('累計運用益',
-          `${Math.round(c.totalYield).toLocaleString('ja-JP')}万円`,
-          `${Math.round(s.totalYield).toLocaleString('ja-JP')}万円`,
-          `${signed(yieldDelta)}万円`)}
-      </div>
-
-      ${scenarioComparisonSvg(c.rows,s.rows)}
-
-      <div class="bg-white/70 rounded-2xl p-3 text-[11px] text-[#6F7785] leading-relaxed">
-        この比較は現在の入力条件をもとに試算しています。LUMIのAI再診断はまだ行っていないため、ここでは数値シミュレーションのスコアのみ比較しています。
-      </div>
-
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-        <button type="button" id="lumi-scenario-discard-v1" class="px-4 py-3 rounded-2xl bg-white border border-[#E2E4E8] text-sm font-bold text-[#5B6472]">元のプランに戻る</button>
-        <button type="button" id="lumi-scenario-apply-v1" class="px-4 py-3 rounded-2xl btn-lumi-primary text-sm font-bold">この条件をプランに反映する</button>
-      </div>`;
-
-    const refresh=root.querySelector('#lumi-refresh-button')?.parentElement;
-    if(refresh)root.insertBefore(panel,refresh);
-    else root.appendChild(panel);
-
-    panel.querySelector('#lumi-scenario-close-comparison-v1')?.addEventListener('click',()=>panel.remove());
-    panel.querySelector('#lumi-scenario-discard-v1')?.addEventListener('click',()=>{
-      panel.remove();
-      activeScenarioDraft=null;
-      activeScenarioComparison=null;
-      window.LUMIFUL_ACTIVE_SCENARIO_DRAFT=null;
-      window.LUMIFUL_ACTIVE_SCENARIO_COMPARISON=null;
-      window.showToast?.('元のプランは変更していません。','info');
-    });
-
-    panel.querySelector('#lumi-scenario-apply-v1')?.addEventListener('click',()=>{
-      applyScenarioToPlan(comp);
-    });
-
-    panel.scrollIntoView?.({behavior:'smooth',block:'start'});
-  }
-
-  async function applyScenarioToPlan(comp){
-    if(!comp?.scenarioModel)return false;
-
-    // This is the only Scenario path allowed to mutate the canonical model.
-    window.activeDataModelV2=window.cloneDataModelV2(
-      window.normalizeDataModelV2(comp.scenarioModel)
-    );
-    window.v2InputInitialized=true;
-
-    window.invalidateLumiDiagnosisContextV1?.('scenario-applied');
-    window.renderV2InputUI?.();
-    window.recalculateAllFast?.();
-    window.syncSimulationResultsViewV2?.();
-    window.scheduleAutoSave?.('lumi-scenario-apply');
-
-    activeScenarioDraft=null;
-    activeScenarioComparison=null;
-    window.LUMIFUL_ACTIVE_SCENARIO_DRAFT=null;
-    window.LUMIFUL_ACTIVE_SCENARIO_COMPARISON=null;
-
-    document.getElementById('lumi-scenario-comparison-v1')?.remove();
-    window.showToast?.('Scenarioの条件を現在のプランに反映しました。LUMIは再診断状態になります。','success');
-    return true;
-  }
-
-  window.openLumiScenarioDraftV1=function(action){
-    const draft=buildScenarioDraft(action);
-
-    if(draft?.unsupportedBinding){
-      window.showToast?.('この提案は対象を一意に特定できないため、現在はScenario比較を実行しません。現在のプランは変更していません。','info');
-      return null;
-    }
-
-    if(!draft){
-      window.showToast?.('この提案は現在のScenario対象外です。現在のプランは変更していません。','info');
-      return null;
-    }
-
-    activeScenarioDraft=draft;
-    window.LUMIFUL_ACTIVE_SCENARIO_DRAFT=JSON.parse(JSON.stringify(draft));
-    renderScenarioDraftModal(draft);
-    return draft;
-  };
-
-  window.renderLumiScenarioComparisonV1=function(draft){
-    try{
-      const comp=buildScenarioComparison(draft);
-      activeScenarioComparison=comp;
-      window.LUMIFUL_ACTIVE_SCENARIO_COMPARISON=comp;
-      renderScenarioComparison(comp);
-      return comp;
-    }catch(e){
-      console.warn('[LUMIFUL] Scenario comparison failed',e);
-      return null;
-    }
-  };
-
-  window.applyLumiScenarioToPlanV1=applyScenarioToPlan;
-
-  window.LUMIFUL_LUMI_SCENARIO_V1=Object.freeze({
-    status:'ENGINE_COMPARE_CANDIDATE',
-    allowedTargets:Object.keys(LUMI_SCENARIO_ALLOWED_V1),
-    enginePath:[
-      'calculateSimulationV2',
-      'adaptSimulationV2ForDashboard',
-      'calculateBaseScoreV2'
-    ],
-    detachedEngineCalculation:true,
-    scenarioSchemaMutation:false,
-    scenarioPersistence:false,
-    scenarioAiCall:false,
-    explicitApplyOnly:true,
-    applyInvalidatesLumiDiagnosis:true
-  });
-
-  window.LUMIFUL_PHASE9_18_DIAGNOSIS_STATE=Object.freeze({
-    status:'IMPLEMENTED_CANDIDATE',
-    states:['unassessed','diagnosing','diagnosed','rediagnose'],
-    badges:['未診断','診断中','診断済み','再診断'],
-    persistence:'existing LocalStorage / Firestore persistence envelope',
-    contextFingerprint:true,
-    reloadRestore:true,
-    validSavedResultAvoidsApi:true,
-    explicitDiagnosisOnly:true,
-    schemaV2DataMutation:false,
-    engineMutation:false,
-    promptMutation:false
-  });
-
-  window.LUMIFUL_PHASE9_9_REAL_AI=Object.freeze({
-    status:'PHASE9_18_STATE_PERSISTENCE',
-    backend:'Firebase callable',
-    functionName:FUNCTION_NAME,
-    region:REGION,
-    aiConnectedAfterDeploy:true,
-    providerSecretInClient:false,
-    engineMutation:false,
-    schemaMutation:false,
-    dummyRuntime:false,
-    mockRuntime:false
-  });
+  function renderError(e){const root=document.getElementById('lumiAdvisorView');if(!root)return;const msg=String(e?.code||'').includes('not-found')?'LUMIのバックエンドがまだデプロイされていません。':(e?.message||'LUMIとの通信に失敗しました。');root.innerHTML=`<div class="space-y-1 mb-1"><h1 class="text-2xl sm:text-3xl font-extrabold text-[#253047] tracking-tight flex items-center gap-2"><i class="fa-solid fa-sun text-[#FFC83D]"></i><span>LUMIの診断</span></h1></div><div class="bg-white rounded-[24px] p-6 border border-[#ECEBE6]"><div class="font-bold text-[#253047]">LUMIは現在接続待ちです</div><p class="text-sm text-[#6F7785] mt-2">${esc(msg)}</p><p class="text-xs text-[#8B93A1] mt-3">Engineの計算結果や入力データには影響ありません。</p></div>`;}
+  async function renderReal(options={}){renderLoading();try{renderResult(await diagnose(options));}catch(e){console.warn('[LUMIFUL] LUMI AI unavailable',e);renderError(e);syncScoreSurfaces(null);}}
+  window.refreshLumiDiagnosisV1=()=>renderReal({force:true});
+  window.handleLumiSuggestedActionV1=function(type){const text=type==='scenario'?'この条件での比較機能は次のScenario工程で有効になります。現在の入力値は変更していません。':'現在の入力値は変更していません。Simulation Inputから内容を確認できます。';window.showToast?.(text,'info');};
+  window.LUMIFUL_LUMI_REAL_AI_V1=Object.freeze({diagnose,render:renderReal,region:REGION,functionName:FUNCTION_NAME,providerSecretInClient:false,schemaMutation:false,engineMutation:false});
+  const previousSwitch=window.switchView;if(typeof previousSwitch==='function')window.switchView=function(name){window.LUMIFUL_ACTIVE_VIEW=name;const r=previousSwitch.apply(this,arguments);const lumiRoot=document.getElementById('lumiAdvisorView');if(lumiRoot&&name!=='lumiAdvisor')lumiRoot.classList.add('hidden');if(name==='lumiAdvisor')setTimeout(()=>renderReal(),40);else if(name==='dashboard'||name==='simulationResults')setTimeout(()=>syncScoreSurfaces(),0);return r;};
+  const previousScore=window.updateScoreDashboardUI;if(typeof previousScore==='function')window.updateScoreDashboardUI=function(){const r=previousScore.apply(this,arguments);syncScoreSurfaces();return r;};
+  const previousResults=window.syncSimulationResultsViewV2;if(typeof previousResults==='function')window.syncSimulationResultsViewV2=function(){const r=previousResults.apply(this,arguments);syncScoreSurfaces();return r;};
+  document.addEventListener('DOMContentLoaded',()=>setTimeout(()=>syncScoreSurfaces(),0)); setTimeout(()=>syncScoreSurfaces(),100);
+  window.LUMIFUL_PHASE9_9_REAL_AI=Object.freeze({status:'PERFORMANCE_HOTFIX_READY',backend:'Firebase callable',functionName:FUNCTION_NAME,region:REGION,aiConnectedAfterDeploy:true,providerSecretInClient:false,engineMutation:false,schemaMutation:false,dummyRuntime:false,mockRuntime:false});
 })();
 </script>
 
