@@ -1904,6 +1904,99 @@
 }
 </style>
 
+
+<style id="phase9-16-sp-final-lock">
+/* ============================================================
+   PHASE 9-16 — SP FINAL LOCK
+   Scope: smartphone HOME KPI only.
+   Desktop remains untouched.
+   ============================================================ */
+@media (max-width:639px){
+
+  /* Restore compact 2x2 card proportions. */
+  #home-kpi-grid > #kpi-card-score,
+  #home-kpi-grid > #kpi-card-yield,
+  #home-kpi-grid > #kpi-card-cover,
+  #home-kpi-grid > #kpi-card-assets{
+    min-height:0 !important;
+    height:230px !important;
+    padding:12px !important;
+    box-sizing:border-box !important;
+  }
+
+  /* Reduce vertical whitespace while preserving aligned insight row and CTA. */
+  #kpi-card-score,
+  #kpi-card-yield,
+  #kpi-card-cover,
+  #kpi-card-assets{
+    display:grid !important;
+    grid-template-rows:104px 40px minmax(0,1fr) 36px !important;
+    row-gap:6px !important;
+  }
+
+  /* Four insight bars remain exactly aligned and compact. */
+  #kpi-card-score > #kpi-score-breakdown,
+  #kpi-card-yield > #kpi-yield-insight,
+  #kpi-card-cover > #kpi-cover-subtext,
+  #kpi-card-assets > #kpi-final-status{
+    grid-row:2 !important;
+    position:static !important;
+    top:auto !important;
+    bottom:auto !important;
+    left:auto !important;
+    right:auto !important;
+    width:100% !important;
+    height:40px !important;
+    min-height:40px !important;
+    max-height:40px !important;
+    margin:0 !important;
+    transform:none !important;
+    box-sizing:border-box !important;
+  }
+
+  /* CTA line stays locked at the bottom. */
+  #kpi-card-score > .p916-kpi-cta,
+  #kpi-card-yield > .kpi-card-cta,
+  #kpi-card-cover > .kpi-card-cta,
+  #kpi-card-assets > .kpi-card-cta{
+    grid-row:4 !important;
+    height:36px !important;
+    min-height:36px !important;
+    max-height:36px !important;
+    margin:0 !important;
+    padding-top:9px !important;
+  }
+
+  /* SP semantic display: unevaluated LUMI is an em dash, not "未評価" or zero. */
+  #kpi-ai-adj[data-lumi-unevaluated="true"]{
+    font-size:10px !important;
+    line-height:1 !important;
+    font-weight:800 !important;
+    max-width:none !important;
+    overflow:visible !important;
+    text-overflow:clip !important;
+  }
+}
+
+@media (max-width:374px){
+  #home-kpi-grid > #kpi-card-score,
+  #home-kpi-grid > #kpi-card-yield,
+  #home-kpi-grid > #kpi-card-cover,
+  #home-kpi-grid > #kpi-card-assets{
+    height:222px !important;
+    padding:10px !important;
+  }
+
+  #kpi-card-score,
+  #kpi-card-yield,
+  #kpi-card-cover,
+  #kpi-card-assets{
+    grid-template-rows:100px 40px minmax(0,1fr) 36px !important;
+    row-gap:5px !important;
+  }
+}
+</style>
+
 </head>
 <body class="bg-[#FAFAF7] text-[#253047] min-h-screen font-sans antialiased relative overflow-x-hidden">
 
@@ -13265,6 +13358,65 @@ window.LUMIFUL_PHASE9_16_GITHUB_CANDIDATE = Object.freeze({
   document.addEventListener('DOMContentLoaded',finalizeStandardInsightWidths);
   window.addEventListener('load',finalizeStandardInsightWidths);
   setTimeout(finalizeStandardInsightWidths,0);
+})();
+</script>
+
+
+<script>
+(function(){
+  function normalizeSpLumiUnevaluated(){
+    if(!window.matchMedia('(max-width:639px)').matches) return;
+    const el=document.getElementById('kpi-ai-adj');
+    if(!el) return;
+    const raw=String(el.textContent||'').trim();
+    if(raw==='未評価' || raw==='0' || raw==='0.0' || raw==='0 / 10'){
+      el.textContent='—';
+      el.setAttribute('data-lumi-unevaluated','true');
+      el.setAttribute('aria-label','LUMI 未評価');
+    }else if(raw==='—'){
+      el.setAttribute('data-lumi-unevaluated','true');
+      el.setAttribute('aria-label','LUMI 未評価');
+    }else{
+      el.removeAttribute('data-lumi-unevaluated');
+      el.removeAttribute('aria-label');
+    }
+  }
+
+  const prevScoreUpdate=window.updateScoreDashboardUI;
+  if(typeof prevScoreUpdate==='function'){
+    window.updateScoreDashboardUI=function(){
+      const r=prevScoreUpdate.apply(this,arguments);
+      requestAnimationFrame(normalizeSpLumiUnevaluated);
+      return r;
+    };
+  }
+
+  const prevRecalc=window.recalculateAllV2Dashboard;
+  if(typeof prevRecalc==='function'){
+    window.recalculateAllV2Dashboard=function(){
+      const r=prevRecalc.apply(this,arguments);
+      requestAnimationFrame(normalizeSpLumiUnevaluated);
+      return r;
+    };
+  }
+
+  document.addEventListener('DOMContentLoaded',normalizeSpLumiUnevaluated);
+  window.addEventListener('load',normalizeSpLumiUnevaluated);
+  window.addEventListener('resize',normalizeSpLumiUnevaluated,{passive:true});
+  setTimeout(normalizeSpLumiUnevaluated,0);
+
+  window.LUMIFUL_PHASE9_16_SP_FINAL_LOCK=Object.freeze({
+    desktopUntouched:true,
+    spCardHeightPx:230,
+    spInsightHeightPx:40,
+    narrowSpCardHeightPx:222,
+    lumiUnevaluatedDisplay:'—',
+    ctaPreserved:true,
+    engineImpact:false,
+    schemaImpact:false,
+    scoreImpact:false,
+    authImpact:false
+  });
 })();
 </script>
 
