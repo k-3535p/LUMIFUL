@@ -11037,13 +11037,19 @@ window.LUMIFUL_PHASE8_ONBOARDING_LOCK = Object.freeze({
     'pension_amount'
   ]);
   function normalizeScenarioTargetV1(target,label){
-    const raw=[target,label].filter(Boolean).join(' ').trim().toLowerCase();
-    if(raw==='expected_return'||raw==='expectedreturn'||raw.includes('expected return')||raw.includes('yield')||raw.includes('利回'))return 'expected_return';
-    if(raw==='housing_cost'||raw==='housingcost'||raw==='housing'||raw.includes('housing')||raw.includes('住居費')||raw.includes('家賃')||raw.includes('住宅費'))return 'housing_cost';
-    if(raw==='living_cost'||raw==='livingcost'||raw.includes('living cost')||raw.includes('生活費'))return 'living_cost';
-    if(raw==='income_end_age'||raw.includes('income end')||raw.includes('収入終了')||raw.includes('終了年齢')||raw.includes('何歳まで働'))return 'income_end_age';
-    if(raw==='pension_amount'||raw.includes('pension')||raw.includes('年金'))return 'pension_amount';
-    if(raw==='income_amount'||raw.includes('income amount')||raw.includes('収入額')||raw.includes('収入を')||raw.includes('収入の'))return 'income_amount';
+    const exact=String(target||'').trim().toLowerCase();
+
+    // Canonical Action Contract target always wins over free-form wording.
+    if(SCENARIO_TARGETS_V1.includes(exact))return exact;
+
+    // Alias fallback is used only when the AI did not return a canonical target.
+    const raw=exact||String(label||'').trim().toLowerCase();
+    if(raw==='expectedreturn'||raw.includes('expected return')||raw.includes('yield')||raw.includes('利回'))return 'expected_return';
+    if(raw==='housingcost'||raw==='housing'||raw.includes('housing')||raw.includes('住居費')||raw.includes('家賃')||raw.includes('住宅費'))return 'housing_cost';
+    if(raw==='livingcost'||raw.includes('living cost')||raw.includes('生活費'))return 'living_cost';
+    if(raw.includes('income end')||raw.includes('収入終了')||raw.includes('終了年齢')||raw.includes('何歳まで働'))return 'income_end_age';
+    if(raw.includes('pension')||raw.includes('年金'))return 'pension_amount';
+    if(raw.includes('income amount')||raw.includes('収入額')||raw.includes('収入を')||raw.includes('収入の'))return 'income_amount';
     return null;
   }
   window.normalizeLumiScenarioTargetV1=normalizeScenarioTargetV1;
