@@ -12263,7 +12263,14 @@ ${JSON.stringify(OUTPUT_SCHEMA_EXAMPLE,null,2)}
   }
   async function diagnose(options={}){
     const pkg=window.buildLumiPromptPackageV1?.(); if(!pkg?.context) throw Object.assign(new Error('LUMI Contextを生成できませんでした。'),{code:'CONTEXT_UNAVAILABLE'});
-    const key=hashContext(pkg.context); if(!options.force&&cacheValue&&cacheKey===key)return cacheValue; if(inflight)return inflight;
+    const key=hashContext(pkg.context); if (!options.force && cacheValue && cacheKey === key) {
+      // PHASE 9-17: cached diagnosis is still a valid diagnosis result.
+      // Re-apply it to SCORE/KPI surfaces before returning so HOME/SP cannot
+      // remain at the unassessed placeholder after a cached LUMI diagnosis.
+      window.LUMIFUL_LAST_LUMI_RESULT = cacheValue;
+      syncScoreSurfaces(cacheValue);
+      return cacheValue;
+    } if(inflight)return inflight;
     inflight=callBackend(pkg.context).then(v=>{cacheKey=key;cacheValue=v;window.LUMIFUL_LAST_LUMI_RESULT=v;window.LUMIFUL_LUMI_CONTEXT_DIRTY=false;syncScoreSurfaces(v);return v;}).finally(()=>{inflight=null;}); return inflight;
   }
   function scoreState(r){const raw=Math.max(0,Math.min(100,Number(window.currentBaseScore||0)));return r?.score||{engine90:Number((raw*.9).toFixed(2)),lumi10:null,total100:Number((raw*.9).toFixed(2)),axes:{},checkLevel:'clear'};}
