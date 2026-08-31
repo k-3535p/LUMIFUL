@@ -12000,8 +12000,12 @@ window.LUMIFUL_PHASE8_ONBOARDING_LOCK = Object.freeze({
   function cleanAction(v){
     const x=v&&typeof v==='object'?v:{};
     const allowed=['scenario','review','input'];
-    const type=allowed.includes(x.type)?x.type:'review';
-    return {type,label:clampText(x.label,80),target:clampText(x.target,80),suggestedValue:(typeof x.suggestedValue==='number'&&Number.isFinite(x.suggestedValue))?x.suggestedValue:null,reason:clampText(x.reason,300)};
+    const scenarioTargets=['housing','livingCost','incomeAmount','incomeEndAge','pensionAmount','expectedReturn'];
+    let type=allowed.includes(x.type)?x.type:'review';
+    const target=clampText(x.target,80);
+    const suggestedValue=(typeof x.suggestedValue==='number'&&Number.isFinite(x.suggestedValue))?x.suggestedValue:null;
+    if(type==='scenario'&&(!scenarioTargets.includes(target)||suggestedValue===null))type='review';
+    return {type,label:clampText(x.label,80),target,suggestedValue,reason:clampText(x.reason,300)};
   }
   window.validateLumiResponseV1=function(raw){
     const x=raw&&typeof raw==='object'?raw:{};
@@ -12109,6 +12113,18 @@ advice: 本人の価値観を尊重した次の考え方・選択肢
 typeは scenario / review / input のいずれか。
 scenarioは前提を変えた比較提案、reviewは設定見直しの提案、inputは不足情報の入力提案です。
 具体的な値を suggestedValue に入れる場合も、それは実行ではなく比較候補です。
+
+scenario を提案する場合、target は必ず次のいずれかの機械可読キーを使用してください。
+- housing：月間住宅費を変えて比較
+- livingCost：月間生活費を変えて比較
+- incomeAmount：現在の主な本人収入額を変えて比較
+- incomeEndAge：現在の主な本人収入の終了年齢を変えて比較
+- pensionAmount：既に入力済みの年金収入額を変えて比較
+- expectedReturn：対象を一意に特定できる運用資産の想定利回りを変えて比較
+
+scenario は、Context内の現在値と対象を一意に特定でき、具体的な suggestedValue を根拠をもって提案できる場合だけ返してください。
+対象が複数あって一意に特定できない場合、未入力の年金を新規作成する必要がある場合、価値観など数値Scenarioではない場合は scenario にせず review または input を使用してください。
+target に説明文や独自キーを作らないでください。
 
 【出力ルール】
 必ずJSONオブジェクトのみを返してください。Markdown、コードフェンス、前置き、後書きは禁止です。
@@ -12841,15 +12857,8 @@ ${JSON.stringify(OUTPUT_SCHEMA_EXAMPLE,null,2)}
   let activeScenarioComparison=null;
 
   function scenarioTargetKey(raw){
-    const t=String(raw||'').trim().toLowerCase();
-    if(!t)return '';
-    if(t.includes('housing')||t.includes('住宅'))return 'housing';
-    if(t.includes('living')||t.includes('expense')||t.includes('生活費'))return 'livingCost';
-    if((t.includes('income')||t.includes('収入'))&&(t.includes('end')||t.includes('age')||t.includes('期間')))return 'incomeEndAge';
-    if(t.includes('pension')||t.includes('年金'))return 'pensionAmount';
-    if(t.includes('return')||t.includes('yield')||t.includes('利回'))return 'expectedReturn';
-    if(t.includes('income')||t.includes('収入'))return 'incomeAmount';
-    return '';
+    const key=String(raw||'').trim();
+    return Object.prototype.hasOwnProperty.call(LUMI_SCENARIO_ALLOWED_V1,key)?key:'';
   }
 
   function isSupportedScenarioAction(action){
@@ -12884,7 +12893,7 @@ ${JSON.stringify(OUTPUT_SCHEMA_EXAMPLE,null,2)}
     return null;
   }
 
-  function resolveReturnAssets(model, sourceTarget=''){
+  function resolveReturnAssets(model){
     const eligible=(model.assets||[])
       .map((x,i)=>({x,i}))
       .filter(({x})=>
@@ -12893,18 +12902,7 @@ ${JSON.stringify(OUTPUT_SCHEMA_EXAMPLE,null,2)}
         x?.category!=='stock' &&
         Number.isFinite(Number(x?.expectedReturn))
       );
-
-    if(eligible.length<=1)return eligible;
-
-    const t=String(sourceTarget||'').toLowerCase();
-    const matched=eligible.filter(({x})=>{
-      const category=String(x?.category||'').toLowerCase();
-      const name=String(x?.name||'').toLowerCase();
-      if(t.includes('bond')||t.includes('債券'))return category.includes('bond')||name.includes('債券');
-      if(t.includes('fund')||t.includes('投資信託'))return category.includes('fund')||name.includes('投資信託');
-      return name && t.includes(name);
-    });
-    return matched.length===1?matched:[];
+    return eligible.length===1?eligible:[];
   }
 
   function scenarioBinding(model,key,sourceTarget=''){
@@ -12961,7 +12959,7 @@ ${JSON.stringify(OUTPUT_SCHEMA_EXAMPLE,null,2)}
     }
 
     if(key==='expectedReturn'){
-      const targets=resolveReturnAssets(model,sourceTarget);
+      const targets=resolveReturnAssets(model);
       if(targets.length!==1)return null;
       const target=targets[0];
       return {
@@ -13273,7 +13271,7 @@ ${JSON.stringify(OUTPUT_SCHEMA_EXAMPLE,null,2)}
       ${scenarioComparisonSvg(c.rows,s.rows)}
 
       <div class="bg-white/70 rounded-2xl p-3 text-[11px] text-[#6F7785] leading-relaxed">
-        この比較は既存Engine v2で一時計算しています。LUMI AIの再診断は行っていないため、ここではENGINE SCOREのみ比較しています。
+        この比較は現在の入力条件をもとに試算しています。LUMIのAI再診断はまだ行っていないため、ここでは数値シミュレーションのスコアのみ比較しています。
       </div>
 
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -13362,7 +13360,7 @@ ${JSON.stringify(OUTPUT_SCHEMA_EXAMPLE,null,2)}
   window.applyLumiScenarioToPlanV1=applyScenarioToPlan;
 
   window.LUMIFUL_LUMI_SCENARIO_V1=Object.freeze({
-    status:'ENGINE_COMPARE_CANDIDATE',
+    status:'ACTION_EXPANSION_CANDIDATE',
     allowedTargets:Object.keys(LUMI_SCENARIO_ALLOWED_V1),
     enginePath:[
       'calculateSimulationV2',
