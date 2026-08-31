@@ -1704,6 +1704,84 @@
 }
 </style>
 
+
+<style id="phase9-16-sp-final-polish-v3">
+/* ============================================================
+   PHASE 9-16 — SP FINAL POLISH v3
+   Scope: smartphone HOME KPI cards only.
+   PC layout / Engine / Auth / LUMI runtime unchanged.
+   ============================================================ */
+@media (max-width:639px){
+
+  /* 1) Card height: lock all four cards to the same compact height. */
+  #home-kpi-grid > #kpi-card-score,
+  #home-kpi-grid > #kpi-card-yield,
+  #home-kpi-grid > #kpi-card-cover,
+  #home-kpi-grid > #kpi-card-assets{
+    height:220px !important;
+    min-height:220px !important;
+    max-height:220px !important;
+  }
+
+  /* 2) LUMI score breakdown:
+        internal "未評価" is a non-numeric state, so show "—" on SP only.
+        The top status badge remains "LUMI 未評価". */
+  #kpi-card-score #kpi-ai-adj{
+    font-size:0 !important;
+    line-height:1 !important;
+    min-width:18px !important;
+    text-align:center !important;
+  }
+  #kpi-card-score #kpi-ai-adj::after{
+    content:"—";
+    font-size:10px !important;
+    line-height:1 !important;
+    font-weight:800 !important;
+    color:#8C5800 !important;
+  }
+
+  /* 3) All four bottom navigation links use exactly the same typography. */
+  #kpi-card-score > div:last-child button,
+  #home-kpi-grid .kpi-standard-card .kpi-card-cta-button{
+    font-family:inherit !important;
+    font-size:10px !important;
+    line-height:1.2 !important;
+    font-weight:700 !important;
+    letter-spacing:0 !important;
+    gap:4px !important;
+    white-space:nowrap !important;
+  }
+  #kpi-card-score > div:last-child button i,
+  #home-kpi-grid .kpi-standard-card .kpi-card-cta-button i{
+    font-size:9px !important;
+  }
+
+  /* Remove the historical special reduction only for the long cover CTA. */
+  #kpi-card-cover .kpi-card-cta-button{
+    font-size:10px !important;
+    letter-spacing:0 !important;
+  }
+}
+
+/* Very narrow phones: keep the same hierarchy but prevent clipping. */
+@media (max-width:374px){
+  #home-kpi-grid > #kpi-card-score,
+  #home-kpi-grid > #kpi-card-yield,
+  #home-kpi-grid > #kpi-card-cover,
+  #home-kpi-grid > #kpi-card-assets{
+    height:214px !important;
+    min-height:214px !important;
+    max-height:214px !important;
+  }
+
+  #kpi-card-score > div:last-child button,
+  #home-kpi-grid .kpi-standard-card .kpi-card-cta-button,
+  #kpi-card-cover .kpi-card-cta-button{
+    font-size:9px !important;
+  }
+}
+</style>
+
 </head>
 <body class="bg-[#FAFAF7] text-[#253047] min-h-screen font-sans antialiased relative overflow-x-hidden">
 
