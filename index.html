@@ -5281,6 +5281,7 @@ m.profile.targetAge=_targetRaw?Math.max(m.profile.currentAge||18,Math.round(Numb
       setText('kpi-score-status-text', '条件を入力してください');
       setText('kpi-final-age-label', String(window.ensureV2InputModel()?.profile?.targetAge || 90));
       setText('kpi-final-assets', '0 万円');
+      setText('kpi-yield-living-support-rate', '—');
       setText('asset-potential-assets', '0 万円');
 
       const scoreBadge = document.getElementById('kpi-score-badge');
@@ -5347,6 +5348,31 @@ m.profile.targetAge=_targetRaw?Math.max(m.profile.currentAge||18,Math.round(Numb
       const finalLifestyleAssets = tableRows[tableRows.length - 1]?.lifestyleAssets || 0;
       const totalYield = tableRows.reduce((acc, r) => acc + r.annualYield, 0);
       const avgYield = Math.round(totalYield / tableRows.length);
+
+      // PHASE 9-16 — HOME insight only.
+      // Uses the same expense definition already used by the existing cover-rate logic:
+      // annual living expense + annual housing expense.
+      const yieldSupportLivingAnnual = window.normalizeAnnualAmountV2(
+        migrated.living?.expense?.amount,
+        migrated.living?.expense?.frequency
+      );
+      const yieldSupportHousing = migrated.living?.housing || {};
+      const yieldSupportHousingAnnual =
+        yieldSupportHousing.type === 'owned_no_loan'
+          ? 0
+          : Math.max(0, Number(yieldSupportHousing.monthlyAmount || 0)) * 12;
+      const yieldSupportExpenseAnnual =
+        yieldSupportLivingAnnual + yieldSupportHousingAnnual;
+      const yieldSupportRate =
+        yieldSupportExpenseAnnual > 0
+          ? Math.max(0, Math.round((avgYield / yieldSupportExpenseAnnual) * 100))
+          : null;
+      const yieldSupportRateElem =
+        document.getElementById('kpi-yield-living-support-rate');
+      if (yieldSupportRateElem) {
+        yieldSupportRateElem.textContent =
+          yieldSupportRate === null ? '—' : `${yieldSupportRate}%`;
+      }
 
       document.getElementById('kpi-annual-yield').innerHTML = `${avgYield.toLocaleString()} 万円<span class="kpi-annual-unit text-xs font-normal text-[#6F7785]"> /年</span><span class="kpi-annual-average text-xs font-normal text-[#6F7785]"> (平均)</span>`;
 
