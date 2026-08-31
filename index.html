@@ -918,197 +918,6 @@
 }
 </style>
 
-
-<style id="phase9-16-recovery-rebuild">
-/* ============================================================
-   PHASE 9-16 RECOVERY REBUILD
-   Built on the known-fast Phase 9-15 runtime.
-   HOME KPI changes are static HTML/CSS only.
-   ============================================================ */
-#home-kpi-grid{
-  align-items:stretch;
-}
-#home-kpi-grid .kpi-home-card{
-  display:grid !important;
-  grid-template-rows:1fr 42px 38px !important;
-  row-gap:10px !important;
-  min-width:0;
-}
-#home-kpi-grid .kpi-main-zone{
-  min-height:0;
-}
-#home-kpi-grid .kpi-home-insight{
-  grid-row:2;
-  width:100%;
-  height:42px;
-  min-height:42px;
-  max-height:42px;
-  box-sizing:border-box;
-  margin:0;
-}
-#home-kpi-grid .kpi-home-cta{
-  grid-row:3;
-  height:38px;
-  min-height:38px;
-  max-height:38px;
-  padding-top:11px;
-  border-top:1px solid #ECEBE6;
-  display:flex;
-  align-items:flex-start;
-  justify-content:flex-end;
-  box-sizing:border-box;
-}
-#home-kpi-grid .kpi-card-cta-button{
-  display:flex;
-  align-items:center;
-  justify-content:flex-end;
-  gap:4px;
-  padding:0;
-  border:0;
-  background:transparent;
-  color:#253047;
-  cursor:pointer;
-  font-size:12px;
-  font-weight:700;
-  line-height:1.2;
-  white-space:nowrap;
-}
-#home-kpi-grid .kpi-card-cta-button:hover{color:#8C5800}
-#home-kpi-grid .kpi-card-cta-button i{font-size:10px}
-
-#home-kpi-grid .kpi-insight-neutral,
-#home-kpi-grid .kpi-insight-warning,
-#home-kpi-grid .kpi-insight-info{
-  padding:9px 11px;
-  border-radius:10px;
-  display:flex;
-  align-items:center;
-  gap:10px;
-  font-size:10px;
-  line-height:1.25;
-  font-weight:700;
-}
-#home-kpi-grid .kpi-insight-neutral{
-  background:rgba(248,245,236,.92);
-  border:1px solid rgba(225,212,177,.90);
-  color:#6D5A2D;
-}
-#home-kpi-grid .kpi-insight-warning{
-  background:rgba(255,241,243,.92);
-  border:1px solid rgba(248,194,202,.88);
-  color:#D85A72;
-}
-#home-kpi-grid .kpi-insight-info{
-  background:rgba(244,248,252,.96);
-  border:1px solid rgba(211,222,234,.95);
-  color:#64748B;
-}
-#kpi-yield-insight .kpi-insight-line + .kpi-insight-line{
-  position:relative;
-  padding-left:11px;
-}
-#kpi-yield-insight .kpi-insight-line + .kpi-insight-line::before{
-  content:"";
-  position:absolute;left:0;top:15%;bottom:15%;width:1px;
-  background:rgba(109,90,45,.22);
-}
-#kpi-phase-badge{
-  padding:0!important;margin:0!important;border:0!important;border-radius:0!important;
-  background:transparent!important;box-shadow:none!important;color:inherit!important;font:inherit!important;
-}
-
-/* PC: visually balanced row without absolute positioning or runtime layout work. */
-@media (min-width:640px){
-  #home-kpi-grid .kpi-home-card{
-    min-height:238px;
-  }
-}
-
-/* SP: compact 2x2 cards. No fixed giant blank area. */
-@media (max-width:639px){
-  #home-kpi-grid{
-    grid-template-columns:repeat(2,minmax(0,1fr)) !important;
-    gap:10px !important;
-  }
-  #home-kpi-grid .kpi-home-card{
-    min-height:0 !important;
-    height:226px !important;
-    padding:12px !important;
-    border-radius:20px !important;
-    grid-template-rows:1fr 40px 34px !important;
-    row-gap:7px !important;
-  }
-  #home-kpi-grid .kpi-home-insight{
-    height:40px !important;
-    min-height:40px !important;
-    max-height:40px !important;
-  }
-  #home-kpi-grid .kpi-home-cta{
-    height:34px !important;
-    min-height:34px !important;
-    max-height:34px !important;
-    padding-top:8px !important;
-  }
-  #home-kpi-grid .kpi-card-cta-button{
-    font-size:9px !important;
-    gap:3px !important;
-  }
-  #kpi-card-cover .kpi-card-cta-button{font-size:8.2px !important}
-
-  #kpi-score{font-size:32px !important}
-  #kpi-annual-yield,#kpi-cover-rate,#kpi-final-assets{
-    font-size:20px !important;
-    line-height:1.05 !important;
-    white-space:nowrap !important;
-  }
-
-  #kpi-score-breakdown{
-    display:grid !important;
-    grid-template-columns:minmax(0,1fr) 1px minmax(0,1fr) !important;
-    align-items:center !important;
-    gap:5px !important;
-    padding:6px 5px !important;
-  }
-  #kpi-score-breakdown > div:not(:nth-child(2)){
-    display:flex !important;align-items:center !important;justify-content:center !important;gap:3px !important;
-  }
-  #kpi-score-breakdown > div:nth-child(2){
-    width:1px !important;height:18px !important;background:#E7E9ED !important;opacity:1 !important;
-  }
-  #kpi-score-breakdown .uppercase{font-size:7.5px !important;letter-spacing:0 !important}
-  #kpi-base-score,#kpi-ai-adj{font-size:10px !important;line-height:1 !important}
-
-  #kpi-yield-insight{
-    flex-direction:column;
-    align-items:flex-start;
-    justify-content:center;
-    gap:2px;
-    padding:6px 8px;
-    font-size:8.5px;
-  }
-  #kpi-yield-insight .kpi-insight-line + .kpi-insight-line{
-    padding-left:0;
-  }
-  #kpi-yield-insight .kpi-insight-line + .kpi-insight-line::before{content:none}
-  #kpi-cover-subtext,#kpi-final-status{
-    padding:7px 8px;
-    font-size:8.5px;
-  }
-}
-
-@media (max-width:374px){
-  #home-kpi-grid{gap:8px !important}
-  #home-kpi-grid .kpi-home-card{
-    height:216px !important;
-    padding:10px !important;
-    grid-template-rows:1fr 40px 34px !important;
-    row-gap:5px !important;
-  }
-  #home-kpi-grid .kpi-card-cta-button{font-size:8.3px !important}
-  #kpi-card-cover .kpi-card-cta-button{font-size:7.5px !important}
-}
-</style>
-
 </head>
 <body class="bg-[#FAFAF7] text-[#253047] min-h-screen font-sans antialiased relative overflow-x-hidden">
 
@@ -1341,124 +1150,135 @@
         <section id="hero-section" class="space-y-4">
           
           <!-- 4 KPI EQUAL GRID (Phase 5A Equal 4-Card Layout) -->
-          
-<div id="home-kpi-grid" class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+          <div id="home-kpi-grid" class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
+            
+            <!-- KPI 1: LUMIFUL SCORE CARD -->
+            <div class="bg-[#FFFDF8] rounded-[24px] p-3.5 sm:p-5 border border-[#ECEBE6] flex flex-col justify-between relative overflow-hidden transition shadow-sm">
+              
+              <!-- Hero-Wide Organic Light Field Background Canvas -->
+              <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_85%_35%,rgba(255,200,61,0.22)_0%,rgba(255,200,61,0.08)_45%,rgba(255,253,248,0)_75%)] pointer-events-none -z-0"></div>
 
-  <!-- KPI 1: LUMIFUL SCORE -->
-  <div id="kpi-card-score" class="kpi-home-card kpi-score-card bg-[#FFFDF8] rounded-[24px] p-3.5 sm:p-5 border border-[#ECEBE6] relative overflow-hidden transition shadow-sm">
-    <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_85%_35%,rgba(255,200,61,0.22)_0%,rgba(255,200,61,0.08)_45%,rgba(255,253,248,0)_75%)] pointer-events-none -z-0"></div>
+              <div class="relative z-10 space-y-2 sm:space-y-3">
+                <!-- Header: Title (Top Left) & Dynamic Badge (Top Right) -->
+                <div class="flex items-center justify-between gap-1 sm:gap-2">
+                  <div class="shrink-0 font-extrabold uppercase leading-[0.92]" aria-label="LUMIFUL SCORE">
+                    <span class="block text-[13px] sm:text-[15px] tracking-[0.08em] text-[#253047] whitespace-nowrap">LUMIFUL</span>
+                    <span class="block text-[13px] sm:text-[15px] tracking-[0.30em] text-[#FFC83D] whitespace-nowrap">SCORE</span>
+                  </div>
+                  <div>
+                    <span id="kpi-score-badge" class="px-2 py-0.5 rounded-full text-[9px] sm:text-[10px] font-semibold bg-[#FAFAF7] text-[#6F7785] border border-[#ECEBE6] shrink-0 inline-block truncate max-w-full">
+                      ⚪ 未設定
+                    </span>
+                  </div>
+                </div>
 
-    <div class="kpi-main-zone relative z-10">
-      <div class="flex items-center justify-between gap-1 sm:gap-2">
-        <div class="shrink-0 font-extrabold uppercase leading-[0.92]" aria-label="LUMIFUL SCORE">
-          <span class="block text-[13px] sm:text-[15px] tracking-[0.08em] text-[#253047] whitespace-nowrap">LUMIFUL</span>
-          <span class="block text-[13px] sm:text-[15px] tracking-[0.30em] text-[#FFC83D] whitespace-nowrap">SCORE</span>
-        </div>
-        <span id="kpi-score-badge" class="px-2 py-0.5 rounded-full text-[9px] sm:text-[10px] font-semibold bg-[#FAFAF7] text-[#6F7785] border border-[#ECEBE6] shrink-0 inline-block truncate max-w-full">⚪ 未設定</span>
-      </div>
+                <!-- Main Body: Score Left, Official LUMI Right -->
+                <div class="flex items-center justify-between gap-2 min-h-[52px] sm:min-h-[80px]">
+                  <!-- Main Content Row: Score Number -->
+                  <div class="pt-0.5 flex items-baseline gap-1 min-w-0">
+                    <div id="kpi-score" class="text-2xl sm:text-4xl lg:text-5xl font-extrabold text-[#253047] tracking-tight leading-none whitespace-nowrap">0</div>
+                    <span class="text-[10px] sm:text-xs font-bold text-[#6F7785] whitespace-nowrap">/ 100</span>
+                  </div>
 
-      <div class="flex items-center justify-between gap-2 mt-2">
-        <div class="pt-0.5 flex items-baseline gap-1 min-w-0">
-          <div id="kpi-score" class="text-2xl sm:text-4xl lg:text-5xl font-extrabold text-[#253047] tracking-tight leading-none whitespace-nowrap">0</div>
-          <span class="text-[10px] sm:text-xs font-bold text-[#6F7785] whitespace-nowrap">/ 100</span>
-        </div>
-        <div class="shrink-0 flex items-center justify-center pl-1">
-          <img src="./assets/lumi-spark.png" alt="LUMI" class="w-12 h-12 sm:w-20 sm:h-20 lg:w-24 lg:h-24 object-contain pointer-events-none" />
-        </div>
-      </div>
-    </div>
+                  <!-- Right Side Official LUMI Character Area -->
+                  <div class="shrink-0 flex items-center justify-center pl-1">
+                    <img src="./assets/lumi-spark.png" alt="LUMI" class="w-12 h-12 sm:w-20 sm:h-20 lg:w-24 lg:h-24 object-contain pointer-events-none" />
+                  </div>
+                </div>
 
-    <div id="kpi-score-breakdown" class="kpi-home-insight bg-white/90 p-1.5 sm:p-2 rounded-[14px] border border-[#ECEBE6] shadow-2xs flex items-center whitespace-nowrap relative z-10">
-      <div class="flex items-center justify-center gap-1 sm:gap-1.5 flex-1 min-w-0">
-        <div class="w-4 h-4 sm:w-5 sm:h-5 rounded-md bg-slate-100 text-[#253047] flex items-center justify-center text-[9px] sm:text-[10px] shrink-0"><i class="fa-solid fa-chart-simple"></i></div>
-        <span class="text-[8px] sm:text-[9px] font-bold text-[#6F7785] uppercase tracking-normal sm:tracking-wider">ENGINE</span>
-        <span class="text-xs sm:text-sm font-extrabold text-[#253047]" id="kpi-base-score">0</span>
-      </div>
-      <div class="w-px h-3 sm:h-4 bg-[#ECEBE6] shrink-0 mx-1"></div>
-      <div class="flex items-center justify-center gap-1 sm:gap-1.5 flex-1 min-w-0">
-        <div class="w-4 h-4 sm:w-5 sm:h-5 rounded-md bg-[#FFF9E6] text-[#8C5800] flex items-center justify-center text-[9px] sm:text-[10px] shrink-0"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
-        <span class="text-[8px] sm:text-[9px] font-bold text-[#8C5800] uppercase tracking-normal sm:tracking-wider">LUMI</span>
-        <span class="text-xs sm:text-sm font-extrabold text-[#8C5800]" id="kpi-ai-adj">0</span>
-      </div>
-    </div>
+                <!-- Mini Metrics: full card width so LUMI never competes with BASE/LUMI metrics -->
+                <div id="kpi-score-breakdown" class="bg-white/90 p-1.5 sm:p-2 rounded-[14px] border border-[#ECEBE6] shadow-2xs flex items-center w-full whitespace-nowrap">
+                  <!-- Base Score: Financial Data Chart Icon -->
+                  <div class="flex items-center justify-center gap-1 sm:gap-1.5 flex-1 min-w-0">
+                    <div class="w-4 h-4 sm:w-5 sm:h-5 rounded-md bg-slate-100 text-[#253047] flex items-center justify-center text-[9px] sm:text-[10px] shrink-0">
+                      <i class="fa-solid fa-chart-simple"></i>
+                    </div>
+                    <span class="text-[8px] sm:text-[9px] font-bold text-[#6F7785] uppercase tracking-normal sm:tracking-wider">BASE</span>
+                    <span class="text-xs sm:text-sm font-extrabold text-[#253047]" id="kpi-base-score">0</span>
+                  </div>
+                  <div class="w-px h-3 sm:h-4 bg-[#ECEBE6] shrink-0 mx-1"></div>
+                  <!-- LUMI: Intelligence Sparkle Icon -->
+                  <div class="flex items-center justify-center gap-1 sm:gap-1.5 flex-1 min-w-0">
+                    <div class="w-4 h-4 sm:w-5 sm:h-5 rounded-md bg-[#FFF9E6] text-[#8C5800] flex items-center justify-center text-[9px] sm:text-[10px] shrink-0">
+                      <i class="fa-solid fa-wand-magic-sparkles"></i>
+                    </div>
+                    <span class="text-[8px] sm:text-[9px] font-bold text-[#8C5800] uppercase tracking-normal sm:tracking-wider">LUMI</span>
+                    <span class="text-xs sm:text-sm font-extrabold text-[#8C5800]" id="kpi-ai-adj">0</span>
+                  </div>
+                </div>
+              </div>
 
-    <div class="kpi-home-cta relative z-10">
-      <button onclick="openScoreDetailModal()" class="kpi-card-cta-button group">
-        <span>詳しく見る</span><i class="fa-solid fa-arrow-right group-hover:translate-x-0.5 transition-transform"></i>
-      </button>
-    </div>
-  </div>
+              <!-- Bottom Row: CTA only -->
+              <div class="pt-3 border-t border-[#ECEBE6] mt-3 h-[36px] sm:h-[38px] flex items-start justify-end relative z-10 shrink-0">
+                <button onclick="openScoreDetailModal()" class="text-[10px] sm:text-xs font-bold text-[#253047] hover:text-[#8C5800] transition flex items-center gap-1 group cursor-pointer bg-transparent border-0 p-0 shrink-0 whitespace-nowrap">
+                  <span>詳しく見る</span>
+                  <i class="fa-solid fa-arrow-right text-[9px] sm:text-[10px] group-hover:translate-x-0.5 transition-transform"></i>
+                </button>
+              </div>
 
-  <!-- KPI 2 -->
-  <div id="kpi-card-yield" class="kpi-home-card bg-white rounded-[24px] p-3.5 sm:p-5 border border-[#ECEBE6] relative overflow-hidden transition">
-    <div class="kpi-main-zone">
-      <div class="flex items-center justify-between gap-1 sm:gap-2">
-        <span class="text-[10px] sm:text-xs font-bold text-[#6F7785] whitespace-nowrap tracking-[-0.02em]">資産が生活を支える力</span>
-        <img src="./assets/kpi-annual-yield.png" alt="" class="w-8 h-8 sm:w-10 sm:h-10 object-contain shrink-0 pointer-events-none" />
-      </div>
-      <div class="text-[11px] font-bold text-[#8C5800] mt-2">平均年間運用益 (生涯)</div>
-      <div id="kpi-annual-yield" class="text-2xl sm:text-3xl font-extrabold text-[#253047] tracking-tight mt-1">
-        0 万円<span class="kpi-annual-unit text-xs font-normal text-[#6F7785]"> /年</span>
-      </div>
-    </div>
+            </div>
 
-    <div id="kpi-yield-insight" class="kpi-home-insight kpi-insight-neutral">
-      <div class="kpi-insight-line">生活費の <span id="kpi-yield-living-support-rate">—</span> 相当</div>
-      <div class="kpi-insight-line"><span id="kpi-phase-badge">累計運用益 未設定</span></div>
-    </div>
+            <!-- KPI 2: 年間運用益 (専用画像アセットを絶対保護・維持) -->
+            <div class="bg-white rounded-[24px] p-3.5 sm:p-5 border border-[#ECEBE6] flex flex-col justify-between relative overflow-hidden transition">
+              <div>
+                <div class="flex items-center justify-between gap-1 sm:gap-2 mb-1">
+                  <span class="text-[10px] sm:text-xs font-bold text-[#6F7785] whitespace-nowrap tracking-[-0.02em]">資産が生活を支える力</span>
+                  <img src="./assets/kpi-annual-yield.png" alt="" class="w-8 h-8 sm:w-10 sm:h-10 object-contain shrink-0 pointer-events-none" />
+                </div>
+                <div class="text-[11px] font-bold text-[#8C5800] mb-2">平均年間運用益 (生涯)</div>
+                <div id="kpi-annual-yield" class="text-2xl sm:text-3xl font-extrabold text-[#253047] tracking-tight">
+                  0 万円<span class="kpi-annual-unit text-xs font-normal text-[#6F7785]"> /年</span>
+                </div>
+              </div>
 
-    <div class="kpi-home-cta">
-      <button onclick="switchView('annualProjection')" class="kpi-card-cta-button group">
-        <span>推移を見る</span><i class="fa-solid fa-arrow-right group-hover:translate-x-0.5 transition-transform"></i>
-      </button>
-    </div>
-  </div>
+              <div class="flex items-start justify-start pt-3 border-t border-[#ECEBE6] mt-3 h-[36px] sm:h-[38px] shrink-0">
+                <span id="kpi-phase-badge" class="max-w-full truncate px-2 py-0.5 sm:px-2.5 rounded-full text-[9px] sm:text-[10px] font-bold bg-[#FAFAF7] text-[#6F7785] border border-[#ECEBE6]">
+                  累計運用益 未設定
+                </span>
+              </div>
+            </div>
 
-  <!-- KPI 3 -->
-  <div id="kpi-card-cover" class="kpi-home-card bg-white rounded-[24px] p-3.5 sm:p-5 border border-[#ECEBE6] relative overflow-hidden transition">
-    <div class="kpi-main-zone">
-      <div class="flex items-center justify-between gap-2">
-        <span class="text-[10px] sm:text-xs font-bold text-[#6F7785] whitespace-nowrap tracking-[-0.02em]">生涯収支カバー率</span>
-        <img src="./assets/kpi-cover-rate.png" alt="" class="w-8 h-8 sm:w-10 sm:h-10 object-contain shrink-0 pointer-events-none" />
-      </div>
-      <div class="text-[11px] font-bold text-[#65B9E8] mt-2">生涯の資金維持達成率</div>
-      <div id="kpi-cover-rate" class="text-xl sm:text-2xl font-extrabold text-[#6F7785] tracking-tight whitespace-nowrap mt-1">-</div>
-    </div>
+            <!-- KPI 3: 生涯収支カバー率 (専用画像アセットを絶対保護・維持) -->
+            <div class="bg-white rounded-[24px] p-3.5 sm:p-5 border border-[#ECEBE6] flex flex-col justify-between relative overflow-hidden transition">
+              <div>
+                <div class="flex items-center justify-between gap-2 mb-1">
+                  <span class="text-[10px] sm:text-xs font-bold text-[#6F7785] flex items-center gap-0.5 sm:gap-1 whitespace-nowrap tracking-[-0.02em]">
+                    生涯収支カバー率
+                    
+                  </span>
+                  <img src="./assets/kpi-cover-rate.png" alt="" class="w-8 h-8 sm:w-10 sm:h-10 object-contain shrink-0 pointer-events-none" />
+                </div>
+                <div class="text-[11px] font-bold text-[#65B9E8] mb-2">生涯の資金維持達成率</div>
+                <div id="kpi-cover-rate" class="text-xl sm:text-2xl font-extrabold text-[#6F7785] tracking-tight whitespace-nowrap">
+                  -
+                </div>
+              </div>
 
-    <div id="kpi-cover-subtext" class="kpi-home-insight kpi-insight-warning">
-      <div class="kpi-insight-line">目標年齢までの資金維持力</div>
-    </div>
+              <div id="kpi-cover-subtext" class="text-[11px] text-[#6F7785] pt-3 border-t border-[#ECEBE6] mt-3 h-[36px] sm:h-[38px] flex items-start truncate shrink-0">
+                目標年齢までの資金維持力
+              </div>
+            </div>
 
-    <div class="kpi-home-cta">
-      <button onclick="switchView('simulationResults')" class="kpi-card-cta-button group">
-        <span>シミュレーション結果を見る</span><i class="fa-solid fa-arrow-right group-hover:translate-x-0.5 transition-transform"></i>
-      </button>
-    </div>
-  </div>
+            <!-- KPI 4: 目標年齢時点の想定資産 (専用画像アセットを絶対保護・維持) -->
+            <div class="bg-white rounded-[24px] p-3.5 sm:p-5 border border-[#ECEBE6] flex flex-col justify-between relative overflow-hidden transition">
+              <div>
+                <div class="flex items-center justify-between gap-2 mb-1">
+                  <span class="text-[10px] sm:text-xs font-bold text-[#6F7785] whitespace-nowrap tracking-[-0.02em]">
+                    <span id="kpi-final-age-label">90</span>歳時点の想定資産
+                  </span>
+                  <img src="./assets/kpi-future-assets.png" alt="" class="w-8 h-8 sm:w-10 sm:h-10 object-contain shrink-0 pointer-events-none" />
+                </div>
+                <div id="kpi-final-assets" class="text-2xl sm:text-3xl font-extrabold text-[#253047] tracking-tight mt-3">
+                  0 万円
+                </div>
+              </div>
 
-  <!-- KPI 4 -->
-  <div id="kpi-card-assets" class="kpi-home-card bg-white rounded-[24px] p-3.5 sm:p-5 border border-[#ECEBE6] relative overflow-hidden transition">
-    <div class="kpi-main-zone">
-      <div class="flex items-center justify-between gap-2">
-        <span class="text-[10px] sm:text-xs font-bold text-[#6F7785] whitespace-nowrap tracking-[-0.02em]"><span id="kpi-final-age-label">90</span>歳時点の想定資産</span>
-        <img src="./assets/kpi-future-assets.png" alt="" class="w-8 h-8 sm:w-10 sm:h-10 object-contain shrink-0 pointer-events-none" />
-      </div>
-      <div id="kpi-final-assets" class="text-2xl sm:text-3xl font-extrabold text-[#253047] tracking-tight mt-5">0 万円</div>
-    </div>
+              <div id="kpi-final-status" class="text-[11px] text-[#6F7785] pt-3 border-t border-[#ECEBE6] mt-3 h-[36px] sm:h-[38px] flex items-start shrink-0">
+                利用可能資産のみで算出
+              </div>
+            </div>
 
-    <div id="kpi-final-status" class="kpi-home-insight kpi-insight-info">
-      <div class="kpi-insight-line">利用可能資産のみで算出</div>
-    </div>
-
-    <div class="kpi-home-cta">
-      <button onclick="switchView('assetDetails')" class="kpi-card-cta-button group">
-        <span>資産詳細を見る</span><i class="fa-solid fa-arrow-right group-hover:translate-x-0.5 transition-transform"></i>
-      </button>
-    </div>
-  </div>
-
-</div>
-
+          </div>
 
           <!-- LUMI ADVISOR PANEL -->
           <div id="lumi-advisor-panel" class="bg-[#FEFBF0] rounded-[24px] p-5 border border-[#F0E2B7] transition space-y-4">
@@ -11847,72 +11667,6 @@ ${JSON.stringify(OUTPUT_SCHEMA_EXAMPLE,null,2)}
     engineLumiTypographyUnified: true,
     cumulativeReturnPlainText: true,
     scope: 'SP KPI presentation only'
-  });
-})();
-</script>
-
-
-<script>
-(function(){
-  function isSP(){return window.matchMedia('(max-width:639px)').matches;}
-
-  function normalizeSpUnevaluated(){
-    const el=document.getElementById('kpi-ai-adj');
-    if(!el || !isSP()) return;
-    const raw=String(el.textContent||'').trim();
-    if(raw==='未評価' || raw==='0 / 10'){
-      el.textContent='—';
-      el.setAttribute('aria-label','LUMI 未評価');
-    }
-  }
-
-  function numberFromText(value){
-    const m=String(value??'').replace(/,/g,'').match(/-?\d+(?:\.\d+)?/);
-    return m ? Number(m[0]) : NaN;
-  }
-
-  function livingAnnualMan(){
-    try{
-      const model=window.getCurrentDataModelV2ForPersistence?.() || window.activeDataModelV2 || null;
-      const living=model?.living||{};
-      for(const v of [living.monthlyLivingExpense,living.monthlyExpense,living.livingExpenseMonthly,living.baseMonthlyExpense]){
-        const n=Number(v);
-        if(Number.isFinite(n)&&n>0){const a=n*12; return a>10000?a/10000:a;}
-      }
-      for(const v of [living.annualLivingExpense,living.annualExpense]){
-        const n=Number(v);
-        if(Number.isFinite(n)&&n>0)return n>10000?n/10000:n;
-      }
-    }catch(_){}
-    return NaN;
-  }
-
-  function updateLivingShare(){
-    const out=document.getElementById('kpi-yield-living-support-rate');
-    const yel=document.getElementById('kpi-annual-yield');
-    if(!out||!yel)return;
-    const y=numberFromText(yel.textContent), living=livingAnnualMan();
-    if(!Number.isFinite(y)||!Number.isFinite(living)||living<=0){out.textContent='—';return;}
-    const pct=Math.max(0,y/living*100);
-    out.textContent=(pct>=10?Math.round(pct):Math.round(pct*10)/10).toLocaleString()+'%';
-  }
-
-  document.addEventListener('DOMContentLoaded',function(){
-    normalizeSpUnevaluated();
-    updateLivingShare();
-    const lumi=document.getElementById('kpi-ai-adj');
-    if(lumi)new MutationObserver(normalizeSpUnevaluated).observe(lumi,{childList:true,characterData:true,subtree:true});
-    const annual=document.getElementById('kpi-annual-yield');
-    if(annual)new MutationObserver(updateLivingShare).observe(annual,{childList:true,characterData:true,subtree:true});
-  });
-  window.addEventListener('resize',normalizeSpUnevaluated,{passive:true});
-
-  window.LUMIFUL_PHASE9_16_RECOVERY_REBUILD=Object.freeze({
-    runtimeBase:'PHASE9_15_KNOWN_FAST',
-    staticKpiLayout:true,
-    renderWrappersAdded:0,
-    lightweightObservers:2,
-    spUnevaluatedDisplay:'—'
   });
 })();
 </script>
