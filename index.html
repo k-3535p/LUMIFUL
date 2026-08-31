@@ -11028,11 +11028,50 @@ window.LUMIFUL_PHASE8_ONBOARDING_LOCK = Object.freeze({
     return 'clear';
   }
   function cleanDiagnosis(v){const x=v&&typeof v==='object'?v:{};return {summary:clampText(x.summary,800),strength:clampText(x.strength,800),attention:clampText(x.attention,800),advice:clampText(x.advice,800)};}
+  const SCENARIO_TARGETS_V1=Object.freeze([
+    'expected_return',
+    'housing_cost',
+    'living_cost',
+    'income_amount',
+    'income_end_age',
+    'pension_amount'
+  ]);
+  function normalizeScenarioTargetV1(target,label){
+    const raw=[target,label].filter(Boolean).join(' ').trim().toLowerCase();
+    if(raw==='expected_return'||raw==='expectedreturn'||raw.includes('expected return')||raw.includes('yield')||raw.includes('利回'))return 'expected_return';
+    if(raw==='housing_cost'||raw==='housingcost'||raw==='housing'||raw.includes('housing')||raw.includes('住居費')||raw.includes('家賃')||raw.includes('住宅費'))return 'housing_cost';
+    if(raw==='living_cost'||raw==='livingcost'||raw.includes('living cost')||raw.includes('生活費'))return 'living_cost';
+    if(raw==='income_end_age'||raw.includes('income end')||raw.includes('収入終了')||raw.includes('終了年齢')||raw.includes('何歳まで働'))return 'income_end_age';
+    if(raw==='pension_amount'||raw.includes('pension')||raw.includes('年金'))return 'pension_amount';
+    if(raw==='income_amount'||raw.includes('income amount')||raw.includes('収入額')||raw.includes('収入を')||raw.includes('収入の'))return 'income_amount';
+    return null;
+  }
+  window.normalizeLumiScenarioTargetV1=normalizeScenarioTargetV1;
+  window.LUMIFUL_SCENARIO_ACTION_CONTRACT_V1=Object.freeze({
+    version:'1.0',
+    scenarioTargets:SCENARIO_TARGETS_V1,
+    unknownScenarioPolicy:'downgrade_to_review',
+    schemaGuessing:false,
+    silentMutation:false
+  });
   function cleanAction(v){
     const x=v&&typeof v==='object'?v:{};
     const allowed=['scenario','review','input'];
-    const type=allowed.includes(x.type)?x.type:'review';
-    return {type,label:clampText(x.label,80),target:clampText(x.target,80),suggestedValue:(typeof x.suggestedValue==='number'&&Number.isFinite(x.suggestedValue))?x.suggestedValue:null,reason:clampText(x.reason,300)};
+    let type=allowed.includes(x.type)?x.type:'review';
+    const label=clampText(x.label,80);
+    let target=clampText(x.target,80);
+    let suggestedValue=(typeof x.suggestedValue==='number'&&Number.isFinite(x.suggestedValue))?x.suggestedValue:null;
+    if(type==='scenario'){
+      const canonical=normalizeScenarioTargetV1(target,label);
+      if(canonical){
+        target=canonical;
+      }else{
+        type='review';
+        target='simulation_input';
+        suggestedValue=null;
+      }
+    }
+    return {type,label,target,suggestedValue,reason:clampText(x.reason,300)};
   }
   window.validateLumiResponseV1=function(raw){
     const x=raw&&typeof raw==='object'?raw:{};
@@ -11357,7 +11396,7 @@ ${JSON.stringify(OUTPUT_SCHEMA_EXAMPLE,null,2)}
     const items=v.lumiCheck.items.map(i=>`<div class="text-xs sm:text-sm text-[#5B6472] leading-relaxed">• ${esc(i.message)}</div>`).join('');
     const actions=v.nextActions.map((a,i)=>`<button type="button" class="lumi-next-action w-full text-left bg-white border border-[#E8E6DF] rounded-2xl p-4 hover:bg-[#FAFAF7] transition" data-action-index="${i}"><div class="font-bold text-sm text-[#253047]">${esc(a.label)}</div><div class="text-xs text-[#6F7785] mt-1">${esc(a.reason)}</div></button>`).join('');
     root.innerHTML=`<div class="space-y-1 mb-1"><h1 class="text-2xl sm:text-3xl font-extrabold text-[#253047] tracking-tight flex items-center gap-2"><i class="fa-solid fa-sun text-[#FFC83D]"></i><span>LUMIの診断</span></h1><p class="text-xs sm:text-sm text-[#6F7785]">数字の未来と、あなたが大切にしたい人生を一緒に見ます。</p></div><div class="bg-[#FEFBF0] rounded-[24px] p-5 sm:p-6 border border-[#F0E2B7] flex gap-4 items-start"><img src="./assets/lumi-spark.png" class="w-12 h-12 sm:w-14 sm:h-14 object-contain shrink-0" alt="LUMI"><div class="min-w-0"><div class="flex flex-wrap items-center gap-2"><h2 class="text-base font-bold text-[#253047]">LUMI SCORE ${s.lumi10} / 10</h2><span class="p95-badge">AI</span></div><p class="text-xs sm:text-sm text-[#6F7785] leading-relaxed mt-2">${esc(v.diagnosis.summary)}</p></div></div><div class="bg-white rounded-[24px] p-5 sm:p-6 border border-[#ECEBE6] space-y-4"><div class="p95-section-title"><i class="fa-solid fa-sliders text-[#65B9E8]"></i>LUMI SCOREの内訳</div><div class="grid grid-cols-1 sm:grid-cols-3 gap-3">${axes}</div></div><div class="bg-white rounded-[24px] p-5 sm:p-6 border border-[#ECEBE6] space-y-3"><div class="p95-section-title"><i class="fa-solid fa-triangle-exclamation text-[#FFB35C]"></i>LUMI CHECK：${checkLabel[s.checkLevel]||checkLabel.clear}</div>${items||'<div class="text-xs sm:text-sm text-[#6F7785]">現在の前提では、大きな注意点は見つかりませんでした。</div>'}</div><div class="bg-white rounded-[24px] p-5 sm:p-6 border border-[#ECEBE6] space-y-4"><div class="p95-section-title"><i class="fa-solid fa-comment-dots text-[#FFB35C]"></i>LUMIの見立て</div><div class="p95-diagnosis"><div><h4>未来の見立て</h4><p>${esc(v.diagnosis.summary)}</p></div><div><h4>いいところ</h4><p>${esc(v.diagnosis.strength)}</p></div><div><h4>確認したいこと</h4><p>${esc(v.diagnosis.attention)}</p></div><div><h4>LUMIからの提案</h4><p>${esc(v.diagnosis.advice)}</p></div></div></div>${actions?`<div class="bg-[#FAFAF7] rounded-[24px] p-5 sm:p-6 border border-[#ECEBE6] space-y-3"><div class="p95-section-title">別の未来も見てみる</div>${actions}</div>`:''}<div class="flex justify-end"><button type="button" class="text-xs font-bold text-[#6F7785] hover:text-[#253047]" id="lumi-refresh-button">LUMIでもう一度確認する</button></div>`;
-    root.querySelectorAll('.lumi-next-action').forEach(btn=>btn.addEventListener('click',()=>{const a=v.nextActions[Number(btn.dataset.actionIndex)];if(a)window.handleLumiSuggestedActionV1?.(a.type,a.target,a.suggestedValue);}));
+    root.querySelectorAll('.lumi-next-action').forEach(btn=>btn.addEventListener('click',()=>{const a=v.nextActions[Number(btn.dataset.actionIndex)];if(a)window.handleLumiSuggestedActionV1?.(a.type,a.target,a.suggestedValue,a.label);}));
     root.querySelector('#lumi-refresh-button')?.addEventListener('click',()=>window.refreshLumiDiagnosisV1?.());
   }
   function renderError(e){const root=document.getElementById('lumiAdvisorView');if(!root)return;const msg=String(e?.code||'').includes('not-found')?'LUMIのバックエンドがまだデプロイされていません。':(e?.message||'LUMIとの通信に失敗しました。');root.innerHTML=`<div class="space-y-1 mb-1"><h1 class="text-2xl sm:text-3xl font-extrabold text-[#253047] tracking-tight flex items-center gap-2"><i class="fa-solid fa-sun text-[#FFC83D]"></i><span>LUMIの診断</span></h1></div><div class="bg-white rounded-[24px] p-6 border border-[#ECEBE6]"><div class="font-bold text-[#253047]">LUMIは現在接続待ちです</div><p class="text-sm text-[#6F7785] mt-2">${esc(msg)}</p><p class="text-xs text-[#8B93A1] mt-3">Engineの計算結果や入力データには影響ありません。</p></div>`;}
@@ -11376,6 +11415,54 @@ ${JSON.stringify(OUTPUT_SCHEMA_EXAMPLE,null,2)}
   function isHousingCostScenarioTarget(target){
     const t=String(target||'').trim().toLowerCase();
     return t==='housing'||t==='housingcost'||t==='housing_cost'||t.includes('housing')||t.includes('住居費')||t.includes('家賃')||t.includes('住宅');
+  }
+
+  const LUMI_ACTION_ROUTE_V1=Object.freeze({
+    expected_return:'expected_return', housing_cost:'housing_cost',
+    living_cost:'living_cost', income_amount:'income_amount',
+    income_end_age:'income_end_age', pension_amount:'pension_amount',
+    review:'review', input:'input', unsupported:'unsupported'
+  });
+
+  function normalizeLumiActionRouteV1(type,target,label){
+    const t=String(type||'').trim().toLowerCase();
+    if(t==='scenario'){
+      const canonical=window.normalizeLumiScenarioTargetV1?.(target,label);
+      if(canonical && LUMI_ACTION_ROUTE_V1[canonical])return LUMI_ACTION_ROUTE_V1[canonical];
+    }
+    if(t==='input')return LUMI_ACTION_ROUTE_V1.input;
+    if(t==='review')return LUMI_ACTION_ROUTE_V1.review;
+    return LUMI_ACTION_ROUTE_V1.unsupported;
+  }
+
+  function openUnsupportedLumiActionSafeV1(label,target){
+    closeScenarioStep1();
+    const modal=document.createElement('div');
+    modal.id='lumiScenarioStep1Modal';
+    modal.className='fixed inset-0 z-[120] bg-[#253047]/35 backdrop-blur-[2px] flex items-center justify-center p-4';
+    modal.innerHTML=`<div class="w-full max-w-[620px] bg-[#FFFDF8] rounded-[28px] border border-[#ECEBE6] shadow-2xl p-5 sm:p-7">
+      <div class="flex items-start justify-between gap-4">
+        <div>
+          <div class="text-xs font-bold text-[#8C5800]">LUMIの提案</div>
+          <h3 class="text-xl font-extrabold text-[#253047] mt-1">${esc(label||'別の未来を確認する')}</h3>
+          <p class="text-xs sm:text-sm text-[#6F7785] mt-2">この提案は現在の自動比較対象にはまだ登録されていません。入力値は変更していません。</p>
+        </div>
+        <button type="button" id="lumiScenarioStep1Close" class="w-9 h-9 rounded-full border border-[#ECEBE6] text-[#6F7785] hover:bg-white" aria-label="閉じる"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="mt-5 rounded-2xl bg-[#F7FBFE] border border-[#DCEEF8] px-4 py-3 text-xs text-[#536274] leading-relaxed">
+        比較できない提案を無理にSchemaへ変換せず、安全にシミュレーション入力へ移動できます。
+      </div>
+      <div class="flex flex-col-reverse sm:flex-row sm:justify-end gap-2 mt-5">
+        <button type="button" id="lumiScenarioStep1Back" class="px-5 py-2.5 rounded-[14px] border border-[#D9DCE2] bg-white text-[#536274] text-xs font-bold">閉じる</button>
+        <button type="button" id="lumiScenarioOpenInput" class="px-5 py-2.5 rounded-[14px] bg-[#253047] text-white text-xs font-bold">シミュレーション条件を見る</button>
+      </div>
+    </div>`;
+    document.body.appendChild(modal);
+    modal.querySelector('#lumiScenarioStep1Close')?.addEventListener('click',closeScenarioStep1);
+    modal.querySelector('#lumiScenarioStep1Back')?.addEventListener('click',closeScenarioStep1);
+    modal.querySelector('#lumiScenarioOpenInput')?.addEventListener('click',()=>{closeScenarioStep1();window.switchView?.('simulationInput');});
+    modal.addEventListener('click',e=>{if(e.target===modal)closeScenarioStep1();});
+    return true;
   }
 
   function getSingleReturnBearingAsset(model){
@@ -11620,16 +11707,19 @@ ${JSON.stringify(OUTPUT_SCHEMA_EXAMPLE,null,2)}
     return true;
   }
 
-  window.handleLumiSuggestedActionV1=function(type,target,suggestedValue){
-    if(isExpectedReturnScenarioTarget(target) && type==='scenario'){
-      openExpectedReturnScenarioStep1(target,suggestedValue);
-      return;
+  window.handleLumiSuggestedActionV1=function(type,target,suggestedValue,label){
+    const route=normalizeLumiActionRouteV1(type,target,label);
+    if(route===LUMI_ACTION_ROUTE_V1.expected_return){
+      if(type==='scenario' && openExpectedReturnScenarioStep1(target,suggestedValue))return;
+      openUnsupportedLumiActionSafeV1(label||'想定利回りの前提条件を確認',target); return;
     }
-    if(isHousingCostScenarioTarget(target)){
-      openHousingScenarioStep4(target,suggestedValue);
-      return;
+    if(route===LUMI_ACTION_ROUTE_V1.housing_cost){
+      openHousingScenarioStep4(target,suggestedValue); return;
     }
-    window.showToast?.('現在の入力値は変更していません。Simulation Inputから内容を確認できます。','info');
+    if(route===LUMI_ACTION_ROUTE_V1.review || route===LUMI_ACTION_ROUTE_V1.input){
+      window.switchView?.('simulationInput'); return;
+    }
+    openUnsupportedLumiActionSafeV1(label||'この条件を見直す',target);
   };
 
   window.LUMIFUL_PHASE9_SCENARIO_STEP1=Object.freeze({
@@ -11641,6 +11731,7 @@ ${JSON.stringify(OUTPUT_SCHEMA_EXAMPLE,null,2)}
     detachedEngine:true
   });
 
+  window.LUMIFUL_SCENARIO_ACTION_ROUTER_V1=Object.freeze({status:'CONTRACT_ROUTER',contract:'LUMIFUL_SCENARIO_ACTION_CONTRACT_V1',supported:['expected_return','housing_cost'],recognizedFuture:['living_cost','income_amount','income_end_age','pension_amount'],unknownFallback:'validator_downgrade_to_review',schemaGuessing:false,silentMutation:false});
   window.LUMIFUL_LUMI_REAL_AI_V1=Object.freeze({diagnose,render:renderReal,region:REGION,functionName:FUNCTION_NAME,providerSecretInClient:false,schemaMutation:false,engineMutation:false});
   const previousSwitch=window.switchView;if(typeof previousSwitch==='function')window.switchView=function(name){window.LUMIFUL_ACTIVE_VIEW=name;const r=previousSwitch.apply(this,arguments);const lumiRoot=document.getElementById('lumiAdvisorView');if(lumiRoot&&name!=='lumiAdvisor')lumiRoot.classList.add('hidden');if(name==='lumiAdvisor')setTimeout(()=>renderReal(),40);else if(name==='dashboard'||name==='simulationResults')setTimeout(()=>syncScoreSurfaces(),0);return r;};
   const previousScore=window.updateScoreDashboardUI;if(typeof previousScore==='function')window.updateScoreDashboardUI=function(){const r=previousScore.apply(this,arguments);syncScoreSurfaces();return r;};
