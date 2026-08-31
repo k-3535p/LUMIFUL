@@ -11595,6 +11595,109 @@ ${JSON.stringify(OUTPUT_SCHEMA_EXAMPLE,null,2)}
     return true;
   }
 
+  function openLivingCostScenarioStep7(target,suggestedValue){
+    const currentModel=window.ensureV2InputModel?.();
+    if(!currentModel)return false;
+
+    const normalized=window.normalizeDataModelV2?.(window.cloneDataModelV2?.(currentModel));
+    if(!normalized?.living?.expense)return false;
+
+    const expense=normalized.living.expense;
+    const frequency=String(expense.frequency||'monthly').toLowerCase();
+    const currentRaw=Number(expense.amount||0);
+    const currentMonthly=frequency==='yearly' ? currentRaw/12 : currentRaw;
+    const suggested=Number(suggestedValue);
+    const initialMonthly=Number.isFinite(suggested)&&suggested>=0 ? suggested : currentMonthly;
+
+    closeScenarioStep1();
+    const modal=document.createElement('div');
+    modal.id='lumiScenarioStep1Modal';
+    modal.className='fixed inset-0 z-[120] bg-[#253047]/35 backdrop-blur-[2px] flex items-center justify-center p-4';
+    modal.innerHTML=`<div class="w-full max-w-[680px] bg-[#FFFDF8] rounded-[28px] border border-[#ECEBE6] shadow-2xl p-5 sm:p-7">
+      <div class="flex items-start justify-between gap-4">
+        <div>
+          <div class="text-xs font-bold text-[#8C5800]">LUMI Scenario</div>
+          <h3 class="text-xl font-extrabold text-[#253047] mt-1">生活費を変えた未来を比較</h3>
+          <p class="text-xs sm:text-sm text-[#6F7785] mt-2">現在のプランは変更せず、生活費だけを変えた未来をEngineで比較します。</p>
+        </div>
+        <button type="button" id="lumiScenarioStep1Close" class="w-9 h-9 rounded-full border border-[#ECEBE6] text-[#6F7785] hover:bg-white" aria-label="閉じる"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <div class="mt-5 rounded-2xl bg-white border border-[#ECEBE6] p-4">
+        <div class="text-xs font-bold text-[#6F7785]">現在の生活費</div>
+        <div class="text-lg font-extrabold text-[#253047] mt-1">${fmtManYen(currentMonthly)} / 月</div>
+        <label class="block text-xs font-bold text-[#536274] mt-4 mb-2">比較する生活費（月額・万円）</label>
+        <input id="lumiLivingCostInput" type="number" min="0" step="1" value="${Math.round(initialMonthly/10000)}" class="w-full rounded-[14px] border border-[#D9DCE2] bg-white px-4 py-3 text-[#253047] font-bold outline-none focus:border-[#F0B44D]">
+        <div class="text-[11px] text-[#8A909A] mt-2">入力した値は比較時点では現在のプランへ保存されません。</div>
+      </div>
+
+      <div id="lumiLivingCostResult" class="hidden mt-4"></div>
+
+      <div class="flex flex-col-reverse sm:flex-row sm:justify-end gap-2 mt-5">
+        <button type="button" id="lumiScenarioStep1Back" class="px-5 py-2.5 rounded-[14px] border border-[#D9DCE2] bg-white text-[#536274] text-xs font-bold">元のプランに戻る</button>
+        <button type="button" id="lumiLivingCostCompare" class="px-5 py-2.5 rounded-[14px] bg-[#F0B44D] text-[#253047] text-xs font-extrabold">この条件で比較する</button>
+      </div>
+    </div>`;
+    document.body.appendChild(modal);
+
+    const close=()=>closeScenarioStep1();
+    modal.querySelector('#lumiScenarioStep1Close')?.addEventListener('click',close);
+    modal.querySelector('#lumiScenarioStep1Back')?.addEventListener('click',close);
+    modal.addEventListener('click',e=>{if(e.target===modal)close();});
+
+    modal.querySelector('#lumiLivingCostCompare')?.addEventListener('click',()=>{
+      const man=Number(modal.querySelector('#lumiLivingCostInput')?.value);
+      if(!Number.isFinite(man)||man<0){
+        window.showToast?.('生活費は0以上の数値で入力してください。','warning');
+        return;
+      }
+      const proposedMonthly=man*10000;
+      const scenarioModel=window.cloneDataModelV2(window.normalizeDataModelV2(currentModel));
+      if(!scenarioModel?.living?.expense)return;
+
+      if(String(scenarioModel.living.expense.frequency||'monthly').toLowerCase()==='yearly'){
+        scenarioModel.living.expense.amount=proposedMonthly*12;
+      }else{
+        scenarioModel.living.expense.amount=proposedMonthly;
+      }
+
+      const currentResult=runDetachedScenario(window.cloneDataModelV2(window.normalizeDataModelV2(currentModel)));
+      const scenarioResult=runDetachedScenario(scenarioModel);
+      if(!currentResult||!scenarioResult){
+        window.showToast?.('Scenario比較を実行できませんでした。','warning');
+        return;
+      }
+
+      const c=currentResult.summary||{};
+      const s=scenarioResult.summary||{};
+      const result=modal.querySelector('#lumiLivingCostResult');
+      result.classList.remove('hidden');
+      result.innerHTML=`<div class="rounded-2xl border border-[#ECEBE6] bg-white p-4">
+        <div class="text-xs font-extrabold text-[#253047]">比較結果</div>
+        <div class="grid grid-cols-2 gap-3 mt-3 text-xs">
+          <div class="rounded-xl bg-[#F7F8FA] p-3"><div class="text-[#8A909A]">生活費</div><div class="font-extrabold text-[#253047] mt-1">${fmtManYen(currentMonthly)} → ${fmtManYen(proposedMonthly)}</div></div>
+          <div class="rounded-xl bg-[#F7F8FA] p-3"><div class="text-[#8A909A]">最終資産</div><div class="font-extrabold text-[#253047] mt-1">${fmtManYen(c.finalAssets)} → ${fmtManYen(s.finalAssets)}</div></div>
+          <div class="rounded-xl bg-[#F7F8FA] p-3"><div class="text-[#8A909A]">資金不足</div><div class="font-extrabold text-[#253047] mt-1">${fmtManYen(c.totalShortage)} → ${fmtManYen(s.totalShortage)}</div></div>
+          <div class="rounded-xl bg-[#F7F8FA] p-3"><div class="text-[#8A909A]">累計運用益</div><div class="font-extrabold text-[#253047] mt-1">${fmtManYen(c.cumulativeReturn)} → ${fmtManYen(s.cumulativeReturn)}</div></div>
+        </div>
+        <button type="button" id="lumiLivingCostApply" class="w-full mt-4 px-5 py-3 rounded-[14px] bg-[#253047] text-white text-xs font-extrabold">この条件をプランに反映する</button>
+      </div>`;
+
+      result.querySelector('#lumiLivingCostApply')?.addEventListener('click',()=>{
+        window.activeDataModelV2=window.cloneDataModelV2(window.normalizeDataModelV2(scenarioModel));
+        window.v2InputInitialized=true;
+        window.renderV2InputUI?.();
+        window.recalculateAllFast?.();
+        window.invalidateLumiDiagnosisAfterScenarioV1?.();
+        window.scheduleAutoSave?.('lumi-scenario-step7-living-cost-apply');
+        closeScenarioStep1();
+        window.showToast?.('この生活費を現在のプランに反映しました。','success');
+      },{once:true});
+    });
+
+    return true;
+  }
+
   function openHousingScenarioStep4(target,suggestedValue){
     if(!isHousingCostScenarioTarget(target))return false;
 
@@ -11714,6 +11817,9 @@ ${JSON.stringify(OUTPUT_SCHEMA_EXAMPLE,null,2)}
     if(route===LUMI_ACTION_ROUTE_V1.housing_cost){
       openHousingScenarioStep4(target,suggestedValue); return;
     }
+    if(route===LUMI_ACTION_ROUTE_V1.living_cost){
+      openLivingCostScenarioStep7(target,suggestedValue); return;
+    }
     if(route===LUMI_ACTION_ROUTE_V1.review || route===LUMI_ACTION_ROUTE_V1.input){
       window.switchView?.('simulationInput'); return;
     }
@@ -11729,7 +11835,7 @@ ${JSON.stringify(OUTPUT_SCHEMA_EXAMPLE,null,2)}
     detachedEngine:true
   });
 
-  window.LUMIFUL_SCENARIO_ACTION_ROUTER_V1=Object.freeze({status:'CONTRACT_ROUTER_ROUTING_FIX',contract:'LUMIFUL_SCENARIO_ACTION_CONTRACT_V1',supported:['expected_return','housing_cost'],recognizedFuture:['living_cost','income_amount','income_end_age','pension_amount'],unknownFallback:'validator_downgrade_to_review',schemaGuessing:false,silentMutation:false});
+  window.LUMIFUL_SCENARIO_ACTION_ROUTER_V1=Object.freeze({status:'CONTRACT_ROUTER_ROUTING_FIX',contract:'LUMIFUL_SCENARIO_ACTION_CONTRACT_V1',supported:['expected_return','housing_cost','living_cost'],recognizedFuture:['income_amount','income_end_age','pension_amount'],unknownFallback:'validator_downgrade_to_review',schemaGuessing:false,silentMutation:false});
   window.LUMIFUL_LUMI_REAL_AI_V1=Object.freeze({diagnose,render:renderReal,region:REGION,functionName:FUNCTION_NAME,providerSecretInClient:false,schemaMutation:false,engineMutation:false});
   const previousSwitch=window.switchView;if(typeof previousSwitch==='function')window.switchView=function(name){window.LUMIFUL_ACTIVE_VIEW=name;const r=previousSwitch.apply(this,arguments);const lumiRoot=document.getElementById('lumiAdvisorView');if(lumiRoot&&name!=='lumiAdvisor')lumiRoot.classList.add('hidden');if(name==='lumiAdvisor')setTimeout(()=>renderReal(),40);else if(name==='dashboard'||name==='simulationResults')setTimeout(()=>syncScoreSurfaces(),0);return r;};
   const previousScore=window.updateScoreDashboardUI;if(typeof previousScore==='function')window.updateScoreDashboardUI=function(){const r=previousScore.apply(this,arguments);syncScoreSurfaces();return r;};
