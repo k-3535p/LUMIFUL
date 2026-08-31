@@ -150,7 +150,12 @@
       border-color: var(--lumi-blue);
       box-shadow: 0 0 0 3px rgba(101, 185, 232, 0.15);
     }
-  </style>
+  
+/* Phase 9-15: LUMI SCORE expression assets — presentation only. */
+#kpi-lumi-expression{position:relative;isolation:isolate}
+#kpi-lumi-expression .lumi-score-expression-img{transition:opacity .18s ease}
+@media (prefers-reduced-motion:reduce){#kpi-lumi-expression .lumi-score-expression-img{transition:none}}
+</style>
 
 <style id="phase8-onboarding-final-unified-ui">
   #onboardingView{
@@ -1181,8 +1186,8 @@
                   </div>
 
                   <!-- Right Side Official LUMI Character Area -->
-                  <div class="shrink-0 flex items-center justify-center pl-1">
-                    <img src="./assets/lumi-spark.png" alt="LUMI" class="w-12 h-12 sm:w-20 sm:h-20 lg:w-24 lg:h-24 object-contain pointer-events-none" />
+                  <div id="kpi-lumi-expression" class="lumi-score-expression shrink-0 flex items-center justify-center pl-1" data-lumi-mood="calm" aria-label="LUMIの表情">
+                    <img src="./assets/lumi-spark.png" alt="LUMI" class="lumi-score-expression-img w-12 h-12 sm:w-20 sm:h-20 lg:w-24 lg:h-24 object-contain pointer-events-none" />
                   </div>
                 </div>
 
@@ -12720,6 +12725,33 @@ ${JSON.stringify(OUTPUT_SCHEMA_EXAMPLE,null,2)}
           const n = Number(firstNumber[0]);
           if (Number.isFinite(n)) lumi.textContent = String(Math.round(n * 100) / 100);
         }
+      }
+    }
+
+    const lumiExpression = document.getElementById('kpi-lumi-expression');
+    if (lumiExpression) {
+      const scoreEl = document.getElementById('kpi-score');
+      const score = Number(String(scoreEl?.textContent || '').replace(/[^0-9.\-]/g, ''));
+      const lumiEl = document.getElementById('kpi-ai-adj');
+      const evaluated = lumiEl && !/未評価/.test(String(lumiEl.textContent || ''));
+      const mood = !Number.isFinite(score) || !evaluated ? 'calm'
+        : score >= 80 ? 'bright'
+        : score >= 65 ? 'steady'
+        : score >= 50 ? 'thinking'
+        : 'supportive';
+      lumiExpression.dataset.lumiMood = mood;
+
+      const expressionImg = lumiExpression.querySelector('.lumi-score-expression-img');
+      if (expressionImg) {
+        const srcByMood = {
+          calm: './assets/lumi-spark.png',
+          bright: './assets/lumi-spark-bright.png',
+          steady: './assets/lumi-spark-steady.png',
+          thinking: './assets/lumi-spark-thinking.png',
+          supportive: './assets/lumi-spark-supportive.png'
+        };
+        const nextSrc = srcByMood[mood] || srcByMood.calm;
+        if (expressionImg.getAttribute('src') !== nextSrc) expressionImg.setAttribute('src', nextSrc);
       }
     }
 
