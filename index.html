@@ -12619,8 +12619,10 @@ ${JSON.stringify(OUTPUT_SCHEMA_EXAMPLE,null,2)}
       .map(i=>`<div class="text-xs sm:text-sm text-[#5B6472] leading-relaxed">• ${esc(i.message)}</div>`)
       .join('');
 
-    const actions=v.nextActions
-      .map((a,i)=>`<button type="button" class="lumi-next-action w-full text-left bg-white border border-[#E8E6DF] rounded-2xl p-4 hover:bg-[#FAFAF7] transition" data-action-index="${i}"><div class="font-bold text-sm text-[#253047]">${esc(a.label)}</div><div class="text-xs text-[#6F7785] mt-1">${esc(a.reason)}</div></button>`)
+    const actions=(Array.isArray(v.nextActions)?v.nextActions:[])
+      .map((a,i)=>({a,i}))
+      .filter(({a})=>isSupportedScenarioAction(a))
+      .map(({a,i})=>`<button type="button" class="lumi-next-action w-full text-left bg-white border border-[#E8E6DF] rounded-2xl p-4 hover:bg-[#FAFAF7] transition" data-action-index="${i}"><div class="font-bold text-sm text-[#253047]">${esc(a.label)}</div><div class="text-xs text-[#6F7785] mt-1">${esc(a.reason)}</div></button>`)
       .join('');
 
     root.innerHTML=`<div class="space-y-1 mb-1"><h1 class="text-2xl sm:text-3xl font-extrabold text-[#253047] tracking-tight flex items-center gap-2"><i class="fa-solid fa-sun text-[#FFC83D]"></i><span>LUMIの診断</span></h1><p class="text-xs sm:text-sm text-[#6F7785]">数字の未来と、あなたが大切にしたい人生を一緒に見ます。</p></div><div class="bg-[#FEFBF0] rounded-[24px] p-5 sm:p-6 border border-[#F0E2B7] flex gap-4 items-start"><img src="./assets/lumi-spark.png" class="w-12 h-12 sm:w-14 sm:h-14 object-contain shrink-0" alt="LUMI"><div class="min-w-0"><div class="flex flex-wrap items-center gap-2"><h2 class="text-base font-bold text-[#253047]">LUMI SCORE ${s.lumi10} / 10</h2><span class="p95-badge">AI</span></div><p class="text-xs sm:text-sm text-[#6F7785] leading-relaxed mt-2">${esc(v.diagnosis.summary)}</p></div></div><div class="bg-white rounded-[24px] p-5 sm:p-6 border border-[#ECEBE6] space-y-4"><div class="p95-section-title"><i class="fa-solid fa-sliders text-[#65B9E8]"></i>LUMI SCOREの内訳</div><div class="grid grid-cols-1 sm:grid-cols-3 gap-3">${axes}</div></div><div class="bg-white rounded-[24px] p-5 sm:p-6 border border-[#ECEBE6] space-y-3"><div class="p95-section-title"><i class="fa-solid fa-triangle-exclamation text-[#FFB35C]"></i>LUMI CHECK：${checkLabel[s.checkLevel]||checkLabel.clear}</div>${items||'<div class="text-xs sm:text-sm text-[#6F7785]">現在の前提では、大きな注意点は見つかりませんでした。</div>'}</div><div class="bg-white rounded-[24px] p-5 sm:p-6 border border-[#ECEBE6] space-y-4"><div class="p95-section-title"><i class="fa-solid fa-comment-dots text-[#FFB35C]"></i>LUMIの見立て</div><div class="p95-diagnosis"><div><h4>未来の見立て</h4><p>${esc(v.diagnosis.summary)}</p></div><div><h4>いいところ</h4><p>${esc(v.diagnosis.strength)}</p></div><div><h4>確認したいこと</h4><p>${esc(v.diagnosis.attention)}</p></div><div><h4>LUMIからの提案</h4><p>${esc(v.diagnosis.advice)}</p></div></div></div>${actions?`<div class="bg-[#FAFAF7] rounded-[24px] p-5 sm:p-6 border border-[#ECEBE6] space-y-3"><div class="p95-section-title">別の未来も見てみる</div>${actions}</div>`:''}<div class="flex justify-end"><button type="button" class="text-xs font-bold text-[#6F7785] hover:text-[#253047]" id="lumi-refresh-button">LUMIでもう一度確認する</button></div>`;
@@ -12772,57 +12774,62 @@ ${JSON.stringify(OUTPUT_SCHEMA_EXAMPLE,null,2)}
 
 
   /* ============================================================
-     PHASE 9-19 — LUMI SCENARIO FOUNDATION
+     PHASE 9-19 — LUMI SCENARIO / ENGINE COMPARISON
      ------------------------------------------------------------
-     This first step intentionally implements only:
-     - allowlisted Scenario intent normalization
-     - current-value resolution from the live Schema v2 model
-     - editable temporary Scenario Draft
-     - zero Schema mutation / zero persistence / zero AI call
+     Verified Engine path in current code:
+       Schema v2 clone
+         -> calculateSimulationV2(model)
+         -> adaptSimulationV2ForDashboard(result)
+         -> calculateBaseScoreV2(model, rows, firstYield, firstNet)
 
-     Engine comparison is NOT guessed here. It will be connected
-     only after the existing Engine's exact data-in/data-out path
-     is verified against the current code.
+     calculateSimulationV2 is explicitly implemented as detached:
+     it copies asset balances and does not mutate the source model.
+
+     Scenario rules:
+     - Draft / comparison never writes activeDataModelV2
+     - Draft / comparison never persists
+     - Draft / comparison never calls Gemini
+     - Only explicit "この条件をプランに反映する" writes Schema v2
      ============================================================ */
 
   const LUMI_SCENARIO_ALLOWED_V1=Object.freeze({
     housing:Object.freeze({
       label:'住宅費を変えた未来',
-      unit:'円 / 月',
-      inputMode:'numeric',
+      unit:'万円 / 月',
+      inputMode:'decimal',
       min:0,
-      max:10000000
+      max:10000
     }),
     livingCost:Object.freeze({
       label:'生活費を変えた未来',
-      unit:'円 / 月',
-      inputMode:'numeric',
+      unit:'万円 / 月',
+      inputMode:'decimal',
       min:0,
-      max:10000000
+      max:10000
     }),
     incomeAmount:Object.freeze({
       label:'収入を変えた未来',
-      unit:'円',
-      inputMode:'numeric',
+      unit:'万円',
+      inputMode:'decimal',
       min:0,
-      max:1000000000
+      max:100000
     }),
     incomeEndAge:Object.freeze({
       label:'働く期間を変えた未来',
       unit:'歳まで',
       inputMode:'numeric',
-      min:0,
+      min:18,
       max:120
     }),
     pensionAmount:Object.freeze({
       label:'年金を変えた未来',
-      unit:'円',
-      inputMode:'numeric',
+      unit:'万円',
+      inputMode:'decimal',
       min:0,
-      max:1000000000
+      max:100000
     }),
     expectedReturn:Object.freeze({
-      label:'運用条件を変えた未来',
+      label:'想定利回りを変えた未来',
       unit:'%',
       inputMode:'decimal',
       min:-100,
@@ -12831,6 +12838,7 @@ ${JSON.stringify(OUTPUT_SCHEMA_EXAMPLE,null,2)}
   });
 
   let activeScenarioDraft=null;
+  let activeScenarioComparison=null;
 
   function scenarioTargetKey(raw){
     const t=String(raw||'').trim().toLowerCase();
@@ -12844,53 +12852,125 @@ ${JSON.stringify(OUTPUT_SCHEMA_EXAMPLE,null,2)}
     return '';
   }
 
-  function currentScenarioValue(key){
-    const m=window.getCurrentDataModelV2ForPersistence?.();
-    if(!m)return null;
+  function isSupportedScenarioAction(action){
+    if(String(action?.type||'')!=='scenario')return false;
+    const key=scenarioTargetKey(action?.target);
+    return !!(key&&LUMI_SCENARIO_ALLOWED_V1[key]);
+  }
 
+  function normalizedCurrentModel(){
+    return window.cloneDataModelV2(
+      window.normalizeDataModelV2(window.ensureV2InputModel())
+    );
+  }
+
+  function annualIncomeAmount(item){
+    return window.normalizeAnnualAmountV2?.(item?.amount,item?.frequency) || 0;
+  }
+
+  function resolveSingleWorkIncome(model){
+    const candidates=(model.incomes||[])
+      .map((x,i)=>({x,i}))
+      .filter(({x})=>x?.category!=='pension' && (x?.owner==='self'||!x?.owner));
+    if(candidates.length===1)return candidates[0];
+    return null;
+  }
+
+  function resolveSinglePension(model){
+    const candidates=(model.incomes||[])
+      .map((x,i)=>({x,i}))
+      .filter(({x})=>x?.category==='pension');
+    if(candidates.length===1)return candidates[0];
+    return null;
+  }
+
+  function resolveReturnAssets(model, sourceTarget=''){
+    const eligible=(model.assets||[])
+      .map((x,i)=>({x,i}))
+      .filter(({x})=>
+        x?.assetClass==='simulation' &&
+        x?.category!=='cash' &&
+        x?.category!=='stock' &&
+        Number.isFinite(Number(x?.expectedReturn))
+      );
+
+    if(eligible.length<=1)return eligible;
+
+    const t=String(sourceTarget||'').toLowerCase();
+    const matched=eligible.filter(({x})=>{
+      const category=String(x?.category||'').toLowerCase();
+      const name=String(x?.name||'').toLowerCase();
+      if(t.includes('bond')||t.includes('債券'))return category.includes('bond')||name.includes('債券');
+      if(t.includes('fund')||t.includes('投資信託'))return category.includes('fund')||name.includes('投資信託');
+      return name && t.includes(name);
+    });
+    return matched.length===1?matched:[];
+  }
+
+  function scenarioBinding(model,key,sourceTarget=''){
     if(key==='housing'){
-      const h=m.housing||{};
-      return Number(h.monthlyAmount||0);
+      return {
+        currentValue:Number(model.living?.housing?.monthlyAmount||0),
+        apply:(m,v)=>{m.living.housing.monthlyAmount=v;}
+      };
     }
 
     if(key==='livingCost'){
-      const e=m.expenses||{};
-      return Number(
-        e.monthlyLivingCost ??
-        e.monthlyAmount ??
-        e.livingCost ??
-        0
-      );
+      const expense=model.living?.expense||{};
+      const currentAnnual=window.normalizeAnnualAmountV2?.(expense.amount,expense.frequency)||0;
+      return {
+        currentValue:currentAnnual/12,
+        apply:(m,v)=>{
+          m.living.expense.amount = m.living.expense.frequency==='yearly' ? v*12 : v;
+        }
+      };
     }
 
-    const incomes=Array.isArray(m.income)?m.income:(Array.isArray(m.incomes)?m.incomes:[]);
     if(key==='incomeAmount'){
-      const first=incomes[0]||{};
-      return Number(first.amount||0);
+      const found=resolveSingleWorkIncome(model);
+      if(!found)return null;
+      const isMonthly=found.x.frequency==='monthly';
+      return {
+        currentValue:Number(found.x.amount||0),
+        detail:found.x.name||'収入',
+        apply:(m,v)=>{m.incomes[found.i].amount=v;},
+        unit:isMonthly?'万円 / 月':'万円 / 年'
+      };
     }
+
     if(key==='incomeEndAge'){
-      const first=incomes[0]||{};
-      return Number(first.endAge||0);
+      const found=resolveSingleWorkIncome(model);
+      if(!found)return null;
+      return {
+        currentValue:Number(found.x.endAge||0),
+        detail:found.x.name||'収入',
+        apply:(m,v)=>{m.incomes[found.i].endAge=Math.round(v);}
+      };
     }
+
     if(key==='pensionAmount'){
-      const p=incomes.find(x=>String(x?.type||'').toLowerCase().includes('pension')||String(x?.label||'').includes('年金'));
-      return Number(p?.amount||0);
+      const found=resolveSinglePension(model);
+      if(!found)return null;
+      const isMonthly=found.x.frequency==='monthly';
+      return {
+        currentValue:Number(found.x.amount||0),
+        detail:found.x.name||'年金',
+        apply:(m,v)=>{m.incomes[found.i].amount=v;},
+        unit:isMonthly?'万円 / 月':'万円 / 年'
+      };
     }
 
     if(key==='expectedReturn'){
-      const assets=Array.isArray(m.assets)?m.assets:[];
-      const eligible=assets.filter(a=>{
-        const type=String(a?.type||'').toLowerCase();
-        return (type.includes('fund')||type.includes('bond')||String(a?.label||'').includes('投資信託')||String(a?.label||'').includes('債券'))
-          && Number.isFinite(Number(a?.expectedReturn));
-      });
-      if(!eligible.length)return 0;
-      const total=eligible.reduce((s,a)=>s+Math.max(0,Number(a?.value||0)),0);
-      if(total>0){
-        return eligible.reduce((s,a)=>s+Math.max(0,Number(a?.value||0))*Number(a?.expectedReturn||0),0)/total;
-      }
-      return Number(eligible[0]?.expectedReturn||0);
+      const targets=resolveReturnAssets(model,sourceTarget);
+      if(targets.length!==1)return null;
+      const target=targets[0];
+      return {
+        currentValue:Number(target.x.expectedReturn||0),
+        detail:target.x.name||'運用資産',
+        apply:(m,v)=>{m.assets[target.i].expectedReturn=v;}
+      };
     }
+
     return null;
   }
 
@@ -12903,27 +12983,164 @@ ${JSON.stringify(OUTPUT_SCHEMA_EXAMPLE,null,2)}
   function buildScenarioDraft(action){
     const key=scenarioTargetKey(action?.target);
     if(!key||!LUMI_SCENARIO_ALLOWED_V1[key])return null;
+
+    const model=normalizedCurrentModel();
+    const binding=scenarioBinding(model,key,action?.target);
+    if(!binding)return {
+      unsupportedBinding:true,
+      key,
+      sourceTarget:String(action?.target||'')
+    };
+
     const def=LUMI_SCENARIO_ALLOWED_V1[key];
-    const current=currentScenarioValue(key);
+    const current=Number(binding.currentValue||0);
     const suggested=normalizeSuggestedScenarioValue(action?.suggestedValue,current);
+
     return {
       version:1,
       key,
       type:'scenario',
       sourceTarget:String(action?.target||''),
+      actionLabel:String(action?.label||def.label),
+      reason:String(action?.reason||''),
       label:def.label,
-      unit:def.unit,
-      currentValue:Number.isFinite(Number(current))?Number(current):0,
-      draftValue:Number.isFinite(Number(suggested))?Number(suggested):(Number(current)||0),
+      detail:String(binding.detail||''),
+      unit:String(binding.unit||def.unit),
+      currentValue:current,
+      draftValue:Number.isFinite(Number(suggested))?Number(suggested):current,
       createdAt:new Date().toISOString()
     };
   }
 
-  function scenarioValueText(value,key){
+  function scenarioValueText(value,key,unit=''){
     const n=Number(value||0);
     if(key==='expectedReturn')return `${Math.round(n*100)/100}%`;
     if(key==='incomeEndAge')return `${Math.round(n)}歳`;
-    return `${Math.round(n).toLocaleString('ja-JP')}円`;
+    return `${Math.round(n*10)/10}${unit||'万円'}`;
+  }
+
+  function buildScenarioModel(draft){
+    const current=normalizedCurrentModel();
+    const scenario=window.cloneDataModelV2(current);
+    const binding=scenarioBinding(scenario,draft.key,draft.sourceTarget);
+    if(!binding)throw new Error('scenario-target-not-uniquely-resolved');
+    binding.apply(scenario,Number(draft.draftValue));
+    return window.normalizeDataModelV2(scenario);
+  }
+
+  function engineScoreFor(model,rows){
+    if(!rows.length)return null;
+    if(typeof window.calculateBaseScoreV2!=='function')return null;
+    const first=rows[0];
+    const result=window.calculateBaseScoreV2(
+      model,
+      rows,
+      Number(first?.annualYield||0),
+      Number(first?.netCashflow||0)
+    );
+    const raw=Number(result?.totalScore);
+    if(!Number.isFinite(raw))return null;
+    return {
+      raw100:raw,
+      engine90:Number((raw*.9).toFixed(2))
+    };
+  }
+
+  function summarizeScenarioEngine(model){
+    if(typeof window.calculateSimulationV2!=='function' ||
+       typeof window.adaptSimulationV2ForDashboard!=='function'){
+      throw new Error('scenario-engine-path-unavailable');
+    }
+
+    const simulation=window.calculateSimulationV2(model);
+    const adapted=window.adaptSimulationV2ForDashboard(simulation);
+    const rows=Array.isArray(adapted?.rows)?adapted.rows:[];
+    if(!rows.length)throw new Error('scenario-engine-returned-no-rows');
+
+    const finalRow=rows[rows.length-1];
+    const shortage=rows.find(r=>Number(r.shortage||0)>0);
+    const totalYield=rows.reduce((s,r)=>s+Number(r.annualYield||0),0);
+    const avgNet=rows.reduce((s,r)=>s+Number(r.netCashflow||0),0)/rows.length;
+    const minAssets=Math.min(...rows.map(r=>Number(r.availableAssets??r.financialAsset??0)));
+
+    return {
+      simulation,
+      adapted,
+      rows,
+      score:engineScoreFor(model,rows),
+      finalAssets:Number(finalRow.availableAssets??finalRow.financialAsset??0),
+      minimumAssets:minAssets,
+      shortageAge:shortage?.age||null,
+      targetAge:Number(adapted.targetAge||finalRow.age||0),
+      totalYield,
+      averageNetCashflow:avgNet
+    };
+  }
+
+  function buildScenarioComparison(draft){
+    const currentModel=normalizedCurrentModel();
+    const scenarioModel=buildScenarioModel(draft);
+
+    // Both calls use the verified detached Engine v2 path.
+    const current=summarizeScenarioEngine(currentModel);
+    const scenario=summarizeScenarioEngine(scenarioModel);
+
+    return {
+      version:1,
+      draft:{...draft},
+      currentModel,
+      scenarioModel,
+      current,
+      scenario,
+      createdAt:new Date().toISOString()
+    };
+  }
+
+  function signed(n,digits=0){
+    const x=Number(n||0);
+    const rounded=digits?Math.round(x*10)/10:Math.round(x);
+    return `${x>0?'+':''}${rounded.toLocaleString('ja-JP')}`;
+  }
+
+  function scoreText(summary){
+    const n=summary?.score?.engine90;
+    return Number.isFinite(Number(n))?`${Math.round(Number(n)*10)/10} / 90`:'—';
+  }
+
+  function shortageText(summary){
+    return summary.shortageAge ? `${summary.shortageAge}歳` : `${summary.targetAge}歳まで維持`;
+  }
+
+  function scenarioComparisonSvg(currentRows,scenarioRows){
+    const count=Math.min(currentRows.length,scenarioRows.length);
+    if(!count)return '';
+    const a=currentRows.slice(0,count).map(r=>Number(r.availableAssets??r.financialAsset??0));
+    const b=scenarioRows.slice(0,count).map(r=>Number(r.availableAssets??r.financialAsset??0));
+    const vals=a.concat(b,[0]);
+    let min=Math.min(...vals),max=Math.max(...vals);
+    if(max===min){max+=1;min-=1;}
+
+    const W=760,H=260,p={l:46,r:18,t:18,b:36};
+    const x=i=>p.l+(count<=1?0:i/(count-1))*(W-p.l-p.r);
+    const y=v=>p.t+(max-v)/(max-min)*(H-p.t-p.b);
+    const pts=arr=>arr.map((v,i)=>`${x(i).toFixed(1)},${y(v).toFixed(1)}`).join(' ');
+    const zeroY=y(0);
+    const firstAge=currentRows[0]?.age||'';
+    const lastAge=currentRows[count-1]?.age||'';
+
+    return `<div class="mt-4 overflow-hidden rounded-2xl border border-[#E8EEF2] bg-white p-3">
+      <div class="flex items-center gap-4 text-[10px] font-bold text-[#6F7785] mb-2">
+        <span><span class="inline-block w-5 border-t-[3px] border-[#AAB0BA] align-middle mr-1"></span>今の未来</span>
+        <span><span class="inline-block w-5 border-t-[3px] border-[#65B9E8] align-middle mr-1"></span>別の未来</span>
+      </div>
+      <svg viewBox="0 0 ${W} ${H}" width="100%" role="img" aria-label="今の未来と別の未来の利用可能資産比較">
+        <line x1="${p.l}" y1="${zeroY}" x2="${W-p.r}" y2="${zeroY}" stroke="#ECEBE6"/>
+        <polyline points="${pts(a)}" fill="none" stroke="#AAB0BA" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        <polyline points="${pts(b)}" fill="none" stroke="#65B9E8" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        <text x="${p.l}" y="${H-10}" font-size="11" fill="#8B93A1">${firstAge}歳</text>
+        <text x="${W-p.r}" y="${H-10}" text-anchor="end" font-size="11" fill="#8B93A1">${lastAge}歳</text>
+      </svg>
+    </div>`;
   }
 
   function renderScenarioDraftModal(draft){
@@ -12937,21 +13154,24 @@ ${JSON.stringify(OUTPUT_SCHEMA_EXAMPLE,null,2)}
       <div class="flex items-start justify-between gap-4">
         <div>
           <div class="text-[11px] font-bold tracking-wide text-[#65B9E8]">LUMI SCENARIO</div>
-          <h2 id="lumi-scenario-title-v1" class="text-xl font-extrabold text-[#253047] mt-1">${esc(draft.label)}</h2>
+          <h2 id="lumi-scenario-title-v1" class="text-xl font-extrabold text-[#253047] mt-1">${esc(draft.actionLabel||draft.label)}</h2>
+          ${draft.detail?`<div class="text-[11px] font-bold text-[#8B93A1] mt-1">${esc(draft.detail)}</div>`:''}
         </div>
         <button type="button" id="lumi-scenario-close-v1" class="w-9 h-9 rounded-full bg-[#F5F5F2] text-[#6F7785]" aria-label="閉じる"><i class="fa-solid fa-xmark"></i></button>
       </div>
 
+      ${draft.reason?`<p class="text-xs text-[#5B6472] leading-relaxed font-medium mt-4">${esc(draft.reason)}</p>`:''}
+
       <div class="mt-5 bg-[#FAFAF7] rounded-2xl p-4">
         <div class="text-xs font-bold text-[#8B93A1]">現在</div>
-        <div class="text-lg font-extrabold text-[#253047] mt-1">${esc(scenarioValueText(draft.currentValue,draft.key))}</div>
+        <div class="text-lg font-extrabold text-[#253047] mt-1">${esc(scenarioValueText(draft.currentValue,draft.key,draft.unit))}</div>
       </div>
 
       <div class="mt-4">
         <label for="lumi-scenario-value-v1" class="block text-xs font-bold text-[#6F7785] mb-2">試す条件</label>
         <div class="flex items-center gap-2">
           <input id="lumi-scenario-value-v1" type="text" inputmode="${def.inputMode==='decimal'?'decimal':'numeric'}" value="${esc(draft.draftValue)}" class="w-full rounded-2xl border border-[#E2E4E8] px-4 py-3 text-lg font-bold text-[#253047] outline-none focus:border-[#65B9E8]">
-          <span class="text-xs font-bold text-[#8B93A1] whitespace-nowrap">${esc(def.unit)}</span>
+          <span class="text-xs font-bold text-[#8B93A1] whitespace-nowrap">${esc(draft.unit)}</span>
         </div>
         <p class="text-[11px] text-[#8B93A1] leading-relaxed mt-2">ここで変更しても、現在のプラン・保存データは変更されません。</p>
       </div>
@@ -12980,17 +13200,146 @@ ${JSON.stringify(OUTPUT_SCHEMA_EXAMPLE,null,2)}
       activeScenarioDraft={...draft,draftValue:value};
       window.LUMIFUL_ACTIVE_SCENARIO_DRAFT=JSON.parse(JSON.stringify(activeScenarioDraft));
       close();
-      window.showToast?.('Scenario条件を一時保存しました。現在のプランは変更していません。','info');
-      window.renderLumiScenarioComparisonV1?.(activeScenarioDraft);
+
+      try{
+        activeScenarioComparison=buildScenarioComparison(activeScenarioDraft);
+        window.LUMIFUL_ACTIVE_SCENARIO_COMPARISON=activeScenarioComparison;
+        renderScenarioComparison(activeScenarioComparison);
+      }catch(e){
+        console.warn('[LUMIFUL] Scenario comparison unavailable',e);
+        window.showToast?.('この提案は現在、安全に比較できる対象を特定できませんでした。現在のプランは変更していません。','warning');
+      }
     });
+  }
+
+  function comparisonCell(label,currentValue,scenarioValue,deltaText=''){
+    return `<div class="grid grid-cols-[1.1fr_1fr_1fr] gap-2 items-center py-3 border-b border-[#ECEBE6] last:border-0">
+      <div class="text-[11px] sm:text-xs font-bold text-[#6F7785]">${esc(label)}</div>
+      <div class="text-xs sm:text-sm font-extrabold text-[#253047] text-right">${esc(currentValue)}</div>
+      <div class="text-xs sm:text-sm font-extrabold text-[#253047] text-right">${esc(scenarioValue)}${deltaText?`<div class="text-[10px] text-[#65B9E8] mt-0.5">${esc(deltaText)}</div>`:''}</div>
+    </div>`;
+  }
+
+  function renderScenarioComparison(comp){
+    const root=document.getElementById('lumiAdvisorView');
+    if(!root||!comp)return;
+
+    root.querySelector('#lumi-scenario-comparison-v1')?.remove();
+
+    const c=comp.current,s=comp.scenario,d=comp.draft;
+    const scoreDelta=(Number.isFinite(Number(c.score?.engine90))&&Number.isFinite(Number(s.score?.engine90)))
+      ? Number(s.score.engine90)-Number(c.score.engine90)
+      : null;
+    const assetDelta=s.finalAssets-c.finalAssets;
+    const yieldDelta=s.totalYield-c.totalYield;
+
+    const panel=document.createElement('div');
+    panel.id='lumi-scenario-comparison-v1';
+    panel.className='bg-[#F7FBFE] rounded-[24px] p-5 sm:p-6 border border-[#DCEEF8] space-y-4';
+    panel.innerHTML=`<div class="flex items-start justify-between gap-3">
+        <div>
+          <div class="text-[11px] font-bold tracking-wide text-[#65B9E8]">LUMI SCENARIO</div>
+          <div class="p95-section-title mt-1"><i class="fa-solid fa-code-compare text-[#65B9E8]"></i>今の未来と比べる</div>
+          <div class="text-xs font-bold text-[#253047] mt-1">${esc(d.actionLabel||d.label)}</div>
+        </div>
+        <button type="button" id="lumi-scenario-close-comparison-v1" class="text-xs font-bold text-[#8B93A1]">閉じる</button>
+      </div>
+
+      <div class="grid grid-cols-[1.1fr_1fr_1fr] gap-2 px-0.5 text-[10px] font-bold text-[#8B93A1]">
+        <div></div><div class="text-right">今の未来</div><div class="text-right text-[#65B9E8]">別の未来</div>
+      </div>
+
+      <div class="bg-white rounded-2xl px-4 border border-[#E8EEF2]">
+        ${comparisonCell('試した条件',
+          scenarioValueText(d.currentValue,d.key,d.unit),
+          scenarioValueText(d.draftValue,d.key,d.unit))}
+        ${comparisonCell('ENGINE SCORE',
+          scoreText(c),
+          scoreText(s),
+          scoreDelta===null?'':`${signed(scoreDelta,1)} pt`)}
+        ${comparisonCell('最終利用可能資産',
+          `${Math.round(c.finalAssets).toLocaleString('ja-JP')}万円`,
+          `${Math.round(s.finalAssets).toLocaleString('ja-JP')}万円`,
+          `${signed(assetDelta)}万円`)}
+        ${comparisonCell('資金維持',
+          shortageText(c),
+          shortageText(s))}
+        ${comparisonCell('累計運用益',
+          `${Math.round(c.totalYield).toLocaleString('ja-JP')}万円`,
+          `${Math.round(s.totalYield).toLocaleString('ja-JP')}万円`,
+          `${signed(yieldDelta)}万円`)}
+      </div>
+
+      ${scenarioComparisonSvg(c.rows,s.rows)}
+
+      <div class="bg-white/70 rounded-2xl p-3 text-[11px] text-[#6F7785] leading-relaxed">
+        この比較は既存Engine v2で一時計算しています。LUMI AIの再診断は行っていないため、ここではENGINE SCOREのみ比較しています。
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <button type="button" id="lumi-scenario-discard-v1" class="px-4 py-3 rounded-2xl bg-white border border-[#E2E4E8] text-sm font-bold text-[#5B6472]">元のプランに戻る</button>
+        <button type="button" id="lumi-scenario-apply-v1" class="px-4 py-3 rounded-2xl btn-lumi-primary text-sm font-bold">この条件をプランに反映する</button>
+      </div>`;
+
+    const refresh=root.querySelector('#lumi-refresh-button')?.parentElement;
+    if(refresh)root.insertBefore(panel,refresh);
+    else root.appendChild(panel);
+
+    panel.querySelector('#lumi-scenario-close-comparison-v1')?.addEventListener('click',()=>panel.remove());
+    panel.querySelector('#lumi-scenario-discard-v1')?.addEventListener('click',()=>{
+      panel.remove();
+      activeScenarioDraft=null;
+      activeScenarioComparison=null;
+      window.LUMIFUL_ACTIVE_SCENARIO_DRAFT=null;
+      window.LUMIFUL_ACTIVE_SCENARIO_COMPARISON=null;
+      window.showToast?.('元のプランは変更していません。','info');
+    });
+
+    panel.querySelector('#lumi-scenario-apply-v1')?.addEventListener('click',()=>{
+      applyScenarioToPlan(comp);
+    });
+
+    panel.scrollIntoView?.({behavior:'smooth',block:'start'});
+  }
+
+  async function applyScenarioToPlan(comp){
+    if(!comp?.scenarioModel)return false;
+
+    // This is the only Scenario path allowed to mutate the canonical model.
+    window.activeDataModelV2=window.cloneDataModelV2(
+      window.normalizeDataModelV2(comp.scenarioModel)
+    );
+    window.v2InputInitialized=true;
+
+    window.invalidateLumiDiagnosisContextV1?.('scenario-applied');
+    window.renderV2InputUI?.();
+    window.recalculateAllFast?.();
+    window.syncSimulationResultsViewV2?.();
+    window.scheduleAutoSave?.('lumi-scenario-apply');
+
+    activeScenarioDraft=null;
+    activeScenarioComparison=null;
+    window.LUMIFUL_ACTIVE_SCENARIO_DRAFT=null;
+    window.LUMIFUL_ACTIVE_SCENARIO_COMPARISON=null;
+
+    document.getElementById('lumi-scenario-comparison-v1')?.remove();
+    window.showToast?.('Scenarioの条件を現在のプランに反映しました。LUMIは再診断状態になります。','success');
+    return true;
   }
 
   window.openLumiScenarioDraftV1=function(action){
     const draft=buildScenarioDraft(action);
+
+    if(draft?.unsupportedBinding){
+      window.showToast?.('この提案は対象を一意に特定できないため、現在はScenario比較を実行しません。現在のプランは変更していません。','info');
+      return null;
+    }
+
     if(!draft){
       window.showToast?.('この提案は現在のScenario対象外です。現在のプランは変更していません。','info');
       return null;
     }
+
     activeScenarioDraft=draft;
     window.LUMIFUL_ACTIVE_SCENARIO_DRAFT=JSON.parse(JSON.stringify(draft));
     renderScenarioDraftModal(draft);
@@ -12998,40 +13347,34 @@ ${JSON.stringify(OUTPUT_SCHEMA_EXAMPLE,null,2)}
   };
 
   window.renderLumiScenarioComparisonV1=function(draft){
-    // Deliberately not connected to Engine yet.
-    // No speculative calculation is performed in this foundation step.
-    const root=document.getElementById('lumiAdvisorView');
-    if(!root||!draft)return;
-    const existing=root.querySelector('#lumi-scenario-foundation-v1');
-    existing?.remove();
-    const panel=document.createElement('div');
-    panel.id='lumi-scenario-foundation-v1';
-    panel.className='bg-[#F7FBFE] rounded-[24px] p-5 sm:p-6 border border-[#DCEEF8] space-y-3';
-    panel.innerHTML=`<div class="p95-section-title"><i class="fa-solid fa-code-compare text-[#65B9E8]"></i>試す未来</div>
-      <div class="grid grid-cols-2 gap-3">
-        <div class="bg-white rounded-2xl p-4 border border-[#E8EEF2]">
-          <div class="text-[11px] font-bold text-[#8B93A1]">今の未来</div>
-          <div class="text-base font-extrabold text-[#253047] mt-1">${esc(scenarioValueText(draft.currentValue,draft.key))}</div>
-        </div>
-        <div class="bg-white rounded-2xl p-4 border border-[#E8EEF2]">
-          <div class="text-[11px] font-bold text-[#65B9E8]">別の未来</div>
-          <div class="text-base font-extrabold text-[#253047] mt-1">${esc(scenarioValueText(draft.draftValue,draft.key))}</div>
-        </div>
-      </div>
-      <p class="text-xs text-[#6F7785] leading-relaxed font-medium">Scenario Draftは一時状態です。現在のSchema v2・保存データ・LUMI診断結果には反映していません。</p>
-      <div class="text-[11px] text-[#8B93A1]">次工程で、既存Engineの正式な計算経路にこの一時データを接続して比較結果を表示します。</div>`;
-    const refresh=root.querySelector('#lumi-refresh-button')?.parentElement;
-    if(refresh)root.insertBefore(panel,refresh);
-    else root.appendChild(panel);
+    try{
+      const comp=buildScenarioComparison(draft);
+      activeScenarioComparison=comp;
+      window.LUMIFUL_ACTIVE_SCENARIO_COMPARISON=comp;
+      renderScenarioComparison(comp);
+      return comp;
+    }catch(e){
+      console.warn('[LUMIFUL] Scenario comparison failed',e);
+      return null;
+    }
   };
 
+  window.applyLumiScenarioToPlanV1=applyScenarioToPlan;
+
   window.LUMIFUL_LUMI_SCENARIO_V1=Object.freeze({
-    status:'FOUNDATION',
+    status:'ENGINE_COMPARE_CANDIDATE',
     allowedTargets:Object.keys(LUMI_SCENARIO_ALLOWED_V1),
-    schemaMutation:false,
-    persistence:false,
-    aiCall:false,
-    engineComparison:false
+    enginePath:[
+      'calculateSimulationV2',
+      'adaptSimulationV2ForDashboard',
+      'calculateBaseScoreV2'
+    ],
+    detachedEngineCalculation:true,
+    scenarioSchemaMutation:false,
+    scenarioPersistence:false,
+    scenarioAiCall:false,
+    explicitApplyOnly:true,
+    applyInvalidatesLumiDiagnosis:true
   });
 
   window.LUMIFUL_PHASE9_18_DIAGNOSIS_STATE=Object.freeze({
