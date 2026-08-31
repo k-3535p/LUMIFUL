@@ -2224,9 +2224,9 @@
                   <button onclick="setInflationPreset(2.0)" id="header-inf-20" class="px-2 py-0.5 rounded-[8px] font-bold transition border border-transparent">2.0%</button>
                 </div>
 
-                <button onclick="switchView('lumiAdvisor')" id="ai-diagnose-btn" class="px-3.5 py-1.5 btn-lumi-primary text-xs flex items-center gap-1.5 whitespace-nowrap shrink-0">
+                <button onclick="openLumiDiagnosisFromCtaV1()" id="ai-diagnose-btn" class="px-3.5 py-1.5 btn-lumi-primary text-xs flex items-center gap-1.5 whitespace-nowrap shrink-0">
                   <i class="fa-solid fa-arrows-rotate text-[11px]" id="ai-btn-icon"></i>
-                  <span>LUMIのAI診断を見る</span>
+                  <span id="ai-diagnose-btn-label">LUMI AI診断をする</span>
                 </button>
               </div>
             </div>
@@ -2890,9 +2890,9 @@
               </p>
 
               <div class="pt-2">
-                <button onclick="switchView('lumiAdvisor')" class="px-3.5 py-1.5 btn-lumi-primary text-xs flex items-center gap-1.5 whitespace-nowrap shrink-0">
+                <button onclick="openLumiDiagnosisFromCtaV1()" id="results-ai-diagnose-btn" class="px-3.5 py-1.5 btn-lumi-primary text-xs flex items-center gap-1.5 whitespace-nowrap shrink-0">
                   <i class="fa-solid fa-arrows-rotate text-[11px]"></i>
-                  <span>LUMIのAI診断を見る</span>
+                  <span id="results-ai-diagnose-btn-label">LUMI AI診断をする</span>
                 </button>
               </div>
             </div>
@@ -5055,6 +5055,7 @@
         });
       });
 
+      window.invalidateLumiDiagnosisContextV1?.('inflation-change');
       window.recalculateAllFast();
     };
 
@@ -5267,7 +5268,9 @@
     window.syncV2InputAndRecalculate=function(event){const m=window.ensureV2InputModel();const _ageRaw=(document.getElementById('v2CurrentAge')?.value||'').trim();
 m.profile.currentAge=_ageRaw?Math.max(18,Math.round(Number(_ageRaw)||0)):0;
 const _targetRaw=(document.getElementById('v2TargetAge')?.value||'').trim();
-m.profile.targetAge=_targetRaw?Math.max(m.profile.currentAge||18,Math.round(Number(_targetRaw)||90)):90;m.profile.hasSpouse=!!document.getElementById('v2HasSpouse')?.checked;m.profile.spouseAge=m.profile.hasSpouse?Math.max(18,Math.round(v2Num('v2SpouseAge',m.profile.currentAge))):null;m.living.expense={amount:v2Num('v2LivingMonthly'),frequency:'monthly'};const ht=document.getElementById('v2HousingType')?.value||'rent';m.living.housing={type:ht,monthlyAmount:v2Num('v2HousingMonthly'),endAge:ht==='owned_with_loan'?Math.round(v2Num('v2HousingEndAge')):null};m.settings.inflationRate=v2Num('v2InflationRate',1.5);document.querySelectorAll('[data-v2-income]').forEach(el=>{const x=m.incomes[Number(el.dataset.i)];if(!x)return;const k=el.dataset.v2Income;x[k]=(k==='amount'||k==='startAge'||k==='endAge')?Number(el.value||0):el.value;});document.querySelectorAll('[data-v2-asset]').forEach(el=>{const x=m.assets[Number(el.dataset.i)];if(!x)return;const k=el.dataset.v2Asset;x[k]=(k==='value'||k==='expectedReturn')?Number(el.value||0):el.value;});m.assets.filter(a=>a.assetClass==='simulation'&&(a.category==='cash'||a.category==='stock')).forEach(a=>{a.expectedReturn=0;});document.querySelectorAll('[data-v2-withdrawal]').forEach(el=>{const x=m.assets[Number(el.dataset.i)];if(!x)return;const v=el.value;if(v==='auto'){x.withdrawalSetting='auto';x.withdrawalPriority=null;}else if(v==='excluded'){x.withdrawalSetting='excluded';x.withdrawalPriority='excluded';}else{x.withdrawalSetting='manual';x.withdrawalPriority=v;}});document.querySelectorAll('[data-v2-payment]').forEach(el=>{const x=m.payments[Number(el.dataset.i)];if(!x)return;const k=el.dataset.v2Payment;x[k]=(k==='amount'||k==='endAge')?Number(el.value||0):el.value;x.startAge=m.profile.currentAge;});window.LUMIFUL_LUMI_CONTEXT_DIRTY=true;if(m.profile.currentAge>0&&typeof window.recalculateAllFast==='function'){if(event?.type==='input'){clearTimeout(window.__lumifulInputRecalcTimer);window.__lumifulInputRecalcTimer=setTimeout(()=>window.recalculateAllFast(),140);}else{clearTimeout(window.__lumifulInputRecalcTimer);window.recalculateAllFast();}}else window.renderV2EmptyDashboard?.();};
+m.profile.targetAge=_targetRaw?Math.max(m.profile.currentAge||18,Math.round(Number(_targetRaw)||90)):90;m.profile.hasSpouse=!!document.getElementById('v2HasSpouse')?.checked;m.profile.spouseAge=m.profile.hasSpouse?Math.max(18,Math.round(v2Num('v2SpouseAge',m.profile.currentAge))):null;m.living.expense={amount:v2Num('v2LivingMonthly'),frequency:'monthly'};const ht=document.getElementById('v2HousingType')?.value||'rent';m.living.housing={type:ht,monthlyAmount:v2Num('v2HousingMonthly'),endAge:ht==='owned_with_loan'?Math.round(v2Num('v2HousingEndAge')):null};m.settings.inflationRate=v2Num('v2InflationRate',1.5);document.querySelectorAll('[data-v2-income]').forEach(el=>{const x=m.incomes[Number(el.dataset.i)];if(!x)return;const k=el.dataset.v2Income;x[k]=(k==='amount'||k==='startAge'||k==='endAge')?Number(el.value||0):el.value;});document.querySelectorAll('[data-v2-asset]').forEach(el=>{const x=m.assets[Number(el.dataset.i)];if(!x)return;const k=el.dataset.v2Asset;x[k]=(k==='value'||k==='expectedReturn')?Number(el.value||0):el.value;});m.assets.filter(a=>a.assetClass==='simulation'&&(a.category==='cash'||a.category==='stock')).forEach(a=>{a.expectedReturn=0;});document.querySelectorAll('[data-v2-withdrawal]').forEach(el=>{const x=m.assets[Number(el.dataset.i)];if(!x)return;const v=el.value;if(v==='auto'){x.withdrawalSetting='auto';x.withdrawalPriority=null;}else if(v==='excluded'){x.withdrawalSetting='excluded';x.withdrawalPriority='excluded';}else{x.withdrawalSetting='manual';x.withdrawalPriority=v;}});document.querySelectorAll('[data-v2-payment]').forEach(el=>{const x=m.payments[Number(el.dataset.i)];if(!x)return;const k=el.dataset.v2Payment;x[k]=(k==='amount'||k==='endAge')?Number(el.value||0):el.value;x.startAge=m.profile.currentAge;});window.LUMIFUL_LUMI_CONTEXT_DIRTY=true;
+if(event?.type==='input'||event?.type==='change')window.invalidateLumiDiagnosisContextV1?.('input-change');
+if(m.profile.currentAge>0&&typeof window.recalculateAllFast==='function'){if(event?.type==='input'){clearTimeout(window.__lumifulInputRecalcTimer);window.__lumifulInputRecalcTimer=setTimeout(()=>window.recalculateAllFast(),140);}else{clearTimeout(window.__lumifulInputRecalcTimer);window.recalculateAllFast();}}else window.renderV2EmptyDashboard?.();};
     window.addV2Income=function(){const m=window.ensureV2InputModel();m.incomes.push({id:v2Id('income'),category:'salary',name:'給与',owner:'self',amount:0,frequency:'yearly',startAge:m.profile.currentAge||0,endAge:0});window.renderV2IncomeList();};window.removeV2Income=function(i){window.ensureV2InputModel().incomes.splice(i,1);window.renderV2IncomeList();window.recalculateAllFast();};
     window.addV2Asset=function(){const m=window.ensureV2InputModel();m.assets.push({id:v2Id('asset'),assetClass:'simulation',category:'cash',name:'現金・預金',owner:'self',value:0,expectedReturn:0,withdrawalSetting:'auto',withdrawalPriority:null});window.renderV2AssetList();};window.removeV2Asset=function(i){window.ensureV2InputModel().assets.splice(i,1);window.renderV2AssetList();window.recalculateAllFast();};window.addV2PotentialAsset=function(){const m=window.ensureV2InputModel();m.assets.push({id:v2Id('potential'),assetClass:'potential',category:'real_estate',name:'売却できる資産',owner:'self',value:0});window.renderV2PotentialAssetList();};window.removeV2PotentialAsset=function(i){window.ensureV2InputModel().assets.splice(i,1);window.renderV2PotentialAssetList();window.recalculateAllFast();};window.addV2LifestyleAsset=function(){const m=window.ensureV2InputModel();m.assets.push({id:v2Id('lifestyle'),assetClass:'lifestyle',category:'home',name:'自宅',owner:'self',value:0});window.renderV2LifestyleAssetList();};window.removeV2LifestyleAsset=function(i){window.ensureV2InputModel().assets.splice(i,1);window.renderV2LifestyleAssetList();window.recalculateAllFast();};
     window.addV2Payment=function(){const m=window.ensureV2InputModel();m.payments.push({id:v2Id('payment'),category:'other',name:'返済',amount:0,frequency:'monthly',startAge:m.profile.currentAge||0,endAge:50});window.renderV2PaymentList();};window.removeV2Payment=function(i){window.ensureV2InputModel().payments.splice(i,1);window.renderV2PaymentList();window.recalculateAllFast();};
@@ -5959,11 +5962,18 @@ m.profile.targetAge=_targetRaw?Math.max(m.profile.currentAge||18,Math.round(Numb
     window.createPersistenceEnvelopeV2 = function(model, existingEnvelope) {
       const now = new Date().toISOString();
       const normalized = window.cloneDataModelV2(window.normalizeDataModelV2(model));
+      const activeLumiDiagnosis =
+        window.LUMIFUL_ACTIVE_LUMI_DIAGNOSIS_RECORD !== undefined
+          ? window.LUMIFUL_ACTIVE_LUMI_DIAGNOSIS_RECORD
+          : existingEnvelope?.lumiDiagnosis;
       return {
         schemaVersion: 2,
         createdAt: existingEnvelope?.createdAt || now,
         updatedAt: now,
-        data: normalized
+        data: normalized,
+        ...(activeLumiDiagnosis && typeof activeLumiDiagnosis === 'object'
+          ? { lumiDiagnosis: JSON.parse(JSON.stringify(activeLumiDiagnosis)) }
+          : {})
       };
     };
 
@@ -5979,7 +5989,10 @@ m.profile.targetAge=_targetRaw?Math.max(m.profile.currentAge||18,Math.round(Numb
         schemaVersion: 2,
         createdAt: parsed.createdAt || parsed.updatedAt || new Date().toISOString(),
         updatedAt: parsed.updatedAt || parsed.createdAt || new Date().toISOString(),
-        data: window.cloneDataModelV2(window.normalizeDataModelV2(parsed.data))
+        data: window.cloneDataModelV2(window.normalizeDataModelV2(parsed.data)),
+        ...(parsed.lumiDiagnosis && typeof parsed.lumiDiagnosis === 'object'
+          ? { lumiDiagnosis: JSON.parse(JSON.stringify(parsed.lumiDiagnosis)) }
+          : {})
       };
     };
 
@@ -8282,6 +8295,7 @@ m.profile.targetAge=_targetRaw?Math.max(m.profile.currentAge||18,Math.round(Numb
   window.loadUserData = async function(options = {}) {
     if (window.authState?.status === 'guest') {
       const env = await window.LocalStorageAdapter.load();
+      window.restoreLumiDiagnosisPersistenceV1?.(env?.lumiDiagnosis || null);
       if (env?.data && options.restore !== false) window.hydrateSimulationRuntimeV2(env.data);
       return env;
     }
@@ -8297,11 +8311,13 @@ m.profile.targetAge=_targetRaw?Math.max(m.profile.currentAge||18,Math.round(Numb
     catch (e) { err = e; console.warn('[LUMIFUL] cloud load notice', e); }
 
     if (!mirror && !cloud) {
+      window.restoreLumiDiagnosisPersistenceV1?.(null);
       if (err) throw err;
       return null;
     }
 
     const selected = mirror && (!cloud || eTime(mirror) > eTime(cloud)) ? mirror : cloud;
+    window.restoreLumiDiagnosisPersistenceV1?.(selected?.lumiDiagnosis || null);
     if (selected?.data && options.restore !== false) {
       window.hydrateSimulationRuntimeV2(selected.data);
     }
@@ -12235,83 +12251,550 @@ ${JSON.stringify(OUTPUT_SCHEMA_EXAMPLE,null,2)}
 
 
 <script id="phase9-9-real-ai-runtime">
-/* LUMIFUL PHASE 9-9 FINAL — REAL AI RUNTIME */
+/* ============================================================
+   LUMIFUL PHASE 9-18 — LUMI DIAGNOSIS STATE + PERSISTENCE
+   ------------------------------------------------------------
+   Source of truth:
+   persisted diagnosis record + current LUMI context fingerprint.
+
+   States:
+   - unassessed   -> 未診断
+   - diagnosing  -> 診断中
+   - diagnosed   -> 診断済み
+   - rediagnose  -> 再診断
+
+   Persistence:
+   - Guest: existing LocalStorage persistence envelope
+   - Account: existing Firestore users/{uid} persistence envelope
+   - Schema v2 `data` is unchanged.
+
+   API:
+   - valid saved diagnosis -> reuse, no API call
+   - changed/no diagnosis -> API only on explicit diagnosis action
+   ============================================================ */
 (function(){
   'use strict';
-  const SDK_ID='lumiful-firebase-functions-sdk', FUNCTION_NAME='lumiDiagnose', REGION='asia-northeast1';
-  let inflight=null, cacheKey='', cacheValue=null;
+
+  const SDK_ID='lumiful-firebase-functions-sdk';
+  const FUNCTION_NAME='lumiDiagnose';
+  const REGION='asia-northeast1';
+
+  let inflight=null;
+  let cacheKey='';
+  let cacheValue=null;
+  let activeRecord=null;
+  let currentContextKey='';
+  let contextKeyDirty=true;
+  let explicitRunOnOpen=false;
+
   const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const axisLabel={lifeAlignment:'人生との整合性',freedom:'選択の自由度',riskHealth:'リスク健全性'};
   const checkLabel={clear:'大きな注意点なし',attention:'確認したい前提あり',warning:'見直したい前提あり'};
-  function hashContext(v){let s='';try{s=JSON.stringify(v);}catch(_){return '';}let h=2166136261;for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619);}return(h>>>0).toString(16);}
+
+  function hashContext(v){
+    let s='';
+    try{s=JSON.stringify(v);}catch(_){return '';}
+    let h=2166136261;
+    for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=Math.imul(h,16777619);}
+    return(h>>>0).toString(16);
+  }
+
+  function buildCurrentPackage(){
+    const pkg=window.buildLumiPromptPackageV1?.();
+    if(!pkg?.context) throw Object.assign(new Error('LUMI Contextを生成できませんでした。'),{code:'CONTEXT_UNAVAILABLE'});
+    return pkg;
+  }
+
+  function resolveCurrentContextKey(force=false){
+    if(!force&&!contextKeyDirty&&currentContextKey)return currentContextKey;
+    currentContextKey=hashContext(buildCurrentPackage().context);
+    contextKeyDirty=false;
+    return currentContextKey;
+  }
+
+  function normalizeStoredResult(raw){
+    if(!raw||typeof raw!=='object'||!raw.validated)return null;
+    const validated=window.validateLumiResponseV1?.(raw.validated);
+    if(!validated)return null;
+    const score=window.composeLumiScoreV1?.(validated);
+    if(!score)return null;
+    return {
+      validated,
+      score,
+      meta:{
+        ...(raw.meta&&typeof raw.meta==='object'?raw.meta:{}),
+        source:raw.meta?.source||'persisted'
+      }
+    };
+  }
+
+  function normalizeRecord(raw){
+    if(!raw||typeof raw!=='object'||String(raw.contextKey||'')==='')return null;
+    const result=normalizeStoredResult(raw.result);
+    if(!result)return null;
+    return {
+      version:1,
+      contextKey:String(raw.contextKey),
+      diagnosedAt:String(raw.diagnosedAt||result.meta?.receivedAt||new Date().toISOString()),
+      result
+    };
+  }
+
+  function setActiveRecord(record){
+    activeRecord=normalizeRecord(record);
+    window.LUMIFUL_ACTIVE_LUMI_DIAGNOSIS_RECORD=activeRecord
+      ? JSON.parse(JSON.stringify(activeRecord))
+      : null;
+    if(activeRecord){
+      cacheKey=activeRecord.contextKey;
+      cacheValue=activeRecord.result;
+      window.LUMIFUL_LAST_LUMI_RESULT=activeRecord.result;
+    }else{
+      cacheKey='';
+      cacheValue=null;
+      window.LUMIFUL_LAST_LUMI_RESULT=null;
+    }
+  }
+
+  function diagnosisState(options={}){
+    if(inflight)return {status:'diagnosing',record:activeRecord,result:null};
+    if(!activeRecord?.result?.score)return {status:'unassessed',record:null,result:null};
+    let key='';
+    try{key=resolveCurrentContextKey(!!options.refreshContext);}
+    catch(_){return {status:'rediagnose',record:activeRecord,result:null};}
+    if(key&&activeRecord.contextKey===key){
+      return {status:'diagnosed',record:activeRecord,result:activeRecord.result};
+    }
+    return {status:'rediagnose',record:activeRecord,result:null};
+  }
+
+  const statusUi={
+    unassessed:{badge:'未診断',cta:'LUMI AI診断をする'},
+    diagnosing:{badge:'診断中',cta:'診断中…'},
+    diagnosed:{badge:'診断済み',cta:'LUMI AI診断を見る'},
+    rediagnose:{badge:'再診断',cta:'LUMI AI再診断をする'}
+  };
+
+  function scoreState(r){
+    const raw=Math.max(0,Math.min(100,Number(window.currentBaseScore||0)));
+    return r?.score||{
+      engine90:Number((raw*.9).toFixed(2)),
+      lumi10:null,
+      total100:Number((raw*.9).toFixed(2)),
+      axes:{},
+      checkLevel:'clear'
+    };
+  }
+
+  function setText(id,text){
+    const el=document.getElementById(id);
+    if(el)el.textContent=text;
+  }
+
+  function setCtaState(id,labelId,state){
+    const btn=document.getElementById(id);
+    const label=document.getElementById(labelId);
+    const ui=statusUi[state.status]||statusUi.unassessed;
+    if(label)label.textContent=ui.cta;
+    if(btn){
+      const busy=state.status==='diagnosing';
+      btn.disabled=busy;
+      btn.setAttribute('aria-busy',busy?'true':'false');
+      btn.classList.toggle('opacity-60',busy);
+      btn.classList.toggle('cursor-wait',busy);
+    }
+  }
+
+  function syncScoreSurfaces(options={}){
+    const state=diagnosisState({refreshContext:!!options.refreshContext});
+    const r=state.status==='diagnosed'?state.result:null;
+    const s=scoreState(r);
+    const has=state.status==='diagnosed'&&!!r?.score;
+    const ui=statusUi[state.status]||statusUi.unassessed;
+
+    setText('kpi-score',String(Math.round(s.total100)));
+    setText('kpi-base-score',String(Math.ceil(Number(s.engine90)||0)));
+    setText('kpi-ai-adj',has?String(Math.round((Number(s.lumi10)||0)*100)/100):'—');
+
+    const labels=document.querySelectorAll('#kpi-score-breakdown span.uppercase');
+    if(labels[0])labels[0].textContent='ENGINE';
+    if(labels[1])labels[1].textContent='LUMI';
+
+    setText('kpi-score-badge',ui.badge);
+
+    setText('results-score',String(Math.round(s.total100)));
+    setText('results-base-score',`${s.engine90} / 90`);
+    setText('results-ai-adjustment',has?`${s.lumi10} / 10`:'未評価');
+
+    setText('detailScoreFinal',String(Math.round(s.total100)));
+    setText('detailBaseScore',`${s.engine90} / 90`);
+    setText('detailAiAdj',has?`${s.lumi10} / 10`:'未評価');
+    setText('detailScoreBadge',ui.badge);
+
+    const notice=document.getElementById('detailAiStatusNotice');
+    if(notice){
+      notice.textContent=
+        state.status==='diagnosed'?'※ LUMIのAI総合判断を反映':
+        state.status==='rediagnose'?'※ 条件が変更されています。LUMIの再診断が必要です':
+        state.status==='diagnosing'?'※ LUMIが診断中です':
+        '※ LUMIは未診断です';
+    }
+
+    const diag=document.getElementById('kpi-diagnosis-text');
+    if(diag){
+      if(has&&r.validated?.diagnosis?.summary){
+        diag.textContent=r.validated.diagnosis.summary;
+      }else if(state.status==='rediagnose'){
+        diag.textContent='シミュレーション条件が変更されています。現在の条件でLUMI AI再診断をすると、診断結果を更新できます。';
+      }else if(state.status==='diagnosing'){
+        diag.textContent='現在の条件をLUMIが診断しています。';
+      }else{
+        diag.textContent='プロファイルや収支、資産の数値を設定すると、数値シミュレーションと連動したAI分析アドバイスが表示されます。';
+      }
+    }
+
+    const resultDiag=document.getElementById('results-lumi-text');
+    if(resultDiag){
+      if(has&&r.validated?.diagnosis?.summary){
+        resultDiag.textContent=r.validated.diagnosis.summary;
+      }else if(state.status==='rediagnose'){
+        resultDiag.textContent='条件が変更されています。現在のシミュレーション結果に合わせてLUMI AI再診断を実行できます。';
+      }else if(state.status==='diagnosing'){
+        resultDiag.textContent='現在の条件をLUMIが診断しています。';
+      }else{
+        resultDiag.textContent='条件を設定すると、AIコンパニオンLUMIによるシミュレーション解釈とアドバイスが表示されます。';
+      }
+    }
+
+    setCtaState('ai-diagnose-btn','ai-diagnose-btn-label',state);
+    setCtaState('results-ai-diagnose-btn','results-ai-diagnose-btn-label',state);
+
+    return state;
+  }
+
   async function ensureFunctions(){
     const rt=await window.initializeFirebaseRuntime?.();
-    if(!rt||rt.status!=='ready'||!rt.app) throw Object.assign(new Error('Firebaseを初期化できませんでした。'),{code:'FIREBASE_UNAVAILABLE'});
-    if(!window.firebase?.functions){const v=window.LUMIFUL_FIREBASE_SDK_VERSION||'12.18.0';await window.loadExternalScriptOnce(`https://www.gstatic.com/firebasejs/${v}/firebase-functions-compat.js`,SDK_ID);}
-    if(!window.firebase?.functions) throw Object.assign(new Error('Firebase Functions SDKを読み込めませんでした。'),{code:'FUNCTIONS_UNAVAILABLE'});
+    if(!rt||rt.status!=='ready'||!rt.app){
+      throw Object.assign(new Error('Firebaseを初期化できませんでした。'),{code:'FIREBASE_UNAVAILABLE'});
+    }
+    if(!window.firebase?.functions){
+      const v=window.LUMIFUL_FIREBASE_SDK_VERSION||'12.18.0';
+      await window.loadExternalScriptOnce(`https://www.gstatic.com/firebasejs/${v}/firebase-functions-compat.js`,SDK_ID);
+    }
+    if(!window.firebase?.functions){
+      throw Object.assign(new Error('Firebase Functions SDKを読み込めませんでした。'),{code:'FUNCTIONS_UNAVAILABLE'});
+    }
     return rt.app.functions(REGION);
   }
+
   async function callBackend(context){
-    const fn=await ensureFunctions(), callable=fn.httpsCallable(FUNCTION_NAME,{timeout:30000});
-    const response=await callable({protocol:'lumiful-lumi/v1',contextVersion:'1.0',promptVersion:'1.0',context});
-    const body=response?.data||{}, raw=(body.result&&typeof body.result==='object')?body.result:body;
+    const fn=await ensureFunctions();
+    const callable=fn.httpsCallable(FUNCTION_NAME,{timeout:30000});
+    const response=await callable({
+      protocol:'lumiful-lumi/v1',
+      contextVersion:'1.0',
+      promptVersion:'1.0',
+      context
+    });
+    const body=response?.data||{};
+    const raw=(body.result&&typeof body.result==='object')?body.result:body;
     const validated=window.validateLumiResponseV1?.(raw);
-    if(!validated) throw Object.assign(new Error('LUMIの回答を検証できませんでした。'),{code:'INVALID_RESPONSE'});
+    if(!validated){
+      throw Object.assign(new Error('LUMIの回答を検証できませんでした。'),{code:'INVALID_RESPONSE'});
+    }
     const score=window.composeLumiScoreV1?.(validated);
-    if(!score) throw Object.assign(new Error('LUMI SCOREを構成できませんでした。'),{code:'SCORE_UNAVAILABLE'});
-    return {validated,score,meta:{...(body.meta||{}),source:'firebase-callable',receivedAt:new Date().toISOString()}};
+    if(!score){
+      throw Object.assign(new Error('LUMI SCOREを構成できませんでした。'),{code:'SCORE_UNAVAILABLE'});
+    }
+    return {
+      validated,
+      score,
+      meta:{
+        ...(body.meta||{}),
+        source:'firebase-callable',
+        receivedAt:new Date().toISOString()
+      }
+    };
   }
+
+  async function persistActiveRecord(){
+    if(!activeRecord)return null;
+    window.LUMIFUL_ACTIVE_LUMI_DIAGNOSIS_RECORD=JSON.parse(JSON.stringify(activeRecord));
+    try{
+      return await window.saveUserData?.();
+    }catch(e){
+      console.warn('[LUMIFUL] LUMI diagnosis persistence deferred',e);
+      return null;
+    }
+  }
+
   async function diagnose(options={}){
-    const pkg=window.buildLumiPromptPackageV1?.(); if(!pkg?.context) throw Object.assign(new Error('LUMI Contextを生成できませんでした。'),{code:'CONTEXT_UNAVAILABLE'});
-    const key=hashContext(pkg.context); if (!options.force && cacheValue && cacheKey === key) {
-      // PHASE 9-17: cached diagnosis is still a valid diagnosis result.
-      // Re-apply it to SCORE/KPI surfaces before returning so HOME/SP cannot
-      // remain at the unassessed placeholder after a cached LUMI diagnosis.
-      window.LUMIFUL_LAST_LUMI_RESULT = cacheValue;
-      syncScoreSurfaces(cacheValue);
+    const pkg=buildCurrentPackage();
+    const key=hashContext(pkg.context);
+
+    currentContextKey=key;
+    contextKeyDirty=false;
+
+    if(!options.force&&activeRecord?.contextKey===key&&activeRecord?.result?.score){
+      cacheKey=key;
+      cacheValue=activeRecord.result;
+      window.LUMIFUL_LAST_LUMI_RESULT=activeRecord.result;
+      syncScoreSurfaces();
+      return activeRecord.result;
+    }
+
+    if(!options.force&&cacheValue&&cacheKey===key){
+      const record={
+        version:1,
+        contextKey:key,
+        diagnosedAt:String(cacheValue.meta?.receivedAt||new Date().toISOString()),
+        result:cacheValue
+      };
+      setActiveRecord(record);
+      await persistActiveRecord();
+      syncScoreSurfaces();
       return cacheValue;
-    } if(inflight)return inflight;
-    inflight=callBackend(pkg.context).then(v=>{cacheKey=key;cacheValue=v;window.LUMIFUL_LAST_LUMI_RESULT=v;window.LUMIFUL_LUMI_CONTEXT_DIRTY=false;syncScoreSurfaces(v);return v;}).finally(()=>{inflight=null;}); return inflight;
+    }
+
+    if(inflight)return inflight;
+
+    syncScoreSurfaces();
+
+    inflight=callBackend(pkg.context)
+      .then(async v=>{
+        const record={
+          version:1,
+          contextKey:key,
+          diagnosedAt:String(v.meta?.receivedAt||new Date().toISOString()),
+          result:v
+        };
+        setActiveRecord(record);
+        window.LUMIFUL_LUMI_CONTEXT_DIRTY=false;
+        await persistActiveRecord();
+        syncScoreSurfaces();
+        return v;
+      })
+      .finally(()=>{
+        inflight=null;
+        syncScoreSurfaces();
+      });
+
+    return inflight;
   }
-  function scoreState(r){const raw=Math.max(0,Math.min(100,Number(window.currentBaseScore||0)));return r?.score||{engine90:Number((raw*.9).toFixed(2)),lumi10:null,total100:Number((raw*.9).toFixed(2)),axes:{},checkLevel:'clear'};}
-  function setText(id,text){const el=document.getElementById(id);if(el)el.textContent=text;}
-  function currentValidResult(candidate=window.LUMIFUL_LAST_LUMI_RESULT){
-    if(!candidate?.score||!cacheKey||window.LUMIFUL_LUMI_CONTEXT_DIRTY)return null;
-    return candidate;
+
+  function renderLoading(){
+    const root=document.getElementById('lumiAdvisorView');
+    if(!root)return;
+    root.innerHTML=`<div class="space-y-1 mb-1"><h1 class="text-2xl sm:text-3xl font-extrabold text-[#253047] tracking-tight flex items-center gap-2"><i class="fa-solid fa-sun text-[#FFC83D]"></i><span>LUMIの診断</span></h1><p class="text-xs sm:text-sm text-[#6F7785]">あなたの未来をLUMIが読み取っています。</p></div><div class="bg-[#FEFBF0] rounded-[24px] p-6 border border-[#F0E2B7] flex gap-4 items-center"><img src="./assets/lumi-spark.png" class="w-12 h-12 object-contain" alt="LUMI"><div><div class="font-bold text-[#253047]">未来を一緒に確認しています…</div><div class="text-xs text-[#6F7785] mt-1">数字・大切にしたいこと・前提条件を総合して考えています。</div></div></div>`;
   }
-  function syncScoreSurfaces(r=window.LUMIFUL_LAST_LUMI_RESULT){
-    r=currentValidResult(r);
-    const s=scoreState(r), has=!!r?.score;
-    setText('kpi-score',String(Math.round(s.total100))); setText('kpi-base-score',String(Math.ceil(Number(s.engine90)||0))); setText('kpi-ai-adj',has?String(Math.round((Number(s.lumi10)||0)*100)/100):'—');
-    const labels=document.querySelectorAll('#kpi-score-breakdown span.uppercase'); if(labels[0])labels[0].textContent='ENGINE';if(labels[1])labels[1].textContent='LUMI';
-    const badge=document.getElementById('kpi-score-badge');if(badge)badge.textContent=has?'LUMIFUL SCORE':'LUMI 未評価';
-    setText('results-score',String(Math.round(s.total100))); setText('results-base-score',`${s.engine90} / 90`); setText('results-ai-adjustment',has?`${s.lumi10} / 10`:'未評価');
-    setText('detailScoreFinal',String(Math.round(s.total100))); setText('detailBaseScore',`${s.engine90} / 90`); setText('detailAiAdj',has?`${s.lumi10} / 10`:'未評価');
-    setText('detailScoreBadge',has?'LUMI診断済み':'未診断');
-    const notice=document.getElementById('detailAiStatusNotice');if(notice)notice.textContent=has?'※ LUMIのAI総合判断を反映':'※ LUMIは未評価です';
-    const diag=document.getElementById('kpi-diagnosis-text'); if(diag&&has&&r.validated?.diagnosis?.summary)diag.textContent=r.validated.diagnosis.summary;
-    const resultDiag=document.getElementById('results-lumi-text'); if(resultDiag&&has&&r.validated?.diagnosis?.summary)resultDiag.textContent=r.validated.diagnosis.summary;
+
+  function renderReady(state){
+    const root=document.getElementById('lumiAdvisorView');
+    if(!root)return;
+    const isRedo=state.status==='rediagnose';
+    const title=isRedo?'現在の条件で再診断できます':'LUMI AI診断を始めましょう';
+    const body=isRedo
+      ?'前回の診断後にシミュレーション条件が変更されています。保存済みの前回結果は残したまま、現在条件で再診断できます。'
+      :'現在のシミュレーション条件をもとに、LUMIが未来の意味と選択肢を一緒に確認します。';
+    const cta=isRedo?'LUMI AI再診断をする':'LUMI AI診断をする';
+    root.innerHTML=`<div class="space-y-1 mb-1"><h1 class="text-2xl sm:text-3xl font-extrabold text-[#253047] tracking-tight flex items-center gap-2"><i class="fa-solid fa-sun text-[#FFC83D]"></i><span>LUMIの診断</span></h1><p class="text-xs sm:text-sm text-[#6F7785]">数字の未来と、あなたが大切にしたい人生を一緒に見ます。</p></div><div class="bg-[#FEFBF0] rounded-[24px] p-5 sm:p-6 border border-[#F0E2B7] flex gap-4 items-start"><img src="./assets/lumi-spark.png" class="w-12 h-12 sm:w-14 sm:h-14 object-contain shrink-0" alt="LUMI"><div class="min-w-0"><h2 class="text-base font-bold text-[#253047]">${esc(title)}</h2><p class="text-xs sm:text-sm text-[#253047] leading-relaxed font-medium mt-2">${esc(body)}</p><button type="button" id="lumi-start-diagnosis-button" class="mt-4 px-4 py-2 btn-lumi-primary text-xs font-bold">${esc(cta)}</button></div></div>`;
+    root.querySelector('#lumi-start-diagnosis-button')?.addEventListener('click',()=>renderReal({force:isRedo,explicit:true}));
   }
-  function renderLoading(){const root=document.getElementById('lumiAdvisorView');if(!root)return;root.innerHTML=`<div class="space-y-1 mb-1"><h1 class="text-2xl sm:text-3xl font-extrabold text-[#253047] tracking-tight flex items-center gap-2"><i class="fa-solid fa-sun text-[#FFC83D]"></i><span>LUMIの診断</span></h1><p class="text-xs sm:text-sm text-[#6F7785]">あなたの未来をLUMIが読み取っています。</p></div><div class="bg-[#FEFBF0] rounded-[24px] p-6 border border-[#F0E2B7] flex gap-4 items-center"><img src="./assets/lumi-spark.png" class="w-12 h-12 object-contain" alt="LUMI"><div><div class="font-bold text-[#253047]">未来を一緒に確認しています…</div><div class="text-xs text-[#6F7785] mt-1">数字・大切にしたいこと・前提条件を総合して考えています。</div></div></div>`;}
+
   function renderResult(r){
-    const root=document.getElementById('lumiAdvisorView');if(!root||!r)return;if(window.LUMIFUL_ACTIVE_VIEW&&window.LUMIFUL_ACTIVE_VIEW!=='lumiAdvisor')root.classList.add('hidden');const v=r.validated,s=r.score;
-    const axes=['lifeAlignment','freedom','riskHealth'].map(k=>{const a=s.axes[k],j=v.scoreJudgment[k],score=a.unknown?'未評価':`${a.points} / ${a.max}`;return `<div class="p95-axis"><div class="p95-axis-head"><span>${axisLabel[k]}</span><strong>${score}</strong></div><p>${esc(j.reason||'')}</p></div>`;}).join('');
-    const items=v.lumiCheck.items.map(i=>`<div class="text-xs sm:text-sm text-[#5B6472] leading-relaxed">• ${esc(i.message)}</div>`).join('');
-    const actions=v.nextActions.map((a,i)=>`<button type="button" class="lumi-next-action w-full text-left bg-white border border-[#E8E6DF] rounded-2xl p-4 hover:bg-[#FAFAF7] transition" data-action-index="${i}"><div class="font-bold text-sm text-[#253047]">${esc(a.label)}</div><div class="text-xs text-[#6F7785] mt-1">${esc(a.reason)}</div></button>`).join('');
+    const root=document.getElementById('lumiAdvisorView');
+    if(!root||!r)return;
+    if(window.LUMIFUL_ACTIVE_VIEW&&window.LUMIFUL_ACTIVE_VIEW!=='lumiAdvisor')root.classList.add('hidden');
+
+    const v=r.validated;
+    const s=r.score;
+    const axes=['lifeAlignment','freedom','riskHealth'].map(k=>{
+      const a=s.axes[k];
+      const j=v.scoreJudgment[k];
+      const score=a.unknown?'未評価':`${a.points} / ${a.max}`;
+      return `<div class="p95-axis"><div class="p95-axis-head"><span>${axisLabel[k]}</span><strong>${score}</strong></div><p>${esc(j.reason||'')}</p></div>`;
+    }).join('');
+
+    const items=v.lumiCheck.items
+      .map(i=>`<div class="text-xs sm:text-sm text-[#5B6472] leading-relaxed">• ${esc(i.message)}</div>`)
+      .join('');
+
+    const actions=v.nextActions
+      .map((a,i)=>`<button type="button" class="lumi-next-action w-full text-left bg-white border border-[#E8E6DF] rounded-2xl p-4 hover:bg-[#FAFAF7] transition" data-action-index="${i}"><div class="font-bold text-sm text-[#253047]">${esc(a.label)}</div><div class="text-xs text-[#6F7785] mt-1">${esc(a.reason)}</div></button>`)
+      .join('');
+
     root.innerHTML=`<div class="space-y-1 mb-1"><h1 class="text-2xl sm:text-3xl font-extrabold text-[#253047] tracking-tight flex items-center gap-2"><i class="fa-solid fa-sun text-[#FFC83D]"></i><span>LUMIの診断</span></h1><p class="text-xs sm:text-sm text-[#6F7785]">数字の未来と、あなたが大切にしたい人生を一緒に見ます。</p></div><div class="bg-[#FEFBF0] rounded-[24px] p-5 sm:p-6 border border-[#F0E2B7] flex gap-4 items-start"><img src="./assets/lumi-spark.png" class="w-12 h-12 sm:w-14 sm:h-14 object-contain shrink-0" alt="LUMI"><div class="min-w-0"><div class="flex flex-wrap items-center gap-2"><h2 class="text-base font-bold text-[#253047]">LUMI SCORE ${s.lumi10} / 10</h2><span class="p95-badge">AI</span></div><p class="text-xs sm:text-sm text-[#6F7785] leading-relaxed mt-2">${esc(v.diagnosis.summary)}</p></div></div><div class="bg-white rounded-[24px] p-5 sm:p-6 border border-[#ECEBE6] space-y-4"><div class="p95-section-title"><i class="fa-solid fa-sliders text-[#65B9E8]"></i>LUMI SCOREの内訳</div><div class="grid grid-cols-1 sm:grid-cols-3 gap-3">${axes}</div></div><div class="bg-white rounded-[24px] p-5 sm:p-6 border border-[#ECEBE6] space-y-3"><div class="p95-section-title"><i class="fa-solid fa-triangle-exclamation text-[#FFB35C]"></i>LUMI CHECK：${checkLabel[s.checkLevel]||checkLabel.clear}</div>${items||'<div class="text-xs sm:text-sm text-[#6F7785]">現在の前提では、大きな注意点は見つかりませんでした。</div>'}</div><div class="bg-white rounded-[24px] p-5 sm:p-6 border border-[#ECEBE6] space-y-4"><div class="p95-section-title"><i class="fa-solid fa-comment-dots text-[#FFB35C]"></i>LUMIの見立て</div><div class="p95-diagnosis"><div><h4>未来の見立て</h4><p>${esc(v.diagnosis.summary)}</p></div><div><h4>いいところ</h4><p>${esc(v.diagnosis.strength)}</p></div><div><h4>確認したいこと</h4><p>${esc(v.diagnosis.attention)}</p></div><div><h4>LUMIからの提案</h4><p>${esc(v.diagnosis.advice)}</p></div></div></div>${actions?`<div class="bg-[#FAFAF7] rounded-[24px] p-5 sm:p-6 border border-[#ECEBE6] space-y-3"><div class="p95-section-title">別の未来も見てみる</div>${actions}</div>`:''}<div class="flex justify-end"><button type="button" class="text-xs font-bold text-[#6F7785] hover:text-[#253047]" id="lumi-refresh-button">LUMIでもう一度確認する</button></div>`;
-    root.querySelectorAll('.lumi-next-action').forEach(btn=>btn.addEventListener('click',()=>{const a=v.nextActions[Number(btn.dataset.actionIndex)];if(a)window.handleLumiSuggestedActionV1?.(a.type,a.target,a.suggestedValue);}));
+
+    root.querySelectorAll('.lumi-next-action').forEach(btn=>btn.addEventListener('click',()=>{
+      const a=v.nextActions[Number(btn.dataset.actionIndex)];
+      if(a)window.handleLumiSuggestedActionV1?.(a.type,a.target,a.suggestedValue);
+    }));
     root.querySelector('#lumi-refresh-button')?.addEventListener('click',()=>window.refreshLumiDiagnosisV1?.());
   }
-  function renderError(e){const root=document.getElementById('lumiAdvisorView');if(!root)return;const msg=String(e?.code||'').includes('not-found')?'LUMIのバックエンドがまだデプロイされていません。':(e?.message||'LUMIとの通信に失敗しました。');root.innerHTML=`<div class="space-y-1 mb-1"><h1 class="text-2xl sm:text-3xl font-extrabold text-[#253047] tracking-tight flex items-center gap-2"><i class="fa-solid fa-sun text-[#FFC83D]"></i><span>LUMIの診断</span></h1></div><div class="bg-white rounded-[24px] p-6 border border-[#ECEBE6]"><div class="font-bold text-[#253047]">LUMIは現在接続待ちです</div><p class="text-sm text-[#6F7785] mt-2">${esc(msg)}</p><p class="text-xs text-[#8B93A1] mt-3">Engineの計算結果や入力データには影響ありません。</p></div>`;}
-  async function renderReal(options={}){renderLoading();try{renderResult(await diagnose(options));}catch(e){console.warn('[LUMIFUL] LUMI AI unavailable',e);renderError(e);syncScoreSurfaces(null);}}
-  window.refreshLumiDiagnosisV1=()=>renderReal({force:true});
-  window.handleLumiSuggestedActionV1=function(type){const text=type==='scenario'?'この条件での比較機能は次のScenario工程で有効になります。現在の入力値は変更していません。':'現在の入力値は変更していません。Simulation Inputから内容を確認できます。';window.showToast?.(text,'info');};
-  window.LUMIFUL_LUMI_REAL_AI_V1=Object.freeze({diagnose,render:renderReal,region:REGION,functionName:FUNCTION_NAME,providerSecretInClient:false,schemaMutation:false,engineMutation:false});
-  const previousSwitch=window.switchView;if(typeof previousSwitch==='function')window.switchView=function(name){window.LUMIFUL_ACTIVE_VIEW=name;const r=previousSwitch.apply(this,arguments);const lumiRoot=document.getElementById('lumiAdvisorView');if(lumiRoot&&name!=='lumiAdvisor')lumiRoot.classList.add('hidden');if(name==='lumiAdvisor')setTimeout(()=>renderReal(),40);else if(name==='dashboard'||name==='simulationResults')setTimeout(()=>syncScoreSurfaces(),0);return r;};
-  const previousScore=window.updateScoreDashboardUI;if(typeof previousScore==='function')window.updateScoreDashboardUI=function(){const r=previousScore.apply(this,arguments);syncScoreSurfaces();return r;};
-  const previousResults=window.syncSimulationResultsViewV2;if(typeof previousResults==='function')window.syncSimulationResultsViewV2=function(){const r=previousResults.apply(this,arguments);syncScoreSurfaces();return r;};
-  document.addEventListener('DOMContentLoaded',()=>setTimeout(()=>syncScoreSurfaces(),0)); setTimeout(()=>syncScoreSurfaces(),100);
-  window.LUMIFUL_PHASE9_9_REAL_AI=Object.freeze({status:'PERFORMANCE_HOTFIX_READY',backend:'Firebase callable',functionName:FUNCTION_NAME,region:REGION,aiConnectedAfterDeploy:true,providerSecretInClient:false,engineMutation:false,schemaMutation:false,dummyRuntime:false,mockRuntime:false});
+
+  function renderError(e){
+    const root=document.getElementById('lumiAdvisorView');
+    if(!root)return;
+    const msg=String(e?.code||'').includes('not-found')
+      ?'LUMIのバックエンドがまだデプロイされていません。'
+      :(e?.message||'LUMIとの通信に失敗しました。');
+    root.innerHTML=`<div class="space-y-1 mb-1"><h1 class="text-2xl sm:text-3xl font-extrabold text-[#253047] tracking-tight flex items-center gap-2"><i class="fa-solid fa-sun text-[#FFC83D]"></i><span>LUMIの診断</span></h1></div><div class="bg-white rounded-[24px] p-6 border border-[#ECEBE6]"><div class="font-bold text-[#253047]">LUMIは現在接続待ちです</div><p class="text-sm text-[#6F7785] mt-2">${esc(msg)}</p><p class="text-xs text-[#8B93A1] mt-3">Engineの計算結果や入力データには影響ありません。</p></div>`;
+  }
+
+  async function renderReal(options={}){
+    const before=syncScoreSurfaces({refreshContext:true});
+    if(!options.force&&before.status==='diagnosed'){
+      renderResult(before.result);
+      return before.result;
+    }
+    if(!options.explicit){
+      renderReady(before);
+      return null;
+    }
+
+    renderLoading();
+    syncScoreSurfaces();
+
+    try{
+      const result=await diagnose({force:!!options.force});
+      renderResult(result);
+      return result;
+    }catch(e){
+      console.warn('[LUMIFUL] LUMI AI unavailable',e);
+      renderError(e);
+      syncScoreSurfaces({refreshContext:true});
+      return null;
+    }
+  }
+
+  window.restoreLumiDiagnosisPersistenceV1=function(rawRecord){
+    setActiveRecord(rawRecord);
+    contextKeyDirty=true;
+    currentContextKey='';
+    window.LUMIFUL_LUMI_CONTEXT_DIRTY=false;
+    setTimeout(()=>syncScoreSurfaces({refreshContext:true}),0);
+    return activeRecord;
+  };
+
+  window.invalidateLumiDiagnosisContextV1=function(){
+    contextKeyDirty=true;
+    currentContextKey='';
+    if(activeRecord){
+      const state={status:'rediagnose',record:activeRecord,result:null};
+      const ui=statusUi.rediagnose;
+      setText('kpi-score-badge',ui.badge);
+      setText('kpi-ai-adj','—');
+      setCtaState('ai-diagnose-btn','ai-diagnose-btn-label',state);
+      setCtaState('results-ai-diagnose-btn','results-ai-diagnose-btn-label',state);
+    }
+  };
+
+  window.getLumiDiagnosisStateV1=function(options={}){
+    return diagnosisState({refreshContext:options.refreshContext!==false});
+  };
+
+  window.openLumiDiagnosisFromCtaV1=function(){
+    const state=syncScoreSurfaces({refreshContext:true});
+    explicitRunOnOpen=state.status!=='diagnosed';
+    window.switchView?.('lumiAdvisor');
+  };
+
+  window.refreshLumiDiagnosisV1=()=>renderReal({force:true,explicit:true});
+
+  window.handleLumiSuggestedActionV1=function(type){
+    const message=type==='scenario'
+      ?'この条件での比較機能は次のScenario工程で有効になります。現在の入力値は変更していません。'
+      :'現在の入力値は変更していません。Simulation Inputから内容を確認できます。';
+    window.showToast?.(message,'info');
+  };
+
+  window.LUMIFUL_LUMI_REAL_AI_V1=Object.freeze({
+    diagnose,
+    render:renderReal,
+    region:REGION,
+    functionName:FUNCTION_NAME,
+    providerSecretInClient:false,
+    schemaMutation:false,
+    engineMutation:false
+  });
+
+  const previousSwitch=window.switchView;
+  if(typeof previousSwitch==='function'){
+    window.switchView=function(name){
+      window.LUMIFUL_ACTIVE_VIEW=name;
+      const r=previousSwitch.apply(this,arguments);
+      const lumiRoot=document.getElementById('lumiAdvisorView');
+
+      if(lumiRoot&&name!=='lumiAdvisor')lumiRoot.classList.add('hidden');
+
+      if(name==='lumiAdvisor'){
+        const run=explicitRunOnOpen;
+        explicitRunOnOpen=false;
+        setTimeout(()=>{
+          const state=syncScoreSurfaces({refreshContext:true});
+          if(state.status==='diagnosed'){
+            renderResult(state.result);
+          }else if(run){
+            renderReal({force:state.status==='rediagnose',explicit:true});
+          }else{
+            renderReady(state);
+          }
+        },40);
+      }else if(name==='dashboard'||name==='simulationResults'){
+        setTimeout(()=>syncScoreSurfaces({refreshContext:true}),0);
+      }
+
+      return r;
+    };
+  }
+
+  const previousScore=window.updateScoreDashboardUI;
+  if(typeof previousScore==='function'){
+    window.updateScoreDashboardUI=function(){
+      const r=previousScore.apply(this,arguments);
+      syncScoreSurfaces();
+      return r;
+    };
+  }
+
+  const previousResults=window.syncSimulationResultsViewV2;
+  if(typeof previousResults==='function'){
+    window.syncSimulationResultsViewV2=function(){
+      const r=previousResults.apply(this,arguments);
+      syncScoreSurfaces();
+      return r;
+    };
+  }
+
+  document.addEventListener('DOMContentLoaded',()=>setTimeout(()=>syncScoreSurfaces({refreshContext:true}),0));
+  setTimeout(()=>syncScoreSurfaces({refreshContext:true}),100);
+
+  window.LUMIFUL_PHASE9_18_DIAGNOSIS_STATE=Object.freeze({
+    status:'IMPLEMENTED_CANDIDATE',
+    states:['unassessed','diagnosing','diagnosed','rediagnose'],
+    badges:['未診断','診断中','診断済み','再診断'],
+    persistence:'existing LocalStorage / Firestore persistence envelope',
+    contextFingerprint:true,
+    reloadRestore:true,
+    validSavedResultAvoidsApi:true,
+    explicitDiagnosisOnly:true,
+    schemaV2DataMutation:false,
+    engineMutation:false,
+    promptMutation:false
+  });
+
+  window.LUMIFUL_PHASE9_9_REAL_AI=Object.freeze({
+    status:'PHASE9_18_STATE_PERSISTENCE',
+    backend:'Firebase callable',
+    functionName:FUNCTION_NAME,
+    region:REGION,
+    aiConnectedAfterDeploy:true,
+    providerSecretInClient:false,
+    engineMutation:false,
+    schemaMutation:false,
+    dummyRuntime:false,
+    mockRuntime:false
+  });
 })();
 </script>
 
