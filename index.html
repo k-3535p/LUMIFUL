@@ -5705,13 +5705,13 @@ if(m.profile.currentAge>0&&typeof window.recalculateAllFast==='function'){if(eve
           window.assetChart.update('none');
           return;
         } catch (error) {
-          console.warn('[LUMIFUL] Existing HOME chart update notice:', error);
+          console.warn('[LUMIFUL] HOME chart in-place update notice:', error);
         }
       }
 
       if (window.assetChart) {
         try { window.assetChart.destroy(); } catch (error) {
-          console.warn('[LUMIFUL] Previous chart destroy notice:', error);
+          console.warn('[LUMIFUL] Stale HOME chart destroy notice:', error);
         }
         window.assetChart = null;
       }
@@ -8411,7 +8411,6 @@ if(m.profile.currentAge>0&&typeof window.recalculateAllFast==='function'){if(eve
 
   async function restoreCurrent(force = false) {
     if (!['authenticated', 'guest'].includes(window.authState?.status)) return null;
-    if (P.restoring) return null;
     const id = fbUser()?.uid || 'guest';
     if (!force && P.restoredUid === id) return null;
 
@@ -8478,10 +8477,7 @@ if(m.profile.currentAge>0&&typeof window.recalculateAllFast==='function'){if(eve
       runtime.auth.onAuthStateChanged(async user => {
         applyState(user);
         route();
-
-        // Initial restoration is owned by window.onload after bootAuth().
-        // Avoid a second simultaneous restore/hydration while the app is booting.
-        if (user && !window.LUMIFUL_STEP4_BOOTING) {
+        if (user) {
           try {
             await restoreCurrent(true);
           } catch (restoreError) {
@@ -8685,14 +8681,6 @@ if(m.profile.currentAge>0&&typeof window.recalculateAllFast==='function'){if(eve
       route();
     }
   };
-
-  window.LUMIFUL_PHASE9_19_BOOT_RENDER_STABILITY = Object.freeze({
-    initialRestoreOwner:'window.onload',
-    authListenerSkipsRestoreDuringBoot:true,
-    restoreConcurrencyGuard:true,
-    homeChartReusedOnRecalculation:true,
-    scenarioBehaviorPreserved:true
-  });
 
   window.LUMIFUL_PHASE7B_STEP3_FINAL_V3 = Object.freeze({
     persistedSessionResolvedBeforeRouting: true,
@@ -12649,13 +12637,17 @@ ${JSON.stringify(OUTPUT_SCHEMA_EXAMPLE,null,2)}
       .map(i=>`<div class="text-xs sm:text-sm text-[#5B6472] leading-relaxed">• ${esc(i.message)}</div>`)
       .join('');
 
-    const actions=(Array.isArray(v.nextActions)?v.nextActions:[])
-      .map((a,i)=>({a,i}))
+    const indexedActions=(Array.isArray(v.nextActions)?v.nextActions:[]).map((a,i)=>({a,i}));
+    const actions=indexedActions
       .filter(({a})=>isSupportedScenarioAction(a))
       .map(({a,i})=>`<button type="button" class="lumi-next-action w-full text-left bg-white border border-[#E8E6DF] rounded-2xl p-4 hover:bg-[#FAFAF7] transition" data-action-index="${i}"><div class="font-bold text-sm text-[#253047]">${esc(a.label)}</div><div class="text-xs text-[#6F7785] mt-1">${esc(a.reason)}</div></button>`)
       .join('');
+    const reviewActions=indexedActions
+      .filter(({a})=>!isSupportedScenarioAction(a))
+      .map(({a})=>`<div class="w-full bg-white border border-[#E8E6DF] rounded-2xl p-4"><div class="font-bold text-sm text-[#253047]">${esc(a.label)}</div><div class="text-xs text-[#6F7785] mt-1">${esc(a.reason)}</div></div>`)
+      .join('');
 
-    root.innerHTML=`<div class="space-y-1 mb-1"><h1 class="text-2xl sm:text-3xl font-extrabold text-[#253047] tracking-tight flex items-center gap-2"><i class="fa-solid fa-sun text-[#FFC83D]"></i><span>LUMIの診断</span></h1><p class="text-xs sm:text-sm text-[#6F7785]">数字の未来と、あなたが大切にしたい人生を一緒に見ます。</p></div><div class="bg-[#FEFBF0] rounded-[24px] p-5 sm:p-6 border border-[#F0E2B7] flex gap-4 items-start"><img src="./assets/lumi-spark.png" class="w-12 h-12 sm:w-14 sm:h-14 object-contain shrink-0" alt="LUMI"><div class="min-w-0"><div class="flex flex-wrap items-center gap-2"><h2 class="text-base font-bold text-[#253047]">LUMI SCORE ${s.lumi10} / 10</h2><span class="p95-badge">AI</span></div><p class="text-xs sm:text-sm text-[#6F7785] leading-relaxed mt-2">${esc(v.diagnosis.summary)}</p></div></div><div class="bg-white rounded-[24px] p-5 sm:p-6 border border-[#ECEBE6] space-y-4"><div class="p95-section-title"><i class="fa-solid fa-sliders text-[#65B9E8]"></i>LUMI SCOREの内訳</div><div class="grid grid-cols-1 sm:grid-cols-3 gap-3">${axes}</div></div><div class="bg-white rounded-[24px] p-5 sm:p-6 border border-[#ECEBE6] space-y-3"><div class="p95-section-title"><i class="fa-solid fa-triangle-exclamation text-[#FFB35C]"></i>LUMI CHECK：${checkLabel[s.checkLevel]||checkLabel.clear}</div>${items||'<div class="text-xs sm:text-sm text-[#6F7785]">現在の前提では、大きな注意点は見つかりませんでした。</div>'}</div><div class="bg-white rounded-[24px] p-5 sm:p-6 border border-[#ECEBE6] space-y-4"><div class="p95-section-title"><i class="fa-solid fa-comment-dots text-[#FFB35C]"></i>LUMIの見立て</div><div class="p95-diagnosis"><div><h4>未来の見立て</h4><p>${esc(v.diagnosis.summary)}</p></div><div><h4>いいところ</h4><p>${esc(v.diagnosis.strength)}</p></div><div><h4>確認したいこと</h4><p>${esc(v.diagnosis.attention)}</p></div><div><h4>LUMIからの提案</h4><p>${esc(v.diagnosis.advice)}</p></div></div></div>${actions?`<div class="bg-[#FAFAF7] rounded-[24px] p-5 sm:p-6 border border-[#ECEBE6] space-y-3"><div class="p95-section-title">別の未来も見てみる</div>${actions}</div>`:''}<div class="flex justify-end"><button type="button" class="text-xs font-bold text-[#6F7785] hover:text-[#253047]" id="lumi-refresh-button">LUMIでもう一度確認する</button></div>`;
+    root.innerHTML=`<div class="space-y-1 mb-1"><h1 class="text-2xl sm:text-3xl font-extrabold text-[#253047] tracking-tight flex items-center gap-2"><i class="fa-solid fa-sun text-[#FFC83D]"></i><span>LUMIの診断</span></h1><p class="text-xs sm:text-sm text-[#6F7785]">数字の未来と、あなたが大切にしたい人生を一緒に見ます。</p></div><div class="bg-[#FEFBF0] rounded-[24px] p-5 sm:p-6 border border-[#F0E2B7] flex gap-4 items-start"><img src="./assets/lumi-spark.png" class="w-12 h-12 sm:w-14 sm:h-14 object-contain shrink-0" alt="LUMI"><div class="min-w-0"><div class="flex flex-wrap items-center gap-2"><h2 class="text-base font-bold text-[#253047]">LUMI SCORE ${s.lumi10} / 10</h2><span class="p95-badge">AI</span></div><p class="text-xs sm:text-sm text-[#6F7785] leading-relaxed mt-2">${esc(v.diagnosis.summary)}</p></div></div><div class="bg-white rounded-[24px] p-5 sm:p-6 border border-[#ECEBE6] space-y-4"><div class="p95-section-title"><i class="fa-solid fa-sliders text-[#65B9E8]"></i>LUMI SCOREの内訳</div><div class="grid grid-cols-1 sm:grid-cols-3 gap-3">${axes}</div></div><div class="bg-white rounded-[24px] p-5 sm:p-6 border border-[#ECEBE6] space-y-3"><div class="p95-section-title"><i class="fa-solid fa-triangle-exclamation text-[#FFB35C]"></i>LUMI CHECK：${checkLabel[s.checkLevel]||checkLabel.clear}</div>${items||'<div class="text-xs sm:text-sm text-[#6F7785]">現在の前提では、大きな注意点は見つかりませんでした。</div>'}</div><div class="bg-white rounded-[24px] p-5 sm:p-6 border border-[#ECEBE6] space-y-4"><div class="p95-section-title"><i class="fa-solid fa-comment-dots text-[#FFB35C]"></i>LUMIの見立て</div><div class="p95-diagnosis"><div><h4>未来の見立て</h4><p>${esc(v.diagnosis.summary)}</p></div><div><h4>いいところ</h4><p>${esc(v.diagnosis.strength)}</p></div><div><h4>確認したいこと</h4><p>${esc(v.diagnosis.attention)}</p></div><div><h4>LUMIからの提案</h4><p>${esc(v.diagnosis.advice)}</p></div></div></div>${actions?`<div class="bg-[#FAFAF7] rounded-[24px] p-5 sm:p-6 border border-[#ECEBE6] space-y-3"><div class="p95-section-title">別の未来も見てみる</div>${actions}</div>`:''}${reviewActions?`<div class="bg-[#FAFAF7] rounded-[24px] p-5 sm:p-6 border border-[#ECEBE6] space-y-3"><div class="p95-section-title">LUMIからの提案</div>${reviewActions}</div>`:''}<div class="flex justify-end"><button type="button" class="text-xs font-bold text-[#6F7785] hover:text-[#253047]" id="lumi-refresh-button">LUMIでもう一度確認する</button></div>`;
 
     root.querySelectorAll('.lumi-next-action').forEach(btn=>btn.addEventListener('click',()=>{
       const a=v.nextActions[Number(btn.dataset.actionIndex)];
@@ -12774,7 +12766,18 @@ ${JSON.stringify(OUTPUT_SCHEMA_EXAMPLE,null,2)}
           }
         },40);
       }else if(name==='dashboard'||name==='simulationResults'){
-        setTimeout(()=>syncScoreSurfaces({refreshContext:true}),0);
+        setTimeout(()=>{
+          syncScoreSurfaces({refreshContext:true});
+          if(name==='dashboard'){
+            const chart=window.assetChart;
+            const canvas=document.getElementById('assetChart');
+            if(chart&&chart.canvas===canvas){
+              try{chart.resize();chart.update('none');}catch(error){console.warn('[LUMIFUL] HOME chart visible resize notice:',error);}
+            }else if(Array.isArray(window.currentTableRows)&&window.currentTableRows.length){
+              try{window.recalculateAllFast?.();}catch(error){console.warn('[LUMIFUL] HOME chart visible render notice:',error);}
+            }
+          }
+        },0);
       }
 
       return r;
