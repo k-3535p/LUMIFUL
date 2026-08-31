@@ -1799,6 +1799,39 @@
 }
 </style>
 
+
+<style id="phase9-17-score-sync-fix">
+/* ============================================================
+   PHASE 9-17 — SCORE SYNC / SP BADGE FIX
+   Scope:
+   - Show the actual existing #kpi-ai-adj text on SP after LUMI diagnosis.
+   - No diagnosis: runtime writes "—".
+   - Prevent #kpi-score-badge from ellipsis truncation on SP.
+   No Engine / AI prompt / Auth / Schema / HOME layout changes.
+   ============================================================ */
+@media (max-width: 639px) {
+  #homeView #home-kpi-grid #kpi-card-score #kpi-score-breakdown #kpi-ai-adj {
+    font-size: 10px !important;
+    line-height: 1.05 !important;
+    min-width: 18px !important;
+    text-align: center !important;
+  }
+
+  #homeView #home-kpi-grid #kpi-card-score #kpi-score-breakdown #kpi-ai-adj::after {
+    content: none !important;
+    display: none !important;
+  }
+
+  #homeView #home-kpi-grid #kpi-card-score #kpi-score-badge {
+    max-width: none !important;
+    width: auto !important;
+    overflow: visible !important;
+    text-overflow: clip !important;
+    white-space: nowrap !important;
+  }
+}
+</style>
+
 </head>
 <body class="bg-[#FAFAF7] text-[#253047] min-h-screen font-sans antialiased relative overflow-x-hidden">
 
@@ -12242,11 +12275,12 @@ ${JSON.stringify(OUTPUT_SCHEMA_EXAMPLE,null,2)}
   function syncScoreSurfaces(r=window.LUMIFUL_LAST_LUMI_RESULT){
     r=currentValidResult(r);
     const s=scoreState(r), has=!!r?.score;
-    setText('kpi-score',String(Math.round(s.total100))); setText('kpi-base-score',String(Math.ceil(Number(s.engine90)||0))); setText('kpi-ai-adj',has?String(Math.round((Number(s.lumi10)||0)*100)/100):'未評価');
+    setText('kpi-score',String(Math.round(s.total100))); setText('kpi-base-score',String(Math.ceil(Number(s.engine90)||0))); setText('kpi-ai-adj',has?String(Math.round((Number(s.lumi10)||0)*100)/100):'—');
     const labels=document.querySelectorAll('#kpi-score-breakdown span.uppercase'); if(labels[0])labels[0].textContent='ENGINE';if(labels[1])labels[1].textContent='LUMI';
     const badge=document.getElementById('kpi-score-badge');if(badge)badge.textContent=has?'LUMIFUL SCORE':'LUMI 未評価';
     setText('results-score',String(Math.round(s.total100))); setText('results-base-score',`${s.engine90} / 90`); setText('results-ai-adjustment',has?`${s.lumi10} / 10`:'未評価');
     setText('detailScoreFinal',String(Math.round(s.total100))); setText('detailBaseScore',`${s.engine90} / 90`); setText('detailAiAdj',has?`${s.lumi10} / 10`:'未評価');
+    setText('detailScoreBadge',has?'LUMI診断済み':'未診断');
     const notice=document.getElementById('detailAiStatusNotice');if(notice)notice.textContent=has?'※ LUMIのAI総合判断を反映':'※ LUMIは未評価です';
     const diag=document.getElementById('kpi-diagnosis-text'); if(diag&&has&&r.validated?.diagnosis?.summary)diag.textContent=r.validated.diagnosis.summary;
     const resultDiag=document.getElementById('results-lumi-text'); if(resultDiag&&has&&r.validated?.diagnosis?.summary)resultDiag.textContent=r.validated.diagnosis.summary;
