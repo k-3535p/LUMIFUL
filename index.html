@@ -11319,6 +11319,16 @@ ${JSON.stringify(OUTPUT_SCHEMA_EXAMPLE,null,2)}
     if(!candidate?.score||!cacheKey||window.LUMIFUL_LUMI_CONTEXT_DIRTY)return null;
     return candidate;
   }
+  function syncLumiDiagnosisCtaV1(hasCurrentDiagnosis){
+    const home=document.getElementById('ai-diagnose-btn');
+    const homeLabel=home?.querySelector('span');
+    if(homeLabel)homeLabel.textContent=hasCurrentDiagnosis?'LUMIのAI診断を見る':'LUMIのAI再診断をする';
+
+    document.querySelectorAll('button[onclick="switchView(\'lumiAdvisor\')"] span').forEach(label=>{
+      if(label.closest('#ai-diagnose-btn'))return;
+      if(String(label.textContent||'').includes('LUMIのAI診断'))label.textContent=hasCurrentDiagnosis?'LUMIのAI診断を見る':'LUMIのAI再診断をする';
+    });
+  }
   function syncScoreSurfaces(r=window.LUMIFUL_LAST_LUMI_RESULT){
     r=currentValidResult(r);
     const s=scoreState(r), has=!!r?.score;
@@ -11328,8 +11338,17 @@ ${JSON.stringify(OUTPUT_SCHEMA_EXAMPLE,null,2)}
     setText('results-score',String(Math.round(s.total100))); setText('results-base-score',`${s.engine90} / 90`); setText('results-ai-adjustment',has?`${s.lumi10} / 10`:'未評価');
     setText('detailScoreFinal',String(Math.round(s.total100))); setText('detailBaseScore',`${s.engine90} / 90`); setText('detailAiAdj',has?`${s.lumi10} / 10`:'未評価');
     const notice=document.getElementById('detailAiStatusNotice');if(notice)notice.textContent=has?'※ LUMIのAI総合判断を反映':'※ LUMIは未評価です';
-    const diag=document.getElementById('kpi-diagnosis-text'); if(diag&&has&&r.validated?.diagnosis?.summary)diag.textContent=r.validated.diagnosis.summary;
-    const resultDiag=document.getElementById('results-lumi-text'); if(resultDiag&&has&&r.validated?.diagnosis?.summary)resultDiag.textContent=r.validated.diagnosis.summary;
+    const diag=document.getElementById('kpi-diagnosis-text');
+    if(diag){
+      if(has&&r.validated?.diagnosis?.summary)diag.textContent=r.validated.diagnosis.summary;
+      else if(window.LUMIFUL_LUMI_CONTEXT_DIRTY)diag.textContent='シミュレーション条件が変更されました。現在の条件でLUMIのAI診断を更新できます。';
+    }
+    const resultDiag=document.getElementById('results-lumi-text');
+    if(resultDiag){
+      if(has&&r.validated?.diagnosis?.summary)resultDiag.textContent=r.validated.diagnosis.summary;
+      else if(window.LUMIFUL_LUMI_CONTEXT_DIRTY)resultDiag.textContent='シミュレーション条件が変更されました。現在の条件でLUMIのAI診断を更新できます。';
+    }
+    syncLumiDiagnosisCtaV1(has);
   }
   function renderLoading(){const root=document.getElementById('lumiAdvisorView');if(!root)return;root.innerHTML=`<div class="space-y-1 mb-1"><h1 class="text-2xl sm:text-3xl font-extrabold text-[#253047] tracking-tight flex items-center gap-2"><i class="fa-solid fa-sun text-[#FFC83D]"></i><span>LUMIの診断</span></h1><p class="text-xs sm:text-sm text-[#6F7785]">あなたの未来をLUMIが読み取っています。</p></div><div class="bg-[#FEFBF0] rounded-[24px] p-6 border border-[#F0E2B7] flex gap-4 items-center"><img src="./assets/lumi-spark.png" class="w-12 h-12 object-contain" alt="LUMI"><div><div class="font-bold text-[#253047]">未来を一緒に確認しています…</div><div class="text-xs text-[#6F7785] mt-1">数字・大切にしたいこと・前提条件を総合して考えています。</div></div></div>`;}
   function renderResult(r){
@@ -11344,6 +11363,10 @@ ${JSON.stringify(OUTPUT_SCHEMA_EXAMPLE,null,2)}
   function renderError(e){const root=document.getElementById('lumiAdvisorView');if(!root)return;const msg=String(e?.code||'').includes('not-found')?'LUMIのバックエンドがまだデプロイされていません。':(e?.message||'LUMIとの通信に失敗しました。');root.innerHTML=`<div class="space-y-1 mb-1"><h1 class="text-2xl sm:text-3xl font-extrabold text-[#253047] tracking-tight flex items-center gap-2"><i class="fa-solid fa-sun text-[#FFC83D]"></i><span>LUMIの診断</span></h1></div><div class="bg-white rounded-[24px] p-6 border border-[#ECEBE6]"><div class="font-bold text-[#253047]">LUMIは現在接続待ちです</div><p class="text-sm text-[#6F7785] mt-2">${esc(msg)}</p><p class="text-xs text-[#8B93A1] mt-3">Engineの計算結果や入力データには影響ありません。</p></div>`;}
   async function renderReal(options={}){renderLoading();try{renderResult(await diagnose(options));}catch(e){console.warn('[LUMIFUL] LUMI AI unavailable',e);renderError(e);syncScoreSurfaces(null);}}
   window.refreshLumiDiagnosisV1=()=>renderReal({force:true});
+  window.invalidateLumiDiagnosisAfterScenarioV1=function(){
+    window.LUMIFUL_LUMI_CONTEXT_DIRTY=true;
+    syncScoreSurfaces(null);
+  };
 
   /* PHASE 9 SCENARIO STEP 1 — expectedReturn only */
   function isExpectedReturnScenarioTarget(target){
@@ -11473,6 +11496,7 @@ ${JSON.stringify(OUTPUT_SCHEMA_EXAMPLE,null,2)}
 
       window.renderV2InputUI?.();
       window.recalculateAllFast?.();
+      window.invalidateLumiDiagnosisAfterScenarioV1?.();
       window.scheduleAutoSave?.('lumi-scenario-step2-apply');
 
       closeScenarioStep1();
@@ -11495,7 +11519,7 @@ ${JSON.stringify(OUTPUT_SCHEMA_EXAMPLE,null,2)}
     schemaMutation:'explicit-apply-only',
     persistence:'after-explicit-apply',
     aiCallOnCompare:false,
-    diagnosisStateIntegration:false,
+    diagnosisStateIntegration:'rediagnose-after-explicit-apply',
     detachedEngine:true
   });
 
