@@ -11433,6 +11433,15 @@ ${JSON.stringify(OUTPUT_SCHEMA_EXAMPLE,null,2)}
   function normalizeLumiActionRouteV1(type,target,label){
     const t=String(type||'').trim().toLowerCase();
     const canonical=window.normalizeLumiScenarioTargetV1?.(target,label);
+
+    // The current backend prompt does not yet enforce canonical target enums.
+    // For review/input actions, the user-facing label expresses the intended item
+    // more reliably than a stale/free-form target. Resolve label first.
+    if(t==='review'||t==='input'){
+      const fromLabel=window.normalizeLumiScenarioTargetV1?.('',label);
+      if(fromLabel && LUMI_ACTION_ROUTE_V1[fromLabel])return LUMI_ACTION_ROUTE_V1[fromLabel];
+    }
+
     if(canonical && LUMI_ACTION_ROUTE_V1[canonical])return LUMI_ACTION_ROUTE_V1[canonical];
     if(t==='input')return LUMI_ACTION_ROUTE_V1.input;
     if(t==='review')return LUMI_ACTION_ROUTE_V1.review;
