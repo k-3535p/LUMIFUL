@@ -11438,10 +11438,28 @@ ${JSON.stringify(OUTPUT_SCHEMA_EXAMPLE,null,2)}
       if(String(label.textContent||'').includes('LUMIのAI診断'))label.textContent=hasCurrentDiagnosis?'LUMIのAI診断を見る':'LUMIのAI再診断をする';
     });
   }
+  function syncLumiScoreExpressionV1(score,hasCurrentDiagnosis){
+    const root=document.getElementById('kpi-lumi-expression');
+    const img=root?.querySelector('.lumi-score-expression-img');
+    if(!root||!img)return;
+    const n=Number(score);
+    const mood=!hasCurrentDiagnosis||!Number.isFinite(n)?'calm':n>=80?'bright':n>=65?'steady':n>=50?'thinking':'supportive';
+    const srcByMood={
+      calm:'./assets/lumi-spark.png',
+      bright:'./assets/lumi-spark-bright.png',
+      steady:'./assets/lumi-spark-steady.png',
+      thinking:'./assets/lumi-spark-thinking.png',
+      supportive:'./assets/lumi-spark-supportive.png'
+    };
+    root.dataset.lumiMood=mood;
+    const nextSrc=srcByMood[mood]||srcByMood.calm;
+    if(img.getAttribute('src')!==nextSrc)img.setAttribute('src',nextSrc);
+  }
   function syncScoreSurfaces(r=window.LUMIFUL_LAST_LUMI_RESULT){
     r=currentValidResult(r);
     const s=scoreState(r), has=!!r?.score;
     setText('kpi-score',String(Math.round(s.total100))); setText('kpi-base-score',String(Math.ceil(Number(s.engine90)||0))); setText('kpi-ai-adj',has?String(Math.round((Number(s.lumi10)||0)*100)/100):'未評価');
+    syncLumiScoreExpressionV1(s.total100,has);
     const labels=document.querySelectorAll('#kpi-score-breakdown span.uppercase'); if(labels[0])labels[0].textContent='ENGINE';if(labels[1])labels[1].textContent='LUMI';
     const badge=document.getElementById('kpi-score-badge');if(badge)badge.textContent=has?'LUMIFUL SCORE':'LUMI 未評価';
     setText('results-score',String(Math.round(s.total100))); setText('results-base-score',`${s.engine90} / 90`); setText('results-ai-adjustment',has?`${s.lumi10} / 10`:'未評価');
@@ -12728,32 +12746,6 @@ ${JSON.stringify(OUTPUT_SCHEMA_EXAMPLE,null,2)}
       }
     }
 
-    const lumiExpression = document.getElementById('kpi-lumi-expression');
-    if (lumiExpression) {
-      const scoreEl = document.getElementById('kpi-score');
-      const score = Number(String(scoreEl?.textContent || '').replace(/[^0-9.\-]/g, ''));
-      const lumiEl = document.getElementById('kpi-ai-adj');
-      const evaluated = lumiEl && !/未評価/.test(String(lumiEl.textContent || ''));
-      const mood = !Number.isFinite(score) || !evaluated ? 'calm'
-        : score >= 80 ? 'bright'
-        : score >= 65 ? 'steady'
-        : score >= 50 ? 'thinking'
-        : 'supportive';
-      lumiExpression.dataset.lumiMood = mood;
-
-      const expressionImg = lumiExpression.querySelector('.lumi-score-expression-img');
-      if (expressionImg) {
-        const srcByMood = {
-          calm: './assets/lumi-spark.png',
-          bright: './assets/lumi-spark-bright.png',
-          steady: './assets/lumi-spark-steady.png',
-          thinking: './assets/lumi-spark-thinking.png',
-          supportive: './assets/lumi-spark-supportive.png'
-        };
-        const nextSrc = srcByMood[mood] || srcByMood.calm;
-        if (expressionImg.getAttribute('src') !== nextSrc) expressionImg.setAttribute('src', nextSrc);
-      }
-    }
 
     const cumulative = document.getElementById('kpi-phase-badge');
     if (cumulative) {
