@@ -12088,14 +12088,12 @@ ${JSON.stringify(OUTPUT_SCHEMA_EXAMPLE,null,2)}
   function openPensionAmountScenarioStep10(suggestedValue){
     const currentModel=cloneScenarioModel();
     const candidates=getPensionAmountCandidatesV1(currentModel);
-
-    if(!candidates.length){
-      window.showToast?.('比較できる年金収入が見つからないため、現在の入力値は変更していません。','info');
-      return true;
-    }
-
+    const isUnset=!candidates.length;
     const suggested=Number(suggestedValue);
-    const hasSuggested=Number.isFinite(suggested)&&suggested>=0;
+    const hasSuggested=suggestedValue!==null && suggestedValue!==undefined && suggestedValue!=='' && Number.isFinite(suggested) && suggested>=0;
+    const currentAge=Math.max(18,Number(currentModel?.profile?.currentAge||18));
+    const targetAge=Math.max(currentAge,Number(currentModel?.profile?.targetAge||90));
+    const hasSpouse=!!currentModel?.profile?.hasSpouse;
 
     closeScenarioStep1();
     const modal=document.createElement('div');
@@ -12108,31 +12106,42 @@ ${JSON.stringify(OUTPUT_SCHEMA_EXAMPLE,null,2)}
       const monthly=Number(pensionMonthlyAmountV1(income).toFixed(2));
       return `<option value="${index}">${owner}｜${name}（${monthly}万円 / 月）</option>`;
     }).join('');
+    const ownerField=isUnset&&hasSpouse?`<label class="block text-xs font-bold text-[#536274] mt-4 mb-1">対象</label>
+        <select id="lumiPensionScenarioOwner" class="w-full px-3 py-2.5 rounded-[12px] border border-[#D9DCE2] bg-white text-sm font-bold text-[#253047]">
+          <option value="self">本人</option><option value="spouse">配偶者</option>
+        </select>`:'';
+    const startAgeField=isUnset?`<label class="block text-xs font-bold text-[#536274] mt-4 mb-1">年金開始年齢</label>
+        <div class="flex items-center gap-2">
+          <input id="lumiPensionScenarioStartAge" type="number" min="${Math.round(currentAge)}" max="${Math.round(targetAge)}" step="1" placeholder="例：65" class="w-full px-3 py-2.5 rounded-[12px] border border-[#D9DCE2] bg-white text-sm font-bold text-[#253047]">
+          <span class="text-xs text-[#6F7785] shrink-0">歳</span>
+        </div>`:'';
 
     modal.innerHTML=`<div class="w-full max-w-[720px] bg-[#FFFDF8] rounded-[28px] border border-[#ECEBE6] shadow-2xl p-5 sm:p-7">
       <div class="flex items-start justify-between gap-4">
         <div>
           <div class="text-xs font-bold text-[#8C5800]">LUMI Scenario</div>
-          <h3 class="text-xl sm:text-2xl font-extrabold text-[#253047] mt-1">年金額を変えた未来</h3>
-          <p class="text-xs sm:text-sm text-[#6F7785] mt-2">${candidates.length===1?'年金額を変えた場合の未来を比較できます。':'年金が複数あるため、比較する年金を選んでください。'}</p>
+          <h3 class="text-xl sm:text-2xl font-extrabold text-[#253047] mt-1">${isUnset?'年金を受け取る未来':'年金額を変えた未来'}</h3>
+          <p class="text-xs sm:text-sm text-[#6F7785] mt-2">${isUnset?'現在のプランには年金が設定されていません。受給見込み額と開始年齢を入力して、一時的に未来を比較できます。':(candidates.length===1?'年金額を変えた場合の未来を比較できます。':'年金が複数あるため、比較する年金を選んでください。')}</p>
         </div>
         <button type="button" id="lumiScenarioStep1Close" class="w-9 h-9 rounded-full border border-[#ECEBE6] text-[#6F7785] hover:bg-white" aria-label="閉じる"><i class="fa-solid fa-xmark"></i></button>
       </div>
 
       <div class="mt-5 rounded-2xl bg-white border border-[#ECEBE6] p-4">
-        <label class="block text-xs font-bold text-[#536274] mb-1">比較する年金</label>
+        ${isUnset?`<div class="text-xs text-[#6F7785]">現在のプラン</div>
+        <div class="text-lg font-extrabold text-[#253047] mt-1">年金未設定</div>
+        ${ownerField}${startAgeField}`:`<label class="block text-xs font-bold text-[#536274] mb-1">比較する年金</label>
         <select id="lumiPensionScenarioTarget" class="w-full px-3 py-2.5 rounded-[12px] border border-[#D9DCE2] bg-white text-sm font-bold text-[#253047]" ${candidates.length===1?'disabled':''}>
           ${options}
         </select>
-
         <div class="text-xs text-[#6F7785] mt-4">現在の年金額</div>
-        <div id="lumiPensionScenarioCurrent" class="text-lg font-extrabold text-[#253047] mt-1"></div>
+        <div id="lumiPensionScenarioCurrent" class="text-lg font-extrabold text-[#253047] mt-1"></div>`}
 
-        <label class="block text-xs font-bold text-[#536274] mt-4 mb-1">比較する年金額</label>
+        <label class="block text-xs font-bold text-[#536274] mt-4 mb-1">${isUnset?'受給見込み額':'比較する年金額'}</label>
         <div class="flex items-center gap-2">
-          <input id="lumiPensionScenarioValue" type="number" min="0" step="1" class="w-full px-3 py-2.5 rounded-[12px] border border-[#D9DCE2] bg-white text-sm font-bold text-[#253047]">
+          <input id="lumiPensionScenarioValue" type="number" min="0" step="1" ${isUnset?'placeholder="手取りの月額を入力"':''} class="w-full px-3 py-2.5 rounded-[12px] border border-[#D9DCE2] bg-white text-sm font-bold text-[#253047]">
           <span class="text-xs text-[#6F7785] shrink-0">万円 / 月</span>
         </div>
+        ${isUnset?'<div class="text-[11px] text-[#8A909A] mt-2">LUMIは未入力の年金額を推測しません。ご自身の受給見込みを入力してください。</div>':''}
         <div class="text-[11px] text-[#8A909A] mt-2">比較するだけでは現在のプランは変更されません。</div>
       </div>
 
@@ -12148,49 +12157,86 @@ ${JSON.stringify(OUTPUT_SCHEMA_EXAMPLE,null,2)}
     document.body.appendChild(modal);
     const select=modal.querySelector('#lumiPensionScenarioTarget');
     const valueInput=modal.querySelector('#lumiPensionScenarioValue');
+    const startAgeInput=modal.querySelector('#lumiPensionScenarioStartAge');
+    const ownerSelect=modal.querySelector('#lumiPensionScenarioOwner');
     const currentEl=modal.querySelector('#lumiPensionScenarioCurrent');
     let comparedModel=null;
 
     function selectedBinding(){
+      if(isUnset)return null;
       const index=Number(select?.value);
       return candidates.find(x=>x.index===index)||null;
     }
+    function resetComparison(){
+      comparedModel=null;
+      modal.querySelector('#lumiPensionScenarioCompare')?.classList.add('hidden');
+      modal.querySelector('#lumiScenarioStep1Apply')?.classList.add('hidden');
+    }
     function syncSelectedPension(){
+      if(isUnset){
+        if(valueInput)valueInput.value=hasSuggested?String(Number(suggested.toFixed(2))):'';
+        resetComparison();
+        return;
+      }
       const binding=selectedBinding();
       if(!binding)return;
       const monthly=Number(pensionMonthlyAmountV1(binding.income).toFixed(2));
       if(currentEl)currentEl.textContent=`${monthly}万円 / 月`;
       if(valueInput)valueInput.value=String(hasSuggested?Number(suggested.toFixed(2)):monthly);
-      comparedModel=null;
-      modal.querySelector('#lumiPensionScenarioCompare')?.classList.add('hidden');
-      modal.querySelector('#lumiScenarioStep1Apply')?.classList.add('hidden');
+      resetComparison();
     }
 
-    if(candidates.length===1)select.value=String(candidates[0].index);
+    if(!isUnset&&candidates.length===1)select.value=String(candidates[0].index);
     syncSelectedPension();
 
     modal.querySelector('#lumiScenarioStep1Close')?.addEventListener('click',closeScenarioStep1);
     modal.querySelector('#lumiScenarioStep1Back')?.addEventListener('click',closeScenarioStep1);
     select?.addEventListener('change',syncSelectedPension);
+    valueInput?.addEventListener('input',resetComparison);
+    startAgeInput?.addEventListener('input',resetComparison);
+    ownerSelect?.addEventListener('change',resetComparison);
 
     modal.querySelector('#lumiPensionScenarioTry')?.addEventListener('click',()=>{
-      const binding=selectedBinding();
-      if(!binding){
-        window.showToast?.('比較する年金を選んでください。','info');
-        return;
-      }
-      const proposedMonthly=Number(valueInput?.value);
+      const proposedRaw=String(valueInput?.value??'').trim();
+      const proposedMonthly=proposedRaw===''?NaN:Number(proposedRaw);
       if(!Number.isFinite(proposedMonthly)||proposedMonthly<0){
         window.showToast?.('比較する年金額を入力してください。','info');
         return;
       }
 
       comparedModel=window.cloneDataModelV2(currentModel);
-      const sourceFrequency=String(binding.income?.frequency||'monthly').toLowerCase();
-      comparedModel.incomes[binding.index].amount=sourceFrequency==='yearly'
-        ? proposedMonthly*12
-        : proposedMonthly;
-      comparedModel.incomes[binding.index].frequency=binding.income.frequency;
+      if(isUnset){
+        const startRaw=String(startAgeInput?.value??'').trim();
+        const proposedStartAge=startRaw===''?NaN:Math.round(Number(startRaw));
+        if(!Number.isFinite(proposedStartAge)||proposedStartAge<currentAge||proposedStartAge>targetAge){
+          window.showToast?.(`年金開始年齢は${Math.round(currentAge)}〜${Math.round(targetAge)}歳で入力してください。`,'info');
+          comparedModel=null;
+          return;
+        }
+        const owner=hasSpouse&&ownerSelect?.value==='spouse'?'spouse':'self';
+        comparedModel.incomes.push({
+          id:`income_pension_scenario_${Date.now()}`,
+          category:'pension',
+          name:owner==='spouse'?'配偶者年金':'本人年金',
+          owner,
+          amount:proposedMonthly,
+          frequency:'monthly',
+          startAge:proposedStartAge,
+          endAge:Math.max(targetAge,120)
+        });
+      }else{
+        const binding=selectedBinding();
+        if(!binding){
+          window.showToast?.('比較する年金を選んでください。','info');
+          comparedModel=null;
+          return;
+        }
+        const sourceFrequency=String(binding.income?.frequency||'monthly').toLowerCase();
+        comparedModel.incomes[binding.index].amount=sourceFrequency==='yearly'
+          ? proposedMonthly*12
+          : proposedMonthly;
+        comparedModel.incomes[binding.index].frequency=binding.income.frequency;
+      }
 
       const currentResult=runDetachedScenario(currentModel);
       const scenarioResult=runDetachedScenario(comparedModel);
@@ -12231,10 +12277,10 @@ ${JSON.stringify(OUTPUT_SCHEMA_EXAMPLE,null,2)}
       window.renderV2InputUI?.();
       window.recalculateAllFast?.();
       window.invalidateLumiDiagnosisAfterScenarioV1?.();
-      window.scheduleAutoSave?.('lumi-scenario-step10-pension-amount-apply');
+      window.scheduleAutoSave?.('lumi-scenario-step11-pension-unset-apply');
 
       closeScenarioStep1();
-      window.showToast?.('この年金額を現在のプランに反映しました。','success');
+      window.showToast?.(isUnset?'この年金条件を現在のプランに反映しました。':'この年金額を現在のプランに反映しました。','success');
     });
 
     modal.addEventListener('click',e=>{if(e.target===modal)closeScenarioStep1();});
