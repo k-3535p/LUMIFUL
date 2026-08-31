@@ -12701,11 +12701,12 @@ ${JSON.stringify(OUTPUT_SCHEMA_EXAMPLE,null,2)}
 
   window.refreshLumiDiagnosisV1=()=>renderReal({force:true,explicit:true});
 
-  window.handleLumiSuggestedActionV1=function(type){
-    const message=type==='scenario'
-      ?'この条件での比較機能は次のScenario工程で有効になります。現在の入力値は変更していません。'
-      :'現在の入力値は変更していません。Simulation Inputから内容を確認できます。';
-    window.showToast?.(message,'info');
+  window.handleLumiSuggestedActionV1=function(type,target,suggestedValue){
+    if(type!=='scenario'){
+      window.showToast?.('現在の入力値は変更していません。Simulation Inputから内容を確認できます。','info');
+      return;
+    }
+    window.openLumiScenarioDraftV1?.({type,target,suggestedValue});
   };
 
   window.LUMIFUL_LUMI_REAL_AI_V1=Object.freeze({
@@ -12768,6 +12769,270 @@ ${JSON.stringify(OUTPUT_SCHEMA_EXAMPLE,null,2)}
 
   document.addEventListener('DOMContentLoaded',()=>setTimeout(()=>syncScoreSurfaces({refreshContext:true}),0));
   setTimeout(()=>syncScoreSurfaces({refreshContext:true}),100);
+
+
+  /* ============================================================
+     PHASE 9-19 — LUMI SCENARIO FOUNDATION
+     ------------------------------------------------------------
+     This first step intentionally implements only:
+     - allowlisted Scenario intent normalization
+     - current-value resolution from the live Schema v2 model
+     - editable temporary Scenario Draft
+     - zero Schema mutation / zero persistence / zero AI call
+
+     Engine comparison is NOT guessed here. It will be connected
+     only after the existing Engine's exact data-in/data-out path
+     is verified against the current code.
+     ============================================================ */
+
+  const LUMI_SCENARIO_ALLOWED_V1=Object.freeze({
+    housing:Object.freeze({
+      label:'住宅費を変えた未来',
+      unit:'円 / 月',
+      inputMode:'numeric',
+      min:0,
+      max:10000000
+    }),
+    livingCost:Object.freeze({
+      label:'生活費を変えた未来',
+      unit:'円 / 月',
+      inputMode:'numeric',
+      min:0,
+      max:10000000
+    }),
+    incomeAmount:Object.freeze({
+      label:'収入を変えた未来',
+      unit:'円',
+      inputMode:'numeric',
+      min:0,
+      max:1000000000
+    }),
+    incomeEndAge:Object.freeze({
+      label:'働く期間を変えた未来',
+      unit:'歳まで',
+      inputMode:'numeric',
+      min:0,
+      max:120
+    }),
+    pensionAmount:Object.freeze({
+      label:'年金を変えた未来',
+      unit:'円',
+      inputMode:'numeric',
+      min:0,
+      max:1000000000
+    }),
+    expectedReturn:Object.freeze({
+      label:'運用条件を変えた未来',
+      unit:'%',
+      inputMode:'decimal',
+      min:-100,
+      max:100
+    })
+  });
+
+  let activeScenarioDraft=null;
+
+  function scenarioTargetKey(raw){
+    const t=String(raw||'').trim().toLowerCase();
+    if(!t)return '';
+    if(t.includes('housing')||t.includes('住宅'))return 'housing';
+    if(t.includes('living')||t.includes('expense')||t.includes('生活費'))return 'livingCost';
+    if((t.includes('income')||t.includes('収入'))&&(t.includes('end')||t.includes('age')||t.includes('期間')))return 'incomeEndAge';
+    if(t.includes('pension')||t.includes('年金'))return 'pensionAmount';
+    if(t.includes('return')||t.includes('yield')||t.includes('利回'))return 'expectedReturn';
+    if(t.includes('income')||t.includes('収入'))return 'incomeAmount';
+    return '';
+  }
+
+  function currentScenarioValue(key){
+    const m=window.getCurrentDataModelV2ForPersistence?.();
+    if(!m)return null;
+
+    if(key==='housing'){
+      const h=m.housing||{};
+      return Number(h.monthlyAmount||0);
+    }
+
+    if(key==='livingCost'){
+      const e=m.expenses||{};
+      return Number(
+        e.monthlyLivingCost ??
+        e.monthlyAmount ??
+        e.livingCost ??
+        0
+      );
+    }
+
+    const incomes=Array.isArray(m.income)?m.income:(Array.isArray(m.incomes)?m.incomes:[]);
+    if(key==='incomeAmount'){
+      const first=incomes[0]||{};
+      return Number(first.amount||0);
+    }
+    if(key==='incomeEndAge'){
+      const first=incomes[0]||{};
+      return Number(first.endAge||0);
+    }
+    if(key==='pensionAmount'){
+      const p=incomes.find(x=>String(x?.type||'').toLowerCase().includes('pension')||String(x?.label||'').includes('年金'));
+      return Number(p?.amount||0);
+    }
+
+    if(key==='expectedReturn'){
+      const assets=Array.isArray(m.assets)?m.assets:[];
+      const eligible=assets.filter(a=>{
+        const type=String(a?.type||'').toLowerCase();
+        return (type.includes('fund')||type.includes('bond')||String(a?.label||'').includes('投資信託')||String(a?.label||'').includes('債券'))
+          && Number.isFinite(Number(a?.expectedReturn));
+      });
+      if(!eligible.length)return 0;
+      const total=eligible.reduce((s,a)=>s+Math.max(0,Number(a?.value||0)),0);
+      if(total>0){
+        return eligible.reduce((s,a)=>s+Math.max(0,Number(a?.value||0))*Number(a?.expectedReturn||0),0)/total;
+      }
+      return Number(eligible[0]?.expectedReturn||0);
+    }
+    return null;
+  }
+
+  function normalizeSuggestedScenarioValue(value,current){
+    if(value===null||value===undefined||value==='')return current;
+    const n=Number(String(value).replace(/,/g,'').replace(/[^0-9.+-]/g,''));
+    return Number.isFinite(n)?n:current;
+  }
+
+  function buildScenarioDraft(action){
+    const key=scenarioTargetKey(action?.target);
+    if(!key||!LUMI_SCENARIO_ALLOWED_V1[key])return null;
+    const def=LUMI_SCENARIO_ALLOWED_V1[key];
+    const current=currentScenarioValue(key);
+    const suggested=normalizeSuggestedScenarioValue(action?.suggestedValue,current);
+    return {
+      version:1,
+      key,
+      type:'scenario',
+      sourceTarget:String(action?.target||''),
+      label:def.label,
+      unit:def.unit,
+      currentValue:Number.isFinite(Number(current))?Number(current):0,
+      draftValue:Number.isFinite(Number(suggested))?Number(suggested):(Number(current)||0),
+      createdAt:new Date().toISOString()
+    };
+  }
+
+  function scenarioValueText(value,key){
+    const n=Number(value||0);
+    if(key==='expectedReturn')return `${Math.round(n*100)/100}%`;
+    if(key==='incomeEndAge')return `${Math.round(n)}歳`;
+    return `${Math.round(n).toLocaleString('ja-JP')}円`;
+  }
+
+  function renderScenarioDraftModal(draft){
+    document.getElementById('lumi-scenario-modal-v1')?.remove();
+
+    const def=LUMI_SCENARIO_ALLOWED_V1[draft.key];
+    const overlay=document.createElement('div');
+    overlay.id='lumi-scenario-modal-v1';
+    overlay.className='fixed inset-0 z-[120] bg-black/35 flex items-end sm:items-center justify-center p-0 sm:p-5';
+    overlay.innerHTML=`<div class="bg-white w-full sm:max-w-lg rounded-t-[26px] sm:rounded-[26px] p-5 sm:p-6 shadow-2xl" role="dialog" aria-modal="true" aria-labelledby="lumi-scenario-title-v1">
+      <div class="flex items-start justify-between gap-4">
+        <div>
+          <div class="text-[11px] font-bold tracking-wide text-[#65B9E8]">LUMI SCENARIO</div>
+          <h2 id="lumi-scenario-title-v1" class="text-xl font-extrabold text-[#253047] mt-1">${esc(draft.label)}</h2>
+        </div>
+        <button type="button" id="lumi-scenario-close-v1" class="w-9 h-9 rounded-full bg-[#F5F5F2] text-[#6F7785]" aria-label="閉じる"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+
+      <div class="mt-5 bg-[#FAFAF7] rounded-2xl p-4">
+        <div class="text-xs font-bold text-[#8B93A1]">現在</div>
+        <div class="text-lg font-extrabold text-[#253047] mt-1">${esc(scenarioValueText(draft.currentValue,draft.key))}</div>
+      </div>
+
+      <div class="mt-4">
+        <label for="lumi-scenario-value-v1" class="block text-xs font-bold text-[#6F7785] mb-2">試す条件</label>
+        <div class="flex items-center gap-2">
+          <input id="lumi-scenario-value-v1" type="text" inputmode="${def.inputMode==='decimal'?'decimal':'numeric'}" value="${esc(draft.draftValue)}" class="w-full rounded-2xl border border-[#E2E4E8] px-4 py-3 text-lg font-bold text-[#253047] outline-none focus:border-[#65B9E8]">
+          <span class="text-xs font-bold text-[#8B93A1] whitespace-nowrap">${esc(def.unit)}</span>
+        </div>
+        <p class="text-[11px] text-[#8B93A1] leading-relaxed mt-2">ここで変更しても、現在のプラン・保存データは変更されません。</p>
+      </div>
+
+      <div class="mt-6 grid grid-cols-2 gap-3">
+        <button type="button" id="lumi-scenario-cancel-v1" class="px-4 py-3 rounded-2xl bg-[#F5F5F2] text-sm font-bold text-[#5B6472]">戻る</button>
+        <button type="button" id="lumi-scenario-try-v1" class="px-4 py-3 rounded-2xl btn-lumi-primary text-sm font-bold">この未来を試す</button>
+      </div>
+    </div>`;
+
+    document.body.appendChild(overlay);
+
+    const close=()=>overlay.remove();
+    overlay.querySelector('#lumi-scenario-close-v1')?.addEventListener('click',close);
+    overlay.querySelector('#lumi-scenario-cancel-v1')?.addEventListener('click',close);
+    overlay.addEventListener('click',e=>{if(e.target===overlay)close();});
+
+    overlay.querySelector('#lumi-scenario-try-v1')?.addEventListener('click',()=>{
+      const input=overlay.querySelector('#lumi-scenario-value-v1');
+      const raw=Number(String(input?.value||'').replace(/,/g,'').replace(/[^0-9.+-]/g,''));
+      if(!Number.isFinite(raw)){
+        window.showToast?.('試す条件を数字で入力してください。','warning');
+        return;
+      }
+      const value=Math.max(def.min,Math.min(def.max,raw));
+      activeScenarioDraft={...draft,draftValue:value};
+      window.LUMIFUL_ACTIVE_SCENARIO_DRAFT=JSON.parse(JSON.stringify(activeScenarioDraft));
+      close();
+      window.showToast?.('Scenario条件を一時保存しました。現在のプランは変更していません。','info');
+      window.renderLumiScenarioComparisonV1?.(activeScenarioDraft);
+    });
+  }
+
+  window.openLumiScenarioDraftV1=function(action){
+    const draft=buildScenarioDraft(action);
+    if(!draft){
+      window.showToast?.('この提案は現在のScenario対象外です。現在のプランは変更していません。','info');
+      return null;
+    }
+    activeScenarioDraft=draft;
+    window.LUMIFUL_ACTIVE_SCENARIO_DRAFT=JSON.parse(JSON.stringify(draft));
+    renderScenarioDraftModal(draft);
+    return draft;
+  };
+
+  window.renderLumiScenarioComparisonV1=function(draft){
+    // Deliberately not connected to Engine yet.
+    // No speculative calculation is performed in this foundation step.
+    const root=document.getElementById('lumiAdvisorView');
+    if(!root||!draft)return;
+    const existing=root.querySelector('#lumi-scenario-foundation-v1');
+    existing?.remove();
+    const panel=document.createElement('div');
+    panel.id='lumi-scenario-foundation-v1';
+    panel.className='bg-[#F7FBFE] rounded-[24px] p-5 sm:p-6 border border-[#DCEEF8] space-y-3';
+    panel.innerHTML=`<div class="p95-section-title"><i class="fa-solid fa-code-compare text-[#65B9E8]"></i>試す未来</div>
+      <div class="grid grid-cols-2 gap-3">
+        <div class="bg-white rounded-2xl p-4 border border-[#E8EEF2]">
+          <div class="text-[11px] font-bold text-[#8B93A1]">今の未来</div>
+          <div class="text-base font-extrabold text-[#253047] mt-1">${esc(scenarioValueText(draft.currentValue,draft.key))}</div>
+        </div>
+        <div class="bg-white rounded-2xl p-4 border border-[#E8EEF2]">
+          <div class="text-[11px] font-bold text-[#65B9E8]">別の未来</div>
+          <div class="text-base font-extrabold text-[#253047] mt-1">${esc(scenarioValueText(draft.draftValue,draft.key))}</div>
+        </div>
+      </div>
+      <p class="text-xs text-[#6F7785] leading-relaxed font-medium">Scenario Draftは一時状態です。現在のSchema v2・保存データ・LUMI診断結果には反映していません。</p>
+      <div class="text-[11px] text-[#8B93A1]">次工程で、既存Engineの正式な計算経路にこの一時データを接続して比較結果を表示します。</div>`;
+    const refresh=root.querySelector('#lumi-refresh-button')?.parentElement;
+    if(refresh)root.insertBefore(panel,refresh);
+    else root.appendChild(panel);
+  };
+
+  window.LUMIFUL_LUMI_SCENARIO_V1=Object.freeze({
+    status:'FOUNDATION',
+    allowedTargets:Object.keys(LUMI_SCENARIO_ALLOWED_V1),
+    schemaMutation:false,
+    persistence:false,
+    aiCall:false,
+    engineComparison:false
+  });
 
   window.LUMIFUL_PHASE9_18_DIAGNOSIS_STATE=Object.freeze({
     status:'IMPLEMENTED_CANDIDATE',
