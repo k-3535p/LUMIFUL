@@ -1997,6 +1997,240 @@
 }
 </style>
 
+
+<style id="phase9-16-runtime-clean-final">
+/* ============================================================
+   PHASE 9-16 — RUNTIME CLEAN FINAL
+   This is the only authoritative Phase 9-16 KPI layout layer.
+   Old Phase 9-16 CSS may remain in the file, but this block wins.
+   No JS render wrappers are used.
+   ============================================================ */
+
+#home-kpi-grid{
+  align-items:stretch !important;
+}
+
+#kpi-card-score,
+#kpi-card-yield,
+#kpi-card-cover,
+#kpi-card-assets{
+  position:relative !important;
+  min-width:0 !important;
+  overflow:hidden !important;
+}
+
+/* SCORE content must not become the positioning parent of the insight row. */
+#kpi-card-score .kpi-score-content{
+  position:static !important;
+}
+
+/* Keep standard content in normal flow. */
+#kpi-card-yield .kpi-standard-content,
+#kpi-card-cover .kpi-standard-content,
+#kpi-card-assets .kpi-standard-content{
+  display:block !important;
+  min-height:0 !important;
+  height:auto !important;
+  padding-bottom:0 !important;
+}
+
+/* ---------- PC / tablet ---------- */
+@media (min-width:640px){
+  /* Common visual height for the KPI row. */
+  #kpi-card-score,
+  #kpi-card-yield,
+  #kpi-card-cover,
+  #kpi-card-assets{
+    min-height:238px !important;
+  }
+
+  /* Four insights: exact same Y coordinate + height + inner width. */
+  #kpi-card-score #kpi-score-breakdown,
+  #kpi-card-yield #kpi-yield-insight,
+  #kpi-card-cover #kpi-cover-subtext,
+  #kpi-card-assets #kpi-final-status{
+    position:absolute !important;
+    top:auto !important;
+    bottom:58px !important;
+    left:20px !important;
+    right:20px !important;
+    width:auto !important;
+    max-width:none !important;
+    height:42px !important;
+    min-height:42px !important;
+    max-height:42px !important;
+    margin:0 !important;
+    transform:none !important;
+    box-sizing:border-box !important;
+  }
+
+  /* CTA remains on the same bottom baseline. */
+  #kpi-card-yield .kpi-card-cta,
+  #kpi-card-cover .kpi-card-cta,
+  #kpi-card-assets .kpi-card-cta,
+  #kpi-card-score > div:last-child{
+    position:absolute !important;
+    left:20px !important;
+    right:20px !important;
+    bottom:12px !important;
+    height:34px !important;
+    min-height:34px !important;
+    max-height:34px !important;
+    margin:0 !important;
+    padding-top:10px !important;
+    border-top:1px solid #ECEBE6 !important;
+    box-sizing:border-box !important;
+  }
+}
+
+/* ---------- Smartphone ---------- */
+@media (max-width:639px){
+  #home-kpi-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr)) !important;
+    gap:10px !important;
+  }
+
+  /* Strongly override all historical min-height rules. */
+  #home-kpi-grid > #kpi-card-score,
+  #home-kpi-grid > #kpi-card-yield,
+  #home-kpi-grid > #kpi-card-cover,
+  #home-kpi-grid > #kpi-card-assets{
+    height:238px !important;
+    min-height:238px !important;
+    max-height:238px !important;
+    padding:12px !important;
+    border-radius:20px !important;
+    display:block !important;
+  }
+
+  /* Main values stay compact and readable. */
+  #kpi-score{
+    font-size:32px !important;
+    line-height:1 !important;
+  }
+  #kpi-annual-yield,
+  #kpi-cover-rate,
+  #kpi-final-assets{
+    font-size:20px !important;
+    line-height:1.05 !important;
+    white-space:nowrap !important;
+  }
+
+  /* Four insight rows are exactly aligned. */
+  #kpi-card-score #kpi-score-breakdown,
+  #kpi-card-yield #kpi-yield-insight,
+  #kpi-card-cover #kpi-cover-subtext,
+  #kpi-card-assets #kpi-final-status{
+    position:absolute !important;
+    top:auto !important;
+    bottom:52px !important;
+    left:12px !important;
+    right:12px !important;
+    width:auto !important;
+    max-width:none !important;
+    height:40px !important;
+    min-height:40px !important;
+    max-height:40px !important;
+    margin:0 !important;
+    transform:none !important;
+    box-sizing:border-box !important;
+    overflow:hidden !important;
+  }
+
+  #kpi-card-score #kpi-score-breakdown{
+    padding:6px 5px !important;
+    border-radius:11px !important;
+  }
+
+  #kpi-yield-insight{
+    padding:6px 8px !important;
+    flex-direction:column !important;
+    align-items:flex-start !important;
+    justify-content:center !important;
+    gap:2px !important;
+    font-size:8.5px !important;
+    line-height:1.15 !important;
+  }
+  #kpi-yield-insight .kpi-insight-line + .kpi-insight-line{
+    padding-left:0 !important;
+  }
+  #kpi-yield-insight .kpi-insight-line + .kpi-insight-line::before{
+    content:none !important;
+  }
+
+  #kpi-cover-subtext,
+  #kpi-final-status{
+    padding:7px 8px !important;
+    font-size:8.5px !important;
+    line-height:1.2 !important;
+  }
+
+  /* CTA row on a shared baseline. */
+  #kpi-card-yield .kpi-card-cta,
+  #kpi-card-cover .kpi-card-cta,
+  #kpi-card-assets .kpi-card-cta,
+  #kpi-card-score > div:last-child{
+    position:absolute !important;
+    left:12px !important;
+    right:12px !important;
+    bottom:8px !important;
+    height:34px !important;
+    min-height:34px !important;
+    max-height:34px !important;
+    margin:0 !important;
+    padding-top:9px !important;
+    border-top:1px solid #ECEBE6 !important;
+    box-sizing:border-box !important;
+  }
+
+  #home-kpi-grid .kpi-card-cta-button,
+  #kpi-card-score > div:last-child button{
+    font-size:9px !important;
+    line-height:1.15 !important;
+  }
+
+  /* SP-only semantic: unevaluated LUMI is shown as an em dash. */
+  #kpi-ai-adj{
+    max-width:none !important;
+    overflow:visible !important;
+    text-overflow:clip !important;
+  }
+}
+
+@media (max-width:374px){
+  #home-kpi-grid{
+    gap:8px !important;
+  }
+  #home-kpi-grid > #kpi-card-score,
+  #home-kpi-grid > #kpi-card-yield,
+  #home-kpi-grid > #kpi-card-cover,
+  #home-kpi-grid > #kpi-card-assets{
+    height:228px !important;
+    min-height:228px !important;
+    max-height:228px !important;
+    padding:10px !important;
+  }
+
+  #kpi-card-score #kpi-score-breakdown,
+  #kpi-card-yield #kpi-yield-insight,
+  #kpi-card-cover #kpi-cover-subtext,
+  #kpi-card-assets #kpi-final-status{
+    left:10px !important;
+    right:10px !important;
+    bottom:50px !important;
+  }
+
+  #kpi-card-yield .kpi-card-cta,
+  #kpi-card-cover .kpi-card-cta,
+  #kpi-card-assets .kpi-card-cta,
+  #kpi-card-score > div:last-child{
+    left:10px !important;
+    right:10px !important;
+    bottom:7px !important;
+  }
+}
+</style>
+
 </head>
 <body class="bg-[#FAFAF7] text-[#253047] min-h-screen font-sans antialiased relative overflow-x-hidden">
 
@@ -12763,659 +12997,154 @@ ${JSON.stringify(OUTPUT_SCHEMA_EXAMPLE,null,2)}
 })();
 </script>
 
-<script>
-(function(){
-function n916(){
-const e=document.getElementById('kpi-base-score');if(e){const m=String(e.textContent||'').match(/-?\d+(?:\.\d+)?/);if(m){const n=Number(m[0]);if(Number.isFinite(n))e.textContent=String(Math.ceil(n));}}
-const l=document.getElementById('kpi-ai-adj');if(l){const r=String(l.textContent||'').trim();if(/未評価/.test(r)){l.textContent='—';l.setAttribute('aria-label','LUMI 未評価');}else l.removeAttribute('aria-label');}
-const c=document.getElementById('kpi-phase-badge');if(c){['rounded-full','rounded-xl','border','px-2','px-3','py-0.5','py-1','bg-[#FAFAF7]','border-[#ECEBE6]','bg-emerald-50','border-emerald-200'].forEach(x=>c.classList.remove(x));}}
-const p=window.updateScoreDashboardUI;if(typeof p==='function')window.updateScoreDashboardUI=function(){const r=p.apply(this,arguments);requestAnimationFrame(n916);return r;};
-const s=window.switchView;if(typeof s==='function')window.switchView=function(){const r=s.apply(this,arguments);if(arguments[0]==='dashboard')requestAnimationFrame(n916);return r;};
-document.addEventListener('DOMContentLoaded',n916);window.addEventListener('load',n916);setTimeout(n916,0);
-window.LUMIFUL_PHASE9_16_SP_HOME_LOCK=Object.freeze({lumiUnevaluatedDisplay:'—',engineIntegerOnly:true,engineLumiTypographyUnified:true,cumulativeReturnPlainText:true,kpiBottomAlignmentUnified:true});
-})();</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 <script>
-/* PHASE 9-16 FINAL — annual investment return as share of living expenses.
-   Presentation-only derived KPI; no Engine / Score / Schema mutation. */
 (function(){
+  function isSP(){ return window.matchMedia('(max-width:639px)').matches; }
+
+  function normalizeLumiUnevaluated(){
+    const el=document.getElementById('kpi-ai-adj');
+    if(!el || !isSP()) return;
+    const raw=String(el.textContent||'').trim();
+    if(raw==='未評価' || raw==='0 / 10'){
+      el.textContent='—';
+      el.setAttribute('aria-label','LUMI 未評価');
+    }
+  }
+
   function numberFromText(value){
-    const m = String(value ?? '').replace(/,/g,'').match(/-?\d+(?:\.\d+)?/);
+    const m=String(value??'').replace(/,/g,'').match(/-?\d+(?:\.\d+)?/);
     return m ? Number(m[0]) : NaN;
   }
 
-  function annualLivingExpenseFromModel(){
+  function annualLivingExpenseMan(){
     try{
-      const model = window.getCurrentDataModelV2ForPersistence?.() || window.activeDataModelV2 || null;
-      const living = model?.living || {};
-      const candidates = [
+      const model=window.getCurrentDataModelV2ForPersistence?.() || window.activeDataModelV2 || null;
+      const living=model?.living || {};
+      const monthly=[
         living.monthlyLivingExpense,
         living.monthlyExpense,
         living.livingExpenseMonthly,
         living.baseMonthlyExpense
       ];
-      for(const v of candidates){
-        const n = Number(v);
-        if(Number.isFinite(n) && n > 0) return n * 12;
+      for(const v of monthly){
+        const n=Number(v);
+        if(Number.isFinite(n) && n>0){
+          const annual=n*12;
+          return annual>10000 ? annual/10000 : annual;
+        }
       }
-      const annualCandidates = [living.annualLivingExpense, living.annualExpense];
-      for(const v of annualCandidates){
-        const n = Number(v);
-        if(Number.isFinite(n) && n > 0) return n;
+      const annuals=[living.annualLivingExpense,living.annualExpense];
+      for(const v of annuals){
+        const n=Number(v);
+        if(Number.isFinite(n) && n>0) return n>10000 ? n/10000 : n;
       }
     }catch(_){}
     return NaN;
   }
 
-  function renderLivingSupportRate(){
-    const out = document.getElementById('kpi-yield-living-support-rate');
-    const yieldEl = document.getElementById('kpi-annual-yield');
+  function refreshLivingSupport(){
+    const out=document.getElementById('kpi-yield-living-support-rate');
+    const yieldEl=document.getElementById('kpi-annual-yield');
     if(!out || !yieldEl) return;
-
-    const avgYieldMan = numberFromText(yieldEl.textContent);
-    const annualLivingRaw = annualLivingExpenseFromModel();
-
-    /* Model values may be stored as yen or 万円 depending on the historical field.
-       Normalize by comparing magnitude; this affects display only. */
-    let annualLivingMan = annualLivingRaw;
-    if(Number.isFinite(annualLivingMan) && annualLivingMan > 10000) annualLivingMan /= 10000;
-
-    if(!Number.isFinite(avgYieldMan) || !Number.isFinite(annualLivingMan) || annualLivingMan <= 0){
-      out.textContent = '—';
+    const y=numberFromText(yieldEl.textContent);
+    const living=annualLivingExpenseMan();
+    if(!Number.isFinite(y) || !Number.isFinite(living) || living<=0){
+      out.textContent='—';
       return;
     }
-    const pct = Math.max(0, (avgYieldMan / annualLivingMan) * 100);
-    const shown = pct >= 10 ? Math.round(pct) : Math.round(pct * 10) / 10;
-    out.textContent = `${shown.toLocaleString()}%`;
+    const pct=Math.max(0,(y/living)*100);
+    const shown=pct>=10 ? Math.round(pct) : Math.round(pct*10)/10;
+    out.textContent=shown.toLocaleString()+'%';
   }
 
-  const prevScore = window.updateScoreDashboardUI;
-  if(typeof prevScore === 'function'){
-    window.updateScoreDashboardUI = function(){
-      const r = prevScore.apply(this, arguments);
-      requestAnimationFrame(renderLivingSupportRate);
-      return r;
-    };
+  function syncLightweightKpiPresentation(){
+    normalizeLumiUnevaluated();
+    refreshLivingSupport();
   }
 
-  const prevRecalc = window.recalculateAllV2Dashboard;
-  if(typeof prevRecalc === 'function'){
-    window.recalculateAllV2Dashboard = function(){
-      const r = prevRecalc.apply(this, arguments);
-      requestAnimationFrame(renderLivingSupportRate);
-      return r;
-    };
-  }
+  document.addEventListener('DOMContentLoaded',function(){
+    syncLightweightKpiPresentation();
 
-  document.addEventListener('DOMContentLoaded', renderLivingSupportRate);
-  window.addEventListener('load', renderLivingSupportRate);
-  setTimeout(renderLivingSupportRate, 0);
-
-  window.LUMIFUL_PHASE9_16_SP_HOME_FINAL = Object.freeze({
-    livingSupportRate: true,
-    formula: 'average annual investment return / annual living expense',
-    scoreImpact: false,
-    engineImpact: false,
-    schemaMutation: false,
-    topRowBalanced: true
-  });
-})();
-</script>
-
-
-<script>
-/* PHASE 9-16 FINAL — reliable display-only living-support ratio. */
-(function(){
-  function readYieldMan(){
-    const el=document.getElementById('kpi-annual-yield');
-    const m=String(el?.textContent||'').replace(/,/g,'').match(/-?\d+(?:\.\d+)?/);
-    return m?Number(m[0]):NaN;
-  }
-  function currentAnnualLivingMan(){
-    try{
-      const model=window.getCurrentDataModelV2ForPersistence?.()||window.activeDataModelV2||null;
-      if(!model) return NaN;
-      const normalize=typeof window.normalizeAnnualAmountV2==='function'
-        ? window.normalizeAnnualAmountV2
-        : ((amount,frequency)=>frequency==='monthly'?Number(amount||0)*12:Number(amount||0));
-      const living=normalize(model?.living?.expense?.amount,model?.living?.expense?.frequency);
-      const housing=normalize(model?.living?.housing?.monthlyAmount,'monthly');
-      const total=Number(living||0)+Number(housing||0);
-      return Number.isFinite(total)&&total>0?total:NaN;
-    }catch(_){return NaN;}
-  }
-  function render916Ratio(){
-    const out=document.getElementById('kpi-yield-living-support-rate');
-    if(!out)return;
-    const y=readYieldMan(), living=currentAnnualLivingMan();
-    if(!Number.isFinite(y)||!Number.isFinite(living)||living<=0){out.textContent='—';return;}
-    const pct=Math.max(0,y/living*100);
-    const shown=pct>=10?Math.round(pct):Math.round(pct*10)/10;
-    out.textContent=`${shown.toLocaleString()}%`;
-  }
-  const recalc=window.recalculateAllV2Dashboard;
-  if(typeof recalc==='function') window.recalculateAllV2Dashboard=function(){const r=recalc.apply(this,arguments);requestAnimationFrame(render916Ratio);return r;};
-  const update=window.updateScoreDashboardUI;
-  if(typeof update==='function') window.updateScoreDashboardUI=function(){const r=update.apply(this,arguments);requestAnimationFrame(render916Ratio);return r;};
-  document.addEventListener('DOMContentLoaded',()=>requestAnimationFrame(render916Ratio));
-  window.addEventListener('load',()=>requestAnimationFrame(render916Ratio));
-  setTimeout(render916Ratio,0);
-  window.LUMIFUL_PHASE9_16_KPI_NAV_FINAL=Object.freeze({commonCardRhythm:true,cardNavigation:true,livingSupportRatio:true,engineImpact:false,scoreImpact:false,schemaMutation:false});
-})();
-</script>
-
-
-<script>
-window.LUMIFUL_PHASE9_16_KPI_ALIGNMENT_FINAL = Object.freeze({
-  scoreCardSpecial: true,
-  alignedCards: ['yield','cover','finalAssets'],
-  mainValueBaselineAligned: true,
-  supportBaselineAligned: true,
-  coverLegacySeparatorRemoved: true,
-  ctaNavigationPreserved: true,
-  engineImpact: false,
-  schemaImpact: false
-});
-</script>
-
-
-<script>
-window.LUMIFUL_PHASE9_16_KPI_INSIGHT_FINAL_V2 = Object.freeze({
-  scoreCardSpecial:true,
-  insightMovedLower:true,
-  sharedInsightDesign:true,
-  yieldTwoRowsOnSP:true,
-  coverLegacyLineRemoved:true,
-  ctaPreserved:true,
-  engineImpact:false,
-  schemaImpact:false,
-  scoreImpact:false
-});
-</script>
-
-
-<script>
-(function(){
-  function lockCoverInsightPresentation(){
-    const el=document.getElementById('kpi-cover-subtext');
-    if(!el) return;
-    el.classList.add('kpi-standard-support','kpi-insight-box','kpi-insight-warning');
-    let line=el.querySelector('.kpi-insight-line');
-    if(!line){
-      const nodes=Array.from(el.childNodes);
-      const wrap=document.createElement('div');
-      wrap.className='kpi-insight-line';
-      nodes.forEach(n=>wrap.appendChild(n));
-      el.appendChild(wrap);
-    }
-  }
-
-  const prevScore=window.updateScoreDashboardUI;
-  if(typeof prevScore==='function'){
-    window.updateScoreDashboardUI=function(){
-      const r=prevScore.apply(this,arguments);
-      requestAnimationFrame(lockCoverInsightPresentation);
-      return r;
-    };
-  }
-
-  const prevRecalc=window.recalculateAllV2Dashboard;
-  if(typeof prevRecalc==='function'){
-    window.recalculateAllV2Dashboard=function(){
-      const r=prevRecalc.apply(this,arguments);
-      requestAnimationFrame(lockCoverInsightPresentation);
-      return r;
-    };
-  }
-
-  document.addEventListener('DOMContentLoaded',lockCoverInsightPresentation);
-  window.addEventListener('load',lockCoverInsightPresentation);
-  setTimeout(lockCoverInsightPresentation,0);
-
-  window.LUMIFUL_PHASE9_16_KPI_INSIGHT_LOCK=Object.freeze({
-    scoreCardSpecial:true,
-    standardCardsAligned:true,
-    coverInsightAligned:true,
-    sharedInsightDesign:true,
-    ctaPreserved:true,
-    engineImpact:false,
-    schemaImpact:false,
-    scoreImpact:false
-  });
-})();
-</script>
-
-
-<script>
-(function(){
-  function lockStandardKpiBaseline(){
-    ['kpi-yield-insight','kpi-cover-subtext','kpi-final-status'].forEach(function(id){
-      const el=document.getElementById(id);
-      if(!el) return;
-      el.classList.add('kpi-standard-support','kpi-insight-box');
-      el.style.marginTop='0px';
-    });
-  }
-
-  const prevScore=window.updateScoreDashboardUI;
-  if(typeof prevScore==='function'){
-    window.updateScoreDashboardUI=function(){
-      const r=prevScore.apply(this,arguments);
-      requestAnimationFrame(lockStandardKpiBaseline);
-      return r;
-    };
-  }
-
-  const prevRecalc=window.recalculateAllV2Dashboard;
-  if(typeof prevRecalc==='function'){
-    window.recalculateAllV2Dashboard=function(){
-      const r=prevRecalc.apply(this,arguments);
-      requestAnimationFrame(lockStandardKpiBaseline);
-      return r;
-    };
-  }
-
-  document.addEventListener('DOMContentLoaded',lockStandardKpiBaseline);
-  window.addEventListener('load',lockStandardKpiBaseline);
-  setTimeout(lockStandardKpiBaseline,0);
-
-  window.LUMIFUL_PHASE9_16_KPI_BASELINE_LOCK=Object.freeze({
-    standardMetricRowsLocked:true,
-    insightTopBaselineLocked:true,
-    insightHeightLocked:true,
-    desktopInsightHeight:42,
-    smartphoneInsightHeight:40,
-    scoreCardIndependent:true,
-    engineImpact:false,
-    schemaImpact:false,
-    scoreImpact:false
-  });
-})();
-</script>
-
-
-<script>
-window.LUMIFUL_PHASE9_16_FINAL_COVER_BASELINE_FIX = Object.freeze({
-  scope:'cover insight presentation only',
-  desktopOffsetPx:-10,
-  smartphoneOffsetPx:-6,
-  engineImpact:false,
-  schemaImpact:false,
-  scoreImpact:false,
-  authImpact:false,
-  navigationImpact:false
-});
-</script>
-
-
-<script>
-(function(){
-  function enforceTrueKpiAlignment(){
-    const coverValue=document.getElementById('kpi-cover-rate');
-    if(coverValue){
-      /* Runtime historically replaces className; restore structural role. */
-      coverValue.classList.add('kpi-standard-value');
+    const lumi=document.getElementById('kpi-ai-adj');
+    if(lumi){
+      new MutationObserver(normalizeLumiUnevaluated)
+        .observe(lumi,{childList:true,characterData:true,subtree:true});
     }
 
-    const coverInsight=document.getElementById('kpi-cover-subtext');
-    if(coverInsight){
-      coverInsight.classList.add('kpi-standard-support','kpi-insight-box','kpi-insight-warning');
-      coverInsight.style.marginTop='0px';
-      coverInsight.style.top='auto';
-      coverInsight.style.position='static';
-
-      if(!coverInsight.querySelector('.kpi-insight-line')){
-        const nodes=Array.from(coverInsight.childNodes);
-        const line=document.createElement('div');
-        line.className='kpi-insight-line';
-        nodes.forEach(n=>line.appendChild(n));
-        coverInsight.appendChild(line);
-      }
+    const annual=document.getElementById('kpi-annual-yield');
+    if(annual){
+      new MutationObserver(refreshLivingSupport)
+        .observe(annual,{childList:true,characterData:true,subtree:true});
     }
-
-    const yieldInsight=document.getElementById('kpi-yield-insight');
-    const finalInsight=document.getElementById('kpi-final-status');
-    [yieldInsight,finalInsight].forEach(function(el){
-      if(!el) return;
-      el.classList.add('kpi-standard-support','kpi-insight-box');
-      el.style.marginTop='0px';
-    });
-  }
-
-  /* Apply after the full render chain, because recalculateAllV2Dashboard
-     rewrites cover classes before updateScoreDashboardUI completes. */
-  const previousUpdateScore=window.updateScoreDashboardUI;
-  if(typeof previousUpdateScore==='function'){
-    window.updateScoreDashboardUI=function(){
-      const result=previousUpdateScore.apply(this,arguments);
-      requestAnimationFrame(enforceTrueKpiAlignment);
-      return result;
-    };
-  }
-
-  const previousRecalc=window.recalculateAllV2Dashboard;
-  if(typeof previousRecalc==='function'){
-    window.recalculateAllV2Dashboard=function(){
-      const result=previousRecalc.apply(this,arguments);
-      requestAnimationFrame(function(){
-        enforceTrueKpiAlignment();
-        requestAnimationFrame(enforceTrueKpiAlignment);
-      });
-      return result;
-    };
-  }
-
-  document.addEventListener('DOMContentLoaded',enforceTrueKpiAlignment);
-  window.addEventListener('load',enforceTrueKpiAlignment);
-  setTimeout(enforceTrueKpiAlignment,0);
-
-  window.LUMIFUL_PHASE9_16_TRUE_ALIGNMENT_LOCK=Object.freeze({
-    rootCause:'runtime className overwrite on kpi-cover-rate',
-    coverValueStructuralClassRestored:true,
-    offsetWorkaroundRemoved:true,
-    threeInsightRowsIdentical:true,
-    engineImpact:false,
-    schemaImpact:false,
-    scoreImpact:false,
-    authImpact:false
   });
-})();
-</script>
 
+  window.addEventListener('resize',normalizeLumiUnevaluated,{passive:true});
 
-<script>
-(function(){
-  function enforceAbsoluteInsightAlignment(){
-    const ids=['kpi-yield-insight','kpi-cover-subtext','kpi-final-status'];
-    ids.forEach(function(id){
-      const el=document.getElementById(id);
-      if(!el) return;
-      el.classList.add('kpi-standard-support','kpi-insight-box');
-      el.style.margin='0px';
-      el.style.top='auto';
-      el.style.transform='none';
-    });
-
-    const cover=document.getElementById('kpi-cover-subtext');
-    if(cover){
-      cover.classList.add('kpi-insight-warning');
-      if(!cover.querySelector('.kpi-insight-line')){
-        const nodes=Array.from(cover.childNodes);
-        const line=document.createElement('div');
-        line.className='kpi-insight-line';
-        nodes.forEach(n=>line.appendChild(n));
-        cover.appendChild(line);
-      }
-    }
-  }
-
-  const prevUpdate=window.updateScoreDashboardUI;
-  if(typeof prevUpdate==='function'){
-    window.updateScoreDashboardUI=function(){
-      const r=prevUpdate.apply(this,arguments);
-      requestAnimationFrame(enforceAbsoluteInsightAlignment);
-      return r;
-    };
-  }
-
-  const prevRecalc=window.recalculateAllV2Dashboard;
-  if(typeof prevRecalc==='function'){
-    window.recalculateAllV2Dashboard=function(){
-      const r=prevRecalc.apply(this,arguments);
-      requestAnimationFrame(enforceAbsoluteInsightAlignment);
-      return r;
-    };
-  }
-
-  document.addEventListener('DOMContentLoaded',enforceAbsoluteInsightAlignment);
-  window.addEventListener('load',enforceAbsoluteInsightAlignment);
-  setTimeout(enforceAbsoluteInsightAlignment,0);
-
-  window.LUMIFUL_PHASE9_16_ABSOLUTE_INSIGHT_ALIGNMENT_LOCK=Object.freeze({
-    method:'shared absolute bottom anchor',
-    desktopBottomPx:70,
-    smartphoneBottomPx:54,
-    exactSharedY:true,
-    scoreCardUntouched:true,
-    engineImpact:false,
-    schemaImpact:false,
-    scoreImpact:false,
-    authImpact:false
-  });
-})();
-</script>
-
-
-<script>
-(function(){
-  function enforceFourCardInsightAlignment(){
-    const score=document.getElementById('kpi-score-breakdown');
-    if(score){
-      score.style.margin='0px';
-      score.style.top='auto';
-      score.style.transform='none';
-    }
-
-    ['kpi-yield-insight','kpi-cover-subtext','kpi-final-status'].forEach(function(id){
-      const el=document.getElementById(id);
-      if(!el) return;
-      el.style.margin='0px';
-      el.style.top='auto';
-      el.style.transform='none';
-    });
-  }
-
-  const prevScoreUpdate=window.updateScoreDashboardUI;
-  if(typeof prevScoreUpdate==='function'){
-    window.updateScoreDashboardUI=function(){
-      const result=prevScoreUpdate.apply(this,arguments);
-      requestAnimationFrame(enforceFourCardInsightAlignment);
-      return result;
-    };
-  }
-
-  const prevRecalc=window.recalculateAllV2Dashboard;
-  if(typeof prevRecalc==='function'){
-    window.recalculateAllV2Dashboard=function(){
-      const result=prevRecalc.apply(this,arguments);
-      requestAnimationFrame(enforceFourCardInsightAlignment);
-      return result;
-    };
-  }
-
-  document.addEventListener('DOMContentLoaded',enforceFourCardInsightAlignment);
-  window.addEventListener('load',enforceFourCardInsightAlignment);
-  setTimeout(enforceFourCardInsightAlignment,0);
-
-  window.LUMIFUL_PHASE9_16_FOUR_CARD_ALIGNMENT_LOCK=Object.freeze({
-    scoreCardSpecial:true,
-    fourInsightYAligned:true,
-    fourInsightHeightAligned:true,
-    scoreDividerPreserved:true,
-    desktopBottomPx:70,
-    desktopHeightPx:42,
-    smartphoneBottomPx:54,
-    smartphoneHeightPx:40,
-    engineImpact:false,
-    schemaImpact:false,
-    scoreImpact:false,
-    authImpact:false
-  });
-})();
-</script>
-
-
-<script>
-window.LUMIFUL_PHASE9_16_GITHUB_CANDIDATE = Object.freeze({
-  fourInsightYAligned:true,
-  fourInsightHeightAligned:true,
-  scoreInsightOverflowFixed:true,
-  scoreInsightWidthMode:'auto with shared insets',
-  scoreDividerPreserved:true,
-  desktopInsightHeight:42,
-  smartphoneInsightHeight:40,
-  smartphoneOverflowGuard:true,
-  engineImpact:false,
-  schemaImpact:false,
-  scoreImpact:false,
-  authImpact:false,
-  navigationImpact:false
-});
-</script>
-
-
-<script>
-(function(){
-  function installFinalKpiStructure(){
-    const scoreCard=document.getElementById('kpi-card-score');
-    const yieldCard=document.getElementById('kpi-card-yield');
-    const coverCard=document.getElementById('kpi-card-cover');
-    const assetsCard=document.getElementById('kpi-card-assets');
-    if(!scoreCard || !yieldCard || !coverCard || !assetsCard) return;
-
-    const moves=[
-      [scoreCard, document.getElementById('kpi-score-breakdown')],
-      [yieldCard, document.getElementById('kpi-yield-insight')],
-      [coverCard, document.getElementById('kpi-cover-subtext')],
-      [assetsCard, document.getElementById('kpi-final-status')]
-    ];
-
-    moves.forEach(function(pair){
-      const card=pair[0], insight=pair[1];
-      if(!insight) return;
-      const cta = card.id==='kpi-card-score'
-        ? card.lastElementChild
-        : card.querySelector('.kpi-card-cta');
-      if(cta && insight.parentElement!==card){
-        card.insertBefore(insight, cta);
-      }
-    });
-
-    /* Hook the SCORE CTA without changing its contents/classes. */
-    const scoreCta=scoreCard.lastElementChild;
-    if(scoreCta && scoreCta.id!=='kpi-score-breakdown'){
-      scoreCta.classList.add('p916-kpi-cta');
-    }
-  }
-
-  /* Run before normal interaction, and once more after load in case
-     historical renderers touched the KPI DOM during startup. */
-  document.addEventListener('DOMContentLoaded',installFinalKpiStructure);
-  window.addEventListener('load',installFinalKpiStructure);
-  setTimeout(installFinalKpiStructure,0);
-
-  window.LUMIFUL_PHASE9_16_VISUAL_LOCK_FINAL=Object.freeze({
-    base:'LUMIFUL_PHASE9_16_GITHUB_CANDIDATE',
-    method:'shared card grid + direct insight row',
-    desktopContentTrackPx:142,
-    desktopInsightHeightPx:42,
-    smartphoneContentTrackPx:104,
-    smartphoneInsightHeightPx:40,
-    fourInsightYAligned:true,
-    reducedMetricInsightWhitespace:true,
-    scoreDividerPreserved:true,
-    ctaPreserved:true,
-    engineImpact:false,
-    schemaImpact:false,
-    scoreImpact:false,
-    authImpact:false
-  });
-})();
-</script>
-
-
-<script>
-(function(){
-  function finalizeStandardInsightWidths(){
-    ['kpi-yield-insight','kpi-cover-subtext','kpi-final-status'].forEach(function(id){
-      const el=document.getElementById(id);
-      if(!el) return;
-      el.style.left='auto';
-      el.style.right='auto';
-      el.style.width='auto';
-      el.style.maxWidth='100%';
-      el.style.minWidth='0';
-      el.style.marginLeft='0';
-      el.style.marginRight='0';
-      el.style.boxSizing='border-box';
-    });
-
-    window.LUMIFUL_PHASE9_16_COMPLETED_LOCK=Object.freeze({
-      threeStandardInsightOverflowFixed:true,
-      insightYAlignmentPreserved:true,
-      insightHeightPreserved:true,
-      scoreCardUntouched:true,
-      ctaPreserved:true,
-      desktopPreserved:true,
-      smartphonePreserved:true,
-      engineImpact:false,
-      schemaImpact:false,
-      scoreImpact:false,
-      authImpact:false
-    });
-  }
-
-  document.addEventListener('DOMContentLoaded',finalizeStandardInsightWidths);
-  window.addEventListener('load',finalizeStandardInsightWidths);
-  setTimeout(finalizeStandardInsightWidths,0);
-})();
-</script>
-
-
-<script>
-(function(){
-  function normalizeSpLumiUnevaluated(){
-    if(!window.matchMedia('(max-width:639px)').matches) return;
-    const el=document.getElementById('kpi-ai-adj');
-    if(!el) return;
-    const raw=String(el.textContent||'').trim();
-    if(raw==='未評価' || raw==='0' || raw==='0.0' || raw==='0 / 10'){
-      el.textContent='—';
-      el.setAttribute('data-lumi-unevaluated','true');
-      el.setAttribute('aria-label','LUMI 未評価');
-    }else if(raw==='—'){
-      el.setAttribute('data-lumi-unevaluated','true');
-      el.setAttribute('aria-label','LUMI 未評価');
-    }else{
-      el.removeAttribute('data-lumi-unevaluated');
-      el.removeAttribute('aria-label');
-    }
-  }
-
-  const prevScoreUpdate=window.updateScoreDashboardUI;
-  if(typeof prevScoreUpdate==='function'){
-    window.updateScoreDashboardUI=function(){
-      const r=prevScoreUpdate.apply(this,arguments);
-      requestAnimationFrame(normalizeSpLumiUnevaluated);
-      return r;
-    };
-  }
-
-  const prevRecalc=window.recalculateAllV2Dashboard;
-  if(typeof prevRecalc==='function'){
-    window.recalculateAllV2Dashboard=function(){
-      const r=prevRecalc.apply(this,arguments);
-      requestAnimationFrame(normalizeSpLumiUnevaluated);
-      return r;
-    };
-  }
-
-  document.addEventListener('DOMContentLoaded',normalizeSpLumiUnevaluated);
-  window.addEventListener('load',normalizeSpLumiUnevaluated);
-  window.addEventListener('resize',normalizeSpLumiUnevaluated,{passive:true});
-  setTimeout(normalizeSpLumiUnevaluated,0);
-
-  window.LUMIFUL_PHASE9_16_SP_FINAL_LOCK=Object.freeze({
-    desktopUntouched:true,
-    spCardHeightPx:230,
-    spInsightHeightPx:40,
-    narrowSpCardHeightPx:222,
+  window.LUMIFUL_PHASE9_16_RUNTIME_CLEAN_FINAL=Object.freeze({
+    removedAccumulatedRuntimeWrappers:true,
+    renderFunctionWrappersAdded:0,
+    spCompactCards:true,
     lumiUnevaluatedDisplay:'—',
-    ctaPreserved:true,
-    engineImpact:false,
-    schemaImpact:false,
-    scoreImpact:false,
-    authImpact:false
+    lightweightObservers:2
   });
 })();
 </script>
