@@ -11830,10 +11830,10 @@ ${JSON.stringify(OUTPUT_SCHEMA_EXAMPLE,null,2)}
       openUnsupportedLumiActionSafeV1(label||'想定利回りの前提条件を確認',target); return;
     }
     if(route===LUMI_ACTION_ROUTE_V1.housing_cost){
-      openHousingScenarioStep4(target,suggestedValue); return;
+      openHousingScenarioStep4('housing_cost',suggestedValue); return;
     }
     if(route===LUMI_ACTION_ROUTE_V1.living_cost){
-      openLivingCostScenarioStep7(target,suggestedValue); return;
+      openLivingCostScenarioStep7('living_cost',suggestedValue); return;
     }
     if(route===LUMI_ACTION_ROUTE_V1.review || route===LUMI_ACTION_ROUTE_V1.input){
       window.switchView?.('simulationInput'); return;
