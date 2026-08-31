@@ -11426,10 +11426,8 @@ ${JSON.stringify(OUTPUT_SCHEMA_EXAMPLE,null,2)}
 
   function normalizeLumiActionRouteV1(type,target,label){
     const t=String(type||'').trim().toLowerCase();
-    if(t==='scenario'){
-      const canonical=window.normalizeLumiScenarioTargetV1?.(target,label);
-      if(canonical && LUMI_ACTION_ROUTE_V1[canonical])return LUMI_ACTION_ROUTE_V1[canonical];
-    }
+    const canonical=window.normalizeLumiScenarioTargetV1?.(target,label);
+    if(canonical && LUMI_ACTION_ROUTE_V1[canonical])return LUMI_ACTION_ROUTE_V1[canonical];
     if(t==='input')return LUMI_ACTION_ROUTE_V1.input;
     if(t==='review')return LUMI_ACTION_ROUTE_V1.review;
     return LUMI_ACTION_ROUTE_V1.unsupported;
@@ -11710,7 +11708,7 @@ ${JSON.stringify(OUTPUT_SCHEMA_EXAMPLE,null,2)}
   window.handleLumiSuggestedActionV1=function(type,target,suggestedValue,label){
     const route=normalizeLumiActionRouteV1(type,target,label);
     if(route===LUMI_ACTION_ROUTE_V1.expected_return){
-      if(type==='scenario' && openExpectedReturnScenarioStep1(target,suggestedValue))return;
+      if(openExpectedReturnScenarioStep1(target,suggestedValue))return;
       openUnsupportedLumiActionSafeV1(label||'想定利回りの前提条件を確認',target); return;
     }
     if(route===LUMI_ACTION_ROUTE_V1.housing_cost){
@@ -11731,7 +11729,7 @@ ${JSON.stringify(OUTPUT_SCHEMA_EXAMPLE,null,2)}
     detachedEngine:true
   });
 
-  window.LUMIFUL_SCENARIO_ACTION_ROUTER_V1=Object.freeze({status:'CONTRACT_ROUTER',contract:'LUMIFUL_SCENARIO_ACTION_CONTRACT_V1',supported:['expected_return','housing_cost'],recognizedFuture:['living_cost','income_amount','income_end_age','pension_amount'],unknownFallback:'validator_downgrade_to_review',schemaGuessing:false,silentMutation:false});
+  window.LUMIFUL_SCENARIO_ACTION_ROUTER_V1=Object.freeze({status:'CONTRACT_ROUTER_ROUTING_FIX',contract:'LUMIFUL_SCENARIO_ACTION_CONTRACT_V1',supported:['expected_return','housing_cost'],recognizedFuture:['living_cost','income_amount','income_end_age','pension_amount'],unknownFallback:'validator_downgrade_to_review',schemaGuessing:false,silentMutation:false});
   window.LUMIFUL_LUMI_REAL_AI_V1=Object.freeze({diagnose,render:renderReal,region:REGION,functionName:FUNCTION_NAME,providerSecretInClient:false,schemaMutation:false,engineMutation:false});
   const previousSwitch=window.switchView;if(typeof previousSwitch==='function')window.switchView=function(name){window.LUMIFUL_ACTIVE_VIEW=name;const r=previousSwitch.apply(this,arguments);const lumiRoot=document.getElementById('lumiAdvisorView');if(lumiRoot&&name!=='lumiAdvisor')lumiRoot.classList.add('hidden');if(name==='lumiAdvisor')setTimeout(()=>renderReal(),40);else if(name==='dashboard'||name==='simulationResults')setTimeout(()=>syncScoreSurfaces(),0);return r;};
   const previousScore=window.updateScoreDashboardUI;if(typeof previousScore==='function')window.updateScoreDashboardUI=function(){const r=previousScore.apply(this,arguments);syncScoreSurfaces();return r;};
