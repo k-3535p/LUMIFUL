@@ -11344,7 +11344,141 @@ ${JSON.stringify(OUTPUT_SCHEMA_EXAMPLE,null,2)}
   function renderError(e){const root=document.getElementById('lumiAdvisorView');if(!root)return;const msg=String(e?.code||'').includes('not-found')?'LUMIのバックエンドがまだデプロイされていません。':(e?.message||'LUMIとの通信に失敗しました。');root.innerHTML=`<div class="space-y-1 mb-1"><h1 class="text-2xl sm:text-3xl font-extrabold text-[#253047] tracking-tight flex items-center gap-2"><i class="fa-solid fa-sun text-[#FFC83D]"></i><span>LUMIの診断</span></h1></div><div class="bg-white rounded-[24px] p-6 border border-[#ECEBE6]"><div class="font-bold text-[#253047]">LUMIは現在接続待ちです</div><p class="text-sm text-[#6F7785] mt-2">${esc(msg)}</p><p class="text-xs text-[#8B93A1] mt-3">Engineの計算結果や入力データには影響ありません。</p></div>`;}
   async function renderReal(options={}){renderLoading();try{renderResult(await diagnose(options));}catch(e){console.warn('[LUMIFUL] LUMI AI unavailable',e);renderError(e);syncScoreSurfaces(null);}}
   window.refreshLumiDiagnosisV1=()=>renderReal({force:true});
-  window.handleLumiSuggestedActionV1=function(type){const text=type==='scenario'?'この条件での比較機能は次のScenario工程で有効になります。現在の入力値は変更していません。':'現在の入力値は変更していません。Simulation Inputから内容を確認できます。';window.showToast?.(text,'info');};
+
+  /* PHASE 9 SCENARIO STEP 1 — expectedReturn only */
+  function isExpectedReturnScenarioTarget(target){
+    const t=String(target||'').trim().toLowerCase();
+    return t==='expectedreturn'||t==='expected_return'||t.includes('return')||t.includes('yield')||t.includes('利回');
+  }
+
+  function getSingleReturnBearingAsset(model){
+    const eligible=(Array.isArray(model?.assets)?model.assets:[])
+      .map((asset,index)=>({asset,index}))
+      .filter(({asset})=>
+        asset?.assetClass==='simulation' &&
+        (asset?.category==='investment_fund'||asset?.category==='bond') &&
+        Number.isFinite(Number(asset?.expectedReturn))
+      );
+    return eligible.length===1?eligible[0]:null;
+  }
+
+  function cloneScenarioModel(){
+    return window.cloneDataModelV2(
+      window.normalizeDataModelV2(window.ensureV2InputModel())
+    );
+  }
+
+  function runDetachedScenario(model){
+    const simulation=window.calculateSimulationV2(model);
+    const adapted=window.adaptSimulationV2ForDashboard(simulation);
+    const rows=Array.isArray(adapted?.rows)?adapted.rows:[];
+    const finalRow=rows.length?rows[rows.length-1]:null;
+    return {
+      rows,
+      finalAssets:Number(finalRow?.availableAssets??finalRow?.financialAsset??0),
+      shortageAge:(rows.find(r=>Number(r?.shortage||0)>0)||{}).age||null,
+      totalReturn:rows.reduce((sum,r)=>sum+Number(r?.annualYield??r?.investmentReturn??0),0)
+    };
+  }
+
+  function scenarioMoney(v){return `${Math.round(Number(v)||0).toLocaleString()} 万円`;}
+  function closeScenarioStep1(){document.getElementById('lumiScenarioStep1Modal')?.remove();}
+
+  function openExpectedReturnScenarioStep1(target,suggestedValue){
+    if(!isExpectedReturnScenarioTarget(target)){
+      window.showToast?.('この提案はまだ比較機能の対象外です。現在の入力値は変更していません。','info');
+      return false;
+    }
+
+    const currentModel=cloneScenarioModel();
+    const binding=getSingleReturnBearingAsset(currentModel);
+    if(!binding){
+      window.showToast?.('比較対象の運用資産を1つに特定できないため、現在の入力値は変更していません。','info');
+      return false;
+    }
+
+    const proposed=Number(suggestedValue);
+    if(!Number.isFinite(proposed)){
+      window.showToast?.('比較する利回りを特定できないため、現在の入力値は変更していません。','info');
+      return false;
+    }
+
+    const currentReturn=Number(binding.asset.expectedReturn||0);
+    const scenarioModel=window.cloneDataModelV2(currentModel);
+    scenarioModel.assets[binding.index].expectedReturn=proposed;
+
+    const currentResult=runDetachedScenario(currentModel);
+    const scenarioResult=runDetachedScenario(scenarioModel);
+
+    closeScenarioStep1();
+    const modal=document.createElement('div');
+    modal.id='lumiScenarioStep1Modal';
+    modal.className='fixed inset-0 z-[120] bg-[#253047]/35 backdrop-blur-[2px] flex items-center justify-center p-4';
+    modal.innerHTML=`<div class="w-full max-w-[720px] bg-[#FFFDF8] rounded-[28px] border border-[#ECEBE6] shadow-2xl p-5 sm:p-7">
+      <div class="flex items-start justify-between gap-4">
+        <div>
+          <div class="text-xs font-bold text-[#8C5800]">LUMI Scenario</div>
+          <h3 class="text-xl sm:text-2xl font-extrabold text-[#253047] mt-1">想定利回りを変えた未来</h3>
+          <p class="text-xs sm:text-sm text-[#6F7785] mt-2">現在のプランは変更せず、一時的な条件だけで比較しています。</p>
+        </div>
+        <button type="button" id="lumiScenarioStep1Close" class="w-9 h-9 rounded-full border border-[#ECEBE6] text-[#6F7785] hover:bg-white" aria-label="閉じる"><i class="fa-solid fa-xmark"></i></button>
+      </div>
+      <div class="mt-5 rounded-2xl bg-white border border-[#ECEBE6] p-4">
+        <div class="text-xs text-[#6F7785]">${esc(binding.asset.name||'運用資産')}</div>
+        <div class="flex items-center gap-3 mt-1">
+          <span class="text-lg font-extrabold text-[#253047]">${currentReturn}%</span>
+          <i class="fa-solid fa-arrow-right text-[#B2B6BE]"></i>
+          <span class="text-lg font-extrabold text-[#8C5800]">${proposed}%</span>
+        </div>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mt-4">
+        <div class="rounded-2xl bg-white border border-[#ECEBE6] p-4">
+          <div class="text-[11px] text-[#6F7785]">最終利用可能資産</div>
+          <div class="text-sm font-bold text-[#253047] mt-2">${scenarioMoney(currentResult.finalAssets)}</div>
+          <div class="text-sm font-extrabold text-[#8C5800] mt-1">→ ${scenarioMoney(scenarioResult.finalAssets)}</div>
+        </div>
+        <div class="rounded-2xl bg-white border border-[#ECEBE6] p-4">
+          <div class="text-[11px] text-[#6F7785]">資金不足</div>
+          <div class="text-sm font-bold text-[#253047] mt-2">${currentResult.shortageAge?`${currentResult.shortageAge}歳`:'なし'}</div>
+          <div class="text-sm font-extrabold text-[#8C5800] mt-1">→ ${scenarioResult.shortageAge?`${scenarioResult.shortageAge}歳`:'なし'}</div>
+        </div>
+        <div class="rounded-2xl bg-white border border-[#ECEBE6] p-4">
+          <div class="text-[11px] text-[#6F7785]">累計運用益</div>
+          <div class="text-sm font-bold text-[#253047] mt-2">${scenarioMoney(currentResult.totalReturn)}</div>
+          <div class="text-sm font-extrabold text-[#8C5800] mt-1">→ ${scenarioMoney(scenarioResult.totalReturn)}</div>
+        </div>
+      </div>
+      <div class="mt-5 rounded-2xl bg-[#F7FBFE] border border-[#DCEEF8] px-4 py-3 text-xs text-[#536274] leading-relaxed">
+        この比較ではLUMIの再診断は行っていません。現在の条件と一時的な条件を、同じ数値シミュレーションで比較しています。
+      </div>
+      <div class="flex justify-end mt-5">
+        <button type="button" id="lumiScenarioStep1Back" class="px-5 py-2.5 rounded-[14px] bg-[#253047] text-white text-xs font-bold">元のプランに戻る</button>
+      </div>
+    </div>`;
+
+    document.body.appendChild(modal);
+    modal.querySelector('#lumiScenarioStep1Close')?.addEventListener('click',closeScenarioStep1);
+    modal.querySelector('#lumiScenarioStep1Back')?.addEventListener('click',closeScenarioStep1);
+    modal.addEventListener('click',e=>{if(e.target===modal)closeScenarioStep1();});
+    return true;
+  }
+
+  window.handleLumiSuggestedActionV1=function(type,target,suggestedValue){
+    if(type==='scenario'){
+      openExpectedReturnScenarioStep1(target,suggestedValue);
+      return;
+    }
+    window.showToast?.('現在の入力値は変更していません。Simulation Inputから内容を確認できます。','info');
+  };
+
+  window.LUMIFUL_PHASE9_SCENARIO_STEP1=Object.freeze({
+    status:'EXPECTED_RETURN_ONLY',
+    schemaMutation:false,
+    persistence:false,
+    aiCallOnCompare:false,
+    detachedEngine:true
+  });
+
   window.LUMIFUL_LUMI_REAL_AI_V1=Object.freeze({diagnose,render:renderReal,region:REGION,functionName:FUNCTION_NAME,providerSecretInClient:false,schemaMutation:false,engineMutation:false});
   const previousSwitch=window.switchView;if(typeof previousSwitch==='function')window.switchView=function(name){window.LUMIFUL_ACTIVE_VIEW=name;const r=previousSwitch.apply(this,arguments);const lumiRoot=document.getElementById('lumiAdvisorView');if(lumiRoot&&name!=='lumiAdvisor')lumiRoot.classList.add('hidden');if(name==='lumiAdvisor')setTimeout(()=>renderReal(),40);else if(name==='dashboard'||name==='simulationResults')setTimeout(()=>syncScoreSurfaces(),0);return r;};
   const previousScore=window.updateScoreDashboardUI;if(typeof previousScore==='function')window.updateScoreDashboardUI=function(){const r=previousScore.apply(this,arguments);syncScoreSurfaces();return r;};
