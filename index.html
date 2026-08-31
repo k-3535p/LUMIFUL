@@ -918,6 +918,992 @@
 }
 </style>
 
+<style id="phase9-16-sp-home-lock">
+@media (max-width:639px){
+#home-kpi-grid>div{display:flex!important;flex-direction:column!important}
+#home-kpi-grid>div:nth-child(2)>div:last-child,#home-kpi-grid>div:nth-child(3)>div:last-child,#home-kpi-grid>div:nth-child(4)>div:last-child{margin-top:auto!important;min-height:34px!important;display:flex!important;align-items:center!important;padding-top:8px!important}
+#kpi-phase-badge{display:inline!important;padding:0!important;margin:0!important;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;white-space:nowrap!important}
+#kpi-base-score,#kpi-ai-adj{min-width:18px!important;text-align:center!important;font-size:10px!important;line-height:1!important;font-weight:800!important}
+}</style>
+
+<style id="phase9-16-sp-home-final-balance">
+/* Final balance pass: HOME KPI cards only */
+@media (max-width:639px){
+  /* Keep top-row cards visually balanced with the LUMIFUL SCORE card. */
+  #home-kpi-grid > div:nth-child(1),
+  #home-kpi-grid > div:nth-child(2){
+    min-height: 176px !important;
+  }
+
+  #kpi-yield-living-support{
+    display:flex !important;
+    align-items:baseline !important;
+    gap:3px !important;
+    min-height:18px !important;
+    margin-top:7px !important;
+    font-size:9px !important;
+    line-height:1.2 !important;
+    font-weight:600 !important;
+    color:#657083 !important;
+    white-space:nowrap !important;
+  }
+  #kpi-yield-living-support-rate{
+    font-size:11px !important;
+    font-weight:800 !important;
+    color:#334155 !important;
+    letter-spacing:-0.01em !important;
+  }
+
+  /* Preserve the shared lower information baseline from 9-16. */
+  #home-kpi-grid > div:nth-child(2) > div:last-child{
+    margin-top:auto !important;
+    min-height:34px !important;
+    padding-top:8px !important;
+  }
+}
+@media (max-width:374px){
+  #home-kpi-grid > div:nth-child(1),
+  #home-kpi-grid > div:nth-child(2){
+    min-height:170px !important;
+  }
+  #kpi-yield-living-support{
+    font-size:8.5px !important;
+    gap:2px !important;
+  }
+  #kpi-yield-living-support-rate{
+    font-size:10px !important;
+  }
+}
+</style>
+
+
+<style id="phase9-16-kpi-navigation-final">
+/* PHASE 9-16 FINAL — common KPI information architecture + navigation */
+#home-kpi-grid .kpi-standard-card{min-width:0;}
+#home-kpi-grid .kpi-standard-content{display:flex;flex:1;min-height:0;flex-direction:column;}
+#home-kpi-grid .kpi-standard-metric{padding-top:12px;}
+#home-kpi-grid .kpi-standard-support{min-height:18px;}
+#home-kpi-grid .kpi-card-cta{
+  margin-top:auto;padding-top:12px;border-top:1px solid #ECEBE6;
+  height:38px;display:flex;align-items:flex-start;justify-content:flex-end;flex:none;
+}
+#home-kpi-grid .kpi-card-cta-button{
+  display:flex;align-items:center;justify-content:flex-end;gap:4px;min-width:0;
+  padding:0;border:0;background:transparent;color:#253047;cursor:pointer;
+  font-size:10px;font-weight:700;line-height:1.2;white-space:nowrap;transition:color .2s ease;
+}
+#home-kpi-grid .kpi-card-cta-button:hover{color:#8C5800;}
+#home-kpi-grid .kpi-card-cta-button i{font-size:9px;flex:none;}
+#kpi-phase-badge{padding:0!important;margin:0!important;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;white-space:normal!important;overflow:visible!important;text-overflow:clip!important;}
+
+@media (min-width:640px){
+  #home-kpi-grid .kpi-standard-content{justify-content:flex-start;}
+  #home-kpi-grid .kpi-standard-metric{padding-top:18px;}
+  #home-kpi-grid .kpi-card-cta-button{font-size:12px;}
+  #home-kpi-grid .kpi-card-cta-button i{font-size:10px;}
+}
+
+@media (max-width:639px){
+  /* Non-score cards follow the same rhythm as SCORE: header, metric/support, flexible space, CTA. */
+  #home-kpi-grid .kpi-standard-card{min-height:176px!important;}
+  #home-kpi-grid .kpi-standard-content{justify-content:flex-start;}
+  #home-kpi-grid .kpi-standard-metric{padding-top:8px!important;}
+  #home-kpi-grid .kpi-standard-support{margin-top:6px!important;min-height:auto!important;}
+  #home-kpi-grid .kpi-card-cta{height:36px!important;margin-top:auto!important;padding-top:9px!important;}
+  #home-kpi-grid .kpi-card-cta-button{font-size:9px!important;gap:3px!important;letter-spacing:-.015em;}
+  #home-kpi-grid .kpi-card-cta-button i{font-size:8px!important;}
+  #kpi-card-cover .kpi-card-cta-button{font-size:8.2px!important;}
+  #kpi-yield-living-support{display:block!important;min-height:0!important;margin-top:0!important;font-size:9px!important;white-space:normal!important;}
+  #kpi-yield-living-support-rate{font-size:10px!important;}
+  #kpi-phase-badge{font-size:8.5px!important;line-height:1.2!important;margin-top:3px!important;}
+  #kpi-cover-subtext,#kpi-final-status{height:auto!important;min-height:0!important;padding-top:0!important;border-top:0!important;overflow:visible!important;}
+}
+@media (max-width:374px){
+  #home-kpi-grid .kpi-standard-card{min-height:170px!important;}
+  #home-kpi-grid .kpi-card-cta-button{font-size:8.3px!important;}
+  #kpi-card-cover .kpi-card-cta-button{font-size:7.5px!important;letter-spacing:-.03em;}
+}
+</style>
+
+
+<style id="phase9-16-kpi-three-card-alignment">
+/* ============================================================
+   PHASE 9-16 — Standard KPI alignment
+   SCORE remains intentionally special.
+   Align only Yield / Cover / Final Assets.
+   ============================================================ */
+#home-kpi-grid .kpi-standard-card .kpi-standard-header{
+  min-height:40px;
+  margin-bottom:0 !important;
+}
+#home-kpi-grid .kpi-standard-card .kpi-standard-metric{
+  padding-top:12px !important;
+  display:grid !important;
+  grid-template-rows:18px 38px minmax(34px,auto);
+  align-content:start;
+}
+#home-kpi-grid .kpi-standard-card .kpi-standard-eyebrow{
+  height:18px;
+  margin:0 !important;
+  display:flex;
+  align-items:flex-start;
+  line-height:1.15;
+}
+#home-kpi-grid .kpi-standard-card .kpi-standard-eyebrow-placeholder{
+  visibility:hidden;
+}
+#home-kpi-grid .kpi-standard-card .kpi-standard-value{
+  height:38px;
+  margin:0 !important;
+  display:flex;
+  align-items:center;
+  font-size:24px !important;
+  line-height:1 !important;
+  font-weight:800 !important;
+  letter-spacing:-0.025em !important;
+  white-space:nowrap;
+}
+#home-kpi-grid .kpi-standard-card .kpi-standard-support{
+  margin-top:6px !important;
+  min-height:34px !important;
+  align-self:start;
+}
+
+/* Remove legacy separator styling from cover-card support.
+   CTA separator at the bottom remains intact. */
+#kpi-cover-subtext{
+  border:0 !important;
+  border-top:0 !important;
+  box-shadow:none !important;
+  padding-top:0 !important;
+}
+
+/* Keep the three standard cards' CTA baseline identical. */
+#home-kpi-grid .kpi-standard-card .kpi-card-cta{
+  margin-top:auto !important;
+  height:38px !important;
+  padding-top:12px !important;
+}
+
+/* SP: preserve 2-column layout without wrapping the main values. */
+@media (max-width:639px){
+  #home-kpi-grid .kpi-standard-card .kpi-standard-header{
+    min-height:34px;
+  }
+  #home-kpi-grid .kpi-standard-card .kpi-standard-metric{
+    padding-top:9px !important;
+    grid-template-rows:16px 32px minmax(32px,auto);
+  }
+  #home-kpi-grid .kpi-standard-card .kpi-standard-eyebrow{
+    height:16px;
+    font-size:8.5px !important;
+    line-height:1.1 !important;
+  }
+  #home-kpi-grid .kpi-standard-card .kpi-standard-value{
+    height:32px;
+    font-size:20px !important;
+    line-height:1 !important;
+  }
+  #home-kpi-grid .kpi-standard-card .kpi-standard-support{
+    min-height:32px !important;
+    margin-top:5px !important;
+    font-size:8.5px !important;
+    line-height:1.25 !important;
+  }
+  #home-kpi-grid .kpi-standard-card .kpi-card-cta{
+    height:36px !important;
+    padding-top:10px !important;
+  }
+}
+@media (max-width:374px){
+  #home-kpi-grid .kpi-standard-card .kpi-standard-value{
+    font-size:18px !important;
+  }
+  #home-kpi-grid .kpi-standard-card .kpi-standard-eyebrow,
+  #home-kpi-grid .kpi-standard-card .kpi-standard-support{
+    font-size:8px !important;
+  }
+}
+</style>
+
+
+<style id="phase9-16-kpi-insight-final-v2">
+/* SCORE remains intentionally special. */
+#home-kpi-grid .kpi-standard-card .kpi-standard-metric{
+  display:flex !important;
+  flex-direction:column !important;
+  align-items:stretch !important;
+  padding-top:12px !important;
+}
+#home-kpi-grid .kpi-standard-card .kpi-standard-value{
+  margin-top:0 !important;
+}
+
+/* Common insight component: placed lower to create deliberate breathing room. */
+#home-kpi-grid .kpi-standard-card .kpi-insight-box{
+  margin-top:24px !important;
+  min-height:42px !important;
+  padding:9px 11px !important;
+  border-radius:10px !important;
+  display:flex !important;
+  align-items:center !important;
+  gap:10px !important;
+  font-size:10px !important;
+  line-height:1.25 !important;
+  font-weight:700 !important;
+  box-sizing:border-box !important;
+  border-top-width:1px !important;
+}
+#home-kpi-grid .kpi-standard-card .kpi-insight-line{
+  min-width:0;
+  white-space:nowrap;
+}
+
+/* Same component, semantic tone only. */
+#home-kpi-grid .kpi-insight-neutral{
+  background:rgba(248,245,236,.92) !important;
+  border:1px solid rgba(225,212,177,.90) !important;
+  color:#6D5A2D !important;
+}
+#home-kpi-grid .kpi-insight-warning{
+  background:rgba(255,241,243,.92) !important;
+  border:1px solid rgba(248,194,202,.88) !important;
+  color:#D85A72 !important;
+}
+#home-kpi-grid .kpi-insight-info{
+  background:rgba(244,248,252,.96) !important;
+  border:1px solid rgba(211,222,234,.95) !important;
+  color:#64748B !important;
+}
+
+/* Yield carries two related facts. */
+#kpi-yield-insight{
+  justify-content:flex-start !important;
+}
+#kpi-yield-insight .kpi-insight-line + .kpi-insight-line{
+  position:relative;
+  padding-left:11px;
+}
+#kpi-yield-insight .kpi-insight-line + .kpi-insight-line::before{
+  content:"";
+  position:absolute;
+  left:0;
+  top:15%;
+  bottom:15%;
+  width:1px;
+  background:rgba(109,90,45,.22);
+}
+
+/* Strip all legacy pill styling from cumulative return. */
+#kpi-phase-badge{
+  display:inline !important;
+  padding:0 !important;
+  margin:0 !important;
+  border:0 !important;
+  border-radius:0 !important;
+  background:transparent !important;
+  box-shadow:none !important;
+  color:inherit !important;
+  font:inherit !important;
+}
+
+/* Ensure there is no accidental legacy horizontal line on cover support. */
+#kpi-cover-subtext{
+  box-shadow:none !important;
+}
+
+/* Keep CTA as the bottom anchor. */
+#home-kpi-grid .kpi-standard-card .kpi-card-cta{
+  margin-top:auto !important;
+}
+
+/* Smartphone layout */
+@media (max-width:639px){
+  #home-kpi-grid .kpi-standard-card .kpi-standard-metric{
+    padding-top:9px !important;
+  }
+  #home-kpi-grid .kpi-standard-card .kpi-insight-box{
+    margin-top:18px !important;
+    min-height:40px !important;
+    padding:7px 8px !important;
+    border-radius:9px !important;
+    font-size:8.5px !important;
+    line-height:1.25 !important;
+    gap:4px !important;
+  }
+  /* Two rows on SP prevents crowding and keeps card rhythm clean. */
+  #kpi-yield-insight{
+    flex-direction:column !important;
+    align-items:flex-start !important;
+    justify-content:center !important;
+    gap:3px !important;
+  }
+  #kpi-yield-insight .kpi-insight-line{
+    width:100%;
+  }
+  #kpi-yield-insight .kpi-insight-line + .kpi-insight-line{
+    padding-left:0 !important;
+  }
+  #kpi-yield-insight .kpi-insight-line + .kpi-insight-line::before{
+    content:none !important;
+  }
+  #home-kpi-grid .kpi-standard-card .kpi-card-cta{
+    margin-top:14px !important;
+  }
+}
+@media (max-width:374px){
+  #home-kpi-grid .kpi-standard-card .kpi-insight-box{
+    margin-top:16px !important;
+    padding:6px 7px !important;
+    font-size:8px !important;
+  }
+}
+</style>
+
+
+<style id="phase9-16-cover-insight-lock">
+/* PHASE 9-16 final alignment lock:
+   keep the cover-rate insight on the exact same visual row as the other KPI insights. */
+#home-kpi-grid .kpi-standard-card #kpi-cover-subtext.kpi-insight-box{
+  margin-top:24px !important;
+  min-height:42px !important;
+  padding:9px 11px !important;
+  border-radius:10px !important;
+  display:flex !important;
+  align-items:center !important;
+  gap:6px !important;
+  background:rgba(255,241,243,.92) !important;
+  border:1px solid rgba(248,194,202,.88) !important;
+  color:#D85A72 !important;
+  font-size:10px !important;
+  line-height:1.25 !important;
+  font-weight:700 !important;
+  box-shadow:none !important;
+  transform:none !important;
+}
+#home-kpi-grid .kpi-standard-card #kpi-cover-subtext .kpi-insight-line{
+  display:flex !important;
+  align-items:center !important;
+  min-height:20px !important;
+  margin:0 !important;
+  padding:0 !important;
+  white-space:nowrap !important;
+}
+/* If historical code injects an icon, keep it inline instead of affecting vertical rhythm. */
+#home-kpi-grid .kpi-standard-card #kpi-cover-subtext svg,
+#home-kpi-grid .kpi-standard-card #kpi-cover-subtext i{
+  flex:0 0 auto !important;
+  margin:0 4px 0 0 !important;
+}
+
+@media (max-width:639px){
+  #home-kpi-grid .kpi-standard-card #kpi-cover-subtext.kpi-insight-box{
+    margin-top:18px !important;
+    min-height:40px !important;
+    padding:7px 8px !important;
+    border-radius:9px !important;
+    font-size:8.5px !important;
+    line-height:1.25 !important;
+  }
+}
+@media (max-width:374px){
+  #home-kpi-grid .kpi-standard-card #kpi-cover-subtext.kpi-insight-box{
+    margin-top:16px !important;
+    padding:6px 7px !important;
+    font-size:8px !important;
+  }
+}
+</style>
+
+
+<style id="phase9-16-kpi-baseline-lock">
+/* ============================================================
+   PHASE 9-16 — FINAL BASELINE LOCK
+   Three standard KPI cards use identical row geometry.
+   SCORE card remains intentionally independent.
+   ============================================================ */
+
+/* Fixed internal rows:
+   1) eyebrow/subtitle
+   2) main value
+   3) breathing space
+   4) insight box
+*/
+#home-kpi-grid .kpi-standard-card .kpi-standard-metric{
+  display:grid !important;
+  grid-template-rows:18px 38px 24px 42px !important;
+  row-gap:0 !important;
+  align-content:start !important;
+  padding-top:12px !important;
+}
+
+#home-kpi-grid .kpi-standard-card .kpi-standard-eyebrow{
+  grid-row:1 !important;
+  height:18px !important;
+  margin:0 !important;
+}
+
+#home-kpi-grid .kpi-standard-card .kpi-standard-value{
+  grid-row:2 !important;
+  height:38px !important;
+  margin:0 !important;
+  align-self:center !important;
+}
+
+/* The insight row is hard-locked to the same vertical baseline and height. */
+#home-kpi-grid .kpi-standard-card .kpi-insight-box{
+  grid-row:4 !important;
+  margin:0 !important;
+  height:42px !important;
+  min-height:42px !important;
+  max-height:42px !important;
+  align-self:stretch !important;
+  box-sizing:border-box !important;
+}
+
+/* Yield / Cover / Assets explicitly share identical geometry. */
+#kpi-yield-insight,
+#kpi-cover-subtext,
+#kpi-final-status{
+  margin-top:0 !important;
+  height:42px !important;
+  min-height:42px !important;
+  max-height:42px !important;
+}
+
+/* Historical cover styles must never alter the shared row. */
+#kpi-cover-subtext{
+  padding-top:9px !important;
+  padding-bottom:9px !important;
+  border-top-width:1px !important;
+  transform:none !important;
+}
+
+/* SP uses the same geometry at a compact scale. */
+@media (max-width:639px){
+  #home-kpi-grid .kpi-standard-card .kpi-standard-metric{
+    grid-template-rows:16px 32px 18px 40px !important;
+    padding-top:9px !important;
+  }
+  #home-kpi-grid .kpi-standard-card .kpi-standard-eyebrow{
+    height:16px !important;
+  }
+  #home-kpi-grid .kpi-standard-card .kpi-standard-value{
+    height:32px !important;
+  }
+  #home-kpi-grid .kpi-standard-card .kpi-insight-box,
+  #kpi-yield-insight,
+  #kpi-cover-subtext,
+  #kpi-final-status{
+    height:40px !important;
+    min-height:40px !important;
+    max-height:40px !important;
+    margin:0 !important;
+  }
+  #kpi-cover-subtext{
+    padding-top:7px !important;
+    padding-bottom:7px !important;
+  }
+}
+</style>
+
+
+<style id="phase9-16-final-cover-baseline-fix">
+/* FINAL MICRO FIX — cover insight only */
+#home-kpi-grid .kpi-standard-card #kpi-cover-subtext.kpi-insight-box{
+  position:relative !important;
+  top:-10px !important;
+}
+
+/* Preserve the shared CTA baseline after the visual lift. */
+#home-kpi-grid .kpi-standard-card #kpi-cover-subtext.kpi-insight-box + .kpi-card-cta{
+  margin-top:auto !important;
+}
+
+@media (max-width:639px){
+  #home-kpi-grid .kpi-standard-card #kpi-cover-subtext.kpi-insight-box{
+    top:-6px !important;
+  }
+}
+</style>
+
+
+<style id="phase9-16-true-alignment-lock">
+/* Structural alignment: no transform/offset workaround. */
+#home-kpi-grid #kpi-cover-subtext.kpi-insight-box{
+  position:static !important;
+  top:auto !important;
+  transform:none !important;
+}
+
+/* All three standard main values occupy the exact same grid row. */
+#home-kpi-grid .kpi-standard-card #kpi-cover-rate.kpi-standard-value{
+  grid-row:2 !important;
+  height:38px !important;
+  margin:0 !important;
+  display:flex !important;
+  align-items:center !important;
+  align-self:center !important;
+  font-size:24px !important;
+  line-height:1 !important;
+  font-weight:800 !important;
+  letter-spacing:-0.025em !important;
+  white-space:nowrap !important;
+}
+
+/* All three insights occupy row 4 with identical dimensions. */
+#home-kpi-grid .kpi-standard-card #kpi-yield-insight,
+#home-kpi-grid .kpi-standard-card #kpi-cover-subtext,
+#home-kpi-grid .kpi-standard-card #kpi-final-status{
+  grid-row:4 !important;
+  position:static !important;
+  top:auto !important;
+  margin:0 !important;
+  height:42px !important;
+  min-height:42px !important;
+  max-height:42px !important;
+  align-self:stretch !important;
+}
+
+@media (max-width:639px){
+  #home-kpi-grid .kpi-standard-card #kpi-cover-rate.kpi-standard-value{
+    height:32px !important;
+    font-size:20px !important;
+  }
+  #home-kpi-grid .kpi-standard-card #kpi-yield-insight,
+  #home-kpi-grid .kpi-standard-card #kpi-cover-subtext,
+  #home-kpi-grid .kpi-standard-card #kpi-final-status{
+    height:40px !important;
+    min-height:40px !important;
+    max-height:40px !important;
+  }
+}
+@media (max-width:374px){
+  #home-kpi-grid .kpi-standard-card #kpi-cover-rate.kpi-standard-value{
+    font-size:18px !important;
+  }
+}
+</style>
+
+
+<style id="phase9-16-absolute-insight-alignment-lock">
+/* ============================================================
+   PHASE 9-16 — ABSOLUTE INSIGHT ALIGNMENT LOCK
+   Final presentation-only solution:
+   anchor the three standard insight boxes to the same card-bottom
+   baseline instead of inheriting historical metric-flow differences.
+   SCORE card remains untouched.
+   ============================================================ */
+
+#home-kpi-grid .kpi-standard-card{
+  position:relative !important;
+}
+
+/* Reserve vertical room so metric content can never collide with insight. */
+#home-kpi-grid .kpi-standard-card .kpi-standard-content{
+  padding-bottom:64px !important;
+}
+
+/* Exact shared Y anchor for the three insight boxes. */
+#home-kpi-grid .kpi-standard-card #kpi-yield-insight,
+#home-kpi-grid .kpi-standard-card #kpi-cover-subtext,
+#home-kpi-grid .kpi-standard-card #kpi-final-status{
+  position:absolute !important;
+  top:auto !important;
+  bottom:70px !important;
+  left:20px !important;
+  right:20px !important;
+
+  margin:0 !important;
+  transform:none !important;
+
+  height:42px !important;
+  min-height:42px !important;
+  max-height:42px !important;
+
+  box-sizing:border-box !important;
+  z-index:2 !important;
+}
+
+/* Neutralize historical cover-only overrides completely. */
+#home-kpi-grid .kpi-standard-card #kpi-cover-subtext.kpi-insight-box{
+  position:absolute !important;
+  top:auto !important;
+  bottom:70px !important;
+  margin:0 !important;
+  transform:none !important;
+}
+
+/* CTA remains independently bottom-anchored by the existing flex layout. */
+#home-kpi-grid .kpi-standard-card .kpi-card-cta{
+  position:relative !important;
+  z-index:3 !important;
+}
+
+/* Smartphone: same concept, compact card padding / CTA height. */
+@media (max-width:639px){
+  #home-kpi-grid .kpi-standard-card .kpi-standard-content{
+    padding-bottom:58px !important;
+  }
+
+  #home-kpi-grid .kpi-standard-card #kpi-yield-insight,
+  #home-kpi-grid .kpi-standard-card #kpi-cover-subtext,
+  #home-kpi-grid .kpi-standard-card #kpi-final-status,
+  #home-kpi-grid .kpi-standard-card #kpi-cover-subtext.kpi-insight-box{
+    bottom:54px !important;
+    left:12px !important;
+    right:12px !important;
+    height:40px !important;
+    min-height:40px !important;
+    max-height:40px !important;
+  }
+}
+</style>
+
+
+<style id="phase9-16-four-card-insight-alignment-lock">
+/* ============================================================
+   PHASE 9-16 — FOUR CARD INSIGHT ALIGNMENT LOCK
+   The SCORE card remains visually special, but its insight bar
+   now shares the exact Y coordinate and height of the other three.
+   The divider below SCORE insight is intentionally preserved.
+   ============================================================ */
+
+/* Let SCORE insight anchor to the card itself, not its historical
+   positioned inner wrapper. */
+#kpi-card-score > .kpi-score-content{
+  position:static !important;
+}
+
+/* Same desktop anchor and height as the three standard KPI insights. */
+#kpi-card-score #kpi-score-breakdown{
+  position:absolute !important;
+  top:auto !important;
+  bottom:70px !important;
+  left:20px !important;
+  right:20px !important;
+
+  margin:0 !important;
+  transform:none !important;
+
+  height:42px !important;
+  min-height:42px !important;
+  max-height:42px !important;
+
+  display:flex !important;
+  align-items:center !important;
+  box-sizing:border-box !important;
+  z-index:2 !important;
+}
+
+/* Keep SCORE's divider / CTA structure exactly as designed. */
+#kpi-card-score > div:last-child{
+  position:relative !important;
+  z-index:3 !important;
+}
+
+/* Explicitly lock all four insight heights together. */
+#kpi-card-score #kpi-score-breakdown,
+#home-kpi-grid .kpi-standard-card #kpi-yield-insight,
+#home-kpi-grid .kpi-standard-card #kpi-cover-subtext,
+#home-kpi-grid .kpi-standard-card #kpi-final-status{
+  height:42px !important;
+  min-height:42px !important;
+  max-height:42px !important;
+}
+
+/* Smartphone: identical compact Y coordinate and height for all four. */
+@media (max-width:639px){
+  #kpi-card-score #kpi-score-breakdown{
+    bottom:54px !important;
+    left:12px !important;
+    right:12px !important;
+
+    height:40px !important;
+    min-height:40px !important;
+    max-height:40px !important;
+
+    padding:7px 8px !important;
+  }
+
+  #kpi-card-score #kpi-score-breakdown,
+  #home-kpi-grid .kpi-standard-card #kpi-yield-insight,
+  #home-kpi-grid .kpi-standard-card #kpi-cover-subtext,
+  #home-kpi-grid .kpi-standard-card #kpi-final-status{
+    height:40px !important;
+    min-height:40px !important;
+    max-height:40px !important;
+  }
+}
+</style>
+
+
+<style id="phase9-16-score-insight-overflow-final-fix">
+/* ============================================================
+   PHASE 9-16 — GitHub candidate final fix
+   SCORE insight keeps its original design, shared Y/height,
+   and the divider below it. Only the absolute-width conflict
+   is removed.
+   ============================================================ */
+
+#kpi-card-score #kpi-score-breakdown{
+  width:auto !important;       /* neutralize historical w-full */
+  max-width:none !important;
+  box-sizing:border-box !important;
+
+  left:20px !important;
+  right:20px !important;
+  bottom:70px !important;
+
+  height:42px !important;
+  min-height:42px !important;
+  max-height:42px !important;
+
+  overflow:hidden !important;
+}
+
+/* Preserve the original SCORE insight's internal two-column balance. */
+#kpi-card-score #kpi-score-breakdown > div.flex-1{
+  min-width:0 !important;
+}
+#kpi-card-score #kpi-score-breakdown #kpi-base-score,
+#kpi-card-score #kpi-score-breakdown #kpi-ai-adj{
+  flex:0 0 auto !important;
+}
+
+/* SCORE divider + CTA remain exactly below the aligned insight. */
+#kpi-card-score > div:last-child{
+  margin-top:auto !important;
+}
+
+/* Smartphone final guard:
+   same Y coordinate / height concept, narrower inset, no overflow. */
+@media (max-width:639px){
+  #kpi-card-score #kpi-score-breakdown{
+    width:auto !important;
+    left:12px !important;
+    right:12px !important;
+    bottom:54px !important;
+
+    height:40px !important;
+    min-height:40px !important;
+    max-height:40px !important;
+
+    padding:6px 7px !important;
+    border-radius:11px !important;
+  }
+
+  /* Protect the 2-column ENGINE / LUMI row on narrow screens. */
+  #kpi-card-score #kpi-score-breakdown > div.flex-1{
+    gap:3px !important;
+  }
+  #kpi-card-score #kpi-score-breakdown > div.flex-1 > span{
+    white-space:nowrap !important;
+  }
+}
+
+@media (max-width:374px){
+  #kpi-card-score #kpi-score-breakdown{
+    left:10px !important;
+    right:10px !important;
+    padding-left:5px !important;
+    padding-right:5px !important;
+  }
+}
+</style>
+
+
+<style id="phase9-16-visual-lock-final">
+/* ============================================================
+   PHASE 9-16 — VISUAL LOCK FINAL
+   Scope: HOME KPI cards only.
+   Goal:
+   1) all four insight bars share exactly the same Y position/height
+   2) reduce the empty space between main metric and insight
+   3) keep CTA/divider at the bottom
+   4) preserve all approved typography/colors/content
+   ============================================================ */
+
+/* The one-time JS below moves each insight to be a direct card child.
+   This removes historical nested flex/grid differences entirely. */
+#kpi-card-score,
+#kpi-card-yield,
+#kpi-card-cover,
+#kpi-card-assets{
+  display:grid !important;
+  grid-template-columns:minmax(0,1fr) !important;
+  grid-template-rows:142px 42px minmax(0,1fr) 38px !important;
+  row-gap:8px !important;
+  position:relative !important;
+}
+
+/* Main content occupies the same fixed visual track on all four cards. */
+#kpi-card-score > .kpi-score-content,
+#kpi-card-yield > .kpi-standard-content,
+#kpi-card-cover > .kpi-standard-content,
+#kpi-card-assets > .kpi-standard-content{
+  grid-row:1 !important;
+  min-height:0 !important;
+  height:auto !important;
+  padding-bottom:0 !important;
+  overflow:visible !important;
+}
+
+/* All four insight bars occupy the exact same row. */
+#kpi-card-score > #kpi-score-breakdown,
+#kpi-card-yield > #kpi-yield-insight,
+#kpi-card-cover > #kpi-cover-subtext,
+#kpi-card-assets > #kpi-final-status{
+  grid-row:2 !important;
+  position:static !important;
+  top:auto !important;
+  bottom:auto !important;
+  left:auto !important;
+  right:auto !important;
+  transform:none !important;
+  margin:0 !important;
+
+  width:100% !important;
+  height:42px !important;
+  min-height:42px !important;
+  max-height:42px !important;
+  box-sizing:border-box !important;
+  align-self:stretch !important;
+}
+
+/* SCORE keeps its original internal design. */
+#kpi-card-score > #kpi-score-breakdown{
+  display:flex !important;
+  align-items:center !important;
+  overflow:hidden !important;
+}
+
+/* Bottom CTA/divider is the same final row in every card. */
+#kpi-card-score > .p916-kpi-cta,
+#kpi-card-yield > .kpi-card-cta,
+#kpi-card-cover > .kpi-card-cta,
+#kpi-card-assets > .kpi-card-cta{
+  grid-row:4 !important;
+  align-self:stretch !important;
+  margin:0 !important;
+  box-sizing:border-box !important;
+  height:38px !important;
+  min-height:38px !important;
+  max-height:38px !important;
+  padding-top:10px !important;
+  border-top:1px solid #ECEBE6 !important;
+}
+
+/* The SCORE card's original bottom row receives only a hook class.
+   Content and design stay unchanged. */
+#kpi-card-score > .p916-kpi-cta{
+  display:flex !important;
+  align-items:flex-start !important;
+  justify-content:flex-end !important;
+}
+
+/* SP: same architecture at compact dimensions. */
+@media (max-width:639px){
+  #kpi-card-score,
+  #kpi-card-yield,
+  #kpi-card-cover,
+  #kpi-card-assets{
+    grid-template-rows:104px 40px minmax(0,1fr) 36px !important;
+    row-gap:6px !important;
+  }
+
+  #kpi-card-score > #kpi-score-breakdown,
+  #kpi-card-yield > #kpi-yield-insight,
+  #kpi-card-cover > #kpi-cover-subtext,
+  #kpi-card-assets > #kpi-final-status{
+    width:100% !important;
+    height:40px !important;
+    min-height:40px !important;
+    max-height:40px !important;
+  }
+
+  #kpi-card-score > #kpi-score-breakdown{
+    padding:6px 5px !important;
+    border-radius:11px !important;
+  }
+
+  #kpi-card-score > .p916-kpi-cta,
+  #kpi-card-yield > .kpi-card-cta,
+  #kpi-card-cover > .kpi-card-cta,
+  #kpi-card-assets > .kpi-card-cta{
+    height:36px !important;
+    min-height:36px !important;
+    max-height:36px !important;
+    padding-top:9px !important;
+  }
+}
+
+/* Very narrow phones: preserve existing typography safeguards;
+   no additional positioning logic. */
+@media (max-width:374px){
+  #kpi-card-score,
+  #kpi-card-yield,
+  #kpi-card-cover,
+  #kpi-card-assets{
+    grid-template-rows:100px 40px minmax(0,1fr) 36px !important;
+    row-gap:5px !important;
+  }
+}
+</style>
+
+
+<style id="phase9-16-completed-lock-width-fix">
+/* ============================================================
+   PHASE 9-16 — COMPLETED LOCK
+   Final fix: standard insight boxes must respect the card's
+   inner horizontal padding. Y position/height/CTA are untouched.
+   ============================================================ */
+
+#kpi-card-yield > #kpi-yield-insight,
+#kpi-card-cover > #kpi-cover-subtext,
+#kpi-card-assets > #kpi-final-status{
+  width:auto !important;
+  max-width:none !important;
+  justify-self:stretch !important;
+  margin-left:0 !important;
+  margin-right:0 !important;
+  box-sizing:border-box !important;
+}
+
+/* Cards use 20px desktop padding: align insight width to inner content area. */
+@media (min-width:640px){
+  #kpi-card-yield > #kpi-yield-insight,
+  #kpi-card-cover > #kpi-cover-subtext,
+  #kpi-card-assets > #kpi-final-status{
+    margin-left:0 !important;
+    margin-right:0 !important;
+  }
+}
+
+/* SP uses 12px card padding, but because the boxes are direct grid children,
+   force them to stay inside the content box instead of extending to the outer edge. */
+@media (max-width:639px){
+  #kpi-card-yield > #kpi-yield-insight,
+  #kpi-card-cover > #kpi-cover-subtext,
+  #kpi-card-assets > #kpi-final-status{
+    width:auto !important;
+    max-width:100% !important;
+    min-width:0 !important;
+    overflow:hidden !important;
+  }
+}
+
+/* Narrow SP: same rule, no extra layout movement. */
+@media (max-width:374px){
+  #kpi-card-yield > #kpi-yield-insight,
+  #kpi-card-cover > #kpi-cover-subtext,
+  #kpi-card-assets > #kpi-final-status{
+    width:auto !important;
+    max-width:100% !important;
+  }
+}
+</style>
+
 </head>
 <body class="bg-[#FAFAF7] text-[#253047] min-h-screen font-sans antialiased relative overflow-x-hidden">
 
@@ -1153,12 +2139,12 @@
           <div id="home-kpi-grid" class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
             
             <!-- KPI 1: LUMIFUL SCORE CARD -->
-            <div class="bg-[#FFFDF8] rounded-[24px] p-3.5 sm:p-5 border border-[#ECEBE6] flex flex-col justify-between relative overflow-hidden transition shadow-sm">
+            <div id="kpi-card-score" class="bg-[#FFFDF8] rounded-[24px] p-3.5 sm:p-5 border border-[#ECEBE6] flex flex-col justify-between relative overflow-hidden transition shadow-sm">
               
               <!-- Hero-Wide Organic Light Field Background Canvas -->
               <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_85%_35%,rgba(255,200,61,0.22)_0%,rgba(255,200,61,0.08)_45%,rgba(255,253,248,0)_75%)] pointer-events-none -z-0"></div>
 
-              <div class="relative z-10 space-y-2 sm:space-y-3">
+              <div class="kpi-score-content relative z-10 space-y-2 sm:space-y-3">
                 <!-- Header: Title (Top Left) & Dynamic Badge (Top Right) -->
                 <div class="flex items-center justify-between gap-1 sm:gap-2">
                   <div class="shrink-0 font-extrabold uppercase leading-[0.92]" aria-label="LUMIFUL SCORE">
@@ -1218,63 +2204,76 @@
 
             </div>
 
-            <!-- KPI 2: 年間運用益 (専用画像アセットを絶対保護・維持) -->
-            <div class="bg-white rounded-[24px] p-3.5 sm:p-5 border border-[#ECEBE6] flex flex-col justify-between relative overflow-hidden transition">
-              <div>
-                <div class="flex items-center justify-between gap-1 sm:gap-2 mb-1">
+            <!-- KPI 2: 年間運用益 -->
+            <div id="kpi-card-yield" class="bg-white rounded-[24px] p-3.5 sm:p-5 border border-[#ECEBE6] flex flex-col relative overflow-hidden transition kpi-standard-card">
+              <div class="kpi-standard-content">
+                <div class="flex items-center justify-between gap-1 sm:gap-2 mb-1 kpi-standard-header">
                   <span class="text-[10px] sm:text-xs font-bold text-[#6F7785] whitespace-nowrap tracking-[-0.02em]">資産が生活を支える力</span>
                   <img src="./assets/kpi-annual-yield.png" alt="" class="w-8 h-8 sm:w-10 sm:h-10 object-contain shrink-0 pointer-events-none" />
                 </div>
-                <div class="text-[11px] font-bold text-[#8C5800] mb-2">平均年間運用益 (生涯)</div>
-                <div id="kpi-annual-yield" class="text-2xl sm:text-3xl font-extrabold text-[#253047] tracking-tight">
-                  0 万円<span class="kpi-annual-unit text-xs font-normal text-[#6F7785]"> /年</span>
+                <div class="kpi-standard-metric">
+                  <div class="kpi-standard-eyebrow text-[11px] font-bold text-[#8C5800]">平均年間運用益 (生涯)</div>
+                  <div id="kpi-annual-yield" class="kpi-standard-value text-2xl sm:text-3xl font-extrabold text-[#253047] tracking-tight">
+                    0 万円<span class="kpi-annual-unit text-xs font-normal text-[#6F7785]"> /年</span>
+                  </div>
+                  <div id="kpi-yield-insight" class="kpi-standard-support kpi-insight-box kpi-insight-neutral">
+                    <div class="kpi-insight-line">
+                      生活費の <span id="kpi-yield-living-support-rate">—</span> 相当
+                    </div>
+                    <div class="kpi-insight-line">
+                      <span id="kpi-phase-badge">累計運用益 未設定</span>
+                    </div>
+                  </div>
                 </div>
               </div>
-
-              <div class="flex items-start justify-start pt-3 border-t border-[#ECEBE6] mt-3 h-[36px] sm:h-[38px] shrink-0">
-                <span id="kpi-phase-badge" class="max-w-full truncate px-2 py-0.5 sm:px-2.5 rounded-full text-[9px] sm:text-[10px] font-bold bg-[#FAFAF7] text-[#6F7785] border border-[#ECEBE6]">
-                  累計運用益 未設定
-                </span>
+              <div class="kpi-card-cta">
+                <button onclick="switchView('annualProjection')" class="kpi-card-cta-button group">
+                  <span>推移を見る</span><i class="fa-solid fa-arrow-right group-hover:translate-x-0.5 transition-transform"></i>
+                </button>
               </div>
             </div>
 
-            <!-- KPI 3: 生涯収支カバー率 (専用画像アセットを絶対保護・維持) -->
-            <div class="bg-white rounded-[24px] p-3.5 sm:p-5 border border-[#ECEBE6] flex flex-col justify-between relative overflow-hidden transition">
-              <div>
-                <div class="flex items-center justify-between gap-2 mb-1">
-                  <span class="text-[10px] sm:text-xs font-bold text-[#6F7785] flex items-center gap-0.5 sm:gap-1 whitespace-nowrap tracking-[-0.02em]">
-                    生涯収支カバー率
-                    
-                  </span>
+            <!-- KPI 3: 生涯収支カバー率 -->
+            <div id="kpi-card-cover" class="bg-white rounded-[24px] p-3.5 sm:p-5 border border-[#ECEBE6] flex flex-col relative overflow-hidden transition kpi-standard-card">
+              <div class="kpi-standard-content">
+                <div class="flex items-center justify-between gap-2 mb-1 kpi-standard-header">
+                  <span class="text-[10px] sm:text-xs font-bold text-[#6F7785] flex items-center gap-0.5 sm:gap-1 whitespace-nowrap tracking-[-0.02em]">生涯収支カバー率</span>
                   <img src="./assets/kpi-cover-rate.png" alt="" class="w-8 h-8 sm:w-10 sm:h-10 object-contain shrink-0 pointer-events-none" />
                 </div>
-                <div class="text-[11px] font-bold text-[#65B9E8] mb-2">生涯の資金維持達成率</div>
-                <div id="kpi-cover-rate" class="text-xl sm:text-2xl font-extrabold text-[#6F7785] tracking-tight whitespace-nowrap">
-                  -
+                <div class="kpi-standard-metric">
+                  <div class="kpi-standard-eyebrow text-[11px] font-bold text-[#65B9E8]">生涯の資金維持達成率</div>
+                  <div id="kpi-cover-rate" class="kpi-standard-value text-xl sm:text-2xl font-extrabold text-[#6F7785] tracking-tight whitespace-nowrap">-</div>
+                  <div id="kpi-cover-subtext" class="kpi-standard-support kpi-insight-box kpi-insight-warning">
+                    <div class="kpi-insight-line">目標年齢までの資金維持力</div>
+                  </div>
                 </div>
               </div>
-
-              <div id="kpi-cover-subtext" class="text-[11px] text-[#6F7785] pt-3 border-t border-[#ECEBE6] mt-3 h-[36px] sm:h-[38px] flex items-start truncate shrink-0">
-                目標年齢までの資金維持力
+              <div class="kpi-card-cta">
+                <button onclick="switchView('simulationResults')" class="kpi-card-cta-button group">
+                  <span>シミュレーション結果を見る</span><i class="fa-solid fa-arrow-right group-hover:translate-x-0.5 transition-transform"></i>
+                </button>
               </div>
             </div>
 
-            <!-- KPI 4: 目標年齢時点の想定資産 (専用画像アセットを絶対保護・維持) -->
-            <div class="bg-white rounded-[24px] p-3.5 sm:p-5 border border-[#ECEBE6] flex flex-col justify-between relative overflow-hidden transition">
-              <div>
-                <div class="flex items-center justify-between gap-2 mb-1">
-                  <span class="text-[10px] sm:text-xs font-bold text-[#6F7785] whitespace-nowrap tracking-[-0.02em]">
-                    <span id="kpi-final-age-label">90</span>歳時点の想定資産
-                  </span>
+            <!-- KPI 4: 目標年齢時点の想定資産 -->
+            <div id="kpi-card-assets" class="bg-white rounded-[24px] p-3.5 sm:p-5 border border-[#ECEBE6] flex flex-col relative overflow-hidden transition kpi-standard-card">
+              <div class="kpi-standard-content">
+                <div class="flex items-center justify-between gap-2 mb-1 kpi-standard-header">
+                  <span class="text-[10px] sm:text-xs font-bold text-[#6F7785] whitespace-nowrap tracking-[-0.02em]"><span id="kpi-final-age-label">90</span>歳時点の想定資産</span>
                   <img src="./assets/kpi-future-assets.png" alt="" class="w-8 h-8 sm:w-10 sm:h-10 object-contain shrink-0 pointer-events-none" />
                 </div>
-                <div id="kpi-final-assets" class="text-2xl sm:text-3xl font-extrabold text-[#253047] tracking-tight mt-3">
-                  0 万円
+                <div class="kpi-standard-metric">
+                  <div class="kpi-standard-eyebrow kpi-standard-eyebrow-placeholder" aria-hidden="true">&nbsp;</div>
+                  <div id="kpi-final-assets" class="kpi-standard-value text-2xl sm:text-3xl font-extrabold text-[#253047] tracking-tight">0 万円</div>
+                  <div id="kpi-final-status" class="kpi-standard-support kpi-insight-box kpi-insight-info">
+                    <div class="kpi-insight-line">利用可能資産のみで算出</div>
+                  </div>
                 </div>
               </div>
-
-              <div id="kpi-final-status" class="text-[11px] text-[#6F7785] pt-3 border-t border-[#ECEBE6] mt-3 h-[36px] sm:h-[38px] flex items-start shrink-0">
-                利用可能資産のみで算出
+              <div class="kpi-card-cta">
+                <button onclick="switchView('assetDetails')" class="kpi-card-cta-button group">
+                  <span>資産詳細を見る</span><i class="fa-solid fa-arrow-right group-hover:translate-x-0.5 transition-transform"></i>
+                </button>
               </div>
             </div>
 
@@ -11668,6 +12667,604 @@ ${JSON.stringify(OUTPUT_SCHEMA_EXAMPLE,null,2)}
     cumulativeReturnPlainText: true,
     scope: 'SP KPI presentation only'
   });
+})();
+</script>
+
+<script>
+(function(){
+function n916(){
+const e=document.getElementById('kpi-base-score');if(e){const m=String(e.textContent||'').match(/-?\d+(?:\.\d+)?/);if(m){const n=Number(m[0]);if(Number.isFinite(n))e.textContent=String(Math.ceil(n));}}
+const l=document.getElementById('kpi-ai-adj');if(l){const r=String(l.textContent||'').trim();if(/未評価/.test(r)){l.textContent='—';l.setAttribute('aria-label','LUMI 未評価');}else l.removeAttribute('aria-label');}
+const c=document.getElementById('kpi-phase-badge');if(c){['rounded-full','rounded-xl','border','px-2','px-3','py-0.5','py-1','bg-[#FAFAF7]','border-[#ECEBE6]','bg-emerald-50','border-emerald-200'].forEach(x=>c.classList.remove(x));}}
+const p=window.updateScoreDashboardUI;if(typeof p==='function')window.updateScoreDashboardUI=function(){const r=p.apply(this,arguments);requestAnimationFrame(n916);return r;};
+const s=window.switchView;if(typeof s==='function')window.switchView=function(){const r=s.apply(this,arguments);if(arguments[0]==='dashboard')requestAnimationFrame(n916);return r;};
+document.addEventListener('DOMContentLoaded',n916);window.addEventListener('load',n916);setTimeout(n916,0);
+window.LUMIFUL_PHASE9_16_SP_HOME_LOCK=Object.freeze({lumiUnevaluatedDisplay:'—',engineIntegerOnly:true,engineLumiTypographyUnified:true,cumulativeReturnPlainText:true,kpiBottomAlignmentUnified:true});
+})();</script>
+
+<script>
+/* PHASE 9-16 FINAL — annual investment return as share of living expenses.
+   Presentation-only derived KPI; no Engine / Score / Schema mutation. */
+(function(){
+  function numberFromText(value){
+    const m = String(value ?? '').replace(/,/g,'').match(/-?\d+(?:\.\d+)?/);
+    return m ? Number(m[0]) : NaN;
+  }
+
+  function annualLivingExpenseFromModel(){
+    try{
+      const model = window.getCurrentDataModelV2ForPersistence?.() || window.activeDataModelV2 || null;
+      const living = model?.living || {};
+      const candidates = [
+        living.monthlyLivingExpense,
+        living.monthlyExpense,
+        living.livingExpenseMonthly,
+        living.baseMonthlyExpense
+      ];
+      for(const v of candidates){
+        const n = Number(v);
+        if(Number.isFinite(n) && n > 0) return n * 12;
+      }
+      const annualCandidates = [living.annualLivingExpense, living.annualExpense];
+      for(const v of annualCandidates){
+        const n = Number(v);
+        if(Number.isFinite(n) && n > 0) return n;
+      }
+    }catch(_){}
+    return NaN;
+  }
+
+  function renderLivingSupportRate(){
+    const out = document.getElementById('kpi-yield-living-support-rate');
+    const yieldEl = document.getElementById('kpi-annual-yield');
+    if(!out || !yieldEl) return;
+
+    const avgYieldMan = numberFromText(yieldEl.textContent);
+    const annualLivingRaw = annualLivingExpenseFromModel();
+
+    /* Model values may be stored as yen or 万円 depending on the historical field.
+       Normalize by comparing magnitude; this affects display only. */
+    let annualLivingMan = annualLivingRaw;
+    if(Number.isFinite(annualLivingMan) && annualLivingMan > 10000) annualLivingMan /= 10000;
+
+    if(!Number.isFinite(avgYieldMan) || !Number.isFinite(annualLivingMan) || annualLivingMan <= 0){
+      out.textContent = '—';
+      return;
+    }
+    const pct = Math.max(0, (avgYieldMan / annualLivingMan) * 100);
+    const shown = pct >= 10 ? Math.round(pct) : Math.round(pct * 10) / 10;
+    out.textContent = `${shown.toLocaleString()}%`;
+  }
+
+  const prevScore = window.updateScoreDashboardUI;
+  if(typeof prevScore === 'function'){
+    window.updateScoreDashboardUI = function(){
+      const r = prevScore.apply(this, arguments);
+      requestAnimationFrame(renderLivingSupportRate);
+      return r;
+    };
+  }
+
+  const prevRecalc = window.recalculateAllV2Dashboard;
+  if(typeof prevRecalc === 'function'){
+    window.recalculateAllV2Dashboard = function(){
+      const r = prevRecalc.apply(this, arguments);
+      requestAnimationFrame(renderLivingSupportRate);
+      return r;
+    };
+  }
+
+  document.addEventListener('DOMContentLoaded', renderLivingSupportRate);
+  window.addEventListener('load', renderLivingSupportRate);
+  setTimeout(renderLivingSupportRate, 0);
+
+  window.LUMIFUL_PHASE9_16_SP_HOME_FINAL = Object.freeze({
+    livingSupportRate: true,
+    formula: 'average annual investment return / annual living expense',
+    scoreImpact: false,
+    engineImpact: false,
+    schemaMutation: false,
+    topRowBalanced: true
+  });
+})();
+</script>
+
+
+<script>
+/* PHASE 9-16 FINAL — reliable display-only living-support ratio. */
+(function(){
+  function readYieldMan(){
+    const el=document.getElementById('kpi-annual-yield');
+    const m=String(el?.textContent||'').replace(/,/g,'').match(/-?\d+(?:\.\d+)?/);
+    return m?Number(m[0]):NaN;
+  }
+  function currentAnnualLivingMan(){
+    try{
+      const model=window.getCurrentDataModelV2ForPersistence?.()||window.activeDataModelV2||null;
+      if(!model) return NaN;
+      const normalize=typeof window.normalizeAnnualAmountV2==='function'
+        ? window.normalizeAnnualAmountV2
+        : ((amount,frequency)=>frequency==='monthly'?Number(amount||0)*12:Number(amount||0));
+      const living=normalize(model?.living?.expense?.amount,model?.living?.expense?.frequency);
+      const housing=normalize(model?.living?.housing?.monthlyAmount,'monthly');
+      const total=Number(living||0)+Number(housing||0);
+      return Number.isFinite(total)&&total>0?total:NaN;
+    }catch(_){return NaN;}
+  }
+  function render916Ratio(){
+    const out=document.getElementById('kpi-yield-living-support-rate');
+    if(!out)return;
+    const y=readYieldMan(), living=currentAnnualLivingMan();
+    if(!Number.isFinite(y)||!Number.isFinite(living)||living<=0){out.textContent='—';return;}
+    const pct=Math.max(0,y/living*100);
+    const shown=pct>=10?Math.round(pct):Math.round(pct*10)/10;
+    out.textContent=`${shown.toLocaleString()}%`;
+  }
+  const recalc=window.recalculateAllV2Dashboard;
+  if(typeof recalc==='function') window.recalculateAllV2Dashboard=function(){const r=recalc.apply(this,arguments);requestAnimationFrame(render916Ratio);return r;};
+  const update=window.updateScoreDashboardUI;
+  if(typeof update==='function') window.updateScoreDashboardUI=function(){const r=update.apply(this,arguments);requestAnimationFrame(render916Ratio);return r;};
+  document.addEventListener('DOMContentLoaded',()=>requestAnimationFrame(render916Ratio));
+  window.addEventListener('load',()=>requestAnimationFrame(render916Ratio));
+  setTimeout(render916Ratio,0);
+  window.LUMIFUL_PHASE9_16_KPI_NAV_FINAL=Object.freeze({commonCardRhythm:true,cardNavigation:true,livingSupportRatio:true,engineImpact:false,scoreImpact:false,schemaMutation:false});
+})();
+</script>
+
+
+<script>
+window.LUMIFUL_PHASE9_16_KPI_ALIGNMENT_FINAL = Object.freeze({
+  scoreCardSpecial: true,
+  alignedCards: ['yield','cover','finalAssets'],
+  mainValueBaselineAligned: true,
+  supportBaselineAligned: true,
+  coverLegacySeparatorRemoved: true,
+  ctaNavigationPreserved: true,
+  engineImpact: false,
+  schemaImpact: false
+});
+</script>
+
+
+<script>
+window.LUMIFUL_PHASE9_16_KPI_INSIGHT_FINAL_V2 = Object.freeze({
+  scoreCardSpecial:true,
+  insightMovedLower:true,
+  sharedInsightDesign:true,
+  yieldTwoRowsOnSP:true,
+  coverLegacyLineRemoved:true,
+  ctaPreserved:true,
+  engineImpact:false,
+  schemaImpact:false,
+  scoreImpact:false
+});
+</script>
+
+
+<script>
+(function(){
+  function lockCoverInsightPresentation(){
+    const el=document.getElementById('kpi-cover-subtext');
+    if(!el) return;
+    el.classList.add('kpi-standard-support','kpi-insight-box','kpi-insight-warning');
+    let line=el.querySelector('.kpi-insight-line');
+    if(!line){
+      const nodes=Array.from(el.childNodes);
+      const wrap=document.createElement('div');
+      wrap.className='kpi-insight-line';
+      nodes.forEach(n=>wrap.appendChild(n));
+      el.appendChild(wrap);
+    }
+  }
+
+  const prevScore=window.updateScoreDashboardUI;
+  if(typeof prevScore==='function'){
+    window.updateScoreDashboardUI=function(){
+      const r=prevScore.apply(this,arguments);
+      requestAnimationFrame(lockCoverInsightPresentation);
+      return r;
+    };
+  }
+
+  const prevRecalc=window.recalculateAllV2Dashboard;
+  if(typeof prevRecalc==='function'){
+    window.recalculateAllV2Dashboard=function(){
+      const r=prevRecalc.apply(this,arguments);
+      requestAnimationFrame(lockCoverInsightPresentation);
+      return r;
+    };
+  }
+
+  document.addEventListener('DOMContentLoaded',lockCoverInsightPresentation);
+  window.addEventListener('load',lockCoverInsightPresentation);
+  setTimeout(lockCoverInsightPresentation,0);
+
+  window.LUMIFUL_PHASE9_16_KPI_INSIGHT_LOCK=Object.freeze({
+    scoreCardSpecial:true,
+    standardCardsAligned:true,
+    coverInsightAligned:true,
+    sharedInsightDesign:true,
+    ctaPreserved:true,
+    engineImpact:false,
+    schemaImpact:false,
+    scoreImpact:false
+  });
+})();
+</script>
+
+
+<script>
+(function(){
+  function lockStandardKpiBaseline(){
+    ['kpi-yield-insight','kpi-cover-subtext','kpi-final-status'].forEach(function(id){
+      const el=document.getElementById(id);
+      if(!el) return;
+      el.classList.add('kpi-standard-support','kpi-insight-box');
+      el.style.marginTop='0px';
+    });
+  }
+
+  const prevScore=window.updateScoreDashboardUI;
+  if(typeof prevScore==='function'){
+    window.updateScoreDashboardUI=function(){
+      const r=prevScore.apply(this,arguments);
+      requestAnimationFrame(lockStandardKpiBaseline);
+      return r;
+    };
+  }
+
+  const prevRecalc=window.recalculateAllV2Dashboard;
+  if(typeof prevRecalc==='function'){
+    window.recalculateAllV2Dashboard=function(){
+      const r=prevRecalc.apply(this,arguments);
+      requestAnimationFrame(lockStandardKpiBaseline);
+      return r;
+    };
+  }
+
+  document.addEventListener('DOMContentLoaded',lockStandardKpiBaseline);
+  window.addEventListener('load',lockStandardKpiBaseline);
+  setTimeout(lockStandardKpiBaseline,0);
+
+  window.LUMIFUL_PHASE9_16_KPI_BASELINE_LOCK=Object.freeze({
+    standardMetricRowsLocked:true,
+    insightTopBaselineLocked:true,
+    insightHeightLocked:true,
+    desktopInsightHeight:42,
+    smartphoneInsightHeight:40,
+    scoreCardIndependent:true,
+    engineImpact:false,
+    schemaImpact:false,
+    scoreImpact:false
+  });
+})();
+</script>
+
+
+<script>
+window.LUMIFUL_PHASE9_16_FINAL_COVER_BASELINE_FIX = Object.freeze({
+  scope:'cover insight presentation only',
+  desktopOffsetPx:-10,
+  smartphoneOffsetPx:-6,
+  engineImpact:false,
+  schemaImpact:false,
+  scoreImpact:false,
+  authImpact:false,
+  navigationImpact:false
+});
+</script>
+
+
+<script>
+(function(){
+  function enforceTrueKpiAlignment(){
+    const coverValue=document.getElementById('kpi-cover-rate');
+    if(coverValue){
+      /* Runtime historically replaces className; restore structural role. */
+      coverValue.classList.add('kpi-standard-value');
+    }
+
+    const coverInsight=document.getElementById('kpi-cover-subtext');
+    if(coverInsight){
+      coverInsight.classList.add('kpi-standard-support','kpi-insight-box','kpi-insight-warning');
+      coverInsight.style.marginTop='0px';
+      coverInsight.style.top='auto';
+      coverInsight.style.position='static';
+
+      if(!coverInsight.querySelector('.kpi-insight-line')){
+        const nodes=Array.from(coverInsight.childNodes);
+        const line=document.createElement('div');
+        line.className='kpi-insight-line';
+        nodes.forEach(n=>line.appendChild(n));
+        coverInsight.appendChild(line);
+      }
+    }
+
+    const yieldInsight=document.getElementById('kpi-yield-insight');
+    const finalInsight=document.getElementById('kpi-final-status');
+    [yieldInsight,finalInsight].forEach(function(el){
+      if(!el) return;
+      el.classList.add('kpi-standard-support','kpi-insight-box');
+      el.style.marginTop='0px';
+    });
+  }
+
+  /* Apply after the full render chain, because recalculateAllV2Dashboard
+     rewrites cover classes before updateScoreDashboardUI completes. */
+  const previousUpdateScore=window.updateScoreDashboardUI;
+  if(typeof previousUpdateScore==='function'){
+    window.updateScoreDashboardUI=function(){
+      const result=previousUpdateScore.apply(this,arguments);
+      requestAnimationFrame(enforceTrueKpiAlignment);
+      return result;
+    };
+  }
+
+  const previousRecalc=window.recalculateAllV2Dashboard;
+  if(typeof previousRecalc==='function'){
+    window.recalculateAllV2Dashboard=function(){
+      const result=previousRecalc.apply(this,arguments);
+      requestAnimationFrame(function(){
+        enforceTrueKpiAlignment();
+        requestAnimationFrame(enforceTrueKpiAlignment);
+      });
+      return result;
+    };
+  }
+
+  document.addEventListener('DOMContentLoaded',enforceTrueKpiAlignment);
+  window.addEventListener('load',enforceTrueKpiAlignment);
+  setTimeout(enforceTrueKpiAlignment,0);
+
+  window.LUMIFUL_PHASE9_16_TRUE_ALIGNMENT_LOCK=Object.freeze({
+    rootCause:'runtime className overwrite on kpi-cover-rate',
+    coverValueStructuralClassRestored:true,
+    offsetWorkaroundRemoved:true,
+    threeInsightRowsIdentical:true,
+    engineImpact:false,
+    schemaImpact:false,
+    scoreImpact:false,
+    authImpact:false
+  });
+})();
+</script>
+
+
+<script>
+(function(){
+  function enforceAbsoluteInsightAlignment(){
+    const ids=['kpi-yield-insight','kpi-cover-subtext','kpi-final-status'];
+    ids.forEach(function(id){
+      const el=document.getElementById(id);
+      if(!el) return;
+      el.classList.add('kpi-standard-support','kpi-insight-box');
+      el.style.margin='0px';
+      el.style.top='auto';
+      el.style.transform='none';
+    });
+
+    const cover=document.getElementById('kpi-cover-subtext');
+    if(cover){
+      cover.classList.add('kpi-insight-warning');
+      if(!cover.querySelector('.kpi-insight-line')){
+        const nodes=Array.from(cover.childNodes);
+        const line=document.createElement('div');
+        line.className='kpi-insight-line';
+        nodes.forEach(n=>line.appendChild(n));
+        cover.appendChild(line);
+      }
+    }
+  }
+
+  const prevUpdate=window.updateScoreDashboardUI;
+  if(typeof prevUpdate==='function'){
+    window.updateScoreDashboardUI=function(){
+      const r=prevUpdate.apply(this,arguments);
+      requestAnimationFrame(enforceAbsoluteInsightAlignment);
+      return r;
+    };
+  }
+
+  const prevRecalc=window.recalculateAllV2Dashboard;
+  if(typeof prevRecalc==='function'){
+    window.recalculateAllV2Dashboard=function(){
+      const r=prevRecalc.apply(this,arguments);
+      requestAnimationFrame(enforceAbsoluteInsightAlignment);
+      return r;
+    };
+  }
+
+  document.addEventListener('DOMContentLoaded',enforceAbsoluteInsightAlignment);
+  window.addEventListener('load',enforceAbsoluteInsightAlignment);
+  setTimeout(enforceAbsoluteInsightAlignment,0);
+
+  window.LUMIFUL_PHASE9_16_ABSOLUTE_INSIGHT_ALIGNMENT_LOCK=Object.freeze({
+    method:'shared absolute bottom anchor',
+    desktopBottomPx:70,
+    smartphoneBottomPx:54,
+    exactSharedY:true,
+    scoreCardUntouched:true,
+    engineImpact:false,
+    schemaImpact:false,
+    scoreImpact:false,
+    authImpact:false
+  });
+})();
+</script>
+
+
+<script>
+(function(){
+  function enforceFourCardInsightAlignment(){
+    const score=document.getElementById('kpi-score-breakdown');
+    if(score){
+      score.style.margin='0px';
+      score.style.top='auto';
+      score.style.transform='none';
+    }
+
+    ['kpi-yield-insight','kpi-cover-subtext','kpi-final-status'].forEach(function(id){
+      const el=document.getElementById(id);
+      if(!el) return;
+      el.style.margin='0px';
+      el.style.top='auto';
+      el.style.transform='none';
+    });
+  }
+
+  const prevScoreUpdate=window.updateScoreDashboardUI;
+  if(typeof prevScoreUpdate==='function'){
+    window.updateScoreDashboardUI=function(){
+      const result=prevScoreUpdate.apply(this,arguments);
+      requestAnimationFrame(enforceFourCardInsightAlignment);
+      return result;
+    };
+  }
+
+  const prevRecalc=window.recalculateAllV2Dashboard;
+  if(typeof prevRecalc==='function'){
+    window.recalculateAllV2Dashboard=function(){
+      const result=prevRecalc.apply(this,arguments);
+      requestAnimationFrame(enforceFourCardInsightAlignment);
+      return result;
+    };
+  }
+
+  document.addEventListener('DOMContentLoaded',enforceFourCardInsightAlignment);
+  window.addEventListener('load',enforceFourCardInsightAlignment);
+  setTimeout(enforceFourCardInsightAlignment,0);
+
+  window.LUMIFUL_PHASE9_16_FOUR_CARD_ALIGNMENT_LOCK=Object.freeze({
+    scoreCardSpecial:true,
+    fourInsightYAligned:true,
+    fourInsightHeightAligned:true,
+    scoreDividerPreserved:true,
+    desktopBottomPx:70,
+    desktopHeightPx:42,
+    smartphoneBottomPx:54,
+    smartphoneHeightPx:40,
+    engineImpact:false,
+    schemaImpact:false,
+    scoreImpact:false,
+    authImpact:false
+  });
+})();
+</script>
+
+
+<script>
+window.LUMIFUL_PHASE9_16_GITHUB_CANDIDATE = Object.freeze({
+  fourInsightYAligned:true,
+  fourInsightHeightAligned:true,
+  scoreInsightOverflowFixed:true,
+  scoreInsightWidthMode:'auto with shared insets',
+  scoreDividerPreserved:true,
+  desktopInsightHeight:42,
+  smartphoneInsightHeight:40,
+  smartphoneOverflowGuard:true,
+  engineImpact:false,
+  schemaImpact:false,
+  scoreImpact:false,
+  authImpact:false,
+  navigationImpact:false
+});
+</script>
+
+
+<script>
+(function(){
+  function installFinalKpiStructure(){
+    const scoreCard=document.getElementById('kpi-card-score');
+    const yieldCard=document.getElementById('kpi-card-yield');
+    const coverCard=document.getElementById('kpi-card-cover');
+    const assetsCard=document.getElementById('kpi-card-assets');
+    if(!scoreCard || !yieldCard || !coverCard || !assetsCard) return;
+
+    const moves=[
+      [scoreCard, document.getElementById('kpi-score-breakdown')],
+      [yieldCard, document.getElementById('kpi-yield-insight')],
+      [coverCard, document.getElementById('kpi-cover-subtext')],
+      [assetsCard, document.getElementById('kpi-final-status')]
+    ];
+
+    moves.forEach(function(pair){
+      const card=pair[0], insight=pair[1];
+      if(!insight) return;
+      const cta = card.id==='kpi-card-score'
+        ? card.lastElementChild
+        : card.querySelector('.kpi-card-cta');
+      if(cta && insight.parentElement!==card){
+        card.insertBefore(insight, cta);
+      }
+    });
+
+    /* Hook the SCORE CTA without changing its contents/classes. */
+    const scoreCta=scoreCard.lastElementChild;
+    if(scoreCta && scoreCta.id!=='kpi-score-breakdown'){
+      scoreCta.classList.add('p916-kpi-cta');
+    }
+  }
+
+  /* Run before normal interaction, and once more after load in case
+     historical renderers touched the KPI DOM during startup. */
+  document.addEventListener('DOMContentLoaded',installFinalKpiStructure);
+  window.addEventListener('load',installFinalKpiStructure);
+  setTimeout(installFinalKpiStructure,0);
+
+  window.LUMIFUL_PHASE9_16_VISUAL_LOCK_FINAL=Object.freeze({
+    base:'LUMIFUL_PHASE9_16_GITHUB_CANDIDATE',
+    method:'shared card grid + direct insight row',
+    desktopContentTrackPx:142,
+    desktopInsightHeightPx:42,
+    smartphoneContentTrackPx:104,
+    smartphoneInsightHeightPx:40,
+    fourInsightYAligned:true,
+    reducedMetricInsightWhitespace:true,
+    scoreDividerPreserved:true,
+    ctaPreserved:true,
+    engineImpact:false,
+    schemaImpact:false,
+    scoreImpact:false,
+    authImpact:false
+  });
+})();
+</script>
+
+
+<script>
+(function(){
+  function finalizeStandardInsightWidths(){
+    ['kpi-yield-insight','kpi-cover-subtext','kpi-final-status'].forEach(function(id){
+      const el=document.getElementById(id);
+      if(!el) return;
+      el.style.left='auto';
+      el.style.right='auto';
+      el.style.width='auto';
+      el.style.maxWidth='100%';
+      el.style.minWidth='0';
+      el.style.marginLeft='0';
+      el.style.marginRight='0';
+      el.style.boxSizing='border-box';
+    });
+
+    window.LUMIFUL_PHASE9_16_COMPLETED_LOCK=Object.freeze({
+      threeStandardInsightOverflowFixed:true,
+      insightYAlignmentPreserved:true,
+      insightHeightPreserved:true,
+      scoreCardUntouched:true,
+      ctaPreserved:true,
+      desktopPreserved:true,
+      smartphonePreserved:true,
+      engineImpact:false,
+      schemaImpact:false,
+      scoreImpact:false,
+      authImpact:false
+    });
+  }
+
+  document.addEventListener('DOMContentLoaded',finalizeStandardInsightWidths);
+  window.addEventListener('load',finalizeStandardInsightWidths);
+  setTimeout(finalizeStandardInsightWidths,0);
 })();
 </script>
 
