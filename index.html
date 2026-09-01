@@ -990,335 +990,6 @@
 }
 </style>
 
-
-<style id="phase9-step23-kpi-insight-safe">
-/* SCORE card is intentionally excluded. Only KPI 2-4 are aligned to its lower rhythm. */
-#home-kpi-grid .kpi-standard-card{
-  min-width:0;
-}
-#home-kpi-grid .kpi-standard-content{
-  display:flex;
-  flex:1;
-  min-height:0;
-  flex-direction:column;
-}
-#home-kpi-grid .kpi-standard-header{
-  min-height:40px;
-  margin-bottom:0 !important;
-}
-#home-kpi-grid .kpi-standard-metric{
-  padding-top:12px;
-  display:flex;
-  flex-direction:column;
-  min-height:0;
-}
-#home-kpi-grid .kpi-standard-eyebrow{
-  height:18px;
-  margin:0 !important;
-  display:flex;
-  align-items:flex-start;
-  line-height:1.15;
-}
-#home-kpi-grid .kpi-standard-eyebrow-placeholder{
-  visibility:hidden;
-}
-#home-kpi-grid .kpi-standard-value{
-  height:38px;
-  margin:0 !important;
-  display:flex;
-  align-items:center;
-  font-size:24px !important;
-  line-height:1 !important;
-  font-weight:800 !important;
-  letter-spacing:-0.025em !important;
-  white-space:nowrap;
-}
-
-/* Insight area: same visual role/height across the three standard cards. */
-#home-kpi-grid .kpi-insight-box{
-  margin-top:18px !important;
-  min-height:40px !important;
-  padding:7px 9px !important;
-  border-radius:10px !important;
-  display:flex !important;
-  align-items:center !important;
-  gap:8px !important;
-  box-sizing:border-box !important;
-  font-size:9.5px !important;
-  line-height:1.25 !important;
-  font-weight:700 !important;
-  overflow:hidden !important;
-}
-#home-kpi-grid .kpi-insight-line{
-  min-width:0;
-  white-space:nowrap;
-}
-#home-kpi-grid .kpi-insight-neutral{
-  background:rgba(248,245,236,.92) !important;
-  border:1px solid rgba(225,212,177,.90) !important;
-  color:#6D5A2D !important;
-}
-#home-kpi-grid .kpi-insight-warning{
-  background:rgba(255,241,243,.92) !important;
-  border:1px solid rgba(248,194,202,.88) !important;
-  color:#D85A72 !important;
-}
-#home-kpi-grid .kpi-insight-info{
-  background:rgba(244,248,252,.96) !important;
-  border:1px solid rgba(211,222,234,.95) !important;
-  color:#64748B !important;
-}
-
-/* Dynamic className changes must not turn insight rows back into legacy bottom separators. */
-#kpi-cover-subtext,
-#kpi-final-status{
-  margin-top:18px !important;
-  min-height:40px !important;
-  height:auto !important;
-  padding:7px 9px !important;
-  border-radius:10px !important;
-  border-top-width:1px !important;
-  display:flex !important;
-  align-items:center !important;
-  overflow:hidden !important;
-  white-space:normal !important;
-  text-overflow:clip !important;
-  font-size:9.5px !important;
-  line-height:1.25 !important;
-}
-#kpi-cover-subtext{
-  background:rgba(255,241,243,.92) !important;
-  border:1px solid rgba(248,194,202,.88) !important;
-}
-#kpi-final-status{
-  background:rgba(244,248,252,.96) !important;
-  border:1px solid rgba(211,222,234,.95) !important;
-}
-
-/* Yield insight contains two facts. */
-#kpi-yield-insight{
-  justify-content:flex-start !important;
-}
-#kpi-yield-insight .kpi-insight-line + .kpi-insight-line{
-  position:relative;
-  padding-left:9px;
-}
-#kpi-yield-insight .kpi-insight-line + .kpi-insight-line::before{
-  content:"";
-  position:absolute;
-  left:0;
-  top:15%;
-  bottom:15%;
-  width:1px;
-  background:rgba(109,90,45,.22);
-}
-#kpi-phase-badge{
-  display:inline !important;
-  padding:0 !important;
-  margin:0 !important;
-  border:0 !important;
-  border-radius:0 !important;
-  background:transparent !important;
-  box-shadow:none !important;
-  color:inherit !important;
-  font:inherit !important;
-  white-space:normal !important;
-  overflow:visible !important;
-  text-overflow:clip !important;
-}
-
-/* Bottom line / CTA: intentionally mirrors SCORE card dimensions and placement. */
-#home-kpi-grid .kpi-standard-card .kpi-card-cta{
-  padding-top:12px;
-  border-top:1px solid #ECEBE6;
-  margin-top:auto;
-  height:38px;
-  display:flex;
-  align-items:flex-start;
-  justify-content:flex-end;
-  position:relative;
-  z-index:10;
-  flex:none;
-}
-#home-kpi-grid .kpi-standard-card .kpi-card-cta-button{
-  display:flex;
-  align-items:center;
-  justify-content:flex-end;
-  gap:4px;
-  min-width:0;
-  padding:0;
-  border:0;
-  background:transparent;
-  color:#253047;
-  cursor:pointer;
-  font-size:12px;
-  font-weight:700;
-  line-height:1.2;
-  white-space:nowrap;
-  transition:color .2s ease;
-}
-#home-kpi-grid .kpi-standard-card .kpi-card-cta-button:hover{color:#8C5800;}
-#home-kpi-grid .kpi-standard-card .kpi-card-cta-button i{font-size:10px;flex:none;}
-
-@media (max-width:639px){
-  #home-kpi-grid .kpi-standard-card{
-    min-height:176px !important;
-  }
-  #home-kpi-grid .kpi-standard-header{
-    min-height:34px;
-  }
-  #home-kpi-grid .kpi-standard-metric{
-    padding-top:9px !important;
-  }
-  #home-kpi-grid .kpi-standard-eyebrow{
-    height:16px;
-    font-size:8.5px !important;
-    line-height:1.1 !important;
-  }
-  #home-kpi-grid .kpi-standard-value{
-    height:32px;
-    font-size:20px !important;
-  }
-  #home-kpi-grid .kpi-insight-box,
-  #kpi-cover-subtext,
-  #kpi-final-status{
-    margin-top:14px !important;
-    min-height:40px !important;
-    padding:7px 8px !important;
-    border-radius:9px !important;
-    font-size:8.5px !important;
-    line-height:1.25 !important;
-  }
-  #kpi-yield-insight{
-    flex-direction:column !important;
-    align-items:flex-start !important;
-    justify-content:center !important;
-    gap:3px !important;
-  }
-  #kpi-yield-insight .kpi-insight-line{
-    width:100%;
-  }
-  #kpi-yield-insight .kpi-insight-line + .kpi-insight-line{
-    padding-left:0 !important;
-  }
-  #kpi-yield-insight .kpi-insight-line + .kpi-insight-line::before{
-    content:none !important;
-  }
-  #home-kpi-grid .kpi-standard-card .kpi-card-cta{
-    height:36px !important;
-    padding-top:9px !important;
-    margin-top:auto !important;
-  }
-  #home-kpi-grid .kpi-standard-card .kpi-card-cta-button{
-    font-size:9px !important;
-    gap:3px !important;
-    letter-spacing:-.015em;
-  }
-  #home-kpi-grid .kpi-standard-card .kpi-card-cta-button i{
-    font-size:8px !important;
-  }
-  #kpi-card-cover .kpi-card-cta-button{
-    font-size:8.2px !important;
-  }
-}
-@media (max-width:374px){
-  #home-kpi-grid .kpi-standard-card{
-    min-height:170px !important;
-  }
-  #home-kpi-grid .kpi-standard-card .kpi-card-cta-button{
-    font-size:8.3px !important;
-  }
-  #kpi-card-cover .kpi-card-cta-button{
-    font-size:7.5px !important;
-    letter-spacing:-.03em;
-  }
-}
-</style>
-
-
-<style id="phase9-step24-kpi-vertical-grid-align">
-/*
-  KPI 2-4 only.
-  Anchor insight and CTA from the bottom of each card so their vertical positions
-  follow the SCORE card instead of depending on title/value content height.
-*/
-#home-kpi-grid .kpi-standard-card{
-  justify-content:space-between !important;
-}
-#home-kpi-grid .kpi-standard-card .kpi-standard-content{
-  flex:1 1 auto !important;
-  display:flex !important;
-  flex-direction:column !important;
-  min-height:0 !important;
-}
-#home-kpi-grid .kpi-standard-card .kpi-standard-metric{
-  flex:1 1 auto !important;
-  display:flex !important;
-  flex-direction:column !important;
-  min-height:0 !important;
-}
-
-/* Match SCORE breakdown height and pin it to the bottom of the content area. */
-#home-kpi-grid .kpi-standard-card .kpi-standard-support,
-#home-kpi-grid .kpi-standard-card #kpi-cover-subtext,
-#home-kpi-grid .kpi-standard-card #kpi-final-status{
-  margin-top:auto !important;
-  min-height:38px !important;
-  height:38px !important;
-  box-sizing:border-box !important;
-  flex:0 0 38px !important;
-}
-
-/* Match SCORE CTA geometry exactly. */
-#home-kpi-grid .kpi-standard-card .kpi-card-cta{
-  margin-top:12px !important;
-  padding-top:12px !important;
-  height:38px !important;
-  min-height:38px !important;
-  flex:0 0 38px !important;
-  border-top:1px solid #ECEBE6 !important;
-  align-items:flex-start !important;
-  justify-content:flex-end !important;
-}
-#home-kpi-grid .kpi-standard-card .kpi-card-cta-button{
-  font-size:12px !important;
-  line-height:1.2 !important;
-  gap:4px !important;
-}
-#home-kpi-grid .kpi-standard-card .kpi-card-cta-button i{
-  font-size:10px !important;
-}
-
-@media (max-width:639px){
-  #home-kpi-grid .kpi-standard-card .kpi-standard-support,
-  #home-kpi-grid .kpi-standard-card #kpi-cover-subtext,
-  #home-kpi-grid .kpi-standard-card #kpi-final-status{
-    min-height:32px !important;
-    height:32px !important;
-    flex-basis:32px !important;
-  }
-  #home-kpi-grid .kpi-standard-card .kpi-card-cta{
-    margin-top:12px !important;
-    padding-top:9px !important;
-    height:36px !important;
-    min-height:36px !important;
-    flex-basis:36px !important;
-  }
-  #home-kpi-grid .kpi-standard-card .kpi-card-cta-button{
-    font-size:10px !important;
-    line-height:1.2 !important;
-    gap:4px !important;
-  }
-  #home-kpi-grid .kpi-standard-card .kpi-card-cta-button i{
-    font-size:9px !important;
-  }
-  /* Long CTA only: retain one-line fit without moving its baseline. */
-  #kpi-card-cover .kpi-card-cta-button{
-    font-size:8.2px !important;
-  }
-}
-</style>
-
 </head>
 <body class="bg-[#FAFAF7] text-[#253047] min-h-screen font-sans antialiased relative overflow-x-hidden">
 
@@ -1599,71 +1270,63 @@
 
             </div>
 
-            <!-- KPI 2: 年間運用益 -->
-            <div id="kpi-card-yield" class="bg-white rounded-[24px] p-3.5 sm:p-5 border border-[#ECEBE6] flex flex-col relative overflow-hidden transition kpi-standard-card">
-              <div class="kpi-standard-content">
-                <div class="flex items-center justify-between gap-1 sm:gap-2 mb-1 kpi-standard-header">
+            <!-- KPI 2: 年間運用益 (専用画像アセットを絶対保護・維持) -->
+            <div class="bg-white rounded-[24px] p-3.5 sm:p-5 border border-[#ECEBE6] flex flex-col justify-between relative overflow-hidden transition">
+              <div>
+                <div class="flex items-center justify-between gap-1 sm:gap-2 mb-1">
                   <span class="text-[10px] sm:text-xs font-bold text-[#6F7785] whitespace-nowrap tracking-[-0.02em]">資産が生活を支える力</span>
                   <img src="./assets/kpi-annual-yield.png" alt="" class="w-8 h-8 sm:w-10 sm:h-10 object-contain shrink-0 pointer-events-none" />
                 </div>
-                <div class="kpi-standard-metric">
-                  <div class="kpi-standard-eyebrow text-[11px] font-bold text-[#8C5800]">平均年間運用益 (生涯)</div>
-                  <div id="kpi-annual-yield" class="kpi-standard-value text-2xl sm:text-3xl font-extrabold text-[#253047] tracking-tight">
-                    0 万円<span class="kpi-annual-unit text-xs font-normal text-[#6F7785]"> /年</span>
-                  </div>
-                  <div id="kpi-yield-insight" class="kpi-standard-support kpi-insight-box kpi-insight-neutral">
-                    <div class="kpi-insight-line">生活費の <span id="kpi-yield-living-support-rate">—</span> 相当</div>
-                    <div class="kpi-insight-line"><span id="kpi-phase-badge">累計運用益 未設定</span></div>
-                  </div>
+                <div class="text-[11px] font-bold text-[#8C5800] mb-2">平均年間運用益 (生涯)</div>
+                <div id="kpi-annual-yield" class="text-2xl sm:text-3xl font-extrabold text-[#253047] tracking-tight">
+                  0 万円<span class="kpi-annual-unit text-xs font-normal text-[#6F7785]"> /年</span>
                 </div>
               </div>
-              <div class="kpi-card-cta">
-                <button onclick="switchView('annualProjection')" class="kpi-card-cta-button group">
-                  <span>推移を見る</span>
-                  <i class="fa-solid fa-arrow-right group-hover:translate-x-0.5 transition-transform"></i>
-                </button>
+
+              <div class="flex items-start justify-start pt-3 border-t border-[#ECEBE6] mt-3 h-[36px] sm:h-[38px] shrink-0">
+                <span id="kpi-phase-badge" class="max-w-full truncate px-2 py-0.5 sm:px-2.5 rounded-full text-[9px] sm:text-[10px] font-bold bg-[#FAFAF7] text-[#6F7785] border border-[#ECEBE6]">
+                  累計運用益 未設定
+                </span>
               </div>
             </div>
 
-            <!-- KPI 3: 生涯収支カバー率 -->
-            <div id="kpi-card-cover" class="bg-white rounded-[24px] p-3.5 sm:p-5 border border-[#ECEBE6] flex flex-col relative overflow-hidden transition kpi-standard-card">
-              <div class="kpi-standard-content">
-                <div class="flex items-center justify-between gap-2 mb-1 kpi-standard-header">
-                  <span class="text-[10px] sm:text-xs font-bold text-[#6F7785] flex items-center gap-0.5 sm:gap-1 whitespace-nowrap tracking-[-0.02em]">生涯収支カバー率</span>
+            <!-- KPI 3: 生涯収支カバー率 (専用画像アセットを絶対保護・維持) -->
+            <div class="bg-white rounded-[24px] p-3.5 sm:p-5 border border-[#ECEBE6] flex flex-col justify-between relative overflow-hidden transition">
+              <div>
+                <div class="flex items-center justify-between gap-2 mb-1">
+                  <span class="text-[10px] sm:text-xs font-bold text-[#6F7785] flex items-center gap-0.5 sm:gap-1 whitespace-nowrap tracking-[-0.02em]">
+                    生涯収支カバー率
+                    
+                  </span>
                   <img src="./assets/kpi-cover-rate.png" alt="" class="w-8 h-8 sm:w-10 sm:h-10 object-contain shrink-0 pointer-events-none" />
                 </div>
-                <div class="kpi-standard-metric">
-                  <div class="kpi-standard-eyebrow text-[11px] font-bold text-[#65B9E8]">生涯の資金維持達成率</div>
-                  <div id="kpi-cover-rate" class="kpi-standard-value text-xl sm:text-2xl font-extrabold text-[#6F7785] tracking-tight whitespace-nowrap">-</div>
-                  <div id="kpi-cover-subtext" class="kpi-standard-support kpi-insight-box kpi-insight-warning">目標年齢までの資金維持力</div>
+                <div class="text-[11px] font-bold text-[#65B9E8] mb-2">生涯の資金維持達成率</div>
+                <div id="kpi-cover-rate" class="text-xl sm:text-2xl font-extrabold text-[#6F7785] tracking-tight whitespace-nowrap">
+                  -
                 </div>
               </div>
-              <div class="kpi-card-cta">
-                <button onclick="switchView('simulationResults')" class="kpi-card-cta-button group">
-                  <span>シミュレーション結果を見る</span>
-                  <i class="fa-solid fa-arrow-right group-hover:translate-x-0.5 transition-transform"></i>
-                </button>
+
+              <div id="kpi-cover-subtext" class="text-[11px] text-[#6F7785] pt-3 border-t border-[#ECEBE6] mt-3 h-[36px] sm:h-[38px] flex items-start truncate shrink-0">
+                目標年齢までの資金維持力
               </div>
             </div>
 
-            <!-- KPI 4: 目標年齢時点の想定資産 -->
-            <div id="kpi-card-assets" class="bg-white rounded-[24px] p-3.5 sm:p-5 border border-[#ECEBE6] flex flex-col relative overflow-hidden transition kpi-standard-card">
-              <div class="kpi-standard-content">
-                <div class="flex items-center justify-between gap-2 mb-1 kpi-standard-header">
-                  <span class="text-[10px] sm:text-xs font-bold text-[#6F7785] whitespace-nowrap tracking-[-0.02em]"><span id="kpi-final-age-label">90</span>歳時点の想定資産</span>
+            <!-- KPI 4: 目標年齢時点の想定資産 (専用画像アセットを絶対保護・維持) -->
+            <div class="bg-white rounded-[24px] p-3.5 sm:p-5 border border-[#ECEBE6] flex flex-col justify-between relative overflow-hidden transition">
+              <div>
+                <div class="flex items-center justify-between gap-2 mb-1">
+                  <span class="text-[10px] sm:text-xs font-bold text-[#6F7785] whitespace-nowrap tracking-[-0.02em]">
+                    <span id="kpi-final-age-label">90</span>歳時点の想定資産
+                  </span>
                   <img src="./assets/kpi-future-assets.png" alt="" class="w-8 h-8 sm:w-10 sm:h-10 object-contain shrink-0 pointer-events-none" />
                 </div>
-                <div class="kpi-standard-metric">
-                  <div class="kpi-standard-eyebrow kpi-standard-eyebrow-placeholder" aria-hidden="true">&nbsp;</div>
-                  <div id="kpi-final-assets" class="kpi-standard-value text-2xl sm:text-3xl font-extrabold text-[#253047] tracking-tight">0 万円</div>
-                  <div id="kpi-final-status" class="kpi-standard-support kpi-insight-box kpi-insight-info">利用可能資産のみで算出</div>
+                <div id="kpi-final-assets" class="text-2xl sm:text-3xl font-extrabold text-[#253047] tracking-tight mt-3">
+                  0 万円
                 </div>
               </div>
-              <div class="kpi-card-cta">
-                <button onclick="switchView('assetDetails')" class="kpi-card-cta-button group">
-                  <span>資産詳細を見る</span>
-                  <i class="fa-solid fa-arrow-right group-hover:translate-x-0.5 transition-transform"></i>
-                </button>
+
+              <div id="kpi-final-status" class="text-[11px] text-[#6F7785] pt-3 border-t border-[#ECEBE6] mt-3 h-[36px] sm:h-[38px] flex items-start shrink-0">
+                利用可能資産のみで算出
               </div>
             </div>
 
@@ -12879,42 +12542,6 @@ ${JSON.stringify(OUTPUT_SCHEMA_EXAMPLE,null,2)}
 <script>
 /* PHASE 9-15 — KPI display-only final normalizer */
 (function () {
-  function numberFromKpiText(value){
-    const m=String(value ?? '').replace(/,/g,'').match(/-?\d+(?:\.\d+)?/);
-    return m ? Number(m[0]) : NaN;
-  }
-
-  function annualLivingExpenseMan(){
-    try{
-      const model=window.getCurrentDataModelV2ForPersistence?.() || window.activeDataModelV2 || null;
-      if(!model) return NaN;
-      const normalize=typeof window.normalizeAnnualAmountV2==='function'
-        ? window.normalizeAnnualAmountV2
-        : ((amount,frequency)=>frequency==='monthly'?Number(amount||0)*12:Number(amount||0));
-      const living=normalize(model?.living?.expense?.amount,model?.living?.expense?.frequency);
-      const housing=normalize(model?.living?.housing?.monthlyAmount,'monthly');
-      const total=Number(living||0)+Number(housing||0);
-      return Number.isFinite(total)&&total>0 ? total : NaN;
-    }catch(_){
-      return NaN;
-    }
-  }
-
-  function syncYieldLivingSupportRate(){
-    const out=document.getElementById('kpi-yield-living-support-rate');
-    const yieldEl=document.getElementById('kpi-annual-yield');
-    if(!out || !yieldEl) return;
-    const avgYieldMan=numberFromKpiText(yieldEl.textContent);
-    const annualLivingMan=annualLivingExpenseMan();
-    if(!Number.isFinite(avgYieldMan) || !Number.isFinite(annualLivingMan) || annualLivingMan<=0){
-      out.textContent='—';
-      return;
-    }
-    const pct=Math.max(0,(avgYieldMan/annualLivingMan)*100);
-    const shown=pct>=10 ? Math.round(pct) : Math.round(pct*10)/10;
-    out.textContent=`${shown.toLocaleString()}%`;
-  }
-
   function normalizeKpiPresentation() {
     const engine = document.getElementById('kpi-base-score');
     if (engine) {
@@ -12940,8 +12567,6 @@ ${JSON.stringify(OUTPUT_SCHEMA_EXAMPLE,null,2)}
       }
     }
 
-
-    syncYieldLivingSupportRate();
 
     const coverRateKpi = document.getElementById('kpi-cover-rate');
     if (coverRateKpi) {
