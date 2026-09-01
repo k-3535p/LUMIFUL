@@ -1117,6 +1117,18 @@
 }
 </style>
 
+
+<style id="phase9-step30-sp-kpi-height-fix">
+@media (max-width:639px){
+  /* KPI3/4 need the same physical card height as the top-row KPI cards.
+     Use the grid+id selector so this wins over historical !important card padding rules. */
+  #home-kpi-grid > #kpi-cover-card,
+  #home-kpi-grid > #kpi-final-card{
+    min-height:205px !important;
+  }
+}
+</style>
+
 </head>
 <body class="bg-[#FAFAF7] text-[#253047] min-h-screen font-sans antialiased relative overflow-x-hidden">
 
