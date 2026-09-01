@@ -923,6 +923,63 @@
 }
 </style>
 
+
+<style id="phase9-step20-kpi-sp-polish">
+/* KPI status badge: evaluated = calm blue, unrated = attention red. */
+#kpi-score-badge[data-lumi-rated="true"]{
+  background:#EAF6FC !important;
+  color:#3F7899 !important;
+  border-color:#CFE8F5 !important;
+}
+#kpi-score-badge[data-lumi-rated="false"]{
+  background:#FFF1F3 !important;
+  color:#A65B67 !important;
+  border-color:#F1D5DA !important;
+}
+
+@media (max-width:639px){
+  /* PC keeps "未評価"; SP uses a compact dash in the score insight. */
+  #kpi-ai-adj.is-unrated{
+    font-size:0 !important;
+    max-width:none !important;
+    overflow:visible !important;
+  }
+  #kpi-ai-adj.is-unrated::after{
+    content:"—";
+    font-size:10px;
+    line-height:1;
+    font-weight:800;
+  }
+
+  /* Keep the full PC badge wording, but use a compact SP label. */
+  #kpi-score-badge[data-sp-label]{
+    font-size:0 !important;
+    max-width:none !important;
+    overflow:visible !important;
+    text-overflow:clip !important;
+  }
+  #kpi-score-badge[data-sp-label]::after{
+    content:attr(data-sp-label);
+    font-size:8.5px;
+    line-height:1.15;
+    font-weight:700;
+  }
+
+  /* "全期間 100% カバー" is too long for the two-column SP KPI card. */
+  #kpi-cover-rate[data-full-cover="true"]{
+    font-size:0 !important;
+  }
+  #kpi-cover-rate[data-full-cover="true"]::after{
+    content:"100% カバー";
+    font-size:19px;
+    line-height:1.08;
+    font-weight:800;
+    letter-spacing:-0.04em;
+    white-space:nowrap;
+  }
+}
+</style>
+
 </head>
 <body class="bg-[#FAFAF7] text-[#253047] min-h-screen font-sans antialiased relative overflow-x-hidden">
 
@@ -1167,7 +1224,7 @@
 
                   <!-- Right Side Official LUMI Character Area -->
                   <div id="kpi-lumi-expression" class="lumi-score-expression shrink-0 flex items-center justify-center pl-1" data-lumi-mood="calm" aria-label="LUMIの表情">
-                    <img src="./assets/lumi-spark.png" alt="LUMI" class="lumi-score-expression-img w-12 h-12 sm:w-20 sm:h-20 lg:w-24 lg:h-24 object-contain pointer-events-none" />
+                    <img src="./assets/lumi-spark.png" alt="LUMI" class="lumi-score-expression-img w-8 h-8 sm:w-9 sm:h-9 lg:w-12 lg:h-12 object-contain pointer-events-none" />
                   </div>
                 </div>
 
@@ -11212,9 +11269,11 @@ ${JSON.stringify(OUTPUT_SCHEMA_EXAMPLE,null,2)}
     r=currentValidResult(r);
     const s=scoreState(r), has=!!r?.score;
     setText('kpi-score',String(Math.round(s.total100))); setText('kpi-base-score',String(Math.ceil(Number(s.engine90)||0))); setText('kpi-ai-adj',has?String(Math.round((Number(s.lumi10)||0)*100)/100):'未評価');
+    const kpiLumiAdj=document.getElementById('kpi-ai-adj');
+    if(kpiLumiAdj)kpiLumiAdj.classList.toggle('is-unrated',!has);
     syncLumiScoreExpressionV1(s.engine90);
     const labels=document.querySelectorAll('#kpi-score-breakdown span.uppercase'); if(labels[0])labels[0].textContent='ENGINE';if(labels[1])labels[1].textContent='LUMI';
-    const badge=document.getElementById('kpi-score-badge');if(badge)badge.textContent=has?'LUMIFUL SCORE':'LUMI 未評価';
+    const badge=document.getElementById('kpi-score-badge');if(badge){badge.textContent=has?'LUMIFUL SCORE':'LUMI 未評価';badge.dataset.lumiRated=has?'true':'false';badge.dataset.spLabel=has?'総合':'未評価';}
     setText('results-score',String(Math.round(s.total100))); setText('results-base-score',`${s.engine90} / 90`); setText('results-ai-adjustment',has?`${s.lumi10} / 10`:'未評価');
     setText('detailScoreFinal',String(Math.round(s.total100))); setText('detailBaseScore',`${s.engine90} / 90`); setText('detailAiAdj',has?`${s.lumi10} / 10`:'未評価');
     const notice=document.getElementById('detailAiStatusNotice');if(notice)notice.textContent=has?'※ LUMIのAI総合判断を反映':'※ LUMIは未評価です';
@@ -12499,6 +12558,11 @@ ${JSON.stringify(OUTPUT_SCHEMA_EXAMPLE,null,2)}
       }
     }
 
+
+    const coverRateKpi = document.getElementById('kpi-cover-rate');
+    if (coverRateKpi) {
+      coverRateKpi.dataset.fullCover = /全期間\s*100%\s*カバー/.test(String(coverRateKpi.textContent || '').trim()) ? 'true' : 'false';
+    }
 
     const cumulative = document.getElementById('kpi-phase-badge');
     if (cumulative) {
