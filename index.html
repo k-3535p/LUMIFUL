@@ -990,6 +990,133 @@
 }
 </style>
 
+
+
+
+<style id="phase9-step29-kpi-clean-canonical">
+/* KPI 2-4 only. SCORE card / graph / LUMI panel are out of scope. */
+#kpi-yield-card,#kpi-cover-card,#kpi-final-card{position:relative !important;}
+
+/* All insight surfaces share the exact same coordinates. */
+#kpi-yield-card>.kpi-unified-insight-row,
+#kpi-cover-card>.kpi-unified-insight-row,
+#kpi-final-card>.kpi-unified-insight-row{
+  position:absolute !important;
+  left:20px !important;
+  right:20px !important;
+  bottom:70px !important;
+  width:auto !important;
+  height:38px !important;
+  min-height:38px !important;
+  margin:0 !important;
+  padding:0 10px !important;
+  box-sizing:border-box !important;
+  border-radius:11px !important;
+  display:flex !important;
+  align-items:center !important;
+  font-size:9.5px !important;
+  line-height:1.2 !important;
+  font-weight:800 !important;
+  overflow:hidden !important;
+}
+
+/* Yield insight */
+#kpi-yield-card>.kpi-unified-insight-row{
+  border:1px solid #EFE2BE !important;
+  background:linear-gradient(180deg,#FFFDF7 0%,#FBF7EA 100%) !important;
+}
+#kpi-phase-badge{
+  width:100% !important;
+  max-width:none !important;
+  height:100% !important;
+  padding:0 !important;
+  margin:0 !important;
+  border:0 !important;
+  border-radius:0 !important;
+  background:transparent !important;
+  color:#6C592C !important;
+  display:flex !important;
+  align-items:center !important;
+  font:inherit !important;
+  white-space:normal !important;
+}
+#kpi-phase-badge::before{
+  content:"✦";width:20px;height:20px;margin-right:7px;border-radius:7px;
+  background:#FFF2C7;color:#B47A00;display:inline-flex;align-items:center;justify-content:center;
+  flex:0 0 20px;font-size:10px;
+}
+
+/* Cover insight */
+#kpi-cover-subtext{
+  border:1px solid #F2D6DB !important;
+  background:linear-gradient(180deg,#FFF9FA 0%,#FFF2F4 100%) !important;
+  color:#A95D6A !important;
+  white-space:normal !important;
+}
+#kpi-cover-subtext::before{
+  content:"\f132";font-family:"Font Awesome 6 Free";font-weight:900;
+  width:20px;height:20px;margin-right:7px;border-radius:7px;background:#FFE3E8;color:#D85A72;
+  display:inline-flex;align-items:center;justify-content:center;flex:0 0 20px;font-size:9px;
+}
+
+/* Final assets insight */
+#kpi-final-status{
+  border:1px solid #DCE7F0 !important;
+  background:linear-gradient(180deg,#FAFCFE 0%,#F3F7FA 100%) !important;
+  color:#607186 !important;
+  white-space:normal !important;
+}
+#kpi-final-status::before{
+  content:"\f51e";font-family:"Font Awesome 6 Free";font-weight:900;
+  width:20px;height:20px;margin-right:7px;border-radius:7px;background:#E8F1F7;color:#607186;
+  display:inline-flex;align-items:center;justify-content:center;flex:0 0 20px;font-size:9px;
+}
+
+/* One shared divider / CTA coordinate. */
+#kpi-yield-card>.kpi-unified-cta,
+#kpi-cover-card>.kpi-unified-cta,
+#kpi-final-card>.kpi-unified-cta{
+  position:absolute !important;
+  left:20px !important;
+  right:20px !important;
+  bottom:20px !important;
+  width:auto !important;
+  height:38px !important;
+  margin:0 !important;
+  padding:12px 0 0 !important;
+  box-sizing:border-box !important;
+  border-top:1px solid #ECEBE6 !important;
+  display:flex !important;
+  align-items:flex-start !important;
+  justify-content:flex-end !important;
+}
+.kpi-unified-cta-button{
+  margin:0 !important;padding:0 !important;border:0 !important;background:transparent !important;
+  color:#253047 !important;display:flex !important;align-items:center !important;gap:4px !important;
+  font-size:12px !important;line-height:1.2 !important;font-weight:700 !important;white-space:nowrap !important;
+  cursor:pointer !important;
+}
+.kpi-unified-cta-button i{font-size:10px !important;}
+
+@media(max-width:639px){
+  #kpi-yield-card>.kpi-unified-insight-row,
+  #kpi-cover-card>.kpi-unified-insight-row,
+  #kpi-final-card>.kpi-unified-insight-row{
+    left:14px !important;right:14px !important;bottom:62px !important;
+    height:34px !important;min-height:34px !important;padding:0 7px !important;
+    border-radius:9px !important;font-size:8.4px !important;
+  }
+  #kpi-yield-card>.kpi-unified-cta,
+  #kpi-cover-card>.kpi-unified-cta,
+  #kpi-final-card>.kpi-unified-cta{
+    left:14px !important;right:14px !important;bottom:14px !important;
+    height:36px !important;padding-top:9px !important;
+  }
+  .kpi-unified-cta-button{font-size:9px !important;gap:3px !important;}
+  .kpi-unified-cta-button i{font-size:8px !important;}
+}
+</style>
+
 </head>
 <body class="bg-[#FAFAF7] text-[#253047] min-h-screen font-sans antialiased relative overflow-x-hidden">
 
@@ -1271,7 +1398,7 @@
             </div>
 
             <!-- KPI 2: 年間運用益 (専用画像アセットを絶対保護・維持) -->
-            <div class="bg-white rounded-[24px] p-3.5 sm:p-5 border border-[#ECEBE6] flex flex-col justify-between relative overflow-hidden transition">
+            <div id="kpi-yield-card" class="bg-white rounded-[24px] p-3.5 sm:p-5 border border-[#ECEBE6] flex flex-col justify-between relative overflow-hidden transition">
               <div>
                 <div class="flex items-center justify-between gap-1 sm:gap-2 mb-1">
                   <span class="text-[10px] sm:text-xs font-bold text-[#6F7785] whitespace-nowrap tracking-[-0.02em]">資産が生活を支える力</span>
@@ -1283,15 +1410,21 @@
                 </div>
               </div>
 
-              <div class="flex items-start justify-start pt-3 border-t border-[#ECEBE6] mt-3 h-[36px] sm:h-[38px] shrink-0">
+              <div class="kpi-unified-insight-row">
                 <span id="kpi-phase-badge" class="max-w-full truncate px-2 py-0.5 sm:px-2.5 rounded-full text-[9px] sm:text-[10px] font-bold bg-[#FAFAF7] text-[#6F7785] border border-[#ECEBE6]">
-                  累計運用益 未設定
+                  生活費の — 相当
                 </span>
+              </div>
+              <div class="kpi-unified-cta">
+                <button onclick="switchView('annualProjection')" class="kpi-unified-cta-button group">
+                  <span>推移を見る</span>
+                  <i class="fa-solid fa-arrow-right group-hover:translate-x-0.5 transition-transform"></i>
+                </button>
               </div>
             </div>
 
             <!-- KPI 3: 生涯収支カバー率 (専用画像アセットを絶対保護・維持) -->
-            <div class="bg-white rounded-[24px] p-3.5 sm:p-5 border border-[#ECEBE6] flex flex-col justify-between relative overflow-hidden transition">
+            <div id="kpi-cover-card" class="bg-white rounded-[24px] p-3.5 sm:p-5 border border-[#ECEBE6] flex flex-col justify-between relative overflow-hidden transition">
               <div>
                 <div class="flex items-center justify-between gap-2 mb-1">
                   <span class="text-[10px] sm:text-xs font-bold text-[#6F7785] flex items-center gap-0.5 sm:gap-1 whitespace-nowrap tracking-[-0.02em]">
@@ -1306,13 +1439,19 @@
                 </div>
               </div>
 
-              <div id="kpi-cover-subtext" class="text-[11px] text-[#6F7785] pt-3 border-t border-[#ECEBE6] mt-3 h-[36px] sm:h-[38px] flex items-start truncate shrink-0">
+              <div id="kpi-cover-subtext" class="kpi-unified-insight-row">
                 目標年齢までの資金維持力
+              </div>
+              <div class="kpi-unified-cta">
+                <button onclick="switchView('simulationResults')" class="kpi-unified-cta-button group">
+                  <span>シミュレーション結果を見る</span>
+                  <i class="fa-solid fa-arrow-right group-hover:translate-x-0.5 transition-transform"></i>
+                </button>
               </div>
             </div>
 
             <!-- KPI 4: 目標年齢時点の想定資産 (専用画像アセットを絶対保護・維持) -->
-            <div class="bg-white rounded-[24px] p-3.5 sm:p-5 border border-[#ECEBE6] flex flex-col justify-between relative overflow-hidden transition">
+            <div id="kpi-final-card" class="bg-white rounded-[24px] p-3.5 sm:p-5 border border-[#ECEBE6] flex flex-col justify-between relative overflow-hidden transition">
               <div>
                 <div class="flex items-center justify-between gap-2 mb-1">
                   <span class="text-[10px] sm:text-xs font-bold text-[#6F7785] whitespace-nowrap tracking-[-0.02em]">
@@ -1325,8 +1464,14 @@
                 </div>
               </div>
 
-              <div id="kpi-final-status" class="text-[11px] text-[#6F7785] pt-3 border-t border-[#ECEBE6] mt-3 h-[36px] sm:h-[38px] flex items-start shrink-0">
+              <div id="kpi-final-status" class="kpi-unified-insight-row">
                 利用可能資産のみで算出
+              </div>
+              <div class="kpi-unified-cta">
+                <button onclick="switchView('assetDetails')" class="kpi-unified-cta-button group">
+                  <span>資産詳細を見る</span>
+                  <i class="fa-solid fa-arrow-right group-hover:translate-x-0.5 transition-transform"></i>
+                </button>
               </div>
             </div>
 
@@ -4241,8 +4386,7 @@ m.profile.targetAge=_targetRaw?Math.max(m.profile.currentAge||18,Math.round(Numb
       if (annualYield) annualYield.innerHTML = `0 万円<span class="kpi-annual-unit text-xs font-normal text-[#6F7785]"> /年</span>`;
       const phaseBadge = document.getElementById('kpi-phase-badge');
       if (phaseBadge) {
-        phaseBadge.innerText = '累計運用益 未設定';
-        phaseBadge.className = 'px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#FAFAF7] text-[#6F7785] border border-[#ECEBE6]';
+        phaseBadge.innerText = '生活費の — 相当';
       }
       const cover = document.getElementById('kpi-cover-rate');
       if (cover) {
@@ -4301,8 +4445,12 @@ m.profile.targetAge=_targetRaw?Math.max(m.profile.currentAge||18,Math.round(Numb
 
       const phaseBadge = document.getElementById('kpi-phase-badge');
       if (phaseBadge) {
-        phaseBadge.innerText = `累計運用益 ${totalYield.toLocaleString()} 万円`;
-        phaseBadge.className = 'px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-[#EAF8F3] text-[#253047] border border-[#72D6B5]/30';
+        const annualLivingForYield = window.normalizeAnnualAmountV2(migrated.living?.expense?.amount, migrated.living?.expense?.frequency);
+        const livingSupportRate = annualLivingForYield > 0 ? (avgYield / annualLivingForYield) * 100 : null;
+        const livingSupportText = Number.isFinite(livingSupportRate)
+          ? `${Math.round(livingSupportRate * 10) / 10}%`
+          : '—';
+        phaseBadge.innerText = `生活費の ${livingSupportText} 相当`;
       }
 
       const coverRateElem = document.getElementById('kpi-cover-rate');
@@ -4325,7 +4473,6 @@ m.profile.targetAge=_targetRaw?Math.max(m.profile.currentAge||18,Math.round(Numb
           coverRateElem.className = 'text-xl sm:text-2xl font-extrabold text-[#FF8FA3] tracking-tight whitespace-nowrap';
           if (coverSubtextElem) {
             coverSubtextElem.innerText = `🚨 ${insolvencyAge}歳頃に資金不足`;
-            coverSubtextElem.className = 'text-[11px] text-[#FF8FA3] font-bold pt-3 border-t border-[#ECEBE6] mt-3 h-[36px] sm:h-[38px] flex items-start truncate shrink-0';
           }
         } else if (totalDeficit === 0) {
           coverRateElem.innerText = '全期間 100% カバー';
@@ -4333,10 +4480,8 @@ m.profile.targetAge=_targetRaw?Math.max(m.profile.currentAge||18,Math.round(Numb
           if (coverSubtextElem) {
             if (minFinAsset >= yearlyExpenseAvg * 3) {
               coverSubtextElem.innerText = '✨ 十分な資金余力あり';
-              coverSubtextElem.className = 'text-[11px] text-[#253047] font-bold pt-3 border-t border-[#ECEBE6] mt-3 h-[36px] sm:h-[38px] flex items-start truncate shrink-0';
             } else {
               coverSubtextElem.innerText = `🟢 ${effectiveTargetAge}歳まで資金維持`;
-              coverSubtextElem.className = 'text-[11px] text-[#253047] font-semibold pt-3 border-t border-[#ECEBE6] mt-3 h-[36px] sm:h-[38px] flex items-start truncate shrink-0';
             }
           }
         } else {
@@ -4345,13 +4490,10 @@ m.profile.targetAge=_targetRaw?Math.max(m.profile.currentAge||18,Math.round(Numb
           if (coverSubtextElem) {
             if (minFinAsset >= yearlyExpenseAvg * 3 && finalFinAsset >= yearlyExpenseAvg * 2) {
               coverSubtextElem.innerText = '✨ 十分な資金余力あり';
-              coverSubtextElem.className = 'text-[11px] text-[#253047] font-bold pt-3 border-t border-[#ECEBE6] mt-3 h-[36px] sm:h-[38px] flex items-start truncate shrink-0';
             } else if (minFinAsset >= yearlyExpenseAvg * 1.5) {
               coverSubtextElem.innerText = `🟢 ${effectiveTargetAge}歳まで資金維持`;
-              coverSubtextElem.className = 'text-[11px] text-[#253047] font-semibold pt-3 border-t border-[#ECEBE6] mt-3 h-[36px] sm:h-[38px] flex items-start truncate shrink-0';
             } else {
               coverSubtextElem.innerText = '⚠️ 達成予定・余力は少なめ';
-              coverSubtextElem.className = 'text-[11px] text-[#8C5800] font-bold pt-3 border-t border-[#ECEBE6] mt-3 h-[36px] sm:h-[38px] flex items-start truncate shrink-0';
             }
           }
         }
@@ -12571,14 +12713,6 @@ ${JSON.stringify(OUTPUT_SCHEMA_EXAMPLE,null,2)}
     const coverRateKpi = document.getElementById('kpi-cover-rate');
     if (coverRateKpi) {
       coverRateKpi.dataset.fullCover = /全期間\s*100%\s*カバー/.test(String(coverRateKpi.textContent || '').trim()) ? 'true' : 'false';
-    }
-
-    const cumulative = document.getElementById('kpi-phase-badge');
-    if (cumulative) {
-      [
-        'rounded-full','border','border-[#ECEBE6]','bg-[#FAFAF7]',
-        'px-2','py-0.5','sm:px-2.5'
-      ].forEach(c => cumulative.classList.remove(c));
     }
   }
 
