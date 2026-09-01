@@ -153,7 +153,17 @@
   
 /* Phase 9-15: LUMI SCORE expression assets — presentation only. */
 #kpi-lumi-expression{position:relative;isolation:isolate}
-#kpi-lumi-expression .lumi-score-expression-img{transition:opacity .18s ease}
+#kpi-lumi-expression .lumi-score-expression-img{
+  width:32px;
+  height:32px;
+  transition:opacity .18s ease;
+}
+@media (min-width:640px){
+  #kpi-lumi-expression .lumi-score-expression-img{width:36px;height:36px}
+}
+@media (min-width:1024px){
+  #kpi-lumi-expression .lumi-score-expression-img{width:48px;height:48px}
+}
 @media (prefers-reduced-motion:reduce){#kpi-lumi-expression .lumi-score-expression-img{transition:none}}
 </style>
 
@@ -2393,7 +2403,6 @@
 
             <button id="settingsAccountActionBtn" onclick="handleCanonicalAccountAction()" class="hidden px-4 py-2 btn-lumi-primary text-xs font-bold whitespace-nowrap shrink-0"></button>
           </div>
-        </div>
         </div>
 
         <div class="bg-white rounded-[24px] p-5 sm:p-6 border border-[#ECEBE6] space-y-4">
